@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PLUS/4 Memory Maps</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #444;
+            color: #000;
+            font-size: 16px;
+            font-family: monospace;
+            margin: 0;
+        }
+        h1 {
+            font-size: 26px;
+        }
+        h2 {
+            font-size: 24px;
+        }
+        h3 {
+            font-size: 20px;
+        }
+        h4 {
+        font-size: 18px;
+        }
+        h5 {
+            font-size: 17px;
+        }
+        h6 {
+            font-size: 16px;
+        }
+        a {
+            color: #a00;
+        }
+        a:hover, a:focus {
+            color: #d44;
+            text-decoration: none;
+        }
+        a.to-top {
+            display: block;
+            text-align: right;
+        }
+        ul {
+            padding-left: 18px;
+        }
+        ol {
+            padding-left: 36px;
+        }
+        p.warning {
+            background-color: #fff;
+            color: #f00;
+            font-size: 24px;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-top: 1px dotted #111;
+            border-left: 1px dotted #111;
+            background-color: #fff;
+            margin-bottom: 15px;
+        }
+        @media ( max-width: 820px ) {
+            .table {
+                overflow: auto;
+            }
+        }
+        th, td {
+            border-right: 1px dotted #111;
+            border-bottom: 1px dotted #111;
+            vertical-align: top;
+            padding: 8px;
+            text-align: left;
+        }
+        pre {
+            background-color: #fff;
+            padding: 15px 30px;
+            border-radius: 25px;
+            border-right: 1px dotted #111;
+            border-bottom: 1px dotted #111;
+        }
+        @media ( max-width: 820px ) {
+            pre {
+            overflow-x: scroll;
+            }
+        }
+        #wrap {
+            background-color: #eee;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0px 30px 60px;
+        }
+        @media ( min-width: 1204px ) {
+            #wrap {
+                border-right: 4px solid #111;
+                border-bottom: 4px solid #111;
+            }
+        }
+        div.section {
+            border-bottom: 2px dotted #111;
+            padding-bottom: 30px;
+            margin-bottom: 60px;
+        }
+        #header {
+            padding: 60px 0px;
+            margin-left: -30px;
+            margin-right: -30px;
+            background-color: #fff;
+            border-bottom: 2px solid #111;
+        }
+        #header h1 {
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="header">
+            <h1>PLUS/4 Memory Maps</h1>
+        </div>
+        <div class="section">
+            <h2>Graphics Chip Register Map</h2>
+            <div class="table">
+                <table>
+                    <tr>
+                        <th>Hexadecimal</th>
+                        <th>Decimal</th>
+                        <th>Bits</th>
+                        <th>Function</th>
+                    </tr>
+                    <tr>
+                        <td>$FF00</td>
+                        <td>65280</td>
+                        <td>0-7</td>
+                        <td>Low byte of reload value for timer 1</td>
+                    </tr>
+                    <tr>
+                        <td>$FF01</td>
+                        <td>65281</td>
+                        <td>0-7</td>
+                        <td>High byte of reload value for timer 1</td>
+                    </tr>
+                    <tr>
+                        <td>$FF02</td>
+                        <td>65282</td>
+                        <td>0-7</td>
+                        <td>Low byte of start value for timer 2</td>
+                    </tr>
+                    <tr>
+                        <td>$FF03</td>
+                        <td>65283</td>
+                        <td>0-7</td>
+                        <td>High byte of start value for timer 2</td>
+                    </tr>
+                    <tr>
+                        <td>$FF04</td>
+                        <td>65284</td>
+                        <td>0-7</td>
+                        <td>Low byte of start value for timer 3</td>
+                    </tr>
+                    <tr>
+                        <td>$FF05</td>
+                        <td>65285</td>
+                        <td>0-7</td>
+                        <td>High byte of start value for timer 3</td>
+                    </tr>
+                    <tr>
+                        <td>$FF06</td>
+                        <td>65286</td>
+                        <td>
+                            0-2<br>
+                            3<br>
+                            4<br>
+                            5<br>
+                            6<br>
+                            7
+                        </td>
+                        <td>
+                            Vertical screen scroll position<br>
+                            0 = 24 rows, 1 = 25 rows<br>
+                            0 = blank screen, 1 = display screen<br>
+                            Bit map mode: 0 = off, 1 = on<br>
+                            Extended color mode: 0 = off, 1 = on<br>
+                            TEST (should always be cleared to 0)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF07</td>
+                        <td>65287</td>
+                        <td>
+                            0-2<br>
+                            3<br>
+                            4<br>
+                            5<br>
+                            6<br>
+                            7
+                        </td>
+                        <td>
+                            Horizontal screen position<br>
+                            0 = 38 columns, 1 = 40 columns<br>
+                            Multicolor mode: 0 = off, 1 = on<br>
+                            Flashing: 0 = yes, 1 = no<br>
+                            TV standard: 0 = PAL, 1 = NTSC<br>
+                            Reverse characters through hardware:<br>
+                            &nbsp;&nbsp;0 = yes, 1 = no
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF08</td>
+                        <td>65288</td>
+                        <td>0-7</td>
+                        <td>Latch register for keyboard</td>
+                    </tr>
+                    <tr>
+                        <td>$FF09</td>
+                        <td>65289</td>
+                        <td>
+                            0<br>
+                            1<br>
+                            2<br>
+                            3<br>
+                            4<br>
+                            5<br>
+                            6<br>
+                            7
+                        </td>
+                        <td>
+                            Not connected<br>
+                            Raster interrupt flag<br>
+                            Light pen interrupt flag<br>
+                            Timer 1 interrupt flag<br>
+                            Timer 2 interrupt flag<br>
+                            Not connected<br>
+                            Timer 3 interrupt flag<br>
+                            Interrupt occured flag
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF0A</td>
+                        <td>65290</td>
+                        <td>
+                            0<br>
+                            1<br>
+                            2<br>
+                            3<br>
+                            4<br>
+                            5<br>
+                            6<br>
+                            7
+                        </td>
+                        <td>
+                            High bit for raster interrupt value<br>
+                            Raster interrupt enable<br>
+                            Light pen interrupt enable<br>
+                            Timer 1 interrupt enable<br>
+                            Timer 2 interrupt enable<br>
+                            Not connected<br>
+                            Timer 3 interrupt enable<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF0B</td>
+                        <td>65291</td>
+                        <td>0-7</td>
+                        <td>Low byte for raster interrupt value</td>
+                    </tr>
+                    <tr>
+                        <td>$FF0C</td>
+                        <td>65292</td>
+                        <td>
+                            0-1<br>
+                            2-7
+                        </td>
+                        <td>
+                            High bits for hardware cursor position<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF0D</td>
+                        <td>65293</td>
+                        <td>0-7</td>
+                        <td>Low byte for hardware cursor position</td>
+                    </tr>
+                    <tr>
+                        <td>$FF0E</td>
+                        <td>65294</td>
+                        <td>0-7</td>
+                        <td>Low byte of frequency for voice 1</td>
+                    </tr>
+                    <tr>
+                        <td>$FF0F</td>
+                        <td>65295</td>
+                        <td>0-7</td>
+                        <td>Low byte of frequency for voice 2</td>
+                    </tr>
+                    <tr>
+                        <td>$FF10</td>
+                        <td>65296</td>
+                        <td>
+                            0-1<br>
+                            2-7
+                        </td>
+                        <td>
+                            High bits of frequency for voice 2<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF11</td>
+                        <td>65297</td>
+                        <td>
+                            0-3<br>
+                            4<br>
+                            5<br>
+                            6<br>
+                            7
+                        </td>
+                        <td>
+                            Volume: 0 = off, F = highest<br>
+                            Select voice 1<br>
+                            Select tone generator for voice 2<br>
+                            Select noise generator for voice 2<br>
+                            Sound reload switch: 0 = on, 1 = off
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF12</td>
+                        <td>65298</td>
+                        <td>
+                            0-1<br>
+                            2<br>
+                            <br>
+                            3-5<br>
+                            6-7
+                        </td>
+                        <td>
+                            High bits of frequency for voice 1<br>
+                            0 = get data from RAM,<br>
+                            1 = get data from ROM<br>
+                            Base address for bit map<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF13</td>
+                        <td>65299</td>
+                        <td>
+                            0<br>
+                            1<br>
+                            2-7
+                        </td>
+                        <td>
+                            Status of clock<br>
+                            Single clock set<br>
+                            Base address for character data
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF14</td>
+                        <td>65300</td>
+                        <td>
+                            0-2<br>
+                            3-7
+                        </td>
+                        <td>
+                            Not connected<br>
+                            Base address for color and screen memory
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF15</td>
+                        <td>65301</td>
+                        <td>
+                            0-3<br>
+                            4-6<br>
+                            7
+                        </td>
+                        <td>
+                            Background color<br>
+                            Background luminance<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF16</td>
+                        <td>65302</td>
+                        <td>
+                            0-3<br>
+                            4-6<br>
+                            7
+                        </td>
+                        <td>
+                            Color for color 1<br>
+                            Luminance for color 1<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF17</td>
+                        <td>65303</td>
+                        <td>
+                            0-3<br>
+                            4-6<br>
+                            7
+                        </td>
+                        <td>
+                            Color for color 2<br>
+                            Luminance for color 2<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF18</td>
+                        <td>65304</td>
+                        <td>
+                            0-3<br>
+                            4-6<br>
+                            7
+                        </td>
+                        <td>
+                            Color for color 3<br>
+                            Luminance for color 3<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF19</td>
+                        <td>65305</td>
+                        <td>
+                            0-3<br>
+                            4-6<br>
+                            7
+                        </td>
+                        <td>
+                            Border color<br>
+                            Border luminance<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF1A</td>
+                        <td>65306</td>
+                        <td>
+                            0-1<br>
+                            2-7
+                        </td>
+                        <td>
+                            High bits for bit map reload<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF1B</td>
+                        <td>65307</td>
+                        <td>0-7</td>
+                        <td>Low byte for bit map reload</td>
+                    </tr>
+                    <tr>
+                        <td>$FF1C</td>
+                        <td>65308</td>
+                        <td>
+                            0<br>
+                            1-7
+                        </td>
+                        <td>
+                            High bit of current vertical raster position<br>
+                            Not connected
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>$FF1D</td>
+                        <td>65309</td>
+                        <td>0-7</td>
+                        <td>Low byte of current vertical raster position</td>
+                    </tr>
+                    <tr>
+                        <td>$FF1E</td>
+                        <td>65310</td>
+                        <td>0-7</td>
+                        <td>Current horizontal raster position</td>
+                    </tr>
+                    <tr>
+                        <td>$FF1F</td>
+                        <td>65311</td>
+                        <td>
+                            0-2<br>
+                            3-6<br>
+                            7
+                        </td>
+                        <td>
+                            Vertical sub address<br>
+                            Blink address<br>
+                            Not connected
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

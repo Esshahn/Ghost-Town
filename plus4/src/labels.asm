@@ -23,4 +23,5 @@
 	eventuellcode11	= $3a17	; unused
 	datenschrott13	= $3b5a	; unused
 	datenschrott10	= $399d	; unused
+	m1000	= $1000
 	code_start	= $3ab3	; unused

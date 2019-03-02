@@ -7,6 +7,7 @@ code_start          = 0x3AB3
                     *= 0x0f90
 datenschrott01:
                     !source "includes/datenschrott01.asm"
+; ==============================================================================
 vermutlichcode:
                     sei
                     ldy #0x00
@@ -37,6 +38,9 @@ vermutlichcode:
                     sta 0xff13
                     jsr 0xe378
                     jmp 0x3ab3
+; ==============================================================================
+                    *= 0x1000
+m1000:
                     jsr 0xc56b
                     lda #0x3f
                     sta 0xa8
@@ -202,7 +206,7 @@ vermutlichcode:
                     jsr 0xc020
                     !byte 0x00
                     bne 0x11a2
-                    jsr 0x1000
+                    jsr m1000
                     ldx 0x3051
                     cpx #0x01
                     bne 0x1165
@@ -236,7 +240,7 @@ vermutlichcode:
                     jmp 0x3b4c
                     cpy #0x02
                     bne 0x11ac
-                    jsr 0x1000
+                    jsr m1000
                     jmp 0x118d
                     cpy #0x04
                     bne 0x11bb
@@ -1715,13 +1719,13 @@ eventuellcode11:
                     rts
                     !byte 0x00
 eventuellcode12:
-wait:
-                    dex
+; ==============================================================================
+wait:               dex
                     bne wait
                     dey
                     bne wait
                     rts
-
+; ==============================================================================
                     lda 0xff12
                     and #0xfb
                     sta 0xff12
@@ -1735,7 +1739,7 @@ wait:
                     lda #0x29
                     sta 0xff17
                     rts
-
+; ==============================================================================
                     lda 0xff12
                     ora #0x04
                     sta 0xff12
@@ -1745,19 +1749,22 @@ wait:
                     lda #0x08
                     sta 0xff07
                     rts
+; ==============================================================================
 init:
                     jsr 0x1f15
                     lda #0x01
-                    sta 0xff15
-                    sta 0xff19
+                    sta 0xff15          ; background color
+                    sta 0xff19          ; border color
                     jsr 0x16ba
                     ldy #0x20
                     jsr wait
+
                     lda #0xfd
-                    sta 0xff08
+-                   sta 0xff08          ; Latch register for keyboard
                     lda 0xff08
                     and #0x01
-                    bne 0x3ac8
+                    bne -               ; bne 0x3ac8 / wait for keypress ?
+
                     lda #0xff
                     jsr 0x1cff
                     lda #0x0c
@@ -1810,7 +1817,7 @@ init:
                     cpx #0x28
                     bne 0x3b2a
                     rts
-
+; ==============================================================================
                     lda #0x06
                     sta 0x35a4
                     lda #0x03
@@ -1823,6 +1830,7 @@ init:
                     jsr wait
                     jsr 0x2fcb
                     jmp 0x162d
+; ==============================================================================
 datenschrott13:
                     !source "includes/datenschrott13.asm"
 
