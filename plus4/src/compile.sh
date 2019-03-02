@@ -1,5 +1,5 @@
 #!/bin/sh
-OUTFILE="gtacme.prg"
+OUTFILE="../bin/gtacme.prg"
 
 rm -f "$OUTFILE"
 
