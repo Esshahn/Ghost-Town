@@ -998,7 +998,7 @@ rsav2:              ldy #0x00
                     lda #0x40
                     sta rsav3+1         ; sta 0x1e39
                     jsr m1E38           ; jsr 0x1e38
-                    ldx #0x00
+rsav4:              ldx #0x00
                     lda 0x1d14,x
                     inc 0x1ddf
                     tay
@@ -1013,12 +1013,12 @@ rsav2:              ldy #0x00
                     tay
 +                   dey
                     sty rsav2+1         ; sty 0x1dd3
-                    ldy #0x00
+rsav5:              ldy #0x00
                     bne 0x1e1d
                     lda #0x40
                     sta 0x1e61
-                    jsr 0x1e60
-                    ldx #0x00
+                    jsr m1E60           ; jsr 0x1e60
+rsav6:              ldx #0x00
                     lda 0x1d6e,x
                     tay
                     inx
@@ -1036,13 +1036,13 @@ rsav2:              ldy #0x00
                     tay
                     dey
                     sty 0x1df8
-                    jsr 0x1e38
-                    jmp 0x1e60
+                    jsr m1E38           ; jsr 0x1e38
+                    jmp m1E60           ; jmp 0x1e60
                     lda #0x00
                     sta rsav2+1         ; sta 0x1dd3
-                    sta 0x1ddf
-                    sta 0x1df8
-                    sta 0x1e04
+                    sta rsav4+1         ; sta 0x1ddf
+                    sta rsav5+1         ; sta 0x1df8
+                    sta rsav6+1         ; sta 0x1e04
                     jmp m1DD2           ; jmp 0x1dd2
                     ; *= 0x1E38
 m1E38:
@@ -1050,8 +1050,8 @@ rsav3:              ldx #0x04
                     cpx #0x1c
                     bcc +               ; bcc 0x1e46
                     lda 0xff11
-                    and #0xef
-                    jmp 0x1e5c
+                    and #0xef           ; clear bit 4
+                    jmp writeFF11       ; jmp 0x1e5c
 
 +                   lda 0x1e88,x        ; 0x1E88 ... : music data lo ?
                     sta 0xff0e          ; Low byte of frequency for voice 1
@@ -1060,16 +1060,17 @@ rsav3:              ldx #0x04
                     ora 0x1ea0,x        ; 0x1EA0 ... : music data hi ?
                     sta 0xff12          ; High bits of frequency for voice 1
                     lda 0xff11
-                    ora #0x10
-                    sta 0xff11
+                    ora #0x10           ; set bit 4
+writeFF11           sta 0xff11          ; (de-)select voice 1
                     rts
-
+                    ; *= 0x1E60
+m1E60:
                     ldx #0x0d
                     cpx #0x1c
                     bcc 0x1e6e
                     lda 0xff11
                     and #0xdf
-                    jmp 0x1e5c
+                    jmp writeFF11       ; jmp 0x1e5c
                     lda 0x1e88,x
                     sta 0xff0f
                     lda 0xff10
@@ -1083,7 +1084,7 @@ rsav3:              ldx #0x04
 datenschrott05:
                     !source "includes/datenschrott05.asm"
 ; ==============================================================================
-m1EBC:
+music_play:
 rsav0:              ldx #0x09
                     dex
                     stx rsav0+1         ; stx 0x1ebd
@@ -1131,7 +1132,8 @@ irq_init0:
 irq0:
                     lda 0xff09
                     sta 0xff09          ; ack IRQ
-                    jsr m1EBC           ; jsr 0x1ebc
+                                        ; this IRQ seems to handle music only!
+                    jsr music_play      ; jsr 0x1ebc
                     pla
                     tay
                     pla
@@ -1745,7 +1747,7 @@ wait:               dex
                     bne wait
                     dey
                     bne wait
-                    rts
+fake:               rts
 ; ==============================================================================
                     lda 0xff12
                     and #0xfb
