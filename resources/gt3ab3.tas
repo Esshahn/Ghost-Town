@@ -1,0 +1,7043 @@
+;
+; **** ZP FIELDS **** 
+;
+RAM_PDIR = $00
+RAM_SRCHTK = $02
+RAM_ZPVEC1 = $03
+RAM_ZPVEC2 = $05
+f06 = $06
+RAM_ENDCHR = $08
+RAM_TRMPOS = $09
+RAM_DIMFLG = $0C
+RAM_VALTYP = $0D
+RAM_INTFLG = $0E
+RAM_DORES = $0F
+RAM_TANSGN = $12
+RAM_CHANNL = $13
+RAM_LINNUM = $14
+f15 = $15
+f1A = $1A
+f20 = $20
+f25 = $25
+RAM_RESHO = $26
+RAM_RESMOH = $27
+RAM_RESLO = $29
+f2A = $2A
+f30 = $30
+f32 = $32
+RAM_FRFTOP = $33
+f34 = $34
+f36 = $36
+RAM_MEMSIZ = $37
+f38 = $38
+f3A = $3A
+f3E = $3E
+RAM_DATPTR = $41
+f46 = $46
+RAM_JMPER = $54
+RAM_SIZE = $55
+RAM_OLDOV = $56
+RAM_TEMPF1 = $57
+RAM_HIGHDS = $58
+RAM_HIGHTR = $5A
+RAM_LOWDS = $5D
+RAM_LoWTR = $5F
+RAM_EXPSGN = $60
+RAM_ARGHO = $6A
+RAM_AUTINC = $73
+f7A = $7A
+f7D = $7D
+f7F = $7F
+RAM_GRAPHM = $83
+RAM_COLSEL = $84
+f8D = $8D
+RAM_EAH = $9E
+RAM_T1 = $9F
+RAM_TPBYTE = $A7
+RAM_FPVERR = $A9
+RAM_DCOUNT = $AA
+RAM_CRSW = $C7
+fD1 = $D1
+fD3 = $D3
+fD5 = $D5
+RAM_CIRSEG = $E9
+RAM_USER = $EA
+fF2 = $F2
+RAM_CHRPTR = $F3
+RAM_BUFEND = $F4
+RAM_LENGTH = $F6
+RAM_TYPE = $F8
+RAM_XSTOP = $FA
+RAM_CURBNK = $FB
+RAM_XoN = $FC
+RAM_XoFF = $FD
+RAM_LOFBUF = $FF
+;
+; **** ZP ABSOLUTE ADRESSES **** 
+;
+RAM_PDIR = $00
+RAM_PORT = $01
+RAM_SRCHTK = $02
+RAM_ZPVEC1 = $03
+a04 = $04
+RAM_ZPVEC2 = $05
+a06 = $06
+RAM_CHARAC = $07
+RAM_ENDCHR = $08
+RAM_TRMPOS = $09
+RAM_VERCK = $0A
+RAM_DIMFLG = $0C
+RAM_VALTYP = $0D
+RAM_INTFLG = $0E
+RAM_DORES = $0F
+RAM_SUBFLG = $10
+RAM_INPFLG = $11
+RAM_TANSGN = $12
+RAM_CHANNL = $13
+RAM_LINNUM = $14
+a15 = $15
+a1F = $1F
+a20 = $20
+a21 = $21
+RAM_INDEX2 = $24
+a25 = $25
+RAM_RESMOH = $27
+a2A = $2A
+a2C = $2C
+RAM_VARTAB = $2D
+a30 = $30
+a32 = $32
+RAM_FRFTOP = $33
+a3A = $3A
+RAM_TXTPTR = $3B
+RAM_INPPTR = $43
+a44 = $44
+a46 = $46
+RAM_OPPTR = $48
+a4B = $4B
+a4C = $4C
+a51 = $51
+RAM_HELPER = $53
+RAM_SIZE = $55
+RAM_OLDOV = $56
+RAM_LoWTR = $5F
+RAM_FACSGN = $66
+RAM_SGNFLG = $67
+RAM_ARISGN = $6F
+RAM_KEYNUM = $76
+RAM_EAH = $9E
+RAM_TPBYTE = $A7
+RAM_FNLEN = $A8
+RAM_DCOUNT = $AA
+RAM_SEDSAL = $C0
+RAM_LSXP = $C4
+RAM_PNT = $C8
+aD3 = $D3
+aD9 = $D9
+aE7 = $E7
+RAM_CHRPTR = $F3
+RAM_USE4DY = $F9
+RAM_XSTOP = $FA
+RAM_XoFF = $FD
+RAM_SEDT2 = $FE
+;
+; **** ZP POINTERS **** 
+;
+RAM_PDIR = $00
+RAM_PORT = $01
+RAM_SRCHTK = $02
+RAM_ZPVEC1 = $03
+p04 = $04
+RAM_ZPVEC2 = $05
+p06 = $06
+RAM_CHARAC = $07
+RAM_ENDCHR = $08
+RAM_TRMPOS = $09
+RAM_VERCK = $0A
+RAM_COUNT = $0B
+RAM_DIMFLG = $0C
+RAM_VALTYP = $0D
+RAM_INTFLG = $0E
+RAM_DORES = $0F
+RAM_SUBFLG = $10
+RAM_TANSGN = $12
+RAM_LINNUM = $14
+p15 = $15
+RAM_TEMPST = $19
+p1A = $1A
+p20 = $20
+p21 = $21
+RAM_RESMO = $28
+RAM_RESLO = $29
+p2C = $2C
+RAM_VARTAB = $2D
+RAM_ARYTAB = $2E
+p2F = $2F
+p30 = $30
+RAM_STREND = $31
+p32 = $32
+RAM_FRFTOP = $33
+p34 = $34
+RAM_DATLIN = $3F
+RAM_DATPTR = $41
+p42 = $42
+p44 = $44
+RAM_JMPER = $54
+RAM_SIZE = $55
+RAM_TEMPF1 = $57
+RAM_LOWDS = $5D
+RAM_FACEXP = $61
+RAM_FACMOH = $63
+RAM_FACOV = $70
+RAM_AUTINC = $73
+p7F = $7F
+RAM_RUNMOD = $81
+RAM_GRAPHM = $83
+RAM_RTFLAG = $8A
+RAM_BSOUR = $95
+pA0 = $A0
+RAM_TPBYTE = $A7
+RAM_DCOUNT = $AA
+RAM_FA = $AE
+RAM_SEDSAL = $C0
+RAM_INDX = $C3
+RAM_LSTP = $C5
+RAM_SEDT1 = $CC
+RAM_INSRT = $CF
+pD0 = $D0
+pD5 = $D5
+pD9 = $D9
+pE0 = $E0
+RAM_STPFLG = $F0
+RAM_TO = $F1
+RAM_PASS = $F7
+RAM_XSTOP = $FA
+RAM_CURBNK = $FB
+RAM_XoN = $FC
+RAM_LOFBUF = $FF
+;
+; **** FIELDS **** 
+;
+f001D = $001D
+f0030 = $0030
+f003C = $003C
+f0100 = $0100
+f0131 = $0131
+f01A0 = $01A0
+f023E = $023E
+f0303 = $0303
+f033B = $033B
+f033C = $033C
+f034B = $034B
+f03AA = $03AA
+f03CC = $03CC
+f03FF = $03FF
+f0404 = $0404
+f051F = $051F
+f0606 = $0606
+f071F = $071F
+f0804 = $0804
+f08FC = $08FC
+f0920 = $0920
+f09B8 = $09B8
+f09C0 = $09C0
+f0BC0 = $0BC0
+f0CA9 = $0CA9
+f0D68 = $0D68
+f0D87 = $0D87
+f0D88 = $0D88
+f0DB8 = $0DB8
+f0DB9 = $0DB9
+f0DC0 = $0DC0
+f0DFF = $0DFF
+f0E19 = $0E19
+f0F0F = $0F0F
+f0F20 = $0F20
+f4015 = $4015
+f406D = $406D
+f422A = $422A
+f4440 = $4440
+f44FD = $44FD
+f4642 = $4642
+f475D = $475D
+f49FB = $49FB
+f4B42 = $4B42
+f4C7C = $4C7C
+f4CFD = $4CFD
+f5020 = $5020
+f507F = $507F
+f51AE = $51AE
+f51D9 = $51D9
+f541D = $541D
+f5555 = $5555
+f55A9 = $55A9
+f56AB = $56AB
+f5FFD = $5FFD
+f60FF = $60FF
+f635D = $635D
+f6363 = $6363
+f66EB = $66EB
+f6B7F = $6B7F
+f6BF9 = $6BF9
+f6FF9 = $6FF9
+f71FD = $71FD
+f7354 = $7354
+f74FD = $74FD
+f7979 = $7979
+f7A55 = $7A55
+f7A7A = $7A7A
+f7D7F = $7D7F
+f7E6B = $7E6B
+f7F55 = $7F55
+f7F7F = $7F7F
+f7FBF = $7FBF
+f7FFF = $7FFF
+f9CDC = $9CDC
+f9F9F = $9F9F
+f9FA5 = $9FA5
+f9FAF = $9FAF
+fA05D = $A05D
+fA0FF = $A0FF
+fA8A0 = $A8A0
+fA8AA = $A8AA
+fA9FA = $A9FA
+fAA55 = $AA55
+fAA59 = $AA59
+fAAFF = $AAFF
+fACFA = $ACFA
+fAF7C = $AF7C
+fB3F3 = $B3F3
+fB8FA = $B8FA
+fBCAA = $BCAA
+fBEC3 = $BEC3
+fBF7F = $BF7F
+fBFBF = $BFBF
+fC000 = $C000
+fC0C0 = $C0C0
+fC0F0 = $C0F0
+fC0FF = $C0FF
+fC3C3 = $C3C3
+fC3FD = $C3FD
+fC57F = $C57F
+fCCCF = $CCCF
+fCCFF = $CCFF
+fD07D = $D07D
+fD0FA = $D0FA
+fD1FD = $D1FD
+fD3FD = $D3FD
+fD4FD = $D4FD
+fD8FD = $D8FD
+fD9D9 = $D9D9
+fDC9C = $DC9C
+fDCDC = $DCDC
+fDFC9 = $DFC9
+fE7E7 = $E7E7
+fE882 = $E882
+fEBFD = $EBFD
+fECE3 = $ECE3
+fF33E = $F33E
+fF3E3 = $F3E3
+fF3F6 = $F3F6
+fF804 = $F804
+fF80C = $F80C
+fF811 = $F811
+fF813 = $F813
+fF815 = $F815
+fF81C = $F81C
+fF81F = $F81F
+fF825 = $F825
+fF827 = $F827
+fF834 = $F834
+fF83F = $F83F
+fF840 = $F840
+fF848 = $F848
+fF84D = $F84D
+fF850 = $F850
+fF851 = $F851
+fF858 = $F858
+fF859 = $F859
+fF864 = $F864
+fF865 = $F865
+fF869 = $F869
+fF871 = $F871
+fF873 = $F873
+fF879 = $F879
+fF87E = $F87E
+fF882 = $F882
+fF883 = $F883
+fF884 = $F884
+fF886 = $F886
+fF894 = $F894
+fF898 = $F898
+fF89B = $F89B
+fF89F = $F89F
+fF8A6 = $F8A6
+fF8B4 = $F8B4
+fF8C0 = $F8C0
+fF8C4 = $F8C4
+fF8E0 = $F8E0
+fF8E6 = $F8E6
+fF8F4 = $F8F4
+fF8F8 = $F8F8
+fF939 = $F939
+fF9F8 = $F9F8
+fF9F9 = $F9F9
+fF9FC = $F9FC
+fF9FF = $F9FF
+fFA00 = $FA00
+fFA24 = $FA24
+fFA39 = $FA39
+fFA4C = $FA4C
+fFA74 = $FA74
+fFAAA = $FAAA
+fFAF9 = $FAF9
+fFAFB = $FAFB
+fFAFF = $FAFF
+fFB29 = $FB29
+fFB65 = $FB65
+fFBFE = $FBFE
+fFD55 = $FD55
+fFD5F = $FD5F
+fFDFC = $FDFC
+fFDFE = $FDFE
+fFDFF = $FDFF
+fFE00 = $FE00
+fFE0C = $FE0C
+fFE11 = $FE11
+fFE1A = $FE1A
+fFEEA = $FEEA
+fFEFC = $FEFC
+fFEFD = $FEFD
+fFEFE = $FEFE
+fFEFF = $FEFF
+fFFBF = $FFBF
+fFFCC = $FFCC
+fFFFC = $FFFC
+fFFFF = $FFFF
+;
+; **** ABSOLUTE ADRESSES **** 
+;
+a0120 = $0120
+a02D0 = $02D0
+a030F = $030F
+a0315 = $0315
+a0327 = $0327
+a0405 = $0405
+a040C = $040C
+a0505 = $0505
+a0507 = $0507
+a050C = $050C
+a050D = $050D
+a0516 = $0516
+a0620 = $0620
+a0705 = $0705
+a0715 = $0715
+a0720 = $0720
+a0901 = $0901
+a0902 = $0902
+a0912 = $0912
+a0A1F = $0A1F
+a0A2B = $0A2B
+a0A6F = $0A6F
+a0B00 = $0B00
+a0B03 = $0B03
+a0B0B = $0B0B
+a0B20 = $0B20
+a0C0C = $0C0C
+a0C21 = $0C21
+a0C3B = $0C3B
+a0C7A = $0C7A
+a0C9C = $0C9C
+a0CCC = $0CCC
+a0CF9 = $0CF9
+a0D0F = $0D0F
+a0D15 = $0D15
+a0D20 = $0D20
+a0D6A = $0D6A
+a0D8C = $0D8C
+a0E0F = $0E0F
+a0E17 = $0E17
+a0E1F = $0E1F
+a0E5A = $0E5A
+a0E6F = $0E6F
+a0E7C = $0E7C
+a0ED2 = $0ED2
+a0F2B = $0F2B
+a0F4A = $0F4A
+a0F6C = $0F6C
+a450D = $450D
+a4720 = $4720
+a4F4E = $4F4E
+a504F = $504F
+a5347 = $5347
+a5446 = $5446
+a5652 = $5652
+a5D3E = $5D3E
+a6A6C = $6A6C
+a6B6D = $6B6D
+a6C6F = $6C6F
+a6D6D = $6D6D
+a6DFB = $6DFB
+a6F6F = $6F6F
+a7F9F = $7F9F
+a8CB0 = $8CB0
+a8D8D = $8D8D
+a9EAA = $9EAA
+aA0BF = $A0BF
+aBCBF = $BCBF
+aC232 = $C232
+aCCC3 = $CCC3
+aCD44 = $CD44
+aCE2D = $CE2D
+aCE7E = $CE7E
+aD33F = $D33F
+aE3C0 = $E3C0
+aE3DF = $E3DF
+aE4E7 = $E4E7
+aEAF8 = $EAF8
+aEF79 = $EF79
+aF0E8 = $F0E8
+aF0FC = $F0FC
+aFDF8 = $FDF8
+aFF07 = $FF07
+aFF08 = $FF08
+aFF09 = $FF09
+aFF0A = $FF0A
+;
+; **** POINTERS **** 
+;
+p0C0F = $0C0F
+p0D7B = $0D7B
+p6F6C = $6F6C
+p9301 = $9301
+pFBB4 = $FBB4
+;
+; **** EXTERNAL JUMPS **** 
+;
+e0104 = $0104
+e0108 = $0108
+e0117 = $0117
+e0220 = $0220
+e0502 = $0502
+e0506 = $0506
+e050E = $050E
+e0517 = $0517
+e0701 = $0701
+e0813 = $0813
+e0814 = $0814
+e0854 = $0854
+e0917 = $0917
+e0944 = $0944
+e0C05 = $0C05
+e0D01 = $0D01
+e0E01 = $0E01
+e0E09 = $0E09
+e0E45 = $0E45
+e0F02 = $0F02
+e0F03 = $0F03
+e0F04 = $0F04
+e0F06 = $0F06
+e0F07 = $0F07
+e0F0A = $0F0A
+e0F12 = $0F12
+e0F13 = $0F13
+e0F19 = $0F19
+e0F1A = $0F1A
+e0F44 = $0F44
+e0F54 = $0F54
+e0F56 = $0F56
+e0F59 = $0F59
+e4320 = $4320
+e503E = $503E
+e5320 = $5320
+e5420 = $5420
+e5450 = $5450
+e5920 = $5920
+e5D20 = $5D20
+e5D5D = $5D5D
+e8080 = $8080
+e8117 = $8117
+eA020 = $A020
+eA0A0 = $A0A0
+eA920 = $A920
+eB8CC = $B8CC
+eC020 = $C020
+eC56B = $C56B
+eDA89 = $DA89
+eE378 = $E378
+eE3B0 = $E3B0
+;
+; **** PREDEFINED LABELS **** 
+;
+RAM_DSCPNT = $0050
+RAM_IESCLK = $030C
+RAM_CINV = $0314
+RAM_ISTOP = $0326
+RAM_ESTAKH = $0455
+RAM_DEJAVU = $0508
+RAM_DELAY = $0542
+ROM_RESTOR = $FF8A
+ROM_SETMSG = $FF90
+ROM_SCNKEY = $FF9F
+ROM_8ASIN = $FFCF
+
+        * = $0F90
+
+        .BYTE $B0,$14,$7E,$ED,$9E,$02,$53,$56
+        .BYTE $11,$0E,$EB,$0B,$25,$89,$36,$18
+        .BYTE $0D,$D1,$35,$53,$25,$98,$EE,$5B
+        .BYTE $26,$75,$45,$38,$F0,$23,$06,$45
+        .BYTE $26,$74,$45,$86,$34,$DA,$23,$3D
+        .BYTE $26,$74,$3B,$B2,$86,$34,$92,$43
+f0FC0   .BYTE $78,$A0,$00,$84,$03,$A2,$2F,$A9
+        .BYTE $3F,$85,$04,$B1,$03,$5D,$90,$0F
+        .BYTE $91,$03,$C8,$D0,$F6,$C6,$04,$CA
+        .BYTE $10,$F1
+        SEI 
+        JSR ROM_RESTOR ;$FF8A RESTOR  Restore vectors to initial values
+        JSR e8117
+        LDA #>pFBB4
+        STA a0327
+        LDA #<pFBB4
+        STA RAM_ISTOP ;ISTOP   
+        STA RAM_DEJAVU ;DEJAVU  'cold' or 'warm' start status
+        JSR eE3B0
+        JSR eE378
+        CLI 
+        LDA #$11
+        STA $FF13    ;Bit 0 :    Clock status
+        JSR eE378
+f0FFD   JMP j3AB3
+
+RAM_BASBGN JSR eC56B
+s1003   LDA #$3F
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #$08
+s1009   CPY #$00
+        BEQ b1017
+b100D   CLC 
+        ADC #$28
+a1010   BCC b1014
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+b1014   DEY 
+        BNE b100D
+b1017   STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        JSR s3A9D
+        LDY #$27
+b101E   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA f0DB8,Y
+        LDA #$07
+        STA f09B8,Y
+        DEY 
+        BNE b101E
+        RTS 
+
+        BRK #$8D
+        ORA f60FF,Y
+j1031   JSR s11CC
+        CPY #$03
+        BNE b10B1
+        JSR s1003
+        JSR eDA89
+        JSR eDA89
+        LDY #$01
+        JSR s1003
+        LDX #$00
+        LDY #$00
+        BEQ b105F
+s104C   LDA f0DB9,X
+        CLC 
+        ADC #$80
+        STA f0DB9,X
+        LDA f0D88,Y
+        CLC 
+        ADC #$80
+        STA f0D88,Y
+        RTS 
+
+b105F   JSR s104C
+        STY RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STX a04
+        JSR s10A7
+        JSR s104C
+        JSR s10A7
+        LDA #$FD
+        STA aFF08
+        LDA aFF08
+        LSR 
+        LSR 
+        LSR 
+        BCS b1081
+        CPX #$00
+        BEQ b1081
+        DEX 
+b1081   LSR 
+        BCS b1089
+        CPX #$25
+        BEQ b1089
+        INX 
+b1089   AND #$08
+        BNE b105F
+        LDA f0DB9,X
+        CMP #$BC
+        BNE b109C
+        CPY #$00
+        BEQ b1099
+        DEY 
+b1099   JMP b105F
+
+b109C   STA f0D88,Y
+        INY 
+        CPY #$05
+        BNE b105F
+        JMP j10B4
+
+s10A7   LDY #$35
+        JSR s3A76
+        LDY RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDX a04
+        RTS 
+
+b10B1   JMP j1155
+
+j10B4   LDX #$05
+b10B6   LDA f0D87,X
+        CMP f10CB,X
+        BNE b10C4
+        DEX 
+        BNE b10B6
+        JMP j10D1
+
+b10C4   LDY #$05
+        JSR s1003
+f10CB   =*+$02
+        JMP j3EF9
+
+        BMI b1104
+        AND (RAM_FRFTOP),Y ;FRFTOP  Pointer: bottom of string storage
+        SEC 
+j10D1   JSR s3A7D
+        JSR s3A17
+        JSR s3B02
+        JMP j3B4C
+
+        JSR e0854
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        ORA a20
+        ORA #$13
+        JSR s2001
+        ANC #$05
+        ORA f0920,Y
+        ASL a1420
+        PHP 
+        ORA a20
+        JAM 
+        SLO a1414
+        NOP a2005
+        AND (p20,X)
+        JSR s2020
+        JSR s2020
+b1104   =*+$01
+        JSR s2020
+        JSR s2020
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        ORA a20
+        ORA #$13
+        JSR s2001
+        ANC #$05
+        ORA f0920,Y
+        ASL a1420
+        PHP 
+        ORA a20
+        SLO (RAM_DORES,X) ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        ASL a06
+        ORA #$0E
+        JSR s2021
+        JSR s2020
+        JSR s2020
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        ORA a20
+        ORA #$13
+        JSR s2001
+        JAM 
+        JAM 
+        ORA RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA #$0E
+        SLO a20
+        NOP f15,X
+        JAM 
+        ORA a20
+        AND (p20,X)
+        JSR s2020
+        JSR s2020
+        JSR s2020
+j1155   =*+$02
+        JSR eC020
+        BRK #$D0
+        EOR #$20
+        BRK #$10
+        LDX a3051
+        CPX #$01
+        BNE b1165
+        LDA #$28
+b1165   CPX #$05
+        BNE b116B
+        LDA #$29
+b116B   CPX #$0A
+        BNE b1171
+        LDA #$47
+b1171   NOP 
+        NOP 
+        NOP 
+        JSR s174F
+        CPX #$0F
+        BNE b1185
+        LDA #$45
+        STA a0A6F
+        LDA #$0F
+        STA a0E6F
+b1185   STA a0E1F
+        LDA #$48
+        STA a0A1F
+b118D   LDA #$FD
+        STA aFF08
+        LDA aFF08
+        AND #$80
+        BNE b118D
+        JSR s3A7D
+        JSR s3A2D
+        JMP j3B4C
+
+        CPY #$02
+        BNE b11AC
+b11A6   JSR RAM_BASBGN ;BASBGN  Start of BASIC text area
+        JMP b118D
+
+b11AC   CPY #$04
+        BNE b11BB
+        LDA a3953
+        CLC 
+        ADC #$40
+        STA a3FC6
+        BNE b11A6
+b11BB   DEY 
+        DEY 
+        DEY 
+        DEY 
+        DEY 
+        LDA #$10
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #$DD
+        JSR s1009
+        JMP b118D
+
+s11CC   JSR s3A9D
+        JMP eC56B
+
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+b11DA   JSR s3846
+        JMP j3B4C
+
+j11E0   LDX #$00
+b11E2   LDA f033C,X
+        CMP #$1E
+        BCC b11ED
+        CMP #$DF
+        BNE b11F5
+b11ED   INX 
+        CPX #$09
+        BNE b11E2
+b11F2   JMP j3B4C
+
+b11F5   LDY a3051
+        BNE b120A
+        CMP #$A9
+        BNE b11ED
+        LDA #$DF
+        CMP a36D7
+        BNE b11F2
+a1207   =*+$02
+        JSR s2FC0
+        BNE b11DA
+b120A   CPY #$01
+        BNE b124B
+        CMP #$E0
+        BEQ b1216
+a1212   CMP #$E1
+s1214   BNE b122A
+b1216   LDA #$AA
+        STA a369A
+        JSR s3846
+        LDY #$F0
+s1220   JSR s3A76
+        LDA #$DF
+        STA a369A
+        BNE b11DA
+b122A   CMP #$27
+        BCS b1233
+        LDY #$00
+        JMP j1031
+
+b1233   CMP #$AD
+        BNE b11ED
+        LDA a3692
+        CMP #$6B
+        BEQ b1243
+        LDY #$0F
+        JMP j3EAC
+
+b1243   LDA #$F9
+        STA a36A3
+        JMP b11DA
+
+b124B   CPY #$02
+        BNE b12A5
+        CMP #$F5
+        BNE b1267
+        LDA a36A3
+        CMP #$F9
+        BEQ b125F
+        LDY #$10
+        JMP j3EAC
+
+b125F   LDA #$DF
+        STA a3901
+b1264   JMP b11DA
+
+b1267   CMP #$A6
+        BNE b1279
+        LDA a369A
+        CMP #$DF
+        BNE b1264
+        LDA #$DF
+        STA a36C2
+        BNE b1264
+b1279   CMP #$B1
+        BNE b1287
+        LDA #$DF
+        STA a36D7
+        STA a36E2
+        BNE b1264
+b1287   CMP #$B9
+        BEQ b128E
+        JMP b11ED
+
+b128E   LDA a3745
+        CMP #$DF
+        BEQ b129A
+        LDY #$03
+        JMP j3EAC
+
+b129A   LDA #$01
+        STA a12A4
+        LDY #$05
+        JMP j1031
+
+b12A5   =*+$01
+a12A4   BRK #$C0
+        SLO (pD0,X)
+        NOP a27C9
+        BCS b12B2
+        LDY #$04
+        JMP j1031
+
+b12B2   JMP j3B4C
+
+        CPY #$04
+        BNE b12DB
+        CMP #$3B
+        BEQ b12C1
+        CMP #$42
+        BNE b12C6
+b12C1   LDY #$0D
+        JMP j3EAC
+
+b12C6   CMP #$F7
+        BEQ b12D1
+        CMP #$F8
+        BEQ b12D1
+        JMP b11ED
+
+b12D1   LDA #$00
+        STA a394B
+        LDY #$06
+        JMP j1031
+
+b12DB   CPY #$05
+        BNE b12F9
+        CMP #$27
+        BCS b12E8
+        LDY #$00
+        JMP j1031
+
+b12E8   CMP #$FD
+        BEQ b12EF
+b12EC   JMP b11ED
+
+b12EF   LDA #$00
+        JMP j2FDF
+
+j12F4   LDY #$07
+        JMP j1031
+
+b12F9   CPY #$06
+        BNE b1306
+        CMP #$F6
+        BNE b12EC
+a1301   LDY #$00
+b1303   JMP j3EAC
+
+a1307   =*+$01
+b1306   CPY #$07
+s1309   =*+$01
+        BNE b133E
+        CMP #$E3
+        BNE b1312
+        LDY #$01
+        BNE b1303
+b1312   CMP #$5F
+a1314   BNE b12EC
+        LDA #$BC
+a1319   =*+$01
+        STA a36FE
+        LDA #$5F
+        STA a36FC
+a1320   JSR s3846
+        LDY #$FF
+        JSR s3A76
+        JSR s3A76
+        JSR s3A76
+        JSR s3A76
+        LDA #$DF
+        STA a36FE
+        LDA #$00
+        STA a36FC
+        JMP b11DA
+
+b133E   CPY #$08
+        BNE b1396
+        LDY #$00
+        STY RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        CMP #$4B
+        BNE b135F
+        LDY a3994
+        BNE b1366
+        JSR s3602
+        LDA #$18
+b1354   STA a35A6
+        LDA #$0C
+        STA a35A4
+b135C   JMP j3B4C
+
+b135F   CMP #$56
+        BNE b1374
+        LDY a3994
+b1366   BNE b136F
+        JSR s3602
+        LDA #$0C
+        BNE b1354
+b136F   LDY #$02
+        JMP j3EAC
+
+b1374   CMP #$C1
+        BEQ b137C
+        CMP #$C3
+        BNE b1384
+b137C   LDA #$DF
+        STA a3720
+b1381   JMP b11DA
+
+b1384   CMP #$CB
+        BNE b13B0
+        LDA a3745
+        CMP #$DF
+        BNE b135C
+        LDA #$DF
+        STA a370E
+        BNE b1381
+b1396   CPY #$09
+        BNE b13A3
+        CMP #$27
+        BCS b13B0
+        LDY #$02
+        JMP j1031
+
+b13A3   CPY #$0A
+        BNE b13D2
+        CMP #$27
+        BCS b13B3
+        LDY #$00
+        JMP j1031
+
+b13B0   JMP b11ED
+
+b13B3   CMP #$CC
+        BEQ b13BB
+        CMP #$CF
+        BNE b13B0
+b13BB   LDA #$DF
+        CMP a36FE
+        BNE b13CD
+        CMP a3752
+        BNE b13CD
+        STA a3736
+b13CA   JMP b11DA
+
+b13CD   LDY #$06
+        JMP j3EAC
+
+b13D2   CPY #$0B
+        BNE b13E1
+        CMP #$D1
+        BNE b13B0
+        LDA #$DF
+        STA a3745
+        BNE b13CA
+b13E1   CPY #$0C
+        BNE b13FD
+        CMP #$27
+        BCS b13EE
+        LDY #$00
+        JMP j1031
+
+b13EE   CMP #$D2
+        BEQ b13F6
+        CMP #$D5
+        BNE b13B0
+b13F6   LDA #$DF
+        STA a3752
+        BNE b13CA
+b13FD   CPY #$0D
+        BNE b1421
+        CMP #$27
+        BCS b140A
+a1405   LDY #$00
+s1409   =*+$02
+        JMP j1031
+
+b140A   CMP #$D6
+        BNE b13B0
+a1410   =*+$02
+        LDA a370E
+        CMP #$DF
+a1414   =*+$01
+a1413   BEQ b141A
+        LDY #$07
+        JMP j3EAC
+
+b141A   LDA #$E2
+        STA a375F
+a1420   =*+$01
+        BNE b13CA
+b1421   CPY #$0E
+        BNE b142E
+        CMP #$D7
+a1427   BNE b13B0
+        LDY #$08
+        JMP j3EAC
+
+b142E   CPY #$0F
+        BNE b143E
+        CMP #$27
+        BCS b143B
+        LDY #$00
+        JMP j1031
+
+b143B   JMP b13B0
+
+b143E   CPY #$10
+        BNE b1464
+        CMP #$F4
+        BNE b144B
+        LDY #$0A
+b1448   JMP j3EAC
+
+b144B   CMP #$D9
+        BEQ b1453
+        CMP #$DB
+        BNE b1457
+b1453   LDY #$09
+        BNE b1448
+b1457   CMP #$B8
+        BEQ b145F
+        CMP #$BB
+        BNE b143B
+b145F   LDY #$03
+        JMP j1031
+
+b1464   CPY #$11
+        BNE b1474
+f1469   =*+$01
+        CMP #$DD
+        BNE b143B
+        LDA #$DF
+        STA a3831
+        JMP b11DA
+
+b1474   CMP #$81
+        BCS b147B
+        JMP b11DA
+
+f147D   =*+$02
+b147B   JMP j1B8F
+
+j147E   LDY a3051
+        CPY #$0E
+        BNE b148A
+        LDY #$20
+        JMP s3A76
+
+b148A   CPY #$0F
+        BNE b14C8
+        LDA #$00
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDY #$0C
+a1495   =*+$01
+        LDX #$06
+        JSR s3608
+        LDA #$EB
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #$39
+        STA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+        LDX a1495
+a14A5   =*+$01
+        LDA #$01
+        BNE b14B2
+        CPX #$06
+        BNE b14AE
+        LDA #$01
+b14AE   DEX 
+        JMP j14B9
+
+b14B2   CPX #$0B
+        BNE b14B8
+        LDA #$00
+b14B8   INX 
+j14B9   STX a1495
+        STA a14A5
+        LDA #$01
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDY #$0C
+        JMP s3608
+
+b14C8   CPY #$11
+        BNE b14D3
+a14CD   =*+$01
+        LDA #$01
+        BEQ b14E4
+        JMP j15C1
+
+b14D3   LDA #$0F
+        STA a3625
+        STA a3627
+        CPY #$0A
+        BNE b1523
+        DEC a2FBF
+        BEQ b14E5
+b14E4   RTS 
+
+b14E5   LDY #$08
+        STY a2FBF
+        LDA #$09
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #>p0D7B
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #<p0D7B
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        LDA #$DF
+        CMP a1507
+        BNE b1501
+        LDA #$D8
+s1502   =*+$01
+b1501   STA a1507
+        LDX #$06
+a1507   =*+$01
+b1506   LDA #$DF
+        LDY #$00
+s150A   STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+s150C   LDA #$EE
+f150F   =*+$01
+s150E   STA (p04),Y
+        LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        CLC 
+        ADC #$28
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        BCC b151F
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b151F   DEX 
+        BNE b1506
+b1522   RTS 
+
+b1523   CPY #$09
+        BNE b1522
+        NOP 
+        JMP j15AD
+
+j152B   LDA #>p0C0F
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #<p0C0F
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+a1536   =*+$01
+        LDX #$06
+a1538   =*+$01
+        LDA #$00
+        BNE b1544
+        DEX 
+        CPX #$02
+        BNE b154B
+        LDA #$01
+        BNE b154B
+b1544   INX 
+        CPX #$07
+        BNE b154B
+        LDA #$00
+b154B   STA a1538
+        STX a1536
+b1551   LDY #$00
+        LDA #$DF
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        INY 
+        INY 
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        DEY 
+        LDA #$EA
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA (p04),Y
+        JSR s159D
+        DEX 
+        BNE b1551
+        LDA #$E4
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDX #$02
+b156E   LDY #$00
+b1570   LDA RAM_FNLEN ;FNLEN   Length of current file name
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA #$DA
+        STA (p04),Y
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+        INY 
+        CPY #$03
+        BNE b1570
+        JSR s159D
+        DEX 
+        BNE b156E
+        LDY #$00
+        LDA #$E7
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+b158B   LDA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        CMP RAM_FNLEN ;FNLEN   Length of current file name
+        BNE b1595
+        LDA #$DF
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+b1595   INC RAM_FNLEN ;FNLEN   Length of current file name
+        INY 
+        CPY #$03
+        BNE b158B
+        RTS 
+
+s159D   LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        CLC 
+        ADC #$28
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        BCC b15AC
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b15AC   RTS 
+
+a15AE   =*+$01
+j15AD   LDX #$01
+        CPX #$01
+        BNE b15B7
+        DEC a15AE
+        RTS 
+
+b15B7   INC a15AE
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        JMP j152B
+
+a15C2   =*+$01
+j15C1   LDA #$00
+        CMP #$00
+        BNE b15CB
+        INC a15C2
+        RTS 
+
+b15CB   DEC a15C2
+        JMP j3620
+
+j15D1   LDA a3736
+        CMP #$DF
+        BNE b15DD
+        LDA #$59
+        STA a37B6
+b15DD   LDA a3051
+        CMP #$11
+        BNE b162A
+        LDA a14CD
+        BNE b15FC
+        LDA a35A4
+        CMP #$06
+        BNE b15FC
+        LDA a35A6
+        CMP #$18
+        BNE b15FC
+        LDA #$00
+        STA a15FD
+a15FD   =*+$01
+b15FC   LDA #$01
+f15FF   =*+$01
+        BNE b1616
+        LDY #$06
+a1603   =*+$01
+        LDX #$1E
+        LDA #$00
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        JSR s3608
+        LDX a1603
+        CPX #$03
+        BEQ b1613
+a1612   DEX 
+b1613   STX a1603
+b1616   LDA #$78
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #$49
+        STA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+        LDY #$06
+        LDA #$01
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDX a1603
+        JSR s3608
+b162A   JMP j147E
+
+j162D   LDX #$09
+b162F   LDA f033B,X
+        STA f034B,X
+        DEX 
+        BNE b162F
+        LDA #$02
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDX a35A6
+        LDY a35A4
+        JSR s3608
+        LDX #$09
+b1647   LDA f033B,X
+        CMP #$D8
+        BNE b1653
+b164E   LDY #$05
+b1650   JMP j3EAC
+
+b1653   LDY a3051
+        CPY #$11
+        BNE b166A
+        CMP #$78
+        BEQ b1666
+        CMP #$7B
+        BEQ b1666
+        CMP #$7E
+        BNE b166A
+b1666   LDY #$0B
+        BNE b1650
+b166A   CMP #$9C
+        BCC b1676
+        CMP #$A5
+        BCS b1676
+        JMP j16A7
+
+j1675   NOP 
+b1676   CMP #$E4
+        BCC b168A
+        CMP #$EB
+        BCS b1682
+b167E   LDY #$04
+        BNE b1650
+b1682   CMP #$F4
+        BCS b168A
+        LDY #$0E
+        BNE b1650
+b168A   DEX 
+        BNE b1647
+        LDX #$09
+b168F   LDA f034B,X
+        STA f033B,X
+        CMP #$D8
+        BEQ b164E
+        CMP #$E4
+        BCC b16A1
+        CMP #$EA
+        BCC b167E
+b16A1   DEX 
+        BNE b168F
+        JMP j11E0
+
+j16A7   LDY a3831
+        CPY #$DF
+        BEQ b16B2
+        LDY #$0C
+        BNE b1650
+b16B2   LDY #$00
+        STY a14CD
+        JMP j1675
+
+s16BA   LDA #$A5
+        STA a36C2
+        LDA #$A9
+        STA a3692
+        LDA #$79
+        STA a3690
+        LDA #$E0
+        STA a369A
+        LDA #$AC
+        STA a36A3
+        LDA #$B8
+        STA a36B3
+        LDA #$B0
+        STA a36D7
+        LDA #$B5
+        STA a36E2
+        LDA #$5E
+        STA a36FE
+        LDA #$C6
+        STA a370E
+        LDA #$C0
+        STA a3720
+        LDA #$CC
+        STA a3736
+        LDA #$D0
+        STA a3745
+        LDA #$D2
+        STA a3752
+        LDA #$D6
+        STA a375F
+        LDA #$00
+        STA a37B6
+        LDA #$DD
+        STA a3831
+        LDA #$01
+        STA a394B
+        LDA #$01
+        STA a3994
+        LDA #$F5
+        STA a3901
+        LDA #$00
+        STA a12A4
+        LDA #$01
+        STA a15FD
+        LDA #$1E
+        STA a1603
+        LDA #$01
+        STA a14CD
+a1733   =*+$01
+        LDX #$05
+        CPX #$07
+        BNE b173A
+        LDX #$FF
+b173A   INX 
+        STX a1733
+        LDA f1747,X
+        STA a3953
+        JMP j310D
+
+f1747   JAM 
+        SLO a04
+        ASL RAM_ENDCHR ;ENDCHR  Flag: scan for quote at end of string
+        ORA (RAM_ZPVEC2,X) ;ZPVEC2  Temp (renumber)
+s174F   =*+$01
+        SLO (pE0,X)
+        NOP a02D0
+        LDA #$49
+        CPX #$0D
+        BNE b175B
+        LDA #$45
+b175B   RTS 
+
+p175C   BVS b179E
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        ROR a205D
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        JSR eA0A0
+        LDY #$A0
+b179E   LDY #$20
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        JSR eA020
+        LDY #$20
+        EOR fA05D,X
+        LDY #$A0
+        LDY #$A0
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        JSR eA0A0
+        LDY #$A0
+        LDY #$A0
+        JSR eA0A0
+        LDY #$A0
+        JSR eA020
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        JSR eA0A0
+        LDY #$5D
+        EOR eA0A0,X
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR s2020
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        LDY #$5D
+        EOR eA0A0,X
+RAM_BMLUM   =*+$01
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR s2020
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        LDY #$5D
+        EOR eA0A0,X
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR s2020
+        JSR eA0A0
+        JSR eA0A0
+        LDY #$20
+        JSR eA0A0
+        LDY #$5D
+        EOR eA0A0,X
+        LDY #$A0
+        LDY #$20
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        LDY #$A0
+        LDY #$A0
+        JSR eA0A0
+        LDY #$A0
+        JSR eA020
+        LDY #$A0
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        LDY #$5D
+        EOR eA020,X
+        LDY #$A0
+        LDY #$A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        JSR eA0A0
+        LDY #$A0
+        JSR eA020
+        LDY #$A0
+        LDY #$20
+        JSR s2020
+        LDY #$A0
+        LDY #$5D
+        EOR s2020,X
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        JSR eA020
+        LDY #$A0
+        EOR a205D,X
+        JSR s2020
+        LDY #$A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        LDY #$A0
+        JSR eA0A0
+        LDY #$20
+        JSR s2020
+        JSR e5D5D
+        JSR eA0A0
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        LDY #$A0
+        LDY #$A0
+        JSR eA0A0
+        JSR s2020
+a1901   =*+$01
+s1902   =*+$02
+        JSR eA020
+        LDY #$A0
+a1905   LDY #$20
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        LDY #$5D
+        EOR eA0A0,X
+        LDY #$A0
+        LDY #$20
+        JSR eA020
+        LDY #$A0
+s1920   LDY #$20
+        JSR eA0A0
+        JSR s2020
+        JSR eA020
+        LDY #$A0
+        LDY #$A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        LDY #$5D
+f193D   =*+$01
+        ARR #$40
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RRA (RAM_LOWDS),Y ;LOWDS   
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e5D20
+        EOR s2020,X
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        EOR e5D5D,X
+        EOR f150F,Y
+        JSR s150A
+        SLO (RAM_LINNUM),Y ;LINNUM  Temp: integer value
+        JSR e0108
+        ASL RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        JSR e0F13
+        NOP a0516
+        NOP a20
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        ORA a1319
+        NOP RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        JAM 
+        ORA f0F20,Y
+        ASL a20
+        EOR e5D5D,X
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        EOR f475D,X
+        PHP 
+        SLO a1413
+        JSR e0F54
+        SLO RAM_INTFLG,X ;INTFLG  Data type: $80 = integer, $00 = floating
+        BIT a0B20
+        ORA #$0C
+        NOP a0405
+        JSR RAM_DELAY ;DELAY   
+        NOP a0705
+        JAM 
+        SLO a202C
+        ORA (RAM_INTFLG,X) ;INTFLG  Data type: $80 = integer, $00 = floating
+        NOP a20
+        ASL RAM_DORES ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        ORA RAM_INTFLG,X ;INTFLG  Data type: $80 = integer, $00 = floating
+        NOP a20
+        EOR f635D,X
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (p20,X)
+        JSR e5D5D
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        BPL b1A6D
+        ORA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        ORA #$0F
+        ORA RAM_CHANNL,X ;CHANNL  Flag: INPUT prompt
+        JSR s1214
+        ORA RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        SLO (p15),Y
+        JAM 
+        ORA a20
+        AND (p20,X)
+b1A6D   AND (p20,X)
+        AND (p20,X)
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e5D5D
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (p20,X)
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e5D20
+        ARR #$40
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RRA (RAM_LOWDS),Y ;LOWDS   
+        ALR #$49
+        LSR a5347
+        SRE a5446
+        JSR e0F03
+        ASL a1207
+        ORA (RAM_LINNUM,X) ;LINNUM  Temp: integer value
+        ORA RAM_DIMFLG,X ;DIMFLG  Flag: Default Array DIMension
+        ORA (RAM_LINNUM,X) ;LINNUM  Temp: integer value
+        ORA RAM_CHANNL ;CHANNL  Flag: INPUT prompt
+        JSR e503E
+        NOP a1901
+        JSR s1409
+        JSR e0701
+        ORA (RAM_TRMPOS,X) ;TRMPOS  Screen column from last TAB
+        ASL a5D3E
+        EOR f6363,X
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        RRA (RAM_FACMOH,X) ;FACMOH  
+        EOR f406D,X
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        RTI 
+
+j1B44   =*+$01
+        ADC f0CA9,X
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #$00
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        LDX #$04
+        LDA #>p175C
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #<p175C
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDY #$00
+b1B5E   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA #$00
+        STA (p04),Y
+        INY 
+        BNE b1B5E
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+        DEX 
+        BNE b1B5E
+        LDA #$FF
+        STA $FF15    ;Background color register
+        STA $FF19    ;Color register #4
+b1B7A   LDA #$FD
+        STA aFF08
+        LDA aFF08
+        AND #$80
+        BNE b1B7A
+        JSR j310D
+        JSR j310D
+        JMP j3AB3
+
+j1B8F   LDA a12A4
+        BNE b1B97
+        JMP j3B4C
+
+b1B97   JSR s3A9D
+        JMP j1B44
+
+p1B9D   SRE (RAM_ZPVEC2),Y ;ZPVEC2  Temp (renumber)
+        ORA (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        SLO (RAM_ENDCHR,X) ;ENDCHR  Flag: scan for quote at end of string
+        JSR e0814
+        ORA a20
+        NOP RAM_TANSGN,X ;TANSGN  Flag TAN siqn / comparison result
+        ORA RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        SLO (p15),Y
+        JAM 
+        ORA a20
+        SLO a2006
+        SRE RAM_ENDCHR ;ENDCHR  Flag: scan for quote at end of string
+        SLO a1413
+        JSR e0F54
+        SLO RAM_INTFLG,X ;INTFLG  Data type: $80 = integer, $00 = floating
+        JSR e0E01
+        NOP a20
+        JSR f0F20
+        BPL b1BCD
+        ASL f0920
+        NOP f20,X
+b1BCD   AND (p20,X)
+        ALR #$09
+        NOP a200C
+        JAM 
+        ORA RAM_DIMFLG ;DIMFLG  Flag: Default Array DIMension
+        ORA RAM_CHARAC ;CHARAC  Search character
+        JAM 
+        SLO a202C
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        SLO RAM_TRMPOS,X ;TRMPOS  Screen column from last TAB
+        NOP 
+        ORA (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        NOP a2C
+        JSR e0E01
+        NOP a20
+        NOP RAM_DORES ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        NOP RAM_CHARAC ;CHARAC  Search character
+        ORA a20
+        ORA (RAM_DIMFLG,X) ;DIMFLG  Flag: Default Array DIMension
+        NOP f0F20
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        JSR e0104
+RAM_BMCOLR   =*+$01
+        ASL a0507
+        JAM 
+        SLO (RAM_ARYTAB),Y ;ARYTAB  Pointer: start of BASIC arrays
+        JSR e0F44
+        ASL a1427
+        JSR e0F06
+        JAM 
+        SLO RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        NOP f20,X
+        NOP RAM_DORES,X ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        ORA RAM_CHANNL,X ;CHANNL  Flag: INPUT prompt
+        ORA a20
+        ORA (RAM_DIMFLG,X) ;DIMFLG  Flag: Default Array DIMension
+        NOP a1420
+        PHP 
+        ORA a20
+        ORA #$14
+        ORA RAM_VALTYP ;VALTYP  Data type: $FF = string   $00 = numeric
+        SLO (p20),Y
+        ORA f150F,Y
+        RLA RAM_DIMFLG ;DIMFLG  Flag: Default Array DIMension
+        NOP a0620
+        ORA #$0E
+        NOP a20
+        NOP a15
+        JAM 
+        ORA #$0E
+        SLO a20
+        JSR s2020
+        ORA f150F,Y
+        JAM 
+        JSR e0F0A
+        ORA RAM_TANSGN,X ;TANSGN  Flag TAN siqn / comparison result
+        ASL a1905
+        JSR e0814
+        JAM 
+        SLO a0715
+        PHP 
+        JSR s3931
+        JSR e0D01
+        ORA (p1A,X)
+        ORA #$0E
+        SLO a20
+        PHP 
+        ORA #$12
+        ORA RAM_CHANNL ;CHANNL  Flag: INPUT prompt
+        AND s2020
+        SLO RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        ORA (RAM_SUBFLG,X) ;SUBFLG  Flag: subscript ref / user function coll
+        PHP 
+        ORA #$03
+        SLO (RAM_VARTAB),Y ;VARTAB  Pointer: start of BASIC variables
+        JAM 
+        SLO a0D0F
+        SLO (p21),Y
+        JSR e0E45
+        ASL 
+        SLO a2019
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        ORA (p15),Y
+        ORA RAM_CHANNL ;CHANNL  Flag: INPUT prompt
+        NOP f20,X
+        ORA (RAM_INTFLG,X) ;INTFLG  Data type: $80 = integer, $00 = floating
+        NOP a20
+        BPL b1C97
+        ORA (RAM_TEMPST,X) ;TEMPST  Stack for temporary strings
+        ORA #$14
+        JSR e0701
+        ORA (RAM_TRMPOS,X) ;TRMPOS  Screen column from last TAB
+        ASL a0120
+b1C97   ASL a2004
+        ORA (RAM_CHARAC,X) ;CHARAC  Search character
+        ORA (RAM_TRMPOS,X) ;TRMPOS  Screen column from last TAB
+        ASL a0120
+        ASL a2004
+        ORA (RAM_CHARAC,X) ;CHARAC  Search character
+        ORA (RAM_TRMPOS,X) ;TRMPOS  Screen column from last TAB
+        ASL a2E20
+        ROL a202E
+        JSR s2020
+        JSR s3E20
+s1CB5   =*+$01
+        JSR f0CA9
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #$A0
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        LDA #>p1B9D
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #<p1B9D
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDX #$07
+b1CCD   LDY #$00
+b1CCF   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA #$68
+        STA (p04),Y
+        INY 
+        CPY #$28
+        BNE b1CCF
+        LDA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        CLC 
+        ADC #$28
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        BCC b1CE7
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+b1CE7   LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        CLC 
+        ADC #$50
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        BCC b1CF6
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b1CF6   DEX 
+        BNE b1CCD
+        LDA #$00
+        STA $FF15    ;Background color register
+        RTS 
+
+s1CFF   STA aFF08
+        JSR eC56B
+        JSR s1CB5
+        JSR s1EF9
+        LDA #$BA
+        STA a1ED9
+        RTS 
+
+        RTS 
+
+        RTS 
+
+f1D14   =*+$01
+        NOP RAM_COLSEL,X ;COLSEL  Current color selected
+        EOR RAM_INPPTR ;INPPTR  Vector: INPUT routine
+        NOP a25
+        ROL a25
+        ROL RAM_RESMOH ;RESMOH  
+        BIT a4B
+f1D1F   BIT a2C2D
+        AND a2B2E
+        NOP a25
+        ROL a25
+        ROL RAM_RESMOH ;RESMOH  
+        BIT a46
+        NOP RAM_FACSGN ;FACSGN  Floating accum. #1: sign
+        SRE RAM_SGNFLG ;SGNFLG  Pointer: series evaluation constant
+        RRA a46
+        NOP RAM_FACSGN ;FACSGN  Floating accum. #1: sign
+        SRE RAM_SGNFLG ;SGNFLG  Pointer: series evaluation constant
+        RRA RAM_RESMOH ;RESMOH  
+        AND #$27
+        EOR #$67
+        NOP RAM_FACSGN ;FACSGN  Floating accum. #1: sign
+        NOP RAM_RESMOH ;RESMOH  
+        AND #$27
+        EOR #$67
+        NOP RAM_FACSGN ;FACSGN  Floating accum. #1: sign
+        NOP a32
+        AND f32,X
+        BVC b1DBB
+        RLA a3130
+        BMI b1D83
+        JAM 
+        AND (p2F),Y
+        RLA a504F
+        SRE a2F2E
+        BMI b1D8E
+        BMI b1D90
+        JAM 
+        AND (p2F),Y
+        SRE a6B6D
+        LSR a6A6C
+        SRE a6B6D
+        LSR a6A6C
+f1D6E   JAM 
+        AND (RAM_FRFTOP),Y ;FRFTOP  Pointer: bottom of string storage
+        AND (RAM_STREND),Y ;STREND  Pointer: end of BASIC arrays (+1)
+        JAM 
+        RLA (p34),Y
+        RLA (p34),Y
+        AND f32,X
+        NOP f32,X
+        JAM 
+        ADC RAM_JMPER,X ;JMPER   
+        JAM 
+        JAM 
+        ADC f8D,X
+b1D83   STA a2D2C
+        DEC a8D8D
+        BIT aCE2D
+        ADC f34,X
+b1D8E   JAM 
+b1D90   =*+$01
+        BMI b1DBF
+        AND a302F
+        AND (p30),Y
+        AND (p32),Y
+        AND (p32),Y
+        AND f32,X
+        AND f32,X
+        AND f32,X
+        ROL a2F2D
+        BMI b1DD6
+        BMI b1DD8
+        JAM 
+        AND (p32),Y
+        ALR #$69
+        RRA a4C
+        ROR 
+        PLA 
+        ALR #$69
+        RRA a4C
+        ROR 
+        PLA 
+        JAM 
+        RLA (p32),Y
+        JAM 
+b1DBB   =*+$01
+        RLA (RAM_STREND),Y ;STREND  Pointer: end of BASIC arrays (+1)
+        JAM 
+        RLA (p34),Y
+b1DBF   AND f36,X
+        AND RAM_FRFTOP,X ;FRFTOP  Pointer: bottom of string storage
+        JAM 
+        AND (RAM_STREND),Y ;STREND  Pointer: end of BASIC arrays (+1)
+        JAM 
+        RLA (p34),Y
+        RLA (p34),Y
+        AND f36,X
+        AND f36,X
+        RLA f36,X
+        NOP 
+a1DD3   =*+$01
+j1DD2   LDY #$00
+        BNE b1DF3
+b1DD6   LDA #$40
+b1DD8   STA a1E39
+        JSR s1E38
+a1DDF   =*+$01
+        LDX #$00
+        LDA f1D14,X
+        INC a1DDF
+        TAY 
+        AND #$1F
+        STA a1E39
+        TYA 
+        LSR 
+        LSR 
+        LSR 
+        LSR 
+        LSR 
+        TAY 
+b1DF3   DEY 
+        STY a1DD3
+a1DF8   =*+$01
+        LDY #$00
+        BNE b1E1D
+        LDA #$40
+        STA a1E61
+        JSR s1E60
+a1E04   =*+$01
+        LDX #$00
+        LDA f1D6E,X
+        TAY 
+        INX 
+        CPX #$65
+        BEQ b1E27
+        STX a1E04
+        AND #$1F
+a1E15   =*+$02
+        STA a1E61
+        TYA 
+        LSR 
+        LSR 
+        LSR 
+        LSR 
+        LSR 
+        TAY 
+b1E1D   DEY 
+f1E1E   STY a1DF8
+        JSR s1E38
+        JMP s1E60
+
+b1E27   LDA #$00
+        STA a1DD3
+        STA a1DDF
+        STA a1DF8
+        STA a1E04
+        JMP j1DD2
+
+a1E39   =*+$01
+s1E38   LDX #$04
+        CPX #$1C
+        BCC b1E46
+        LDA $FF11    ;Bits 0-3 : Volume control
+        AND #$EF
+        JMP j1E5C
+
+b1E46   LDA f1E88,X
+        STA $FF0E    ;Voice #1 frequency, bits 0-7
+        LDA $FF12    ;Bit 0-1 : Voice #1 frequency, bits 8 & 9
+        AND #$FC
+        ORA f1EA0,X
+        STA $FF12    ;Bit 0-1 : Voice #1 frequency, bits 8 & 9
+        LDA $FF11    ;Bits 0-3 : Volume control
+        ORA #$10
+j1E5C   STA $FF11    ;Bits 0-3 : Volume control
+        RTS 
+
+a1E61   =*+$01
+s1E60   LDX #$0D
+        CPX #$1C
+        BCC b1E6E
+        LDA $FF11    ;Bits 0-3 : Volume control
+        AND #$DF
+        JMP j1E5C
+
+b1E6E   LDA f1E88,X
+        STA $FF0F    ;Voice #2 frequency, bits 0-7
+        LDA $FF10    ;Voice #2 frequency, bits 8 & 9
+        AND #$FC
+        ORA f1EA0,X
+        STA $FF10    ;Voice #2 frequency, bits 8 & 9
+        LDA $FF11    ;Bits 0-3 : Volume control
+        ORA #$20
+        STA $FF11    ;Bits 0-3 : Volume control
+        RTS 
+
+f1E88   SLO RAM_KEYNUM ;KEYNUM  
+        LDA #$06
+        EOR fC57F,Y
+        NOP RAM_TXTPTR ;TXTPTR  
+        NOP RAM_GRAPHM,X ;GRAPHM  Current graphic mode
+        LDA aE3C0
+        JAM 
+        ASL f422A,X
+        LSR RAM_EXPSGN,X ;EXPSGN  
+        ADC (RAM_RUNMOD),Y ;RUNMOD  
+f1EA0   =*+$02
+        SAX RAM_BSOUR ;BSOUR   Buffered character for serial bus
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+a1EBD   =*+$01
+s1EBC   LDX #$09
+        DEX 
+        STX a1EBD
+        BEQ b1ECE
+        RTS 
+
+a1EC6   =*+$01
+        LDY #$01
+        DEY 
+        STY a1EC6
+        BEQ b1ECE
+        RTS 
+
+b1ECE   LDY #$0B
+        STY a1EBD
+        LDA $FF11    ;Bits 0-3 : Volume control
+        ORA #$37
+a1ED9   =*+$01
+        AND #$BF
+        STA $FF11    ;Bits 0-3 : Volume control
+        JMP j1DD2
+
+j1EE0   SEI 
+        LDA #<p1F06
+        STA RAM_CINV ;CINV    IRQ Ram Vector
+        LDA #>p1F06
+        STA a0315
+        LDA #$02
+        STA aFF0A
+        LDA #$BF
+        STA a1ED9
+        CLI 
+        JMP s3A9D
+
+s1EF9   LDA #$FD
+        STA aFF08
+        LDA aFF08
+        AND #$80
+        BNE s1EF9
+        RTS 
+
+p1F06   LDA aFF09
+        STA aFF09
+        JSR s1EBC
+f1F0F   PLA 
+        TAY 
+        PLA 
+        TAX 
+        PLA 
+        RTI 
+
+s1F15   LDA a1ED9
+j1F18   CMP #$BF
+        BNE b1F1F
+        JMP j1EE0
+
+b1F1F   LDX #$04
+b1F21   STX RAM_FNLEN ;FNLEN   Length of current file name
+        LDY #$FF
+        JSR s3A76
+        LDX RAM_FNLEN ;FNLEN   Length of current file name
+        DEX 
+        BNE b1F21
+        CLC 
+        ADC #$01
+        STA a1ED9
+        JMP j1F18
+
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+        NOP 
+s2001   =*+$01
+        BRK #$00
+a2002   BRK #$02
+a2004   ASL 
+a2006   =*+$01
+a2005   AND #$27
+a2007   RLA RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$AA
+        TAX 
+a200D   =*+$01
+a200E   =*+$02
+a200C   EOR fD9D9,Y
+        CMP RAM_PDIR,Y ;PDIR    7501 on-chip data-direction register
+        NOP #$A0
+a2014   PLA 
+a2015   NOP 
+        INC RAM_LENGTH,X ;LENGTH  
+a2019   =*+$01
+        RLA RAM_FRFTOP ;FRFTOP  Pointer: bottom of string storage
+        RLA a25
+        ROL 
+        AND RAM_RESMOH ;RESMOH  
+s2020   =*+$01
+        RLA aD9
+s2022   =*+$01
+s2021   CMP f51D9,Y
+        TAX 
+        EOR (pD9),Y
+        CMP fF3F6,Y
+        INC RAM_OLDOV,X ;OLDOV   
+a202C   TAX 
+a202E   =*+$01
+        LSR RAM_LENGTH,X ;LENGTH  
+        INC RAM_RESMOH,X ;RESMOH  
+        AND a2A
+        AND RAM_RESMOH ;RESMOH  
+        RLA RAM_RESMOH ;RESMOH  
+        AND aD9
+s203A   =*+$01
+        EOR (RAM_DCOUNT),Y ;DCOUNT  
+        EOR (pD9),Y
+s203F   =*+$02
+        CMP f51D9,Y
+s2041   =*+$01
+        INC f46,X
+        JAM 
+        JAM 
+        ROL fF2,X
+        JAM 
+        LSR f2A,X
+        AND RAM_RESMOH ;RESMOH  
+        RLA RAM_FRFTOP ;FRFTOP  Pointer: bottom of string storage
+        RLA RAM_RESMOH ;RESMOH  
+        AND RAM_DCOUNT ;DCOUNT  
+        EOR (pD9),Y
+        CMP fD9D9,Y
+        CMP fAA59,Y
+f205A   =*+$01
+        LSR RAM_LENGTH,X ;LENGTH  
+        INC RAM_CHRPTR,X ;CHRPTR  
+a205D   INC RAM_LENGTH,X ;LENGTH  
+        LSR f3A,X
+        INX 
+        TAY 
+        TAX 
+        PLP 
+        NOP #$A0
+        LDX #$3C
+        LAX #$AB
+        ROL 
+        TAY 
+        TAY 
+        LDX #$0C
+        LDY a0A2B
+        JAM 
+        TAY 
+        TAX 
+        TAX 
+        TAX 
+        JAM 
+        JAM 
+        INY 
+        ANC #$2A
+        TAX 
+        ROL 
+        DEY 
+        ISC fA8AA,Y
+        JSR eB8CC
+        TAY 
+        LDX #$22
+        NOP aEAF8
+        SBC #$28
+        NOP #$B0
+        LAX (RAM_FA),Y ;FA      Current device number
+        TAX 
+        ROL 
+        JAM 
+        NOP a3A3A
+        ASL 
+        DEX 
+        DEX 
+        NOP #$3C
+        LAX #$2A
+s20A0   =*+$01
+        NOP #$AC
+        LDY a8CB0
+        ANC #$AB
+        ROL 
+        ROL 
+        LDA #$E9
+        SBC fF9F9,Y
+        EOR f7A,X
+        RRA fFEEA,X
+        ISC fFFFF,X  ;IRQ Vector
+        EOR RAM_TPBYTE,X ;TPBYTE  Byte to be written/read on/off tape
+        LAX RAM_EAH  ;EAH     
+        AHX f9F9F,Y
+f20BC   AHX fAA55,Y
+        NOP 
+        RRA f7F7F,X
+        EOR RAM_FPVERR,X ;FPVERR  
+        SBC #$F9
+        SBC fE7E7,Y
+        ISC RAM_SIZE ;SIZE    
+        NOP 
+        INC fFFFF,X  ;IRQ Vector
+        INC fFEFE,X
+        EOR RAM_EAH,X ;EAH     
+b20D7   =*+$02
+        AHX f9F9F,Y
+        SBC f7A55,Y
+        RRA f7F7F,X
+        RRA $FF55,X
+        EOR RAM_TPBYTE,X ;TPBYTE  Byte to be written/read on/off tape
+        LAX aE7
+        ISC aE7
+        EOR RAM_T1,X ;T1      Temp data area
+        EOR RAM_DCOUNT,X ;DCOUNT  
+b20EB   NOP 
+        INC fFEFE,X
+        EOR RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        ORA RAM_CHARAC ;CHARAC  Search character
+        SLO f1D1F,X
+        ORA f541D,X
+        SBC fFFFF,X  ;IRQ Vector
+        RRA f071F,X
+        SLO RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$40
+        RTI 
+
+        RTI 
+
+a2105   BNE b20D7
+        BNE b210D
+        BRK #$00
+        BRK #$00
+b210D   BRK #$00
+        BRK #$07
+        SLO RAM_CHARAC ;CHARAC  Search character
+        SLO f7D7F,X
+        ADC fD07D,X
+        BNE b20EB
+        BNE b215D
+        BRK #$00
+a2120   =*+$01
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$7D
+        EOR RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        NOP f7D,X
+        ADC f147D,X
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        SLO (RAM_RESMO,X) ;RESMO   
+s213F   =*+$01
+        RLA (RAM_STPFLG,X) ;STPFLG  Pause flag
+b2141   =*+$01
+        BRK #$00
+        BRK #$EC
+        INX 
+        BEQ b2141
+        DCP RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        JSR $FCA0
+        NOP aA0BF
+        STY aE4E7
+        ISC f2F0C,X
+        DCP fECE3,X
+b215D   =*+$02
+        ROR fF33E,X
+        LDY #$1B
+        ISC (RAM_FRFTOP),Y ;FRFTOP  Pointer: bottom of string storage
+b2163   =*+$01
+        LSR aCE7E
+        BMI b2163
+        INY 
+        STY a0F2B
+        SEC 
+        JAM 
+        ORA #$3C
+        DCP (RAM_TPBYTE,X) ;TPBYTE  Byte to be written/read on/off tape
+        NOP fF3E3,X
+        RRA fE882,Y
+        BMI b21F4
+        CPY RAM_CHRPTR ;CHRPTR  
+b217C   =*+$01
+        BMI b217C
+        NOP RAM_RESHO,X ;RESHO   
+        PLP 
+        EOR (RAM_TEMPF1,X) ;TEMPF1  
+        RRA f2F25,X
+        ANC #$2F
+        SLO fFB65,X
+        ISC aEF79
+        ISC fC3C3,Y
+        EOR (pD5,X)
+        SBC fF859,X
+        CPX #$F8
+        NOP f25,X
+        RLA a2F0B
+        SLO f2F25,X
+        ANC #$00
+        BRK #$C3
+        DCP (RAM_INDX,X) ;INDX    
+        EOR (RAM_INDX,X) ;INDX    
+        ISC fF858,X
+        CPX #$F8
+        NOP RAM_HIGHDS,X ;HIGHDS  
+        SED 
+        CPX #$2F
+        SLO f2F25,X
+        ANC #$26
+        LDX RAM_DCOUNT ;DCOUNT  
+        ISC a6DFB
+        ISC f66EB,Y
+        ROR RAM_DCOUNT ;DCOUNT  
+        SED 
+        NOP RAM_HIGHDS,X ;HIGHDS  
+        SED 
+        INX 
+        NOP RAM_FACSGN ;FACSGN  Floating accum. #1: sign
+        TAX 
+        BRK #$00
+        BRK #$AA
+        EOR RAM_ARGHO,X ;ARGHO   Floating accum. #2: mantissa
+        RRA RAM_ARISGN ;ARISGN  Sign comparison result: accum. #1 vs #2
+        BRK #$00
+        NOP #$6A
+        STA RAM_USER,X ;USER    Screen editor color IP
+        ISC RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        NOP #$68
+        STX RAM_CIRSEG,Y ;CIRSEG  Screen line link table / editor temps
+        RRA a6F6F
+        JMP (p6F6C)
+
+        RRA $FF6F
+        NOP RAM_XoN,X ;XoN     Char to send for a x-on (RS232)
+        BRK #$FC
+        NOP fF9FF,X
+        SBC f39F9,Y
+b21F4   AND fF9F9,Y
+        SBC a6F6F,Y
+        ROR 
+        EOR RAM_DCOUNT,X ;DCOUNT  
+        BRK #$00
+        BRK #$FF
+        NOP 
+        STA RAM_ARGHO,X ;ARGHO   Floating accum. #2: mantissa
+        NOP #$00
+        BRK #$00
+        SBC #$96
+        PLA 
+        NOP #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        AND #$96
+        ARR #$00
+        BRK #$00
+        JAM 
+        LDA #$56
+        LAX #$FF
+        BRK #$00
+        BRK #$AA
+        EOR RAM_FPVERR,X ;FPVERR  
+        SBC f6FF9,Y
+        RRA a6C6F
+        JMP (a6F6F)
+
+        RRA a3FFF
+        RLA RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        RLA $FF3F,X  ;RAM select
+        SBC fF9F9,Y
+        AND fF939,Y
+        SBC f6BF9,Y
+        STX RAM_RESLO,Y ;RESLO   
+        JAM 
+        BRK #$00
+        BRK #$00
+        ISC f56AB,X
+        LDA #$02
+        BRK #$00
+        BRK #$F9
+        SBC f55A9,Y
+        TAX 
+        BRK #$00
+        BRK #$BF
+        RLA a2F2F
+        RLA a0B0B
+        ANC #$FF
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ANC #$02
+        JAM 
+        JAM 
+        JAM 
+        ANC #$0B
+        ANC #$FF
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ANC #$2F
+        RLA a2F2F
+        LAX fBFBF,Y
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFEFF,X
+        SED 
+        SED 
+        SED 
+        SED 
+        CPX #$E0
+        CPX #$FF
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        CPX #$80
+        NOP #$80
+        NOP #$E0
+        CPX #$E0
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fF8E0,X
+        SED 
+        SED 
+        SED 
+        INC fFEFE,X
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+        BRK #$00
+        BRK #$00
+        NOP a030F
+        BMI b233C
+        DCP a3F3C
+b233C   RLA fFFCC,X
+        ISC RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        CPY #$00
+        NOP $FF3F    ;RAM select
+        DCP (RAM_SEDSAL,X) ;SEDSAL  Temp for scrolling
+        CPY #$F3
+b234C   =*+$01
+        RLA f3F0F,X
+        RLA (p30),Y
+        ISC (RAM_DORES),Y ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        RLA a3F3C,X
+        DCP $FCFF
+        BRK #$30
+        BMI b234C
+        CPY #$C0
+        BRK #$00
+        BMI b2365
+        SLO (RAM_DIMFLG,X) ;DIMFLG  Flag: Default Array DIMension
+b2365   =*+$01
+        BRK #$03
+        CPY #$CF
+        NOP fFFFF,X  ;IRQ Vector
+        ISC (RAM_XoN),Y ;XoN     Char to send for a x-on (RS232)
+        NOP f30FC,X
+        CPY #$F0
+        CPY #$FC
+        RLA RAM_DIMFLG,X ;DIMFLG  Flag: Default Array DIMension
+b2378   =*+$01
+        BEQ b2378
+        ISC f3330,X
+        SLO (RAM_DORES,X) ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        SLO (RAM_FRFTOP,X) ;FRFTOP  Pointer: bottom of string storage
+b2381   =*+$01
+        ISC $FCFF,X
+        BEQ b2381
+        ISC (RAM_INSRT),Y ;INSRT   Flag: insert mode, >0 = # INSTs
+        ISC RAM_SEDSAL,X ;SEDSAL  Temp for scrolling
+        SLO aF0FC
+        NOP f03CC,X
+        ISC (RAM_DATLIN),Y ;DATLIN  Current DATA line number
+        RLA f0F0F,X
+        RLA (RAM_ZPVEC1),Y ;ZPVEC1  Temp (renumber)
+        SLO (RAM_LOFBUF,X) ;LOFBUF  
+        NOP $FCF0,X
+        ISC fCCFF,X
+        BEQ b23A1
+b23A1   BRK #$30
+        DCP (RAM_SEDT1,X) ;SEDT1   Editor temp use
+        ISC f0030,X
+        BRK #$03
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO a330C
+        SLO $FCF0
+        ISC (RAM_XoN),Y ;XoN     Char to send for a x-on (RS232)
+        ISC fCCCF,X
+        RLA RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$C0
+        BEQ b23FC
+        BRK #$00
+        BRK #$05
+        SLO f7FFF,X
+        SLO RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        CMP a1F
+        SLO f001D,X
+        BRK #$00
+        BRK #$00
+        CPY #$30
+        BMI b23F5
+        RRA fFDFF,X
+        CPY b1F1F
+        RRA $FF7F,X
+        SRE $FF0F,X  ;Voice #2 frequency, bits 0-7
+        ISC fD3,X
+        DCP (RAM_FACOV),Y ;FACOV   Floating accum. #1. low-order (rounding)
+        NOP RAM_BUFEND,X ;BUFEND  
+        NOP fFFFF,X  ;IRQ Vector
+        ISC fD1,X
+        ISC fFFFF,X  ;IRQ Vector
+b23F5   =*+$02
+        RLA f1F0F,X
+        SLO RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        DCP fFFFF    ;IRQ Vector
+b23FC   =*+$01
+        SBC (RAM_TO),Y ;TO      Monitor ZP storage
+        NOP RAM_DSCPNT,X ;DSCPNT  
+        NOP fFFFF,X  ;IRQ Vector
+        ISC f74FD,X
+        BPL b2408
+b2408   BRK #$00
+        JAM 
+        JAM 
+        ORA #$09
+        RLA RAM_RESMOH ;RESMOH  
+        ASL 
+        LDA RAM_LoWTR ;LoWTR   
+        RRA fFFFF,X  ;IRQ Vector
+        ISC fAAFF,X
+        EOR RAM_LOFBUF,X ;LOFBUF  
+        ISC fFFFF,X  ;IRQ Vector
+f2420   =*+$02
+        ISC f27FF,X
+        AHX (RAM_BSOUR),Y ;BSOUR   Buffered character for serial bus
+        AHX f9FA5,Y
+        LAX ROM_SCNKEY
+        ISC f7F55,X
+        ORA f7F,X
+        LAX $FF7F,Y
+        ISC f7354,X
+        ORA (RAM_AUTINC),Y ;AUTINC  Increment value for auto (0 = off)
+        LDY fAF7C,X
+        AHX f9FAF,Y
+        LAX a7F9F
+        NOP 
+        LAX fBF7F,Y
+        RRA f7FBF,X
+        LAX fBCAA,Y
+        NOP f7FBF,X
+        LAX fBF7F,Y
+        TAX 
+        TAX 
+        EOR RAM_LOFBUF,X ;LOFBUF  
+        ISC fFFFF,X  ;IRQ Vector
+        ISC fA0FF,X
+        NOP 
+        SBC RAM_XoFF,X ;XoFF    Char to send for a x-off (RS232)
+        ISC fFFFF,X  ;IRQ Vector
+        ISC RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+b2463   =*+$01
+        NOP #$80
+        RTS 
+
+        RTS 
+
+        CLD 
+        CLD 
+        ISC f15FF,X
+        CMP aCD44
+        ROL $FF3D,X
+        ISC fFD55,X
+        NOP RAM_XoFF,X ;XoFF    Char to send for a x-off (RS232)
+        INC fD8FD,X
+        DEC RAM_OLDOV ;OLDOV   
+        INC RAM_HIGHTR,X ;HIGHTR  
+        INC RAM_XSTOP,X ;XSTOP   Save xreg for quick stopkey test
+        INC f3E,X
+        AND fFDFE,X
+        INC fFEFD,X
+        TAX 
+        INC fFEFD,X
+        SBC fFDFE,X
+        INC fFAAA,X
+        INC RAM_XSTOP,X ;XSTOP   Save xreg for quick stopkey test
+        INC RAM_XSTOP,X ;XSTOP   Save xreg for quick stopkey test
+        INC RAM_XoFF,X ;XoFF    Char to send for a x-off (RS232)
+        LDA RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        JAM 
+        EOR RAM_TEMPF1,X ;TEMPF1  
+        RRA $FF3C,X
+        NOP fBEC3,X
+        BRK #$40
+        RTI 
+
+        RTI 
+
+        CPY #$C0
+        BRK #$80
+        ASL 
+        ROL 
+        ROL 
+        TAX 
+        TAY 
+        NOP #$70
+        BVC b2463
+        TAX 
+        TAX 
+        TAX 
+        TAX 
+        TAX 
+        TAX 
+        ISC fA8A0,X
+        TAY 
+        TAX 
+        ROL 
+        XAA #$0D
+        ORA RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_ZPVEC2,X) ;ZPVEC2  Temp (renumber)
+        ORA RAM_DORES ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        NOP f5555,X
+        EOR RAM_SIZE,X ;SIZE    
+        EOR (RAM_INDX,X) ;INDX    
+        DCP (RAM_INDX,X) ;INDX    
+        BRK #$40
+        RTI 
+
+        RTI 
+
+        BVC b252E
+        BEQ b251C
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BMI b24E9
+b24E9   BRK #$00
+        SAX (RAM_FACEXP,X) ;FACEXP  Floating-point accumulator #1: exponent
+        EOR RAM_LOWDS,X ;LOWDS   
+        ADC (RAM_PDIR),Y ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$10
+        NOP RAM_MEMSIZ,X ;MEMSIZ  Pointer: highest address used by BASIC
+        SRE $FCF0
+        NOP a3F3C,X
+f24FD   SLO a030F
+        EOR RAM_JMPER,X ;JMPER   
+        CMP (RAM_PASS),Y ;PASS    Which pass we are doing str
+        RLA ROM_8ASIN,X
+        ISC f0F0F,X
+        SLO $FF3F    ;RAM select
+        NOP fC0F0,X
+        BRK #$00
+        BRK #$00
+        JAM 
+        ASL 
+        ASL 
+        NOP f7D,X
+        DCP RAM_LOFBUF,X ;LOFBUF  
+b251C   =*+$01
+        ISC fB3F3,X
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        CPY #$C0
+        CPY #$E0
+        TAY 
+        PLA 
+        EOR RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$FF
+        TAX 
+        BRK #$00
+b252E   BRK #$00
+        BRK #$14
+        ADC f1469,X
+        PLP 
+        NOP #$AA
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        BRK #$00
+        ISC f03AA,X
+        JAM 
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        NOP f3F3F,X
+        ISC $FCFF,X
+        NOP f003C,X
+        BRK #$30
+        CPY aCCC3
+        BMI b2558
+b2558   BRK #$00
+        SLO (RAM_FRFTOP,X) ;FRFTOP  Pointer: bottom of string storage
+        ISC RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        JAM 
+        ASL 
+        INY 
+        PLP 
+        PLP 
+        DEX 
+        JAM 
+        BRK #$20
+        PLP 
+        PHP 
+        ASL 
+        ASL 
+        PLP 
+        RTS 
+
+        CMP (RAM_LSTP,X) ;LSTP    
+        CPY a44
+        NOP RAM_LSXP ;LSXP    X position at start
+        DEY 
+b2578   =*+$01
+        NOP RAM_HELPER ;HELPER  
+        SLO f06,X
+        NOP RAM_LSXP ;LSXP    X position at start
+        NOP RAM_PNT  ;PNT     Pointer: current screen line address
+        CPY RAM_SEDSAL ;SEDSAL  Temp for scrolling
+        CPY #$C0
+        ISC fC0FF,X
+        CPY #$FF
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_LOFBUF,X) ;LOFBUF  
+        ISC f0303,X
+        ISC fC0FF,X
+        CPY #$FF
+        ISC fC0C0,X
+        ISC f03FF,X
+        SLO (RAM_LOFBUF,X) ;LOFBUF  
+        ISC f0303,X
+        ISC fC0FF,X
+        CPY #$FF
+        ISC fC0C0,X
+        ISC f03FF,X
+        SLO (RAM_LOFBUF,X) ;LOFBUF  
+        ISC f0303,X
+        ISC fC0FF,X
+        CPY #$FF
+        ISC fC0C0,X
+        CPY #$FF
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+b25BB   ISC f03FF,X
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        BRK #$00
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_VERCK,X) ;VERCK   Flag: 0 = load 1 - verify
+        BRK #$00
+        RTS 
+
+        LDY #$60
+        RTS 
+
+        BVC b2578
+        ASL 
+        ROL 
+        ROL 
+        ROL 
+        ROL 
+        ROL 
+        ASL 
+        JAM 
+        LDY fFFBF,X
+        ISC fFFFF,X  ;IRQ Vector
+        LDY f01A0,X
+        SLO RAM_CHARAC ;CHARAC  Search character
+        SLO b1F1F,X
+        SLO f4015,X
+        BNE b25BB
+        NOP RAM_BUFEND,X ;BUFEND  
+        NOP RAM_BUFEND,X ;BUFEND  
+        NOP RAM_SRCHTK,X ;SRCHTK  Token 'search' looks for (run-time stack)
+        JAM 
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_DORES,X) ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        NOP #$80
+        NOP #$80
+        NOP #$88
+        DEY 
+        ISC f0100,X
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BVC b260E
+        NOP a04
+        NOP a04
+b260E   BVC b2670
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        RTS 
+
+        RTS 
+
+        RTS 
+
+        RTS 
+
+        RTS 
+
+        RTS 
+
+        RTS 
+
+        RTS 
+
+f2622   =*+$02
+        NOP f0F0F
+        SLO a030F
+        SLO (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ISC (RAM_LOFBUF),Y ;LOFBUF  
+        ISC fFFFF,X  ;IRQ Vector
+        NOP aF0FC,X
+        ASL 
+        ORA RAM_ENDCHR ;ENDCHR  Flag: scan for quote at end of string
+        JSR e8080
+        NOP #$81
+        TAX 
+        EOR RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        EOR (pA0,X)
+        BVC b2663
+        PHP 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        SAX (RAM_GRAPHM,X) ;GRAPHM  Current graphic mode
+b264B   =*+$01
+        SAX aBCBF
+b264D   NOP #$28
+b264F   JAM 
+        DCP (RAM_INDX,X) ;INDX    
+        DCP (RAM_INDX,X) ;INDX    
+        DCP (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$AA
+        NOP #$C2
+        JAM 
+        INC f023E,X
+        PLP 
+        NOP #$00
+        BRK #$00
+b2663   BRK #$05
+        SLO f7F7F,X
+        BRK #$00
+        BRK #$00
+        RTI 
+
+        BNE b2663
+b2670   =*+$01
+        NOP RAM_AUTINC,X ;AUTINC  Increment value for auto (0 = off)
+        RRA (p7F),Y
+        RRA f051F,X
+        BRK #$00
+        NOP f34,X
+        NOP RAM_BUFEND,X ;BUFEND  
+        BNE b26BE
+        BRK #$00
+        BRK #$00
+        SLO f3F3F
+        ISC f0404,X
+        NOP a04
+        NOP a04
+        NOP RAM_ENDCHR ;ENDCHR  Flag: scan for quote at end of string
+        PHP 
+        BRK #$00
+        ORA (RAM_ZPVEC2,X) ;ZPVEC2  Temp (renumber)
+        ORA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        ORA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BVC b26AF
+        NOP a44
+        NOP a44
+        BVC b26A3
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+b26A3   SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        BRK #$A0
+        BEQ b264B
+        BEQ b264D
+        BEQ b264F
+b26AF   CPY #$00
+        BRK #$04
+        NOP a04
+        NOP a04
+        ORA RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$AA
+        NOP #$AA
+b26BE   =*+$01
+        NOP #$AA
+b26C0   =*+$01
+        BRK #$09
+        ORA #$06
+        ASL a06
+        ASL RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+        ORA #$55
+        RRA f7A7A,X
+        NOP 
+        NOP 
+        RRA f507F,X
+        NOP fDCDC,X
+        NOP fDCDC,X
+        NOP f6B7F,X
+        ROR f7E6B,X
+        RRA f3F55,X
+        NOP f9CDC,X
+        NOP fDC9C,X
+        NOP f08FC,X
+        PHP 
+        PHP 
+        PLP 
+        BIT RAM_INDEX2 ;INDEX2  Utility pointer area
+        BIT RAM_INDEX2 ;INDEX2  Utility pointer area
+        BIT RAM_INDEX2 ;INDEX2  Utility pointer area
+        BIT RAM_INDEX2 ;INDEX2  Utility pointer area
+        ISC f2CEF,X
+        BIT RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        NOP a04
+        NOP a04
+        NOP a15
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$03
+        ASL aC232
+        NOP #$CC
+        CPY a9EAA
+        LDX RAM_DCOUNT,Y ;DCOUNT  
+        PLP 
+        ADC #$AA
+        NOP fC000,X
+        BCS b26C0
+        SAX (RAM_GRAPHM,X) ;GRAPHM  Current graphic mode
+        RLA (RAM_FRFTOP),Y ;FRFTOP  Pointer: bottom of string storage
+        CPY a0CCC
+        NOP RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        DCP (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        RLA (RAM_FRFTOP),Y ;FRFTOP  Pointer: bottom of string storage
+        BMI b277C
+        BRK #$00
+        BRK #$00
+        NOP a0C0C
+        NOP a3030
+        BMI b2788
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        NOP RAM_SIZE,X ;SIZE    
+        NOP RAM_SIZE,X ;SIZE    
+        EOR RAM_DATPTR,X ;DATPTR  Pointer: Current DATA item address
+        NOP RAM_CRSW,X ;CRSW    Flag: INPUT or GET from keyboard
+        BRK #$00
+        RTI 
+
+        RTI 
+
+        RTI 
+
+        BRK #$01
+        NOP RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        SLO a450D
+b2775   =*+$01
+        SLO RAM_LoWTR,X ;LoWTR   
+b2777   =*+$01
+        SRE aD33F
+        EOR a51
+b277C   =*+$01
+        EOR aD3
+        DCP aD3
+        DCP fD5,X
+        EOR (RAM_FACOV),Y ;FACOV   Floating accum. #1. low-order (rounding)
+        BEQ b2775
+        BEQ b2777
+b2788   =*+$01
+        NOP f3F3F,X
+        AND f0131,X
+        ORA a15
+        NOP RAM_SIZE ;SIZE    
+        EOR RAM_DATPTR,X ;DATPTR  Pointer: Current DATA item address
+        EOR (RAM_DATPTR,X) ;DATPTR  Pointer: Current DATA item address
+        BRK #$00
+        EOR (RAM_XoN,X) ;XoN     Char to send for a x-on (RS232)
+        NOP f4C7C,X
+        RTI 
+
+        BVC b27F3
+        ORA (RAM_SIZE),Y ;SIZE    
+        ADC a6D6D
+        ADC f7979,Y
+        EOR RAM_DIMFLG,X ;DIMFLG  Flag: Default Array DIMension
+        RLA f3B0C,Y
+        NOP a0C3B
+        RLA f3327,Y
+        RLA a25
+        ROL 
+        AND RAM_RESMOH ;RESMOH  
+        RLA RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$80
+        PLA 
+        STX RAM_CIRSEG,Y ;CIRSEG  Screen line link table / editor temps
+        BRK #$00
+        BRK #$00
+        JAM 
+        AND #$96
+        ARR #$00
+a27C9   BRK #$00
+        CPX aF0E8
+        NOP 
+        DCP RAM_PDIR,X ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        JSR $FCA0
+        NOP aE3DF
+        CPX a3E7E
+        ISC (pA0),Y
+        SLO f33F3,Y
+b27E3   =*+$01
+        LSR aCE7E
+        BMI b27E3
+        INY 
+        BRK #$00
+        BRK #$00
+        BRK #$C0
+        BMI b2820
+        BRK #$00
+b27F3   =*+$01
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+f27FF   =*+$01
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ANC #$00
+        BRK #$00
+        BRK #$01
+        BRK #$0B
+        BRK #$00
+        BRK #$00
+        BRK #$0C
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BPL b281C
+b281C   NOP RAM_PDIR ;PDIR    7501 on-chip data-direction register
+b2820   =*+$01
+        ANC #$00
+        BRK #$01
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$0C
+        BRK #$00
+        BRK #$00
+        ANC #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ANC #$00
+        BRK #$0C
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ANC #$00
+        BRK #$00
+        BRK #$0C
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$0C
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$10
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        BPL b2877
+b2877   JAM 
+        BRK #$00
+        BRK #$04
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        BRK #$04
+        BRK #$02
+        JAM 
+        BRK #$04
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$04
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$03
+        NOP RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$02
+        JAM 
+        BRK #$04
+        BRK #$02
+        BRK #$10
+        BRK #$02
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$02
+        JAM 
+        BPL b28DF
+b28DF   ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$01
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        JAM 
+        JAM 
+        BRK #$02
+        JAM 
+        BRK #$01
+        BRK #$00
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        JAM 
+        BRK #$00
+        BRK #$02
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        JAM 
+        JAM 
+        BRK #$02
+        JAM 
+        BRK #$01
+        BRK #$00
+        BRK #$00
+        BRK #$01
+        ORA (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        BRK #$02
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$01
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        JAM 
+        JAM 
+        BRK #$10
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$03
+        ORA (RAM_SUBFLG,X) ;SUBFLG  Flag: subscript ref / user function coll
+        BRK #$01
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$01
+        BRK #$00
+        BRK #$01
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$01
+        BRK #$00
+        BRK #$01
+        BRK #$01
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$10
+        BRK #$01
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        BRK #$02
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (p06,X)
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        JAM 
+        BRK #$02
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        SLO RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BPL b29C0
+        JAM 
+b29C0   BRK #$02
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (p06,X)
+        BRK #$00
+        BRK #$01
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        SLO RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$01
+        JAM 
+        BRK #$02
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (p06,X)
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        SLO RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        JAM 
+        BRK #$02
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$01
+f29FB   =*+$01
+        ORA (p06,X)
+        BRK #$00
+        BRK #$01
+        JAM 
+        BRK #$02
+        ORA (RAM_SUBFLG,X) ;SUBFLG  Flag: subscript ref / user function coll
+        BRK #$00
+        SLO RAM_PORT ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$01
+        BRK #$00
+        BRK #$00
+        ORA f0100
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$0D
+        BRK #$01
+        BRK #$00
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+s2A20   BRK #$01
+        BPL b2A24
+b2A24   ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$0D
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        ORA f0100
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$01
+        BRK #$00
+        ORA (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$00
+        BRK #$0D
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        ORA RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BPL b2A65
+b2A65   =*+$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$0D
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        BRK #$02
+        BPL b2A7F
+b2A7F   JAM 
+        BRK #$01
+        BRK #$02
+        BRK #$01
+        BRK #$02
+        BRK #$10
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$10
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$10
+        JAM 
+        BRK #$01
+        BRK #$02
+        BRK #$01
+        BRK #$02
+        BRK #$01
+        BRK #$02
+        JAM 
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$10
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$01
+        BRK #$00
+        ANC #$10
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$0C
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$0B
+        BRK #$00
+        BRK #$05
+        BRK #$0B
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        NOP f0100
+        BRK #$00
+        BRK #$0C
+        BRK #$01
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$0B
+a2B2E   =*+$01
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$10
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        NOP RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$01
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_ENDCHR,X) ;ENDCHR  Flag: scan for quote at end of string
+        ASL 
+        ORA #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BPL b2B4F
+b2B4F   BRK #$00
+        ORA (RAM_ENDCHR,X) ;ENDCHR  Flag: scan for quote at end of string
+        ASL 
+        ORA #$00
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$08
+        ASL 
+        ORA #$00
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$08
+        ASL 
+        ORA #$00
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$01
+        BRK #$08
+        ASL 
+        ORA #$00
+        BRK #$00
+        BRK #$10
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$08
+        ASL 
+        ORA #$00
+        BRK #$00
+        JAM 
+        JAM 
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$08
+        ASL 
+        ORA #$00
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$08
+        ASL 
+        ORA #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        JAM 
+        BPL b2BB7
+b2BB7   BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$02
+        JAM 
+        BRK #$02
+        BRK #$02
+        JAM 
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$02
+        BRK #$02
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        BRK #$03
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+a2C02   =*+$01
+        BRK #$10
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+a2C2D   BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$00
+        SLO (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        BPL b2C46
+b2C46   BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BPL b2C54
+        BRK #$00
+b2C54   BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$0B
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        NOP f0100
+        BRK #$00
+        BRK #$01
+        JAM 
+        BRK #$00
+        ANC #$00
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$01
+        JAM 
+        BRK #$00
+        NOP a0B00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$10
+        BRK #$00
+        BRK #$00
+        NOP a0B00
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BPL b2CBC
+        BRK #$00
+b2CBC   BRK #$00
+        BRK #$00
+        NOP RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        JAM 
+        BRK #$00
+        ANC #$00
+        BRK #$00
+        BRK #$01
+        BRK #$01
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$0C
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+f2CEF   =*+$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$0D
+        BRK #$00
+        BRK #$00
+        ORA RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$01
+        ORA (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BPL b2D0F
+b2D0F   BRK #$0D
+        BRK #$00
+        ORA (RAM_SUBFLG,X) ;SUBFLG  Flag: subscript ref / user function coll
+        BRK #$00
+        ORA RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        BRK #$03
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        BRK #$0D
+        BRK #$00
+        BRK #$0D
+        BRK #$00
+a2D2C   BRK #$01
+        BRK #$01
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$01
+        BRK #$00
+        BRK #$01
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        ORA (RAM_PORT,X) ;PORT    7501 on-chip 8-bit Input/Output register
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        BPL b2D57
+b2D57   JAM 
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$02
+        JAM 
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$02
+        BRK #$10
+        JAM 
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        JAM 
+        JAM 
+        BRK #$02
+        SLO (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        ASL 
+        ASL 
+        ASL 
+        ASL 
+        ASL 
+        JAM 
+        BRK #$00
+        JAM 
+        BPL b2DBF
+b2DBF   BRK #$00
+        JAM 
+        ASL 
+        ASL 
+        ASL 
+        JAM 
+        BRK #$00
+        BRK #$10
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        ASL 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        ASL 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        ASL 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        ASL 
+        ASL 
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        ASL 
+        ASL 
+        ASL 
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        ASL 
+        ASL 
+        ASL 
+        ASL 
+        ASL 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        ASL 
+        ASL 
+        ASL 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+a2E20   JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$00
+a2E2E   SLO (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+        BRK #$02
+        BPL b2E34
+b2E34   BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        JAM 
+        BRK #$02
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        JAM 
+        BRK #$00
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        BRK #$00
+        BPL b2E76
+        JAM 
+        JAM 
+b2E76   JAM 
+        SLO (RAM_SRCHTK,X) ;SRCHTK  Token 'search' looks for (run-time stack)
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        BPL b2E8F
+b2E8F   BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BPL b2EF7
+b2EF7   BRK #$00
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+f2F0C   =*+$01
+a2F0B   BRK #$00
+        BRK #$10
+        JAM 
+        BRK #$00
+        JAM 
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+f2F25   =*+$01
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+a2F2D   =*+$01
+        BRK #$00
+a2F2F   =*+$01
+a2F2E   BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        BPL b2F5F
+b2F5F   JAM 
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$00
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        JAM 
+        BRK #$02
+        BRK #$0E
+        SLO RAM_PDIR ;PDIR    7501 on-chip data-direction register
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$00
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        BRK #$02
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        JAM 
+        BRK #$02
+        BRK #$00
+        BRK #$02
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        JAM 
+        BRK #$00
+        BRK #$00
+        BRK #$00
+a2FBF   =*+$01
+        BRK #$01
+s2FC0   LDA #$6B
+        STA a3692
+        LDA #$3D
+        STA a3690
+b2FCA   RTS 
+
+s2FCB   LDA a3051
+        CMP #$04
+        BNE b2FCA
+        LDA #$03
+        LDY a394B
+        BEQ b2FDB
+        LDA #$F6
+b2FDB   STA a0CF9
+        RTS 
+
+j2FDF   LDY a3720
+        CPY #$DF
+        BNE b2FEC
+        STA a3994
+        JMP j12F4
+
+b2FEC   JMP j3B4C
+
+s2FEF   JSR s39F4
+        JMP j15D1
+
+s2FF5   JSR s3B02
+        LDA #$00
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        RTS 
+
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+        BRK #$00
+f301E   =*+$01
+        BRK #$DF
+        NOP a1E15
+        RLA a30
+        AND f4B42,Y
+        NOP RAM_LOWDS,X ;LOWDS   
+        ROR RAM_ARISGN ;ARISGN  Sign comparison result: accum. #1 vs #2
+        SEI 
+        STA (RAM_RTFLAG,X) ;RTFLAG  Paint-Right flag
+a302F   =*+$01
+        SLO (RAM_PDIR,X) ;PDIR    7501 on-chip data-direction register
+a3030   AND f0E19,Y
+        AND b2A7F,X
+        ROL 
+        ASL f1E1E,X
+        AND f193D,X
+        RLA a392F
+s3040   NOP 
+        JSR s2FF5
+        LDX #$08
+        STX RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDX #$0C
+        STX RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDX #$28
+        STX RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+a3051   =*+$01
+        LDX #$01
+        BEQ b305E
+b3054   CLC 
+        ADC #$68
+        BCC b305B
+        INC RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+b305B   DEX 
+        BNE b3054
+b305E   STA RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+        LDY #$00
+        STY RAM_FNLEN ;FNLEN   Length of current file name
+        STY RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+j3066   LDA (RAM_TRMPOS),Y ;TRMPOS  Screen column from last TAB
+        TAX 
+        LDA a302F,X
+        STA RAM_SUBFLG ;SUBFLG  Flag: subscript ref / user function coll
+        LDA f301E,X
+        STA RAM_INPFLG ;INPFLG  Flag: $00 = INPUT, $43 = GET, $98 = READ
+        LDX #$03
+b3075   LDY #$00
+b3077   LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        LDA RAM_INPFLG ;INPFLG  Flag: $00 = INPUT, $43 = GET, $98 = READ
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA RAM_SUBFLG ;SUBFLG  Flag: subscript ref / user function coll
+        STA (p04),Y
+        JSR s30C8
+        CPY #$03
+        BNE b3077
+        LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        CLC 
+        ADC #$28
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        BCC b3097
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3097   DEX 
+        BNE b3075
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+        INC RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDA #$75
+        LDX RAM_FNLEN ;FNLEN   Length of current file name
+        CPX #$0D
+        BCC b30B2
+        LDX RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        CPX #$66
+        BCS b30D2
+        LDA #$00
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #$24
+b30B2   STA a30B9
+        LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        SEC 
+a30B9   =*+$01
+        SBC #$75
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        BCS b30C2
+        DEC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        DEC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b30C2   LDY RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        JMP j3066
+
+        RTS 
+
+s30C8   LDA RAM_INPFLG ;INPFLG  Flag: $00 = INPUT, $43 = GET, $98 = READ
+        CMP #$DF
+        BEQ b30D0
+        INC RAM_INPFLG ;INPFLG  Flag: $00 = INPUT, $43 = GET, $98 = READ
+b30D0   INY 
+        RTS 
+
+b30D2   LDA #$0C
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #$00
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+b30E0   LDY #$28
+        LDA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        CMP #$06
+        BCS b30F3
+        SEC 
+        SBC #$03
+        LDY #$00
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA #$39
+        STA (p04),Y
+b30F3   LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        CLC 
+        ADC #$01
+        BCC b30FE
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+f30FC   INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b30FE   STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        CMP #$98
+        BNE b30E0
+        LDA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        CMP #$0F
+        BNE b30E0
+        RTS 
+
+j310D   LDA #$0C
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #$00
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        LDA #>p313C
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #<p313C
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDX #$04
+b3125   LDY #$00
+b3127   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA #$00
+        STA (p04),Y
+        INY 
+a3130   BNE b3127
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+        DEX 
+        BNE b3125
+        RTS 
+
+p313C   JSR s2020
+        JSR s2020
+        JSR eA0A0
+        LDY #$A0
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s20A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$A0
+        LDY #$A0
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR eA020
+        LDY #$A0
+        JSR eA0A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        LDY #$20
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA0A0
+        JSR eA0A0
+        LDY #$20
+        JSR s2020
+        LDY #$A0
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        JSR s2020
+        JSR eA0A0
+        JSR eA020
+        LDY #$A0
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        LDY #$A0
+        JSR eA020
+        LDY #$A0
+        LDY #$A0
+        JSR eA0A0
+        LDY #$A0
+        JSR eA020
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        JSR eA020
+        JSR eA0A0
+        LDY #$20
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        JSR eA0A0
+        JSR eA0A0
+        JSR s2020
+        LDY #$A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        JSR eA0A0
+        JSR eA0A0
+        JSR eA020
+        JSR eA020
+        LDY #$20
+        JSR eA0A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        JSR eA0A0
+        JSR eA0A0
+        LDY #$20
+        LDY #$20
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$A0
+        LDY #$A0
+        LDY #$20
+        JSR eA0A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        LDY #$A0
+        JSR eA0A0
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$A0
+        LDY #$A0
+        JSR eA020
+        LDY #$A0
+        JSR eA0A0
+        JSR s2020
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$20
+        JSR s2020
+a330C   =*+$02
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA020
+        LDY #$A0
+        LDY #$A0
+f3327   =*+$01
+        LDY #$A0
+        LDY #$20
+        JSR eA020
+        JSR s2020
+f3330   JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$A0
+        LDY #$A0
+        LDY #$A0
+        LDY #$A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$20
+        JSR eA0A0
+        LDY #$A0
+        JSR s2020
+        JSR s20A0
+        JSR eA020
+        JSR s2020
+        LDY #$20
+        LDY #$A0
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA0A0
+        LDY #$20
+        LDY #$A0
+        JSR eA0A0
+        LDY #$20
+        JSR eA0A0
+        JSR s2020
+        LDY #$A0
+        JSR eA020
+        LDY #$A0
+        JSR eA0A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR eA0A0
+        LDY #$20
+        LDY #$A0
+f33F3   =*+$02
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR eA020
+f33FD   =*+$02
+        JSR eA020
+        LDY #$20
+        LDY #$A0
+        JSR eA020
+        LDY #$20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        JSR eA0A0
+        JSR eA0A0
+        LDY #$20
+        LDY #$A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$20
+a3430   =*+$01
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$20
+        JSR eA0A0
+        LDY #$A0
+        LDY #$20
+        LDY #$A0
+        JSR s20A0
+        LDY #$20
+        LDY #$A0
+        JSR eA0A0
+        JSR eA020
+        LDY #$A0
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        LDY #$A0
+        LDY #$20
+        JSR eA020
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        JSR s2020
+        LDY #$A0
+        JSR eA020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s1902
+        JSR RAM_ESTAKH ;ESTAKH  
+        SLO a4720
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        NOP f1A,X
+        JSR s2020
+        JSR b2820
+        SRE (RAM_RESLO,X) ;RESLO   
+        JSR s3931
+        SEC 
+        AND f20,X
+        ALR #$49
+        LSR a5347
+        SRE a5446
+        JSR s2020
+        JSR s2020
+        ROL a20
+        BVC b3509
+        PHA 
+        ORA (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        NOP RAM_VALTYP,X ;VALTYP  Data type: $FF = string   $00 = numeric
+        ORA (RAM_INTFLG,X) ;INTFLG  Data type: $80 = integer, $00 = floating
+        ASL s2020
+        JSR s2020
+        ROL f5020,X
+        NOP a1901
+        JSR s1409
+        JSR e0701
+        ORA (RAM_TRMPOS,X) ;TRMPOS  Screen column from last TAB
+        ASL a3C20
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+b3509   =*+$01
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+s3525   =*+$02
+        JSR eA920
+        PHP 
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #>RAM_TEDSCN
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #<RAM_TEDSCN
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        RTS 
+
+s3534   JSR s3525
+        CPY #$00
+        BEQ b3547
+b353B   CLC 
+        ADC #$28
+        BCC b3544
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3544   DEY 
+        BNE b353B
+b3547   CLC 
+a3549   =*+$01
+        ADC #$15
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        BCC b3554
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3554   LDX #$03
+        LDA #$00
+        STA RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+b355A   LDY #$00
+b355C   LDA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        BNE b3566
+        LDA #$DF
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        BNE b3581
+b3566   CMP #$01
+        BNE b3574
+        LDA RAM_FNLEN ;FNLEN   Length of current file name
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+        STA (p04),Y
+        BNE b3581
+b3574   LDA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        STX RAM_SUBFLG ;SUBFLG  Flag: subscript ref / user function coll
+        LDX RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+        STA f033C,X
+        INC RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+        LDX RAM_SUBFLG ;SUBFLG  Flag: subscript ref / user function coll
+b3581   INC RAM_FNLEN ;FNLEN   Length of current file name
+        INY 
+        CPY #$03
+        BNE b355C
+        LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        CLC 
+        ADC #$28
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        BCC b3597
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3597   DEX 
+        BNE b355A
+        RTS 
+
+s359B   LDA #$FD
+        STA aFF08
+        LDA aFF08
+a35A4   =*+$01
+        LDY #$09
+a35A6   =*+$01
+        LDX #$15
+        LSR 
+        BCS b35AF
+        CPY #$00
+        BEQ b35AF
+        DEY 
+b35AF   LSR 
+        BCS b35B7
+        CPY #$15
+        BCS b35B7
+        INY 
+b35B7   LSR 
+        BCS b35BF
+        CPX #$00
+        BEQ b35BF
+        DEX 
+b35BF   LSR 
+        BCS b35C7
+        CPX #$24
+        BCS b35C7
+        INX 
+b35C7   STY a35E8
+        STX a35ED
+        STX a3549
+        LDA #$02
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        JSR s3534
+        LDX #$09
+b35D9   LDA f033B,X
+        CMP #$DF
+        BEQ b35E4
+        CMP #$E2
+        BNE b35F1
+b35E4   DEX 
+        BNE b35D9
+a35E8   =*+$01
+        LDA #$0A
+        STA a35A4
+a35ED   =*+$01
+        LDA #$15
+        STA a35A6
+b35F1   LDA #$FF
+        STA aFF08
+        LDA #<p9301
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDA #>p9301
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #$3D
+        STA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+s3602   LDY a35A4
+        LDX a35A6
+s3608   STX a3549
+        JMP s3534
+
+s360E   SEI 
+        LDA #$C0
+b3611   CMP $FF1D    ;Bits 0-7 : Vertical line bits 0-7
+        BNE b3611
+        LDA #$00
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+b361A   JMP j3A6D
+
+        BNE b361A
+        RTS 
+
+j3620   LDA #$00
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+a3625   =*+$01
+        LDX #$0F
+a3627   =*+$01
+        LDY #$0F
+        JSR s3608
+        NOP 
+        LDX a3625
+        LDY a3627
+a3632   CPX a35A6
+        BCS b3639
+        INX 
+        INX 
+b3639   CPX a35A6
+        BEQ b363F
+        DEX 
+b363F   CPY a35A4
+        BCS b3646
+        INY 
+        INY 
+b3646   CPY a35A4
+        BEQ b364C
+        DEY 
+b364C   STX a3669
+        STX a3549
+        STY a366E
+        LDA #$02
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        JSR s3534
+        LDX #$09
+b365E   LDA f033B,X
+        CMP #$92
+        BCC b3672
+        DEX 
+        BNE b365E
+a3669   =*+$01
+        LDX #$10
+        STX a3625
+a366E   =*+$01
+        LDY #$0E
+        STY a3627
+b3672   LDA #$9C
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #$3E
+        STA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+        LDY a3627
+        LDX a3625
+        STX a3549
+        LDA #$01
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        JMP s3534
+
+p368A   ISC fFE00,X
+        SBC fFB29,X
+a3692   =*+$02
+a3690   ADC fA9FA,Y
+        ISC $FD01,X  ;STATUS port
+        LAX f49FB,Y
+        NOP 
+a369A   CPX #$F9
+        NOP fFDFE,X
+        INC RAM_CURBNK,X ;CURBNK  Current bank configuration
+a36A3   =*+$02
+        AND fACFA,X
+        SBC fFEFC,Y
+        SBC $FC1E,X
+        SBC fFFFC,Y  ;RES Vector
+        JAM 
+        ISC fFD5F,Y
+        LAX (RAM_XSTOP),Y ;XSTOP   Save xreg for quick stopkey test
+a36B3   CLV 
+        SBC fFDFC,Y
+        DCP fF9FC,Y
+        NOP fD3FD,X
+        INC fFBFE,X
+        EOR #$FA
+a36C2   LDA RAM_USE4DY ;USE4DY  (B.7 = 1)=> for wr, (B.6 = 1)=> for rd
+        SED 
+        SBC fF9F8,Y
+        NOP fFAF9,X
+        TAY 
+        SBC fFAFF,X
+        LAX RAM_SEDT2 ;SEDT2   Editor temporary use
+b36D2   =*+$01
+        SBC fF827,X
+        SBC fFA24,X
+a36D7   BCS b36D2
+        NOP f4CFD,X
+        NOP $FCF9,X
+        SBC fFA74,X
+a36E2   LDA RAM_XoN,X ;XoN     Char to send for a x-on (RS232)
+        SBC fFDFC,Y
+        RLA RAM_XSTOP ;XSTOP   Save xreg for quick stopkey test
+        LAX RAM_XoFF ;XoFF    Char to send for a x-off (RS232)
+        SRE aFDF8
+        RRA RAM_TYPE,X ;TYPE    Type of block
+        SBC fF89F,X
+        ISC ROM_SETMSG,X
+        SLO RAM_SEDT2 ;SEDT2   Editor temporary use
+        INC fD1FD,X
+a36FC   =*+$01
+        ISC fFA00,Y
+a36FE   LSR $FCF9,X
+        SBC $FCF9,X
+        SBC fFFFC,Y  ;RES Vector
+        PHP 
+        INC f33FD,X
+        ISC fFA4C,Y
+a370E   DEC RAM_USE4DY ;USE4DY  (B.7 = 1)=> for wr, (B.6 = 1)=> for rd
+        NOP $FCF9,X
+        SBC $FC5B,X
+        SBC fF9FC,Y
+        NOP fFDFE,X
+        LDY a3FFB
+        NOP 
+a3720   CPY #$F9
+        NOP fD4FD,X
+        NOP $FCF9,X
+        SBC $FCFC,X
+        SBC fFFFC,Y  ;RES Vector
+        ASL 
+        INC fFDFE,X
+        SHY f29FB,X
+        NOP 
+a3736   CPY $FCF9
+        SBC $FCC4,X
+        SBC fFFFC,Y  ;RES Vector
+        ANC #$FD
+        STY RAM_CURBNK,X ;CURBNK  Current bank configuration
+a3745   =*+$02
+        AND fD0FA,Y
+        SBC $FCBC,X
+        ISC fFE0C,X
+        INC a15FD,X
+        ISC fFA39,Y
+a3752   JAM 
+        SBC fFDFC,Y
+        AND fF9FC,X
+        NOP f0DFF,X
+        ISC fFAFF,Y
+a375F   DEC RAM_XoFF,X ;XoFF    Char to send for a x-off (RS232)
+        LDX aFDF8
+        NOP RAM_TYPE,X ;TYPE    Type of block
+        SBC fF811,X
+        SBC fF865,X
+        SBC fF840,X
+        SBC fF869,X
+        INC f44FD,X
+        SED 
+        SBC fF898,X
+        SBC fF8F4,X
+        SBC fF87E,X
+        SBC fF851,X
+        SBC fF80C,X
+        SBC fF883,X
+        INC f0FFD,X
+        SED 
+        SBC fF886,X
+        SBC fF882,X
+        SBC fF8F8,X
+        SBC fF8B4,X
+        SBC fF815,X
+        SBC fF840,X
+        SBC fF825,X
+        SBC fF89B,X
+        INC f71FD,X
+        SED 
+        SBC fF84D,X
+        SBC fF879,X
+        SBC fF8A6,X
+        ISC $FD0E,X
+        INC RAM_CURBNK,X ;CURBNK  Current bank configuration
+a37B6   BRK #$FA
+        DCP RAM_TYPE,X ;TYPE    Type of block
+        SBC fF882,X
+        INC f5FFD,X
+        SED 
+        SBC fF884,X
+        SBC fF882,X
+        SBC fF8E6,X
+        SBC fF871,X
+        SBC fF873,X
+        SBC fF81F,X
+        SBC fF81C,X
+        INC f24FD,X
+        SED 
+        SBC fF827,X
+        SBC fF850,X
+        SBC fF848,X
+        SBC fF8C4,X
+        SBC fF8C0,X
+        SBC fF894,X
+        SBC fF8E0,X
+        SBC fF864,X
+        SBC fF83F,X
+        SBC fF813,X
+        INC a15FD,X
+        SED 
+        SBC fF834,X
+        SBC fF804,X
+        ISC $FD10,X  ;User Port PIO (P0-P7)
+        RRA (RAM_CURBNK,X) ;CURBNK  Current bank configuration
+        SRE fB8FA,X
+        SBC fFDFC,Y
+        XAA #$FC
+        SED 
+        SBC fFEFC,Y
+        INC f39FB,X
+        SBC fFAFB,X
+        NOP RAM_XoFF,X ;XoFF    Char to send for a x-off (RS232)
+        JAM 
+        ISC fFA39,Y
+        CMP $FCF9,Y
+        SBC fFE1A,X
+        NOP $FCF9,X
+        ISC fFE11,X
+        INC fC3FD,X
+        ISC fFA39,Y
+a3831   CMP fEBFD,X
+        NOP fFFFF,X  ;IRQ Vector
+        ISC fFFFF,X  ;IRQ Vector
+s383A   LDA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        CLC 
+        ADC #$01
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        BCC b3845
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+b3845   RTS 
+
+s3846   LDA #>p368A
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #<p368A
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        LDY #$00
+j3850   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        CMP #$FF
+        BEQ b385C
+b3856   JSR s383A
+        JMP j3850
+
+b385C   JSR s383A
+        LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        CMP #$FF
+        BEQ b38DF
+        CMP a3051
+        BNE b3856
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #>RAM_TEDSCN
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #<RAM_TEDSCN
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        JSR s383A
+        LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+b387D   CMP #$FE
+        BEQ b388C
+        CMP #$F9
+        BNE b3892
+        LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        JSR s38D7
+        BCC b3890
+b388C   INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3890   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+b3892   CMP #$FB
+        BNE b389F
+        JSR s383A
+        LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+        BNE b38BF
+b389F   CMP #$F8
+        BEQ b38B7
+        CMP #$FC
+        BNE b38AC
+        LDA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+        JMP j399F
+
+b38AC   CMP #$FA
+        BNE b38BF
+        JSR s383A
+        LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+b38B7   LDA RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+        STA (p04),Y
+        LDA RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+b38BF   CMP #$FD
+        BNE b38CC
+        JSR s383A
+        LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+b38CC   JSR s383A
+        LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        CMP #$FF
+        BNE b387D
+        BEQ b38DF
+s38D7   CLC 
+        ADC #$01
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        RTS 
+
+b38DF   LDA a3051
+        CMP #$02
+        BNE b3919
+        LDA #$0D
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        LDA #$0C
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDX #$18
+b38F6   LDA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        CMP #$DF
+        BEQ b3900
+        CMP #$F5
+        BNE b3906
+a3901   =*+$01
+b3900   LDA #$F5
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA (p04),Y
+b3906   LDA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        CLC 
+        ADC #$28
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        BCC b3915
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3915   DEX 
+        BNE b38F6
+        RTS 
+
+b3919   CMP #$07
+        BNE a392F
+        LDX #$17
+b391F   LDA f0D68,X
+        CMP #$DF
+        BNE b392B
+        LDA #$E3
+        STA f0D68,X
+b392B   DEX 
+        BNE b391F
+        RTS 
+
+a392F   CMP #$06
+s3931   BNE b3942
+        LDA #$F6
+        STA a0C9C
+        STA a0C9C
+        STA a0E7C
+        STA a0F6C
+        RTS 
+
+b3942   CMP #$04
+        BNE b398D
+        LDX #$F7
+        LDY #$F8
+a394B   =*+$01
+        LDA #$01
+        BNE b3952
+        LDX #$3B
+        LDY #$42
+a3953   =*+$01
+b3952   LDA #$01
+        CMP #$01
+        BNE b395B
+        STX a0C7A
+b395B   CMP #$02
+        BNE b3962
+        STX a0D6A
+b3962   CMP #$03
+        BNE b3969
+        STX a0E5A
+b3969   CMP #$04
+        BNE b3970
+        STX a0F4A
+b3970   CMP #$05
+        BNE b3977
+        STY a0C9C
+b3977   CMP #$06
+        BNE b397E
+        STY a0D8C
+b397E   CMP #$07
+        BNE b3985
+        STY a0E7C
+b3985   CMP #$08
+        BNE b398C
+        STY a0F6C
+b398C   RTS 
+
+b398D   CMP #$05
+        BNE b399D
+        LDA #$FD
+a3994   =*+$01
+        LDX #$01
+        BNE b3999
+        LDA #$7A
+b3999   STA a0ED2
+        RTS 
+
+b399D   RTS 
+
+j399F   =*+$01
+        ISC fDFC9,X
+        BEQ b39A5
+        INC RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+b39A5   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        JMP b38B7
+
+f39AB   =*+$01
+f39AA   ASL RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        JAM 
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (p15,X)
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_DORES,X) ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        AND (p15,X)
+        ASL f0606,X
+        ASL RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        JAM 
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_TRMPOS,X) ;TRMPOS  Screen column from last TAB
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_DIMFLG,X) ;DIMFLG  Flag: Default Array DIMension
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        AND (RAM_DIMFLG,X) ;DIMFLG  Flag: Default Array DIMension
+        SLO (RAM_DIMFLG,X) ;DIMFLG  Flag: Default Array DIMension
+        JSR RAM_IESCLK ;IESCLK  Escape token crunch
+        NOP a0C21
+        SLO (RAM_TRMPOS,X) ;TRMPOS  Screen column from last TAB
+        ORA RAM_ZPVEC1,X ;ZPVEC1  Temp (renumber)
+        SLO (p06,X)
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        AND (p06,X)
+        SLO (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        AND (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+        ORA f0303,X
+        ASL a21
+        SLO (RAM_ZPVEC1,X) ;ZPVEC1  Temp (renumber)
+s39F4   JSR s360E
+        LDX #$09
+f39FB   =*+$02
+f39F9   LDA f033B,X
+        CMP #$05
+        BEQ b3A08
+        CMP #$03
+b3A03   =*+$01
+        BEQ s3A17
+        DEX 
+        BNE f39F9
+b3A07   RTS 
+
+b3A08   LDX a3051
+        BEQ b3A07
+        DEX 
+        JMP j3A64
+
+        NOP f38,X
+        JAM 
+        SEC 
+        JAM 
+s3A17   =*+$01
+        ISC f51AE,X
+        BMI b3A03
+        STX a3051
+        LDY f3A4A,X
+j3A21   LDA f39AA,Y
+        STA a35A4
+        LDA f39AB,Y
+        STA a35A6
+s3A2D   JSR s3040
+        JMP s3846
+
+f3A33   JAM 
+        ASL RAM_VERCK ;VERCK   Flag: 0 = load 1 - verify
+        ASL a1612
+        NOP 
+a3A3A   ASL f2622,X
+        ROL 
+        ROL a3632
+        NOP 
+        ROL f4642,X
+        LSR 
+        LSR a5652
+        NOP 
+f3A4A   LSR f0804,X
+        NOP a1410
+        CLC 
+        NOP f2420,X
+        PLP 
+        BIT a3430
+        SEC 
+        NOP f4440,X
+        PHA 
+        JMP e5450
+
+        CLI 
+        NOP RAM_EXPSGN,X ;EXPSGN  
+j3A64   STX a3051
+        LDY f3A33,X
+        JMP j3A21
+
+j3A6D   JSR s3602
+        JSR s359B
+        CLI 
+        RTS 
+
+s3A76   =*+$01
+        BRK #$CA
+        BNE s3A76
+        DEY 
+        BNE s3A76
+        RTS 
+
+s3A7D   LDA $FF12    ;Bit 0-1 : Voice #1 frequency, bits 8 & 9
+        AND #$FB
+        STA $FF12    ;Bit 0-1 : Voice #1 frequency, bits 8 & 9
+        LDA #$21
+        STA $FF13    ;Bit 0 :    Clock status
+        LDA aFF07
+        ORA #$90
+        STA aFF07
+        LDA #$DB
+        STA $FF16    ;Color register #1
+        LDA #$29
+        STA $FF17    ;Color register #2
+        RTS 
+
+s3A9D   LDA $FF12    ;Bit 0-1 : Voice #1 frequency, bits 8 & 9
+        ORA #$04
+        STA $FF12    ;Bit 0-1 : Voice #1 frequency, bits 8 & 9
+        LDA #$D5
+        STA $FF13    ;Bit 0 :    Clock status
+        LDA aFF07
+        LDA #$08
+        STA aFF07
+        RTS 
+
+j3AB3   JSR s1F15
+        LDA #$01
+        STA $FF15    ;Background color register
+        STA $FF19    ;Color register #4
+        JSR s16BA
+        LDY #$20
+        JSR s3A76
+        LDA #$FD
+b3AC8   STA aFF08
+        LDA aFF08
+        AND #$01
+        BNE b3AC8
+        LDA #$FF
+        JSR s1CFF
+        LDA #>RAM_TEDSCN
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDA #<RAM_TEDSCN
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDX #$04
+        LDY #$00
+        LDA #$DF
+b3AE5   STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        INY 
+        BNE b3AE5
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        DEX 
+        BNE b3AE5
+        JSR s3A7D
+        LDA #$00
+        STA $FF15    ;Background color register
+        LDA #$12
+        STA $FF19    ;Color register #4
+        JSR s3B02
+        JMP j3B3A
+
+s3B02   LDA #$27
+        STA RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        STA a04
+        LDA #$08
+        STA RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+f3B0C   LDA #$0C
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        LDX #$18
+        LDY #$00
+b3B14   LDA #$5D
+        STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDA #$12
+        STA (p04),Y
+        TYA 
+        CLC 
+        ADC #$28
+        TAY 
+        BCC b3B27
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        INC RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3B27   DEX 
+        BNE b3B14
+b3B2A   LDA #$5D
+        STA f0FC0,X
+        LDA #$12
+        STA f0BC0,X
+        INX 
+        CPX #$28
+        BNE b3B2A
+        RTS 
+
+j3B3A   LDA #$06
+        STA a35A4
+        LDA #$03
+        STA a35A6
+        LDA #$00
+        STA a3051
+        JSR s3A2D
+j3B4C   JSR s2FEF
+        LDY #$30
+        JSR s3A76
+        JSR s2FCB
+        JMP j162D
+
+p3B5A   EOR f150F,Y
+        JSR e0506
+        NOP a200C
+        ORA #$0E
+        NOP RAM_DORES,X ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        JSR s2001
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        SLO (RAM_INTFLG),Y ;INTFLG  Data type: $80 = integer, $00 = floating
+        ORA (RAM_COUNT,X) ;COUNT   Input buffer pointer / No. of subsctipts
+        ORA a20
+        BPL b3B84
+        NOP f20,X
+        AND (p20,X)
+        JSR s2020
+b3B84   =*+$02
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e0F59
+        ORA RAM_RESMOH,X ;RESMOH  
+        NOP a20
+        JAM 
+        ORA RAM_LINNUM ;LINNUM  Temp: integer value
+        NOP RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        JAM 
+        JSR e0117
+        NOP RAM_ZPVEC1,X ;ZPVEC1  Temp (renumber)
+        PHP 
+        ORA a04
+        JSR f150F
+        NOP f20,X
+        ASL RAM_DORES ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        JAM 
+        JSR e0814
+        ORA a20
+        SLO (RAM_PORT),Y ;PORT    7501 on-chip 8-bit Input/Output register
+        SLO (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        ORA a04
+        JSR e0F03
+        NOP a0D15
+        ASL s2021
+        JSR e5920
+        SLO a2015
+        NOP RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        SLO a0E17
+        ORA a04
+        JSR e0E09
+        JSR e0814
+        ORA a20
+        NOP RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        ORA RAM_SUBFLG ;SUBFLG  Flag: subscript ref / user function coll
+        JSR s1220
+        ORA #$16
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        JSR s2021
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e5920
+        SLO a2015
+        NOP RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        ORA (RAM_INTFLG,X) ;INTFLG  Data type: $80 = integer, $00 = floating
+        ANC #$20
+        ASL RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        SLO a200D
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        JSR s2020
+        JSR s2020
+        BPL b3C1A
+        ORA #$13
+        ORA RAM_INTFLG ;INTFLG  Data type: $80 = integer, $00 = floating
+        ORA a04
+        JSR e0F02
+        NOP RAM_LINNUM,X ;LINNUM  Temp: integer value
+        NOP a2005
+b3C1A   =*+$01
+        ROL a2E2E
+        ROL a2E2E
+a3C20   =*+$01
+        ROL a202E
+        JAM 
+        SLO a0912
+        SLO (p2C),Y
+        JSR e0814
+        ORA a20
+        SLO (RAM_SUBFLG),Y ;SUBFLG  Flag: subscript ref / user function coll
+        ORA #$04
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        BIT a0720
+        SLO a2014
+        JSR s1920
+        SLO a2015
+        ORA (RAM_INTFLG,X) ;INTFLG  Data type: $80 = integer, $00 = floating
+        NOP a20
+        ANC #$09
+        NOP a050C
+        NOP a20
+        ORA f150F,Y
+        JSR s2021
+        JSR s2020
+        JSR e0944
+        NOP RAM_INTFLG ;INTFLG  Data type: $80 = integer, $00 = floating
+        RLA RAM_LINNUM ;LINNUM  Temp: integer value
+        JSR e0F19
+        ORA f20,X
+        SLO (RAM_ZPVEC2),Y ;ZPVEC2  Temp (renumber)
+        ORA a20
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        JSR s2020
+        JSR s2020
+        NOP a1301
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        JSR e0502
+        ORA (RAM_VALTYP,X) ;VALTYP  Data type: $FF = string   $00 = numeric
+        JSR s213F
+        RLA s2020,X
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JAM 
+        NOP f30,X
+        JSR e0F56
+        NOP a1314
+        JSR s2021
+        EOR f150F,Y
+        JSR e0F07
+        NOP f20,X
+        ORA (RAM_INTFLG,X) ;INTFLG  Data type: $80 = integer, $00 = floating
+        JSR e0C05
+        ORA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        NOP RAM_TANSGN,X ;TANSGN  Flag TAN siqn / comparison result
+        ORA #$03
+        ORA (RAM_DIMFLG,X) ;DIMFLG  Flag: Default Array DIMension
+        JSR e0813
+        SLO a0B03
+        JSR s2021
+        JSR s2020
+        JSR s2020
+        JSR e5920
+        SLO a2015
+        SLO (RAM_LINNUM),Y ;LINNUM  Temp: integer value
+        ORA RAM_SUBFLG ;SUBFLG  Flag: subscript ref / user function coll
+        BPL b3CC7
+        NOP a20
+        SLO a200E
+b3CC7   ORA (p20,X)
+        ASL a0901
+        NOP a2120
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        EOR (p20,X)
+        ASL RAM_DORES ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        SLO a2014
+        NOP RAM_TANSGN,X ;TANSGN  Flag TAN siqn / comparison result
+        ORA (RAM_SUBFLG,X) ;SUBFLG  Flag: subscript ref / user function coll
+        JSR a1413
+        SLO a1010
+        ORA a04
+        JSR e0F19
+        ORA f20,X
+        AND (p20,X)
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA #$13
+        JSR e0F12
+        SLO a200D
+        ORA #$13
+        JSR e0F04
+        SLO a050D
+        NOP a20
+        JSR s2020
+        JSR e0220
+        ORA a1420,Y
+        PHP 
+        ORA a20
+        SLO RAM_TRMPOS,X ;TRMPOS  Screen column from last TAB
+        NOP 
+        ORA (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        NOP a20
+        EOR e0E01
+        ORA #$0C
+        SLO a2120
+        JSR s2020
+        EOR f150F,Y
+        JSR e0517
+        JAM 
+        ORA a20
+        NOP a030F
+        ANC #$05
+        NOP a20
+        ORA #$0E
+        JSR e0E01
+        NOP a20
+        SLO (RAM_LINNUM),Y ;LINNUM  Temp: integer value
+        ORA (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        ASL RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        NOP a20
+        AND (p20,X)
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e5920
+        SLO a2015
+        SLO RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        JAM 
+        ORA a20
+        PHP 
+        ORA #$14
+        JSR s1902
+        JSR s2001
+        JAM 
+        ORA #$07
+        JSR s2020
+        JSR e0F12
+        SLO (RAM_COUNT,X) ;COUNT   Input buffer pointer / No. of subsctipts
+        JSR e0E01
+        NOP a20
+        NOP RAM_TRMPOS ;TRMPOS  Screen column from last TAB
+        ORA a04
+        JSR s2021
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JAM 
+        ORA RAM_DIMFLG ;DIMFLG  Flag: Default Array DIMension
+        ORA RAM_CHARAC ;CHARAC  Search character
+        JAM 
+        SLO a0B20
+        ORA #$0C
+        NOP a0405
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s1920
+        SLO a2015
+        AND (p20,X)
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e0F59
+        ORA f20,X
+        ASL RAM_DORES ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        ORA RAM_INTFLG,X ;INTFLG  Data type: $80 = integer, $00 = floating
+        NOP a20
+        ORA (p20,X)
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA #$12
+        SLO (RAM_LINNUM),Y ;LINNUM  Temp: integer value
+        ORA s2020,Y
+        JSR s2020
+        JSR e0F1A
+        ORA a0902
+        ORA a20
+        ROL a2E2E
+        ROL a2E2E
+        ROL s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        ORA a0E0F
+        SLO (RAM_LINNUM),Y ;LINNUM  Temp: integer value
+s3E20   =*+$01
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        JSR a1207
+        ORA (RAM_SUBFLG,X) ;SUBFLG  Flag: subscript ref / user function coll
+        BPL b3E2D
+        NOP a20
+        JSR s2020
+b3E2D   JSR s2020
+        ORA f150F,Y
+        ROL e5920
+        SLO a2015
+        ORA (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        ORA a20
+        NOP RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        ORA (p04,X)
+        JSR s2021
+        JSR s2020
+        JSR e0F59
+        ORA f20,X
+        SLO RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        JAM 
+        ORA a20
+        SLO RAM_DORES,X ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        ORA RAM_INTFLG,X ;INTFLG  Data type: $80 = integer, $00 = floating
+        NOP RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        NOP a20
+        JAM 
+        ORA s2020,Y
+        JSR s2020
+        JSR e0814
+        ORA a20
+        JAM 
+        ORA RAM_CHANNL,X ;CHANNL  Flag: INPUT prompt
+        PHP 
+        JSR s2021
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        JSR e5920
+        SLO a2015
+a3E7E   ORA (RAM_TANSGN,X) ;TANSGN  Flag TAN siqn / comparison result
+        ORA a20
+        NOP RAM_TANSGN,X ;TANSGN  Flag TAN siqn / comparison result
+        ORA (RAM_SUBFLG,X) ;SUBFLG  Flag: subscript ref / user function coll
+        BPL b3E8D
+        NOP a20
+        ORA #$0E
+b3E8D   =*+$01
+        JSR s2020
+        JSR s2020
+        JSR e0917
+        JAM 
+        ORA RAM_VARTAB ;VARTAB  Pointer: start of BASIC variables
+        ASL a1405
+        NOP RAM_TRMPOS,X ;TRMPOS  Screen column from last TAB
+        ASL a1307
+        JSR s2021
+        JSR s2020
+        JSR s2020
+        JSR s2020
+j3EAC   LDA #>p3B5A
+        STA RAM_FNLEN ;FNLEN   Length of current file name
+        LDA #<p3B5A
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        CPY #$00
+        BEQ b3EC4
+b3EB8   CLC 
+        ADC #$32
+        STA RAM_TPBYTE ;TPBYTE  Byte to be written/read on/off tape
+        BCC b3EC1
+        INC RAM_FNLEN ;FNLEN   Length of current file name
+b3EC1   DEY 
+        BNE b3EB8
+b3EC4   LDA #$0C
+        STA RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        STY RAM_SRCHTK ;SRCHTK  Token 'search' looks for (run-time stack)
+        LDX #$04
+        LDA #$20
+b3ECE   STA (RAM_SRCHTK),Y ;SRCHTK  Token 'search' looks for (run-time stack)
+        INY 
+        BNE b3ECE
+        INC RAM_ZPVEC1 ;ZPVEC1  Temp (renumber)
+        DEX 
+        BNE b3ECE
+        JSR s3A9D
+b3EDB   LDA (RAM_TPBYTE),Y ;TPBYTE  Byte to be written/read on/off tape
+        STA f0DC0,X
+        LDA #$00
+        STA f09C0,X
+        INX 
+        INY 
+        CPX #$19
+        BNE b3EED
+        LDX #$50
+b3EED   CPY #$32
+        BNE b3EDB
+        LDA #$FD
+        STA $FF15    ;Background color register
+        STA $FF19    ;Color register #4
+j3EF9   LDA #$08
+b3EFB   LDY #$FF
+        JSR s3A76
+        SEC 
+        SBC #$01
+        BNE b3EFB
+        JMP j3AB3
+
+        JSR s2041
+        BPL b3F0E
+        JAM 
+f3F0F   =*+$01
+b3F0E   NOP f20,X
+        SLO a2006
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        SLO (RAM_DORES,X) ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        NOP RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        JSR s150E
+        ORA e0502
+        JAM 
+        JSR s1309
+        JSR s203A
+        JSR s2020
+        JSR s2020
+        JSR s2020
+        EOR (p42,X)
+        SRE (p44,X)
+        EOR a46
+        SRE RAM_OPPTR ;OPPTR   
+        EOR #$4A
+a3F3C   =*+$01
+        ALR #$4C
+f3F3F   =*+$02
+        EOR a4F4E
+        BVC b3F93
+        JAM 
+        SRE (RAM_JMPER),Y ;JMPER   
+        EOR RAM_OLDOV,X ;OLDOV   
+        SRE RAM_HIGHDS,X ;HIGHDS  
+        EOR f205A,Y
+        BMI b3F7F
+        JAM 
+        RLA (p34),Y
+        AND f36,X
+        RLA f38,X
+f3F55   AND f20BC,Y
+        JSR e0F59
+        ORA f20,X
+        ASL a0505
+        NOP a3A
+        JSR s1502
+        NOP a2C02
+        JSR s1502
+        NOP a2002
+        PHP 
+        SLO a040C
+        ORA RAM_TANSGN ;TANSGN  Flag TAN siqn / comparison result
+        BIT a1320
+        SLO a0B03
+        ORA RAM_LINNUM ;LINNUM  Temp: integer value
+        JSR s2021
+b3F7F   JSR e5420
+        ORA RAM_DIMFLG ;DIMFLG  Flag: Default Array DIMension
+        NOP a0D20
+        ORA a20
+        NOP RAM_ENDCHR,X ;ENDCHR  Flag: scan for quote at end of string
+        ORA a20
+        SLO (RAM_DORES,X) ;DORES   Flag: DATA scan/LIST quote/garbage coll
+        NOP RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+b3F93   =*+$02
+        JSR s150E
+        ORA e0502
+        JAM 
+        JSR s203F
+        JSR s2020
+        JSR s2022
+        JSR s2020
+        JSR s2022
+        JSR s2A20
+        ROL 
+        ROL 
+        ROL 
+        ROL 
+        JSR s2020
+        EOR (p20,X)
+        PHP 
+        ORA RAM_DIMFLG ;DIMFLG  Flag: Default Array DIMension
+        BPL b3FC1
+        ASL a2007
+        NOP a1405
+        NOP RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        JAM 
+b3FC1   JSR s203A
+a3FC6   =*+$02
+        JSR e4320
+        JSR s2020
+        ROL 
+        ROL 
+        ROL 
+        ROL 
+        ROL 
+        JSR e5320
+        SLO a1212
+        ORA a202C,Y
+        JAM 
+        ORA (p04,X)
+        JSR e0F03
+        NOP RAM_ZPVEC2 ;ZPVEC2  Temp (renumber)
+        JSR s150E
+        ORA e0502
+        JAM 
+        AND (p20,X)
+        JAM 
+        ORA RAM_LINNUM ;LINNUM  Temp: integer value
+        NOP RAM_ZPVEC2,X ;ZPVEC2  Temp (renumber)
+        JAM 
+        JSR s150C
+        SLO (RAM_COUNT,X) ;COUNT   Input buffer pointer / No. of subsctipts
+        JSR e050E
+        CLC 
+        NOP f20,X
+a3FFB   =*+$01
+        NOP RAM_TRMPOS,X ;TRMPOS  Screen column from last TAB
+        ORA a2105
+a3FFF   JSR RAM_PDIR ;PDIR    7501 on-chip data-direction register
