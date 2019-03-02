@@ -584,3 +584,4 @@
                     rti
                     rti
                     rti
+                    !byte 0x7D

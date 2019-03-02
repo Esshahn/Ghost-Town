@@ -51,5 +51,6 @@
                     and 0x193d,x
                     !byte 0x2f
                     !byte 0x2f
-                    and 0x20ea,y
-                    sbc 0x2f,x
+                    !byte 0x39
+                    ;and 0x20ea,y
+                    ;sbc 0x2f,x

@@ -42,7 +42,7 @@ m1000:
                     dey
                     bne 0x100d
                     sta zpA7
-                    jsr 0x3a9d
+                    jsr m3A9D           ; jsr 0x3a9d
                     ldy #0x27
                     lda (zpA7),y
                     sta 0x0db8,y
@@ -130,7 +130,7 @@ m1000:
                     sec
                     jsr 0x3a7d
                     jsr 0x3a17
-                    jsr 0x3b02
+                    jsr m3B02           ; jsr 0x3b02
                     jmp 0x3b4c
                     jsr 0x0854
                     ora 0x12
@@ -247,7 +247,7 @@ m1000:
                     lda #0xdd
                     jsr 0x1009
                     jmp 0x118d
-                    jsr 0x3a9d
+                    jsr m3A9D           ; jsr 0x3a9d
                     jmp 0xc56b
                     nop
                     nop
@@ -881,15 +881,17 @@ m1000:
                     stx 0x1733
                     lda 0x1747,x
                     sta 0x3953
-                    jmp 0x310d
+                    jmp print_title     ; jmp 0x310d
 datenschrott02:
                     !source "includes/datenschrott02.asm"
-eventuellcode02:
-                    adc 0x0ca9,x
+; ==============================================================================
+                    ; *= 0x1B44
+print_endscreen:
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
-                    lda #0x08
+                    lda #>colram        ; lda #0x08
                     sta zp05
-                    lda #0x00
+                    lda #<vidmem0       ; lda #0x00
                     sta zp02
                     sta zp04
                     ldx #0x04
@@ -898,33 +900,33 @@ eventuellcode02:
                     lda #0x5c
                     sta zpA7
                     ldy #0x00
-                    lda (zpA7),y
-                    sta (zp02),y
-                    lda #0x00
-                    sta (zp04),y
+-                   lda (zpA7),y        ; copy from 0x175c + y
+                    sta (zp02),y        ; to SCREEN
+                    lda #0x00           ; color = BLACK
+                    sta (zp04),y        ; to COLRAM
                     iny
-                    bne 0x1b5e
+                    bne -               ; bne 0x1b5e
                     inc zp03
                     inc zp05
                     inc zpA8
                     dex
-                    bne 0x1b5e
-                    lda #0xff
-                    sta 0xff15
-                    sta 0xff19
-                    lda #0xfd
+                    bne -               ; bne 0x1b5e
+                    lda #0xff           ; PISSGELB
+                    sta 0xff15          ; background
+                    sta 0xff19          ; und border
+-                   lda #0xfd
                     sta 0xff08
                     lda 0xff08
-                    and #0x80
-                    bne 0x1b7a
-                    jsr 0x310d
-                    jsr 0x310d
-                    jmp 0x3ab3
+                    and #0x80           ; WAITKEY?
+                    bne -               ; bne 0x1b7a
+                    jsr print_title     ; jsr 0x310d
+                    jsr print_title     ; jsr 0x310d
+                    jmp init            ; jmp 0x3ab3
                     lda 0x12a4
                     bne 0x1b97
                     jmp 0x3b4c
-                    jsr 0x3a9d
-                    jmp 0x1b44
+                    jsr m3A9D           ; jsr 0x3a9d
+                    jmp print_endscreen ; jmp 0x1b44
 datenschrott03:
                     !source "includes/datenschrott03.asm"
 eventuellcode03:
@@ -973,7 +975,7 @@ eventuellcode03:
                     jsr 0x1cb5
                     jsr 0x1ef9
                     lda #0xba
-                    sta 0x1ed9
+                    sta rsav7+1         ; sta 0x1ed9
                     rts
 datenschrott04:
                     !source "includes/datenschrott04.asm"
@@ -1088,7 +1090,7 @@ rsav1:              ldy #0x01
                     sty rsav0+1         ; sty 0x1ebd
                     lda 0xff11
                     ora #0x37
-                    and #0xbf
+rsav7:              and #0xbf           ; 0x1ED8 0x1ED9
                     sta 0xff11          ; sth. with SOUND / MUSIC ?
                     jmp m1DD2           ; jmp 0x1dd2
 ; ==============================================================================
@@ -1104,10 +1106,11 @@ irq_init0:
                     sta 0xff0a          ; set IRQ source to RASTER
 
                     lda #0xbf
-                    sta 0x1ed9
+                    sta rsav7+1         ; sta 0x1ed9
                     cli
 
-                    jmp 0x3a9d
+                    jmp m3A9D           ; jmp 0x3a9d
+; ==============================================================================
                     lda #0xfd
                     sta 0xff08
                     lda 0xff08
@@ -1133,7 +1136,7 @@ irq0:
                     rti
 ; ==============================================================================
 m1F15:                                  ; call from init
-                    lda 0x1ed9
+                    lda rsav7+1         ; lda 0x1ed9
 --                  cmp #0xbf           ; is true on init
                     bne +               ; bne 0x1f1f
                     jmp irq_init0       ; jmp 0x1ee0
@@ -1146,7 +1149,7 @@ m1F15:                                  ; call from init
                     bne -               ; bne 0x1f21 / some weird wait loop ?
                     clc
                     adc #0x01           ; add 1 (#0xC0 on init)
-                    sta 0x1ed9          ; store in 0x1ED9
+                    sta rsav7+1         ; sta 0x1ed9
                     jmp --              ; jmp 0x1f18
 datenschrott06:
                     !source "includes/datenschrott06.asm"
@@ -1174,13 +1177,17 @@ eventuellcode06:
                     jmp 0x3b4c
                     jsr 0x39f4
                     jmp 0x15d1
-                    jsr 0x3b02
+; ==============================================================================
+m2FF5:
+                    jsr m3B02           ; jsr 0x3b02
                     lda #0x00
                     sta zp02
                     rts
 datenschrott07:
                     !source "includes/datenschrott07.asm"
-eventuellcode07:
+; ==============================================================================
+m3040:              nop
+                    jsr m2FF5           ; jsr 0x2FF5
                     ldx #0x08
                     stx zp05
                     ldx #0x0c
@@ -1254,42 +1261,47 @@ eventuellcode07:
                     inc 0x11
                     iny
                     rts
-                    lda #0x0c
+; ==============================================================================
+                    ; *= 0x30D2
+print_X:
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
-                    lda #0x08
+                    lda #>colram        ; lda #0x08
                     sta zp05
                     lda #0x00
                     sta zp02
                     sta zp04
-                    ldy #0x28
+-                   ldy #0x28
                     lda (zp02),y
                     cmp #0x06
-                    bcs 0x30f3
+                    bcs +               ; bcs 0x30f3
                     sec
                     sbc #0x03
                     ldy #0x00
                     sta (zp02),y
                     lda #0x39
                     sta (zp04),y
-                    lda zp02
++                   lda zp02
                     clc
                     adc #0x01
-                    bcc 0x30fe
+                    bcc +               ; bcc 0x30fe
                     inc zp03
                     inc zp05
-                    sta zp02
++                   sta zp02
                     sta zp04
                     cmp #0x98
-                    bne 0x30e0
+                    bne -               ; bne 0x30e0
                     lda zp03
                     cmp #0x0f
-                    bne 0x30e0
+                    bne -               ; bne 0x30e0
                     rts
-                    lda #0x0c
+; ==============================================================================
+print_title:
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
-                    lda #0x08
+                    lda #>colram        ; lda #0x08
                     sta zp05
-                    lda #0x00
+                    lda #<vidmem0       ; lda #0x00
                     sta zp02
                     sta zp04
                     lda #0x31
@@ -1297,19 +1309,20 @@ eventuellcode07:
                     lda #0x3c
                     sta zpA7
                     ldx #0x04
-                    ldy #0x00
-                    lda (zpA7),y
-                    sta (zp02),y
-                    lda #0x00
-                    sta (zp04),y
+--                  ldy #0x00
+-                   lda (zpA7),y        ; 0x313C + Y ( Titelbild )
+                    sta (zp02),y        ; nach SCREEN
+                    lda #0x00           ; BLACK
+                    sta (zp04),y        ; nach COLRAM
                     iny
-                    bne 0x3127
+                    bne -               ; bne 0x3127
                     inc zp03
                     inc zp05
                     inc zpA8
                     dex
-                    bne 0x3125
+                    bne --              ; bne 0x3125
                     rts
+; ==============================================================================
 datenschrott08:
                     !source "includes/datenschrott08.asm"
 eventuellcode08:
@@ -1693,8 +1706,9 @@ eventuellcode11:
                     sta 0x35a4
                     lda 0x39ab,y
                     sta 0x35a6
-                    jsr 0x3040
+                    jsr m3040           ; jsr 0x3040
                     jmp 0x3846
+; ==============================================================================
                     !byte 0x02
                     asl 0x0a
                     asl 0x1612
@@ -1757,6 +1771,7 @@ fake:               rts
                     sta 0xff17
                     rts
 ; ==============================================================================
+m3A9D:                                  ; set text screen
                     lda 0xff12
                     ora #0x04           ; set bit 2
                     sta 0xff12          ; => get data from ROM
@@ -1802,8 +1817,10 @@ init:
                     sta 0xff15
                     lda #0x12
                     sta 0xff19
-                    jsr 0x3b02
+                    jsr m3B02           ; jsr 0x3b02
                     jmp 0x3b3a
+; ==============================================================================
+m3B02:
                     lda #0x27
                     sta zp02
                     sta zp04
