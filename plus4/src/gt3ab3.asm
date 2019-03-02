@@ -29,7 +29,8 @@ datenschrott01:         !source "includes/datenschrott01.asm"
 ; ==============================================================================
                     *= 0x1000
 m1000:
-                    jsr 0xc56b
+                    jsr 0xc56b          ; ????
+m1003:
                     lda #0x3f
                     sta zpA8
                     lda #0x08
@@ -57,11 +58,11 @@ m1000:
                     jsr 0x11cc
                     cpy #0x03
                     bne 0x10b1
-                    jsr 0x1003
+                    jsr m1003           ; jsr 0x1003
                     jsr 0xda89
                     jsr 0xda89
                     ldy #0x01
-                    jsr 0x1003
+                    jsr m1003           ; jsr 0x1003
                     ldx #0x00
                     ldy #0x00
                     beq 0x105f
@@ -123,7 +124,7 @@ m1000:
                     bne 0x10b6
                     jmp 0x10d1
                     ldy #0x05
-                    jsr 0x1003
+                    jsr m1003           ; jsr 0x1003
                     jmp 0x3ef9
                     bmi 0x1104
                     and (0x33),y
@@ -931,9 +932,11 @@ datenschrott03:
                     !source "includes/datenschrott03.asm"
 eventuellcode03:
                     jsr 0x3e20
-                    jsr 0x0ca9
+                    !byte 0x20
+                    ;jsr 0x0ca9
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
-                    lda #0x08
+                    lda #>colram        ; lda #0x08
                     sta zp05
                     lda #0xa0
                     sta zp02

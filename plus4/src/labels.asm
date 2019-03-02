@@ -53,6 +53,7 @@
 	m3525	= $3525
 	m1000	= $1000
 	code_start	= $3ab3	; unused
+	m1003	= $1003
 	print_X	= $30d2	; unused
 	m1DD2	= $1dd2
 	print_endscreen	= $1b44
