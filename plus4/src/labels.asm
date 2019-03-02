@@ -16,6 +16,7 @@
 	datenschrott02	= $1747	; unused
 	datenschrott01	= $f90	; unused
 	vermutlichcode	= $fc0	; unused
+	wait	= $3a76	; ?
 	init	= $3ab3	; unused
 	eventuellcode12	= $3a76	; unused
 	eventuellcode10	= $39f4	; unused

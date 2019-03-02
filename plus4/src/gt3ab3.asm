@@ -118,7 +118,7 @@ vermutlichcode:
                     bne 0x105f
                     jmp 0x10b4
                     ldy #0x35
-                    jsr 0x3a76
+                    jsr wait
                     ldy 0x02
                     ldx 0x04
                     rts
@@ -296,7 +296,7 @@ vermutlichcode:
                     sta 0x369a
                     jsr 0x3846
                     ldy #0xf0
-                    jsr 0x3a76
+                    jsr wait
                     lda #0xdf
                     sta 0x369a
                     bne 0x11da
@@ -410,10 +410,10 @@ vermutlichcode:
                     sta 0x36fc
                     jsr 0x3846
                     ldy #0xff
-                    jsr 0x3a76
-                    jsr 0x3a76
-                    jsr 0x3a76
-                    jsr 0x3a76
+                    jsr wait
+                    jsr wait
+                    jsr wait
+                    jsr wait
                     lda #0xdf
                     sta 0x36fe
                     lda #0x00
@@ -565,7 +565,7 @@ vermutlichcode:
                     cpy #0x0e
                     bne 0x148a
                     ldy #0x20
-                    jmp 0x3a76
+                    jmp wait
                     cpy #0x0f
                     bne 0x14c8
                     lda #0x00
@@ -1122,7 +1122,7 @@ eventuellcode05:
                     ldx #0x04
                     stx 0xa8
                     ldy #0xff
-                    jsr 0x3a76
+                    jsr wait
                     ldx 0xa8
                     dex
                     bne 0x1f21
@@ -1715,10 +1715,11 @@ eventuellcode11:
                     rts
                     !byte 0x00
 eventuellcode12:
+wait:
                     dex
-                    bne 0x3a76
+                    bne wait
                     dey
-                    bne 0x3a76
+                    bne wait
                     rts
 
                     lda 0xff12
@@ -1751,7 +1752,7 @@ init:
                     sta 0xff19
                     jsr 0x16ba
                     ldy #0x20
-                    jsr 0x3a76
+                    jsr wait
                     lda #0xfd
                     sta 0xff08
                     lda 0xff08
@@ -1819,7 +1820,7 @@ init:
                     jsr 0x3a2d
                     jsr 0x2fef
                     ldy #0x30
-                    jsr 0x3a76
+                    jsr wait
                     jsr 0x2fcb
                     jmp 0x162d
 datenschrott13:
