@@ -1,7 +1,6 @@
 	m1E38	= $1e38	; ?
 	eventuellcode06	= $2fbf	; unused
 	eventuellcode07	= $3044	; unused
-	eventuellcode04	= $1dd2	; unused
 	eventuellcode02	= $1b43	; unused
 	eventuellcode03	= $1cb1	; unused
 	eventuellcode08	= $3523	; unused

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>PLUS/4 Memory Maps</title>
+    <title>PLUS/4 Useful Crap</title>
     <style>
         * {
             box-sizing: border-box;
@@ -117,12 +117,19 @@
         }
     </style>
 </head>
-<body>
+<body id="top">
     <div id="wrap">
         <div id="header">
-            <h1>PLUS/4 Memory Maps</h1>
+            <h1>PLUS/4 Useful Crap</h1>
         </div>
-        <div class="section">
+        <div id="index" class="section">
+        <h2>Index</h2>
+            <ul>
+              <li><a href="#ted">Graphics Chip Register Map</a></li>
+              <li><a href="#palette">Palette</a>
+            </ul>
+        </div>
+        <div id="ted" class="section">
             <h2>Graphics Chip Register Map</h2>
             <div class="table">
                 <table>
@@ -501,6 +508,490 @@
                     </tr>
                 </table>
             </div>
+            <a class="to-top" href="#top">&uarr; back to top &uarr;</a>
+        </div>
+        <div id="palette" class="section">
+            <h2>Palette</h2>
+            <div class="table">
+                <table>
+                    <tr>
+                        <td>hue / luminance</td>
+                        <td>$0y</td>
+                        <td>$1y</td>
+                        <td>$2y</td>
+                        <td>$3y</td>
+                        <td>$4y</td>
+                        <td>$5y</td>
+                        <td>$6y</td>
+                        <td>$7y</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x0 — black
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $00
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $10
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $20
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $30
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $40
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $50
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $60
+                        </td>
+                        <td style="color: white; background-color: #030303">
+                            $70
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x1 — white
+                        </td>
+                        <td style="color: white; background-color: #2f2f2f">
+                            $01
+                        </td>
+                        <td style="color: white; background-color: #3d3d3d">
+                            $11
+                        </td>
+                        <td style="color: white; background-color: #424242">
+                            $21
+                        </td>
+                        <td style="color: white; background-color: #56555a">
+                            $31
+                        </td>
+                        <td style="color: white; background-color: #847e85">
+                            $41
+                        </td>
+                        <td style="color: black; background-color: #b2acb3">
+                            $51
+                        </td>
+                        <td style="color: black; background-color: #cacaca">
+                            $61
+                        </td>
+                        <td style="color: black; background-color: #ffffff">
+                            $71
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x2 — red
+                        </td>
+                        <td style="color: white; background-color: #681010">
+                            $02
+                        </td>
+                        <td style="color: white; background-color: #751e20">
+                            $12
+                        </td>
+                        <td style="color: white; background-color: #7b2820">
+                            $22
+                        </td>
+                        <td style="color: white; background-color: #903c3b">
+                            $32
+                        </td>
+                        <td style="color: white; background-color: #bb6768">
+                            $42
+                        </td>
+                        <td style="color: black; background-color: #e99292">
+                            $52
+                        </td>
+                        <td style="color: black; background-color: #ffacac">
+                            $62
+                        </td>
+                        <td style="color: black; background-color: #fff6f2">
+                            $72
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x3 — cyan
+                        </td>
+                        <td style="color: white; background-color: #004242">
+                            $03
+                        </td>
+                        <td style="color: white; background-color: #00504f">
+                            $13
+                        </td>
+                        <td style="color: white; background-color: #025659">
+                            $23
+                        </td>
+                        <td style="color: white; background-color: #176d72">
+                            $33
+                        </td>
+                        <td style="color: white; background-color: #459696">
+                            $43
+                        </td>
+                        <td style="color: black; background-color: #6cc3c1">
+                            $53
+                        </td>
+                        <td style="color: black; background-color: #85d8e0">
+                            $63
+                        </td>
+                        <td style="color: black; background-color: #d1ffff">
+                            $73
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x4 — purple
+                        </td>
+                        <td style="color: white; background-color: #58006d">
+                            $04
+                        </td>
+                        <td style="color: white; background-color: #6a1078">
+                            $14
+                        </td>
+                        <td style="color: white; background-color: #6f1a82">
+                            $24
+                        </td>
+                        <td style="color: white; background-color: #872d99">
+                            $34
+                        </td>
+                        <td style="color: white; background-color: #af58c3">
+                            $44
+                        </td>
+                        <td style="color: black; background-color: #d986f0">
+                            $54
+                        </td>
+                        <td style="color: black; background-color: #f39cff">
+                            $64
+                        </td>
+                        <td style="color: black; background-color: #ffe9ff">
+                            $74
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x5 — green
+                        </td>
+                        <td style="color: white; background-color: #004e00">
+                            $05
+                        </td>
+                        <td style="color: white; background-color: #045c00">
+                            $15
+                        </td>
+                        <td style="color: white; background-color: #0a6509">
+                            $25
+                        </td>
+                        <td style="color: white; background-color: #1f7b15">
+                            $35
+                        </td>
+                        <td style="color: white; background-color: #4aa73e">
+                            $45
+                        </td>
+                        <td style="color: black; background-color: #79d176">
+                            $55
+                        </td>
+                        <td style="color: black; background-color: #92ea8a">
+                            $65
+                        </td>
+                        <td style="color: black; background-color: #dbffd3">
+                            $75
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x6 — blue
+                        </td>
+                        <td style="color: white; background-color: #191c94">
+                            $06
+                        </td>
+                        <td style="color: white; background-color: #2a2aa3">
+                            $16
+                        </td>
+                        <td style="color: white; background-color: #3034a7">
+                            $26
+                        </td>
+                        <td style="color: white; background-color: #4649c1">
+                            $36
+                        </td>
+                        <td style="color: white; background-color: #7373ec">
+                            $46
+                        </td>
+                        <td style="color: black; background-color: #9da1ff">
+                            $56
+                        </td>
+                        <td style="color: black; background-color: #b7baff">
+                            $66
+                        </td>
+                        <td style="color: black; background-color: #e8e8ff">
+                            $76
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x7 — yellow
+                        </td>
+                        <td style="color: white; background-color: #383800">
+                            $07
+                        </td>
+                        <td style="color: white; background-color: #4c4700">
+                            $17
+                        </td>
+                        <td style="color: white; background-color: #505100">
+                            $27
+                        </td>
+                        <td style="color: white; background-color: #666300">
+                            $37
+                        </td>
+                        <td style="color: white; background-color: #928d11">
+                            $47
+                        </td>
+                        <td style="color: black; background-color: #bdbe40">
+                            $57
+                        </td>
+                        <td style="color: black; background-color: #d6d35b">
+                            $67
+                        </td>
+                        <td style="color: black; background-color: #ffffa3">
+                            $77
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x8 — orange
+                        </td>
+                        <td style="color: white; background-color: #562000">
+                            $08
+                        </td>
+                        <td style="color: white; background-color: #692f00">
+                            $18
+                        </td>
+                        <td style="color: white; background-color: #6e3600">
+                            $28
+                        </td>
+                        <td style="color: white; background-color: #844c0d">
+                            $38
+                        </td>
+                        <td style="color: white; background-color: #af7832">
+                            $48
+                        </td>
+                        <td style="color: black; background-color: #dca261">
+                            $58
+                        </td>
+                        <td style="color: black; background-color: #f3be79">
+                            $68
+                        </td>
+                        <td style="color: black; background-color: #ffffc1">
+                            $78
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $x9 — brown
+                        </td>
+                        <td style="color: white; background-color: #4b2800">
+                            $09
+                        </td>
+                        <td style="color: white; background-color: #593800">
+                            $19
+                        </td>
+                        <td style="color: white; background-color: #654000">
+                            $29
+                        </td>
+                        <td style="color: white; background-color: #735500">
+                            $39
+                        </td>
+                        <td style="color: white; background-color: #a18020">
+                            $49
+                        </td>
+                        <td style="color: black; background-color: #d1a94c">
+                            $59
+                        </td>
+                        <td style="color: black; background-color: #e6c565">
+                            $69
+                        </td>
+                        <td style="color: black; background-color: #ffffb2">
+                            $79
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $xA — yellow-green
+                        </td>
+                        <td style="color: white; background-color: #164800">
+                            $0A
+                        </td>
+                        <td style="color: white; background-color: #265600">
+                            $1A
+                        </td>
+                        <td style="color: white; background-color: #2c5c00">
+                            $2A
+                        </td>
+                        <td style="color: white; background-color: #407200">
+                            $3A
+                        </td>
+                        <td style="color: white; background-color: #6c9e12">
+                            $4A
+                        </td>
+                        <td style="color: black; background-color: #93c83d">
+                            $5A
+                        </td>
+                        <td style="color: black; background-color: #b0e057">
+                            $6A
+                        </td>
+                        <td style="color: black; background-color: #fcffa2">
+                            $7A
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $xB — pink
+                        </td>
+                        <td style="color: white; background-color: #69072f">
+                            $0B
+                        </td>
+                        <td style="color: white; background-color: #751541">
+                            $1B
+                        </td>
+                        <td style="color: white; background-color: #7d1e45">
+                            $2B
+                        </td>
+                        <td style="color: white; background-color: #91335e">
+                            $3B
+                        </td>
+                        <td style="color: white; background-color: #ba5f89">
+                            $4B
+                        </td>
+                        <td style="color: black; background-color: #e98ab1">
+                            $5B
+                        </td>
+                        <td style="color: black; background-color: #ffa4cf">
+                            $6B
+                        </td>
+                        <td style="color: black; background-color: #ffeeff">
+                            $7B
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $xC — blue-green
+                        </td>
+                        <td style="color: white; background-color: #004626">
+                            $0C
+                        </td>
+                        <td style="color: white; background-color: #00583d">
+                            $1C
+                        </td>
+                        <td style="color: white; background-color: #016145">
+                            $2C
+                        </td>
+                        <td style="color: white; background-color: #19745c">
+                            $3C
+                        </td>
+                        <td style="color: white; background-color: #469f83">
+                            $4C
+                        </td>
+                        <td style="color: black; background-color: #6fcdab">
+                            $5C
+                        </td>
+                        <td style="color: black; background-color: #89e5c8">
+                            $6C
+                        </td>
+                        <td style="color: black; background-color: #d1ffff">
+                            $7C
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $xD — light blue
+                        </td>
+                        <td style="color: white; background-color: #062a80">
+                            $0D
+                        </td>
+                        <td style="color: white; background-color: #153d8f">
+                            $1D
+                        </td>
+                        <td style="color: white; background-color: #1c4599">
+                            $2D
+                        </td>
+                        <td style="color: white; background-color: #3259ae">
+                            $3D
+                        </td>
+                        <td style="color: white; background-color: #6185dd">
+                            $4D
+                        </td>
+                        <td style="color: black; background-color: #8ab4ff">
+                            $5D
+                        </td>
+                        <td style="color: black; background-color: #a4caff">
+                            $6D
+                        </td>
+                        <td style="color: black; background-color: #ebffff">
+                            $7D
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $xE — dark blue
+                        </td>
+                        <td style="color: white; background-color: #2a149b">
+                            $0E
+                        </td>
+                        <td style="color: white; background-color: #3922ae">
+                            $1E
+                        </td>
+                        <td style="color: white; background-color: #422dad">
+                            $2E
+                        </td>
+                        <td style="color: white; background-color: #593fc3">
+                            $3E
+                        </td>
+                        <td style="color: white; background-color: #846cef">
+                            $4E
+                        </td>
+                        <td style="color: black; background-color: #b29aff">
+                            $5E
+                        </td>
+                        <td style="color: black; background-color: #c8b8ff">
+                            $6E
+                        </td>
+                        <td style="color: black; background-color: #fff0ff">
+                            $7E
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            $xF — light green
+                        </td>
+                        <td style="color: white; background-color: #0b4900">
+                            $0F
+                        </td>
+                        <td style="color: white; background-color: #195900">
+                            $1F
+                        </td>
+                        <td style="color: white; background-color: #1d6200">
+                            $2F
+                        </td>
+                        <td style="color: white; background-color: #327600">
+                            $3F
+                        </td>
+                        <td style="color: white; background-color: #5da329">
+                            $4F
+                        </td>
+                        <td style="color: black; background-color: #88cb59">
+                            $5F
+                        </td>
+                        <td style="color: black; background-color: #a2e57a">
+                            $6F
+                        </td>
+                        <td style="color: black; background-color: #edffbc">
+                            $7F
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <a class="to-top" href="#top">&uarr; back to top &uarr;</a>
         </div>
     </div>
 </body>

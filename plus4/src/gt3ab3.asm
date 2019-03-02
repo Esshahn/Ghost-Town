@@ -979,8 +979,7 @@ datenschrott04:
                     !source "includes/datenschrott04.asm"
 ; ==============================================================================
                     ; *= 0x1DD2
-eventuellcode04:
-m1DD2:
+m1DD2:                                  ; Teil von music_play
 rsav2:              ldy #0x00
                     bne +               ; bne 0x1df3
                     lda #0x40
@@ -1750,7 +1749,7 @@ fake:               rts
                                         ; b.2-7 : character data base address
                                         ;         %001000xx ($2000)
                     lda 0xff07
-                    ora #0x90
+                    ora #0x90           ; multicolor ON - reverse OFF
                     sta 0xff07
                     lda #0xdb
                     sta 0xff16
