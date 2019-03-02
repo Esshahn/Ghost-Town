@@ -6,7 +6,7 @@ code_start          = 0x3AB3
                     !cpu 6502
                     *= 0x0f90
 datenschrott01:
-                    !source "datenschrott01.asm"
+                    !source "includes/datenschrott01.asm"
 vermutlichcode:
                     sei
                     ldy #0x00
@@ -891,7 +891,7 @@ vermutlichcode:
                     sta 0x3953
                     jmp 0x310d
 datenschrott02:
-                    !source "datenschrott02.asm"
+                    !source "includes/datenschrott02.asm"
 eventuellcode02:
                     adc 0x0ca9,x
                     sta 0x03
@@ -934,7 +934,7 @@ eventuellcode02:
                     jsr 0x3a9d
                     jmp 0x1b44
 datenschrott03:
-                    !source "datenschrott03.asm"
+                    !source "includes/datenschrott03.asm"
 eventuellcode03:
                     jsr 0x3e20
                     jsr 0x0ca9
@@ -984,7 +984,7 @@ eventuellcode03:
                     sta 0x1ed9
                     rts
 datenschrott04:
-                    !source "datenschrott04.asm"
+                    !source "includes/datenschrott04.asm"
 eventuellcode04:
                     ldy #0x00
                     bne 0x1df3
@@ -1070,7 +1070,7 @@ eventuellcode04:
                     sta 0xff11
                     rts
 datenschrott05:
-                    !source "datenschrott05.asm"
+                    !source "includes/datenschrott05.asm"
 eventuellcode05:
                     ldx #0x09
                     dex
@@ -1131,7 +1131,7 @@ eventuellcode05:
                     sta 0x1ed9
                     jmp 0x1f18
 datenschrott06:
-                    !source "datenschrott06.asm"
+                    !source "includes/datenschrott06.asm"
 eventuellcode06:
                     ora (0xa9,x)
                     !byte 0x6b
@@ -1161,7 +1161,7 @@ eventuellcode06:
                     sta 0x02
                     rts
 datenschrott07:
-                    !source "datenschrott07.asm"
+                    !source "includes/datenschrott07.asm"
 eventuellcode07:
                     ldx #0x08
                     stx 0x05
@@ -1293,7 +1293,7 @@ eventuellcode07:
                     bne 0x3125
                     rts
 datenschrott08:
-                    !source "datenschrott08.asm"
+                    !source "includes/datenschrott08.asm"
 eventuellcode08:
                     jsr 0xa920
                     php
@@ -1471,7 +1471,7 @@ eventuellcode08:
                     sta 0xa7
                     jmp 0x3534
 datenschrott09:
-                    !source "datenschrott09.asm"
+                    !source "includes/datenschrott09.asm"
 eventuellcode09:
                     lda 0xa7
                     clc
@@ -1644,7 +1644,7 @@ eventuellcode09:
                     sta 0x0ed2
                     rts
 datenschrott10:
-                    !source "datenschrott10.asm"
+                    !source "includes/datenschrott10.asm"
 eventuellcode10:
                     jsr 0x360e
                     ldx #0x09
@@ -1823,5 +1823,5 @@ init:
                     jsr 0x2fcb
                     jmp 0x162d
 datenschrott13:
-                    !source "datenschrott13.asm"
+                    !source "includes/datenschrott13.asm"
 
