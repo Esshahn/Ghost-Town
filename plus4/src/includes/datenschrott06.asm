@@ -1,1009 +1,1013 @@
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x02
-                    asl
-                    and #0x27
-                    !byte 0x27
-                    !byte 0x00
-                    !byte 0x00
-                    tax
-                    tax
-                    eor 0xd9d9,y
-                    cmp 0x0000,y
-                    !byte 0x80
-                    ldy #0x68
-                    !byte 0xda
-                    inc 0xf6,x
-                    !byte 0x27
-                    !byte 0x33
-                    !byte 0x27
-                    and 0x2a
-                    and 0x27
-                    !byte 0x27
-                    cmp 0xd9d9,y
-                    eor (0xaa),y
-                    eor (0xd9),y
-                    cmp 0xf3f6,y
-                    inc 0x56,x
-                    tax
-                    lsr 0xf6,x
-                    inc 0x27,x
-                    and 0x2a
-                    and 0x27
-                    !byte 0x27
-                    !byte 0x27
-                    and 0xd9
-                    eor (0xaa),y
-                    eor (0xd9),y
-                    cmp 0x51d9,y
-                    inc 0x46,x
-                    !byte 0x02
-                    !byte 0x12
-                    rol 0xf2,x
-                    !byte 0xf2
-                    lsr 0x2a,x
-                    and 0x27
-                    !byte 0x27
-                    !byte 0x33
-                    !byte 0x27
-                    !byte 0x27
-                    and 0xaa
-                    eor (0xd9),y
-                    cmp 0xd9d9,y
-                    cmp 0xaa59,y
-                    lsr 0xf6,x
-                    inc 0xf3,x
-                    inc 0xf6,x
-                    lsr 0x3a,x
-                    inx
-                    tay
-                    tax
-                    plp
-                    !byte 0x82
-                    ldy #0xa2
-                    !byte 0x3c
-                    !byte 0xab
-                    !byte 0xab
-                    rol
-                    tay
-                    tay
-                    ldx #0x0c
-                    ldy 0x0a2b
-                    !byte 0x22
-                    tay
-                    tax
-                    tax
-                    tax
-                    !byte 0xb2
-                    !byte 0xb2
-                    iny
-                    !byte 0x2b
-                    rol
-                    tax
-                    rol
-                    dey
-                    !byte 0xfb
-                    tax
-                    tay
-                    jsr 0xb8cc
-                    tay
-                    ldx #0x22
-                    !byte 0x0c
-                    sed
-                    nop
-                    sbc #0x28
-                    !byte 0x80
-                    bcs 0x2044
-                    ldx 0x2aaa
-                    !byte 0x02
-                    !byte 0x0c
-                    !byte 0x3a
-                    !byte 0x3a
-                    asl
-                    dex
-                    dex
-                    !byte 0x82
-                    !byte 0x3c
-                    !byte 0xab
-                    rol
-                    !byte 0x80
-                    ldy 0xb0ac
-                    sty 0xab2b
-                    rol
-                    rol
-                    lda #0xe9
-                    sbc 0xf9f9,y
-                    eor 0x7a,x
-                    !byte 0x7f
-                    nop
-                    inc 0xffff,x
-                    !byte 0xff
-                    eor 0xa7,x
-                    !byte 0xa7
-                    !byte 0x9e
-                    !byte 0x9f
-                    !byte 0x9f
-                    !byte 0x9f
-                    !byte 0x9f
-                    eor 0xaa,x
-                    !byte 0xfa
-                    !byte 0x7f
-                    !byte 0x7f
-                    !byte 0x7f
-                    eor 0xa9,x
-                    sbc #0xf9
-                    sbc 0xe7e7,y
-                    !byte 0xe7
-                    eor 0xea,x
-                    inc 0xffff,x
-                    inc 0xfefe,x
-                    eor 0x9e,x
-                    !byte 0x9f
-                    !byte 0x9f
-                    !byte 0x9f
-                    sbc 0x7a55,y
-                    !byte 0x7f
-                    !byte 0x7f
-                    !byte 0x7f
-                    !byte 0x7f
-                    eor 0xff,x
-                    eor 0xa7,x
-                    !byte 0xa7
-                    !byte 0xe7
-                    !byte 0xe7
-                    !byte 0xe7
-                    eor 0x9f,x
-                    eor 0xaa,x
-                    !byte 0xfa
-                    inc 0xfefe,x
-                    eor 0x00,x
-                    ora 0x07
-                    !byte 0x1f
-                    !byte 0x1f
-                    ora 0x1d1d,x
-                    !byte 0x54
-                    sbc 0xffff,x
-                    !byte 0x7f
-                    !byte 0x1f
-                    !byte 0x07
-                    !byte 0x07
-                    !byte 0x00
-                    !byte 0x00
-                    rti
-                    rti
-                    rti
-                    bne 0x20d7
-                    bne 0x210d
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x07
-                    !byte 0x07
-                    !byte 0x07
-                    !byte 0x1f
-                    !byte 0x7f
-                    adc 0x7d7d,x
-                    bne 0x20ea
-                    bne 0x20ec
-                    rti
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    adc 0x0055,x
-                    !byte 0x14
-                    adc 0x7d7d,x
-                    !byte 0x14
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x02
-                    !byte 0x03
-                    plp
-                    !byte 0x23
-                    beq 0x2141
-                    !byte 0x00
-                    !byte 0x00
-                    cpx 0xf0e8
-                    !byte 0xfa
-                    !byte 0xdf
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    jsr 0xfca0
-                    !byte 0x0c
-                    !byte 0xbf
-                    ldy #0x8c
-                    !byte 0xe7
-                    cpx 0xff
-                    !byte 0x0c
-                    !byte 0x2f
-                    !byte 0xdf
-                    !byte 0xe3
-                    cpx 0x3e7e
-                    !byte 0xf3
-                    ldy #0x1b
-                    !byte 0xf3
-                    !byte 0x33
-                    lsr 0xce7e
-                    bmi 0x2163
-                    iny
-                    sty 0x0f2b
-                    sec
-                    !byte 0x22
-                    ora #0x3c
-                    !byte 0xc3
-                    !byte 0xa7
-                    !byte 0x5c
-                    !byte 0xe3
-                    !byte 0xf3
-                    !byte 0x7b
-                    !byte 0x82
-                    inx
-                    bmi 0x21f4
-                    cpy 0xf3
-                    bmi 0x217c
-                    !byte 0x34
-                    rol 0x28
-                    eor (0x57,x)
-                    !byte 0x7f
-                    and 0x2f
-                    !byte 0x0b
-                    !byte 0x2f
-                    !byte 0x1f
-                    adc 0xfb
-                    !byte 0xef
-                    adc 0xfbef,y
-                    !byte 0xc3
-                    !byte 0xc3
-                    eor (0xd5,x)
-                    sbc 0xf859,x
-                    cpx #0xf8
-                    !byte 0xf4
-                    and 0x2f
-                    !byte 0x0b
-                    !byte 0x2f
-                    !byte 0x1f
-                    and 0x2f
-                    !byte 0x0b
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0xc3
-                    !byte 0xc3
-                    !byte 0xc3
-                    eor (0xc3,x)
-                    !byte 0xff
-                    cli
-                    sed
-                    cpx #0xf8
-                    !byte 0xf4
-                    cli
-                    sed
-                    cpx #0x2f
-                    !byte 0x1f
-                    and 0x2f
-                    !byte 0x2b
-                    rol 0xa6
-                    tax
-                    !byte 0xef
-                    !byte 0xfb
-                    adc 0xebfb
-                    ror 0x66
-                    tax
-                    sed
-                    !byte 0xf4
-                    cli
-                    sed
-                    inx
-                    !byte 0x64
-                    ror 0xaa
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    tax
-                    eor 0x6a,x
-                    !byte 0x6f
-                    !byte 0x6f
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x80
-                    ror
-                    sta 0xea,x
-                    !byte 0xff
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x80
-                    pla
-                    stx 0xe9,y
-                    !byte 0x6f
-                    !byte 0x6f
-                    !byte 0x6f
-                    jmp (0x6f6c)
-                    !byte 0x6f
-                    !byte 0x6f
-                    !byte 0xff
-                    !byte 0xfc
-                    !byte 0xfc
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0xfc
-                    !byte 0xfc
-                    !byte 0xff
-                    sbc 0xf9f9,y
-                    and 0xf939,y
-                    sbc 0x6ff9,y
-                    !byte 0x6f
-                    ror
-                    eor 0xaa,x
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0xff
-                    nop
-                    sta 0x6a,x
-                    !byte 0x80
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    sbc #0x96
-                    pla
-                    !byte 0x80
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x02
-                    and #0x96
-                    !byte 0x6b
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x02
-                    lda #0x56
-                    !byte 0xab
-                    !byte 0xff
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    tax
-                    eor 0xa9,x
-                    sbc 0x6ff9,y
-                    !byte 0x6f
-                    !byte 0x6f
-                    jmp (0x6f6c)
-                    !byte 0x6f
-                    !byte 0x6f
-                    !byte 0xff
-                    !byte 0x3f
-                    !byte 0x3f
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x3f
-                    !byte 0x3f
-                    !byte 0xff
-                    sbc 0xf9f9,y
-                    and 0xf939,y
-                    sbc 0x6bf9,y
-                    stx 0x29,y
-                    !byte 0x02
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0xff
-                    !byte 0xab
-                    lsr 0xa9,x
-                    !byte 0x02
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    sbc 0xa9f9,y
-                    eor 0xaa,x
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0xbf
-                    !byte 0x2f
-                    !byte 0x2f
-                    !byte 0x2f
-                    !byte 0x2f
-                    !byte 0x0b
-                    !byte 0x0b
-                    !byte 0x0b
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0x0b
-                    !byte 0x02
-                    !byte 0x02
-                    !byte 0x02
-                    !byte 0x02
-                    !byte 0x0b
-                    !byte 0x0b
-                    !byte 0x0b
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0x0b
-                    !byte 0x2f
-                    !byte 0x2f
-                    !byte 0x2f
-                    !byte 0x2f
-                    !byte 0xbf
-                    !byte 0xbf
-                    !byte 0xbf
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    inc 0xf8f8,x
-                    sed
-                    sed
-                    cpx #0xe0
-                    cpx #0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    cpx #0x80
-                    !byte 0x80
-                    !byte 0x80
-                    !byte 0x80
-                    cpx #0xe0
-                    cpx #0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    cpx #0xf8
-                    sed
-                    sed
-                    sed
-                    inc 0xfefe,x
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x0c
-                    !byte 0x0f
-                    !byte 0x03
-                    bmi 0x233c
-                    !byte 0xcf
-                    !byte 0x3c
-                    !byte 0x3f
-                    !byte 0x3f
-                    cpy 0xffff
-                    !byte 0x00
-                    !byte 0x00
-                    cpy #0x00
-                    !byte 0x0c
-                    !byte 0x3f
-                    !byte 0xff
-                    !byte 0xc3
-                    cpy #0xc0
-                    !byte 0xf3
-                    !byte 0x3f
-                    !byte 0x0f
-                    !byte 0x3f
-                    !byte 0x33
-                    bmi 0x2344
-                    !byte 0x0f
-                    !byte 0x3f
-                    !byte 0x3c
-                    !byte 0x3f
-                    !byte 0xcf
-                    !byte 0xff
-                    !byte 0xfc
-                    !byte 0x00
-                    bmi 0x238b
-                    beq 0x231d
-                    cpy #0x00
-                    !byte 0x00
-                    bmi 0x2365
-                    !byte 0x03
-                    !byte 0x0c
-                    !byte 0x00
-                    !byte 0x03
-                    cpy #0xcf
-                    !byte 0x3c
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xf3
-                    !byte 0xfc
-                    !byte 0xfc
-                    !byte 0xfc
-                    bmi 0x2331
-                    beq 0x2333
-                    !byte 0xfc
-                    !byte 0x3f
-                    !byte 0x0c
-                    !byte 0x00
-                    beq 0x2378
-                    !byte 0xff
-                    bmi 0x23af
-                    !byte 0x03
-                    !byte 0x0f
-                    !byte 0x03
-                    !byte 0x33
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xfc
-                    beq 0x2381
-                    !byte 0xf3
-                    !byte 0xcf
-                    !byte 0xff
-                    cpy #0x00
-                    !byte 0x0f
-                    !byte 0xfc
-                    beq 0x238a
-                    cpy 0xf303
-                    !byte 0x3f
-                    !byte 0x3f
-                    !byte 0x0f
-                    !byte 0x0f
-                    !byte 0x33
-                    !byte 0x03
-                    !byte 0x03
-                    !byte 0xff
-                    !byte 0xfc
-                    beq 0x2398
-                    !byte 0xff
-                    !byte 0xff
-                    cpy 0x00f0
-                    !byte 0x00
-                    bmi 0x2367
-                    cpy 0x30ff
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x03
-                    !byte 0x03
-                    !byte 0x03
-                    !byte 0x0f
-                    !byte 0x0c
-                    !byte 0x33
-                    !byte 0x0f
-                    beq 0x23ae
-                    !byte 0xf3
-                    !byte 0xfc
-                    !byte 0xff
-                    !byte 0xcf
-                    cpy 0x003f
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    cpy #0xf0
-                    !byte 0x3c
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    ora 0x1f
-                    !byte 0xff
-                    !byte 0x7f
-                    !byte 0x1f
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    cmp 0x1f
-                    !byte 0x1f
-                    ora 0x0000,x
-                    !byte 0x00
-                    !byte 0x00
-                    !byte 0x00
-                    cpy #0x30
-                    bmi 0x23f5
-                    !byte 0x7f
-                    !byte 0xff
-                    sbc 0x1fcc,x
-                    !byte 0x1f
-                    !byte 0x7f
-                    !byte 0x7f
-                    !byte 0xff
-                    !byte 0x5f
-                    !byte 0x0f
-                    !byte 0xff
-                    !byte 0xf7
-                    !byte 0xd3
-                    !byte 0xd3
-                    bvs 0x23de
-                    !byte 0xf4
-                    !byte 0xfc
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0xf7
-                    cmp (0xff),y
-                    !byte 0xff
-                    !byte 0xff
-                    !byte 0x3f
-                    !byte 0x0f
-                    !byte 0x1f
-                    !byte 0x07
-                    ora (0xcf,x)
-                    !byte 0xff
-                    !byte 0xff
-                    sbc (0xf1),y
-                    !byte 0xfc
-                    !byte 0x50
-                    !byte 0x00
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+                    ;~ nop
+;~ charset0:
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x02
+                    ;~ asl
+                    ;~ and #0x27
+                    ;~ !byte 0x27
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ tax
+                    ;~ tax
+                    ;~ eor 0xd9d9,y
+                    ;~ cmp 0x0000,y
+                    ;~ !byte 0x80
+                    ;~ ldy #0x68
+                    ;~ !byte 0xda
+                    ;~ inc 0xf6,x
+                    ;~ !byte 0x27
+                    ;~ !byte 0x33
+                    ;~ !byte 0x27
+                    ;~ and 0x2a
+                    ;~ and 0x27
+                    ;~ !byte 0x27
+                    ;~ cmp 0xd9d9,y
+                    ;~ eor (0xaa),y
+                    ;~ eor (0xd9),y
+                    ;~ cmp 0xf3f6,y
+                    ;~ inc 0x56,x
+                    ;~ tax
+                    ;~ lsr 0xf6,x
+                    ;~ inc 0x27,x
+                    ;~ and 0x2a
+                    ;~ and 0x27
+                    ;~ !byte 0x27
+                    ;~ !byte 0x27
+                    ;~ and 0xd9
+                    ;~ eor (0xaa),y
+                    ;~ eor (0xd9),y
+                    ;~ cmp 0x51d9,y
+                    ;~ inc 0x46,x
+                    ;~ !byte 0x02
+                    ;~ !byte 0x12
+                    ;~ rol 0xf2,x
+                    ;~ !byte 0xf2
+                    ;~ lsr 0x2a,x
+                    ;~ and 0x27
+                    ;~ !byte 0x27
+                    ;~ !byte 0x33
+                    ;~ !byte 0x27
+                    ;~ !byte 0x27
+                    ;~ and 0xaa
+                    ;~ eor (0xd9),y
+                    ;~ cmp 0xd9d9,y
+                    ;~ cmp 0xaa59,y
+                    ;~ lsr 0xf6,x
+                    ;~ inc 0xf3,x
+                    ;~ inc 0xf6,x
+                    ;~ lsr 0x3a,x
+                    ;~ inx
+                    ;~ tay
+                    ;~ tax
+                    ;~ plp
+                    ;~ !byte 0x82
+                    ;~ ldy #0xa2
+                    ;~ !byte 0x3c
+                    ;~ !byte 0xab
+                    ;~ !byte 0xab
+                    ;~ rol
+                    ;~ tay
+                    ;~ tay
+                    ;~ ldx #0x0c
+                    ;~ ldy 0x0a2b
+                    ;~ !byte 0x22
+                    ;~ tay
+                    ;~ tax
+                    ;~ tax
+                    ;~ tax
+                    ;~ !byte 0xb2
+                    ;~ !byte 0xb2
+                    ;~ iny
+                    ;~ !byte 0x2b
+                    ;~ rol
+                    ;~ tax
+                    ;~ rol
+                    ;~ dey
+                    ;~ !byte 0xfb
+                    ;~ tax
+                    ;~ tay
+                    ;~ jsr 0xb8cc
+                    ;~ tay
+                    ;~ ldx #0x22
+                    ;~ !byte 0x0c
+                    ;~ sed
+                    ;~ nop
+                    ;~ sbc #0x28
+                    ;~ !byte 0x80
+                    ;~ bcs 0x2044
+                    ;~ ldx 0x2aaa
+                    ;~ !byte 0x02
+                    ;~ !byte 0x0c
+                    ;~ !byte 0x3a
+                    ;~ !byte 0x3a
+                    ;~ asl
+                    ;~ dex
+                    ;~ dex
+                    ;~ !byte 0x82
+                    ;~ !byte 0x3c
+                    ;~ !byte 0xab
+                    ;~ rol
+                    ;~ !byte 0x80
+                    ;~ ldy 0xb0ac
+                    ;~ sty 0xab2b
+                    ;~ rol
+                    ;~ rol
+                    ;~ lda #0xe9
+                    ;~ sbc 0xf9f9,y
+                    ;~ eor 0x7a,x
+                    ;~ !byte 0x7f
+                    ;~ nop
+                    ;~ inc 0xffff,x
+                    ;~ !byte 0xff
+                    ;~ eor 0xa7,x
+                    ;~ !byte 0xa7
+                    ;~ !byte 0x9e
+                    ;~ !byte 0x9f
+                    ;~ !byte 0x9f
+                    ;~ !byte 0x9f
+                    ;~ !byte 0x9f
+                    ;~ eor 0xaa,x
+                    ;~ !byte 0xfa
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x7f
+                    ;~ eor 0xa9,x
+                    ;~ sbc #0xf9
+                    ;~ sbc 0xe7e7,y
+                    ;~ !byte 0xe7
+                    ;~ eor 0xea,x
+                    ;~ inc 0xffff,x
+                    ;~ inc 0xfefe,x
+                    ;~ eor 0x9e,x
+                    ;~ !byte 0x9f
+                    ;~ !byte 0x9f
+                    ;~ !byte 0x9f
+                    ;~ sbc 0x7a55,y
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x7f
+                    ;~ eor 0xff,x
+                    ;~ eor 0xa7,x
+                    ;~ !byte 0xa7
+                    ;~ !byte 0xe7
+                    ;~ !byte 0xe7
+                    ;~ !byte 0xe7
+                    ;~ eor 0x9f,x
+                    ;~ eor 0xaa,x
+                    ;~ !byte 0xfa
+                    ;~ inc 0xfefe,x
+                    ;~ eor 0x00,x
+                    ;~ ora 0x07
+                    ;~ !byte 0x1f
+                    ;~ !byte 0x1f
+                    ;~ ora 0x1d1d,x
+                    ;~ !byte 0x54
+                    ;~ sbc 0xffff,x
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x1f
+                    ;~ !byte 0x07
+                    ;~ !byte 0x07
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ rti
+                    ;~ rti
+                    ;~ rti
+                    ;~ bne 0x20d7
+                    ;~ bne 0x210d
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x07
+                    ;~ !byte 0x07
+                    ;~ !byte 0x07
+                    ;~ !byte 0x1f
+                    ;~ !byte 0x7f
+                    ;~ adc 0x7d7d,x
+                    ;~ bne 0x20ea
+                    ;~ bne 0x20ec
+                    ;~ rti
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ adc 0x0055,x
+                    ;~ !byte 0x14
+                    ;~ adc 0x7d7d,x
+                    ;~ !byte 0x14
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x02
+                    ;~ !byte 0x03
+                    ;~ plp
+                    ;~ !byte 0x23
+                    ;~ beq 0x2141
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ cpx 0xf0e8
+                    ;~ !byte 0xfa
+                    ;~ !byte 0xdf
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ jsr 0xfca0
+                    ;~ !byte 0x0c
+                    ;~ !byte 0xbf
+                    ;~ ldy #0x8c
+                    ;~ !byte 0xe7
+                    ;~ cpx 0xff
+                    ;~ !byte 0x0c
+                    ;~ !byte 0x2f
+                    ;~ !byte 0xdf
+                    ;~ !byte 0xe3
+                    ;~ cpx 0x3e7e
+                    ;~ !byte 0xf3
+                    ;~ ldy #0x1b
+                    ;~ !byte 0xf3
+                    ;~ !byte 0x33
+                    ;~ lsr 0xce7e
+                    ;~ bmi 0x2163
+                    ;~ iny
+                    ;~ sty 0x0f2b
+                    ;~ sec
+                    ;~ !byte 0x22
+                    ;~ ora #0x3c
+                    ;~ !byte 0xc3
+                    ;~ !byte 0xa7
+                    ;~ !byte 0x5c
+                    ;~ !byte 0xe3
+                    ;~ !byte 0xf3
+                    ;~ !byte 0x7b
+                    ;~ !byte 0x82
+                    ;~ inx
+                    ;~ bmi 0x21f4
+                    ;~ cpy 0xf3
+                    ;~ bmi 0x217c
+                    ;~ !byte 0x34
+                    ;~ rol 0x28
+                    ;~ eor (0x57,x)
+                    ;~ !byte 0x7f
+                    ;~ and 0x2f
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x1f
+                    ;~ adc 0xfb
+                    ;~ !byte 0xef
+                    ;~ adc 0xfbef,y
+                    ;~ !byte 0xc3
+                    ;~ !byte 0xc3
+                    ;~ eor (0xd5,x)
+                    ;~ sbc 0xf859,x
+                    ;~ cpx #0xf8
+                    ;~ !byte 0xf4
+                    ;~ and 0x2f
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x1f
+                    ;~ and 0x2f
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0xc3
+                    ;~ !byte 0xc3
+                    ;~ !byte 0xc3
+                    ;~ eor (0xc3,x)
+                    ;~ !byte 0xff
+                    ;~ cli
+                    ;~ sed
+                    ;~ cpx #0xf8
+                    ;~ !byte 0xf4
+                    ;~ cli
+                    ;~ sed
+                    ;~ cpx #0x2f
+                    ;~ !byte 0x1f
+                    ;~ and 0x2f
+                    ;~ !byte 0x2b
+                    ;~ rol 0xa6
+                    ;~ tax
+                    ;~ !byte 0xef
+                    ;~ !byte 0xfb
+                    ;~ adc 0xebfb
+                    ;~ ror 0x66
+                    ;~ tax
+                    ;~ sed
+                    ;~ !byte 0xf4
+                    ;~ cli
+                    ;~ sed
+                    ;~ inx
+                    ;~ !byte 0x64
+                    ;~ ror 0xaa
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ tax
+                    ;~ eor 0x6a,x
+                    ;~ !byte 0x6f
+                    ;~ !byte 0x6f
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x80
+                    ;~ ror
+                    ;~ sta 0xea,x
+                    ;~ !byte 0xff
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x80
+                    ;~ pla
+                    ;~ stx 0xe9,y
+                    ;~ !byte 0x6f
+                    ;~ !byte 0x6f
+                    ;~ !byte 0x6f
+                    ;~ jmp (0x6f6c)
+                    ;~ !byte 0x6f
+                    ;~ !byte 0x6f
+                    ;~ !byte 0xff
+                    ;~ !byte 0xfc
+                    ;~ !byte 0xfc
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0xfc
+                    ;~ !byte 0xfc
+                    ;~ !byte 0xff
+                    ;~ sbc 0xf9f9,y
+                    ;~ and 0xf939,y
+                    ;~ sbc 0x6ff9,y
+                    ;~ !byte 0x6f
+                    ;~ ror
+                    ;~ eor 0xaa,x
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0xff
+                    ;~ nop
+                    ;~ sta 0x6a,x
+                    ;~ !byte 0x80
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ sbc #0x96
+                    ;~ pla
+                    ;~ !byte 0x80
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x02
+                    ;~ and #0x96
+                    ;~ !byte 0x6b
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x02
+                    ;~ lda #0x56
+                    ;~ !byte 0xab
+                    ;~ !byte 0xff
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ tax
+                    ;~ eor 0xa9,x
+                    ;~ sbc 0x6ff9,y
+                    ;~ !byte 0x6f
+                    ;~ !byte 0x6f
+                    ;~ jmp (0x6f6c)
+                    ;~ !byte 0x6f
+                    ;~ !byte 0x6f
+                    ;~ !byte 0xff
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x3f
+                    ;~ !byte 0xff
+                    ;~ sbc 0xf9f9,y
+                    ;~ and 0xf939,y
+                    ;~ sbc 0x6bf9,y
+                    ;~ stx 0x29,y
+                    ;~ !byte 0x02
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0xff
+                    ;~ !byte 0xab
+                    ;~ lsr 0xa9,x
+                    ;~ !byte 0x02
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ sbc 0xa9f9,y
+                    ;~ eor 0xaa,x
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0xbf
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x0b
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x02
+                    ;~ !byte 0x02
+                    ;~ !byte 0x02
+                    ;~ !byte 0x02
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x0b
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0x0b
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x2f
+                    ;~ !byte 0x2f
+                    ;~ !byte 0xbf
+                    ;~ !byte 0xbf
+                    ;~ !byte 0xbf
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ inc 0xf8f8,x
+                    ;~ sed
+                    ;~ sed
+                    ;~ cpx #0xe0
+                    ;~ cpx #0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ cpx #0x80
+                    ;~ !byte 0x80
+                    ;~ !byte 0x80
+                    ;~ !byte 0x80
+                    ;~ cpx #0xe0
+                    ;~ cpx #0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ cpx #0xf8
+                    ;~ sed
+                    ;~ sed
+                    ;~ sed
+                    ;~ inc 0xfefe,x
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x0c
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x03
+                    ;~ bmi 0x233c
+                    ;~ !byte 0xcf
+                    ;~ !byte 0x3c
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x3f
+                    ;~ cpy 0xffff
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ cpy #0x00
+                    ;~ !byte 0x0c
+                    ;~ !byte 0x3f
+                    ;~ !byte 0xff
+                    ;~ !byte 0xc3
+                    ;~ cpy #0xc0
+                    ;~ !byte 0xf3
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x33
+                    ;~ bmi 0x2344
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x3c
+                    ;~ !byte 0x3f
+                    ;~ !byte 0xcf
+                    ;~ !byte 0xff
+                    ;~ !byte 0xfc
+                    ;~ !byte 0x00
+                    ;~ bmi 0x238b
+                    ;~ beq 0x231d
+                    ;~ cpy #0x00
+                    ;~ !byte 0x00
+                    ;~ bmi 0x2365
+                    ;~ !byte 0x03
+                    ;~ !byte 0x0c
+                    ;~ !byte 0x00
+                    ;~ !byte 0x03
+                    ;~ cpy #0xcf
+                    ;~ !byte 0x3c
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xf3
+                    ;~ !byte 0xfc
+                    ;~ !byte 0xfc
+                    ;~ !byte 0xfc
+                    ;~ bmi 0x2331
+                    ;~ beq 0x2333
+                    ;~ !byte 0xfc
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x0c
+                    ;~ !byte 0x00
+                    ;~ beq 0x2378
+                    ;~ !byte 0xff
+                    ;~ bmi 0x23af
+                    ;~ !byte 0x03
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x03
+                    ;~ !byte 0x33
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xfc
+                    ;~ beq 0x2381
+                    ;~ !byte 0xf3
+                    ;~ !byte 0xcf
+                    ;~ !byte 0xff
+                    ;~ cpy #0x00
+                    ;~ !byte 0x0f
+                    ;~ !byte 0xfc
+                    ;~ beq 0x238a
+                    ;~ cpy 0xf303
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x33
+                    ;~ !byte 0x03
+                    ;~ !byte 0x03
+                    ;~ !byte 0xff
+                    ;~ !byte 0xfc
+                    ;~ beq 0x2398
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ cpy 0x00f0
+                    ;~ !byte 0x00
+                    ;~ bmi 0x2367
+                    ;~ cpy 0x30ff
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x03
+                    ;~ !byte 0x03
+                    ;~ !byte 0x03
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x0c
+                    ;~ !byte 0x33
+                    ;~ !byte 0x0f
+                    ;~ beq 0x23ae
+                    ;~ !byte 0xf3
+                    ;~ !byte 0xfc
+                    ;~ !byte 0xff
+                    ;~ !byte 0xcf
+                    ;~ cpy 0x003f
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ cpy #0xf0
+                    ;~ !byte 0x3c
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ ora 0x1f
+                    ;~ !byte 0xff
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x1f
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ cmp 0x1f
+                    ;~ !byte 0x1f
+                    ;~ ora 0x0000,x
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ !byte 0x00
+                    ;~ cpy #0x30
+                    ;~ bmi 0x23f5
+                    ;~ !byte 0x7f
+                    ;~ !byte 0xff
+                    ;~ sbc 0x1fcc,x
+                    ;~ !byte 0x1f
+                    ;~ !byte 0x7f
+                    ;~ !byte 0x7f
+                    ;~ !byte 0xff
+                    ;~ !byte 0x5f
+                    ;~ !byte 0x0f
+                    ;~ !byte 0xff
+                    ;~ !byte 0xf7
+                    ;~ !byte 0xd3
+                    ;~ !byte 0xd3
+                    ;~ bvs 0x23de
+                    ;~ !byte 0xf4
+                    ;~ !byte 0xfc
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0xf7
+                    ;~ cmp (0xff),y
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ !byte 0x3f
+                    ;~ !byte 0x0f
+                    ;~ !byte 0x1f
+                    ;~ !byte 0x07
+                    ;~ ora (0xcf,x)
+                    ;~ !byte 0xff
+                    ;~ !byte 0xff
+                    ;~ sbc (0xf1),y
+                    ;~ !byte 0xfc
+                    ;~ !byte 0x50
+                    ;~ !byte 0x00
+; ==============================================================================
+                    *= 0x2400
+charset0_end:
                     !byte 0xfc
                     !byte 0xff
                     !byte 0xff

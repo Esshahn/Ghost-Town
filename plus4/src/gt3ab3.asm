@@ -1,8 +1,8 @@
 ; input filename:    gt3ab3.prg
 ; skip bytes:        2
 ; ==============================================================================
-SILENT_MODE         = 1
-
+SILENT_MODE         = 0
+KANNDOCHNICHWEG     = 0
 ; ==============================================================================
 ; ZEROPAGE
 zp02                = 0x02
@@ -13,45 +13,19 @@ zpA7                = 0xA7
 zpA8                = 0xA8
 ; ==============================================================================
 code_start          = 0x3AB3
+vidmem0             = 0x0C00            ; PLUS/4 default SCREEN
+colram              = 0x0800            ; PLUS/4 COLOR RAM
+charset0            = 0x2000
 ; ==============================================================================
                     !cpu 6502
 
-                    *= 0x0f90
-datenschrott01:
-                    !source "includes/datenschrott01.asm"
-; ==============================================================================
-                    ; *= 0x0FC0
-m0FC0:                                  ; this is all probably leftover from
-                                        ; "original" exomized package
-                    sei
-                    ldy #0x00
-                    sty zp03
-                    ldx #0x2f
-                    lda #0x3f
-                    sta zp04
-                    lda (zp03),y
-                    eor 0x0f90,x
-                    sta (zp03),y
-                    iny
-                    bne 0x0fcb
-                    dec zp04
-                    dex
-                    bpl 0x0fcb
-                    sei
-                    jsr 0xff8a
-                    jsr 0x8117
-                    lda #0xfb
-                    sta 0x0327
-                    lda #0xb4
-                    sta 0x0326
-                    sta 0x0508
-                    jsr 0xe3b0
-                    jsr 0xe378
-                    cli
-                    lda #0x11
-                    sta 0xff13
-                    jsr 0xe378
-                    jmp 0x3ab3
+                    *= charset0
+                    !bin "includes/charset.chr"
+
+                    !if KANNDOCHNICHWEG=1 {
+                        *= 0x0f90
+datenschrott01:         !source "includes/datenschrott01.asm"
+                    }
 ; ==============================================================================
                     *= 0x1000
 m1000:
@@ -1768,10 +1742,13 @@ wait:               dex
 fake:               rts
 ; ==============================================================================
                     lda 0xff12
-                    and #0xfb
-                    sta 0xff12
+                    and #0xfb           ; clear bit 2
+                    sta 0xff12          ; => get data from RAM
                     lda #0x21
-                    sta 0xff13
+                    sta 0xff13          ; bit 0 : Status of Clock   ( 1 )
+                                        ; bit 1 : Single clock set  ( 0 )
+                                        ; b.2-7 : character data base address
+                                        ;         %001000xx ($2000)
                     lda 0xff07
                     ora #0x90
                     sta 0xff07
@@ -1782,12 +1759,12 @@ fake:               rts
                     rts
 ; ==============================================================================
                     lda 0xff12
-                    ora #0x04
-                    sta 0xff12
-                    lda #0xd5
-                    sta 0xff13
+                    ora #0x04           ; set bit 2
+                    sta 0xff12          ; => get data from ROM
+                    lda #0xd5           ; ROM FONT
+                    sta 0xff13          ; set
                     lda 0xff07
-                    lda #0x08
+                    lda #0x08           ; 40 columns and Multicolor OFF
                     sta 0xff07
                     rts
 ; ==============================================================================
