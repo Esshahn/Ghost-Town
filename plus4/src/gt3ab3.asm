@@ -1325,17 +1325,19 @@ print_title:
 ; ==============================================================================
 datenschrott08:
                     !source "includes/datenschrott08.asm"
-eventuellcode08:
-                    jsr 0xa920
-                    php
+; ==============================================================================
+m3525:
+                    lda #>colram        ; lda #0x08
                     sta zp05
-                    lda #0x0c
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
                     lda #0x00
                     sta zp02
                     sta zp04
                     rts
-                    jsr 0x3525
+; ==============================================================================
+m3534:
+                    jsr m3525           ; jsr 0x3525
                     cpy #0x00
                     beq 0x3547
                     clc
@@ -1419,7 +1421,7 @@ eventuellcode08:
                     stx 0x3549
                     lda #0x02
                     sta zpA7
-                    jsr 0x3534
+                    jsr m3534           ; jsr 0x3534
                     ldx #0x09
                     lda 0x033b,x
                     cmp #0xdf
@@ -1443,7 +1445,8 @@ eventuellcode08:
                     ldy 0x35a4
                     ldx 0x35a6
                     stx 0x3549
-                    jmp 0x3534
+                    jmp m3534           ; jmp 0x3534
+; ==============================================================================
                     sei
                     lda #0xc0
                     cmp 0xff1d
@@ -1480,7 +1483,7 @@ eventuellcode08:
                     sty 0x366e
                     lda #0x02
                     sta zpA7
-                    jsr 0x3534
+                    jsr m3534           ; jsr 0x3534
                     ldx #0x09
                     lda 0x033b,x
                     cmp #0x92
@@ -1500,7 +1503,7 @@ eventuellcode08:
                     stx 0x3549
                     lda #0x01
                     sta zpA7
-                    jmp 0x3534
+                    jmp m3534           ; jmp 0x3534
 datenschrott09:
                     !source "includes/datenschrott09.asm"
 eventuellcode09:
@@ -1527,9 +1530,9 @@ eventuellcode09:
                     beq 0x38df
                     cmp 0x3051
                     bne 0x3856
-                    lda #0x08
+                    lda #>colram        ; lda #0x08
                     sta zp05
-                    lda #0x0c
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
                     lda #0x00
                     sta zp02
@@ -1589,9 +1592,9 @@ eventuellcode09:
                     lda #0x0d
                     sta zp02
                     sta zp04
-                    lda #0x08
+                    lda #>colram        ; lda #0x08
                     sta zp05
-                    lda #0x0c
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
                     ldx #0x18
                     lda (zp02),y
@@ -1799,7 +1802,7 @@ init:
 
                     lda #0xff
                     jsr 0x1cff
-                    lda #0x0c
+                    lda #>vidmem0       ; lda #0x0c
                     sta zp03
                     lda #0x00
                     sta zp02

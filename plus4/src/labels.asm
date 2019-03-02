@@ -2,7 +2,6 @@
 	eventuellcode06	= $2fbf	; unused
 	eventuellcode03	= $1cb1	; unused
 	m3B02	= $3b02	; ?
-	eventuellcode08	= $3523	; unused
 	eventuellcode09	= $383a	; unused
 	KANNDOCHNICHWEG	= $0
 	datenschrott09	= $368a	; unused
@@ -27,6 +26,7 @@
 	m3A9D	= $3a9d	; ?
 	irq0	= $1f06	; ?
 	fake	= $3a7c	; unused
+	m3534	= $3534
 	charset0	= $2000
 	wait	= $3a76	; ?
 	init	= $3ab3	; ?
@@ -50,6 +50,7 @@
 	SILENT_MODE	= $0
 	zpA8	= $a8
 	m1F15	= $1f15
+	m3525	= $3525
 	m1000	= $1000
 	code_start	= $3ab3	; unused
 	print_X	= $30d2	; unused
