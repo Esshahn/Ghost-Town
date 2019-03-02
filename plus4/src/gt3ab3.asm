@@ -1,26 +1,40 @@
 ; input filename:    gt3ab3.prg
 ; skip bytes:        2
+; ==============================================================================
+SILENT_MODE         = 1
 
+; ==============================================================================
+; ZEROPAGE
+zp02                = 0x02
+zp03                = 0x03
+zp04                = 0x04
+zp05                = 0x05
+zpA7                = 0xA7
+zpA8                = 0xA8
+; ==============================================================================
 code_start          = 0x3AB3
-
+; ==============================================================================
                     !cpu 6502
+
                     *= 0x0f90
 datenschrott01:
                     !source "includes/datenschrott01.asm"
 ; ==============================================================================
-vermutlichcode:
+                    ; *= 0x0FC0
+m0FC0:                                  ; this is all probably leftover from
+                                        ; "original" exomized package
                     sei
                     ldy #0x00
-                    sty 0x03
+                    sty zp03
                     ldx #0x2f
                     lda #0x3f
-                    sta 0x04
-                    lda (0x03),y
+                    sta zp04
+                    lda (zp03),y
                     eor 0x0f90,x
-                    sta (0x03),y
+                    sta (zp03),y
                     iny
                     bne 0x0fcb
-                    dec 0x04
+                    dec zp04
                     dex
                     bpl 0x0fcb
                     sei
@@ -43,20 +57,20 @@ vermutlichcode:
 m1000:
                     jsr 0xc56b
                     lda #0x3f
-                    sta 0xa8
+                    sta zpA8
                     lda #0x08
                     cpy #0x00
                     beq 0x1017
                     clc
                     adc #0x28
                     bcc 0x1014
-                    inc 0xa8
+                    inc zpA8
                     dey
                     bne 0x100d
-                    sta 0xa7
+                    sta zpA7
                     jsr 0x3a9d
                     ldy #0x27
-                    lda (0xa7),y
+                    lda (zpA7),y
                     sta 0x0db8,y
                     lda #0x07
                     sta 0x09b8,y
@@ -87,8 +101,8 @@ m1000:
                     sta 0x0d88,y
                     rts
                     jsr 0x104c
-                    sty 0x02
-                    stx 0x04
+                    sty zp02
+                    stx zp04
                     jsr 0x10a7
                     jsr 0x104c
                     jsr 0x10a7
@@ -123,8 +137,8 @@ m1000:
                     jmp 0x10b4
                     ldy #0x35
                     jsr wait
-                    ldy 0x02
-                    ldx 0x04
+                    ldy zp02
+                    ldx zp04
                     rts
                     jmp 0x1155
                     ldx #0x05
@@ -255,7 +269,7 @@ m1000:
                     dey
                     dey
                     lda #0x10
-                    sta 0xa8
+                    sta zpA8
                     lda #0xdd
                     jsr 0x1009
                     jmp 0x118d
@@ -426,7 +440,7 @@ m1000:
                     cpy #0x08
                     bne 0x1396
                     ldy #0x00
-                    sty 0xa7
+                    sty zpA7
                     cmp #0x4b
                     bne 0x135f
                     ldy 0x3994
@@ -573,12 +587,12 @@ m1000:
                     cpy #0x0f
                     bne 0x14c8
                     lda #0x00
-                    sta 0xa7
+                    sta zpA7
                     ldy #0x0c
                     ldx #0x06
                     jsr 0x3608
                     lda #0xeb
-                    sta 0xa8
+                    sta zpA8
                     lda #0x39
                     sta 0x0a
                     ldx 0x1495
@@ -596,7 +610,7 @@ m1000:
                     stx 0x1495
                     sta 0x14a5
                     lda #0x01
-                    sta 0xa7
+                    sta zpA7
                     ldy #0x0c
                     jmp 0x3608
                     cpy #0x11
@@ -615,12 +629,12 @@ m1000:
                     ldy #0x08
                     sty 0x2fbf
                     lda #0x09
-                    sta 0x05
+                    sta zp05
                     lda #0x0d
-                    sta 0x03
+                    sta zp03
                     lda #0x7b
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     lda #0xdf
                     cmp 0x1507
                     bne 0x1501
@@ -629,17 +643,17 @@ m1000:
                     ldx #0x06
                     lda #0xdf
                     ldy #0x00
-                    sta (0x02),y
+                    sta (zp02),y
                     lda #0xee
-                    sta (0x04),y
-                    lda 0x02
+                    sta (zp04),y
+                    lda zp02
                     clc
                     adc #0x28
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     bcc 0x151f
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     dex
                     bne 0x1506
                     rts
@@ -648,10 +662,10 @@ m1000:
                     nop
                     jmp 0x15ad
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     lda #0x0f
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     ldx #0x06
                     lda #0x00
                     bne 0x1544
@@ -668,26 +682,26 @@ m1000:
                     stx 0x1536
                     ldy #0x00
                     lda #0xdf
-                    sta (0x02),y
+                    sta (zp02),y
                     iny
                     iny
-                    sta (0x02),y
+                    sta (zp02),y
                     dey
                     lda #0xea
-                    sta (0x02),y
-                    sta (0x04),y
+                    sta (zp02),y
+                    sta (zp04),y
                     jsr 0x159d
                     dex
                     bne 0x1551
                     lda #0xe4
-                    sta 0xa8
+                    sta zpA8
                     ldx #0x02
                     ldy #0x00
-                    lda 0xa8
-                    sta (0x02),y
+                    lda zpA8
+                    sta (zp02),y
                     lda #0xda
-                    sta (0x04),y
-                    inc 0xa8
+                    sta (zp04),y
+                    inc zpA8
                     iny
                     cpy #0x03
                     bne 0x1570
@@ -696,25 +710,25 @@ m1000:
                     bne 0x156e
                     ldy #0x00
                     lda #0xe7
-                    sta 0xa8
-                    lda (0x02),y
-                    cmp 0xa8
+                    sta zpA8
+                    lda (zp02),y
+                    cmp zpA8
                     bne 0x1595
                     lda #0xdf
-                    sta (0x02),y
-                    inc 0xa8
+                    sta (zp02),y
+                    inc zpA8
                     iny
                     cpy #0x03
                     bne 0x158b
                     rts
-                    lda 0x02
+                    lda zp02
                     clc
                     adc #0x28
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     bcc 0x15ac
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     rts
                     ldx #0x01
                     cpx #0x01
@@ -723,7 +737,7 @@ m1000:
                     rts
                     inc 0x15ae
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     jmp 0x152b
                     lda #0x00
                     cmp #0x00
@@ -755,7 +769,7 @@ m1000:
                     ldy #0x06
                     ldx #0x1e
                     lda #0x00
-                    sta 0xa7
+                    sta zpA7
                     jsr 0x3608
                     ldx 0x1603
                     cpx #0x03
@@ -763,12 +777,12 @@ m1000:
                     dex
                     stx 0x1603
                     lda #0x78
-                    sta 0xa8
+                    sta zpA8
                     lda #0x49
                     sta 0x0a
                     ldy #0x06
                     lda #0x01
-                    sta 0xa7
+                    sta zpA7
                     ldx 0x1603
                     jsr 0x3608
                     jmp 0x147e
@@ -778,7 +792,7 @@ m1000:
                     dex
                     bne 0x162f
                     lda #0x02
-                    sta 0xa7
+                    sta zpA7
                     ldx 0x35a6
                     ldy 0x35a4
                     jsr 0x3608
@@ -898,27 +912,27 @@ datenschrott02:
                     !source "includes/datenschrott02.asm"
 eventuellcode02:
                     adc 0x0ca9,x
-                    sta 0x03
+                    sta zp03
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     lda #0x00
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     ldx #0x04
                     lda #0x17
-                    sta 0xa8
+                    sta zpA8
                     lda #0x5c
-                    sta 0xa7
+                    sta zpA7
                     ldy #0x00
-                    lda (0xa7),y
-                    sta (0x02),y
+                    lda (zpA7),y
+                    sta (zp02),y
                     lda #0x00
-                    sta (0x04),y
+                    sta (zp04),y
                     iny
                     bne 0x1b5e
-                    inc 0x03
-                    inc 0x05
-                    inc 0xa8
+                    inc zp03
+                    inc zp05
+                    inc zpA8
                     dex
                     bne 0x1b5e
                     lda #0xff
@@ -942,39 +956,39 @@ datenschrott03:
 eventuellcode03:
                     jsr 0x3e20
                     jsr 0x0ca9
-                    sta 0x03
+                    sta zp03
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     lda #0xa0
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     lda #0x1b
-                    sta 0xa8
+                    sta zpA8
                     lda #0x9d
-                    sta 0xa7
+                    sta zpA7
                     ldx #0x07
                     ldy #0x00
-                    lda (0xa7),y
-                    sta (0x02),y
+                    lda (zpA7),y
+                    sta (zp02),y
                     lda #0x68
-                    sta (0x04),y
+                    sta (zp04),y
                     iny
                     cpy #0x28
                     bne 0x1ccf
-                    lda 0xa7
+                    lda zpA7
                     clc
                     adc #0x28
-                    sta 0xa7
+                    sta zpA7
                     bcc 0x1ce7
-                    inc 0xa8
-                    lda 0x02
+                    inc zpA8
+                    lda zp02
                     clc
                     adc #0x50
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     bcc 0x1cf6
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     dex
                     bne 0x1ccd
                     lda #0x00
@@ -1133,7 +1147,11 @@ irq0:
                     lda 0xff09
                     sta 0xff09          ; ack IRQ
                                         ; this IRQ seems to handle music only!
-                    jsr music_play      ; jsr 0x1ebc
+                    !if SILENT_MODE = 1 {
+                        jsr fake
+                    } else {
+                        jsr music_play  ; jsr 0x1ebc
+                    }
                     pla
                     tay
                     pla
@@ -1147,10 +1165,10 @@ m1F15:                                  ; call from init
                     bne +               ; bne 0x1f1f
                     jmp irq_init0       ; jmp 0x1ee0
 +                   ldx #0x04
--                   stx 0xa8            ; buffer serial input byte ?
+-                   stx zpA8            ; buffer serial input byte ?
                     ldy #0xff
                     jsr wait
-                    ldx 0xa8
+                    ldx zpA8
                     dex
                     bne -               ; bne 0x1f21 / some weird wait loop ?
                     clc
@@ -1185,15 +1203,15 @@ eventuellcode06:
                     jmp 0x15d1
                     jsr 0x3b02
                     lda #0x00
-                    sta 0x02
+                    sta zp02
                     rts
 datenschrott07:
                     !source "includes/datenschrott07.asm"
 eventuellcode07:
                     ldx #0x08
-                    stx 0x05
+                    stx zp05
                     ldx #0x0c
-                    stx 0x03
+                    stx zp03
                     ldx #0x28
                     stx 0x0a
                     ldx #0x01
@@ -1206,8 +1224,8 @@ eventuellcode07:
                     bne 0x3054
                     sta 0x09
                     ldy #0x00
-                    sty 0xa8
-                    sty 0xa7
+                    sty zpA8
+                    sty zpA7
                     lda (0x09),y
                     tax
                     lda 0x302f,x
@@ -1216,45 +1234,45 @@ eventuellcode07:
                     sta 0x11
                     ldx #0x03
                     ldy #0x00
-                    lda 0x02
-                    sta 0x04
+                    lda zp02
+                    sta zp04
                     lda 0x11
-                    sta (0x02),y
+                    sta (zp02),y
                     lda 0x10
-                    sta (0x04),y
+                    sta (zp04),y
                     jsr 0x30c8
                     cpy #0x03
                     bne 0x3077
-                    lda 0x02
+                    lda zp02
                     clc
                     adc #0x28
-                    sta 0x02
+                    sta zp02
                     bcc 0x3097
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     dex
                     bne 0x3075
-                    inc 0xa8
-                    inc 0xa7
+                    inc zpA8
+                    inc zpA7
                     lda #0x75
-                    ldx 0xa8
+                    ldx zpA8
                     cpx #0x0d
                     bcc 0x30b2
-                    ldx 0xa7
+                    ldx zpA7
                     cpx #0x66
                     bcs 0x30d2
                     lda #0x00
-                    sta 0xa8
+                    sta zpA8
                     lda #0x24
                     sta 0x30b9
-                    lda 0x02
+                    lda zp02
                     sec
                     sbc #0x75
-                    sta 0x02
+                    sta zp02
                     bcs 0x30c2
-                    dec 0x03
-                    dec 0x05
-                    ldy 0xa7
+                    dec zp03
+                    dec zp05
+                    ldy zpA7
                     jmp 0x3066
                     rts
                     lda 0x11
@@ -1264,58 +1282,58 @@ eventuellcode07:
                     iny
                     rts
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     lda #0x00
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     ldy #0x28
-                    lda (0x02),y
+                    lda (zp02),y
                     cmp #0x06
                     bcs 0x30f3
                     sec
                     sbc #0x03
                     ldy #0x00
-                    sta (0x02),y
+                    sta (zp02),y
                     lda #0x39
-                    sta (0x04),y
-                    lda 0x02
+                    sta (zp04),y
+                    lda zp02
                     clc
                     adc #0x01
                     bcc 0x30fe
-                    inc 0x03
-                    inc 0x05
-                    sta 0x02
-                    sta 0x04
+                    inc zp03
+                    inc zp05
+                    sta zp02
+                    sta zp04
                     cmp #0x98
                     bne 0x30e0
-                    lda 0x03
+                    lda zp03
                     cmp #0x0f
                     bne 0x30e0
                     rts
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     lda #0x00
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     lda #0x31
-                    sta 0xa8
+                    sta zpA8
                     lda #0x3c
-                    sta 0xa7
+                    sta zpA7
                     ldx #0x04
                     ldy #0x00
-                    lda (0xa7),y
-                    sta (0x02),y
+                    lda (zpA7),y
+                    sta (zp02),y
                     lda #0x00
-                    sta (0x04),y
+                    sta (zp04),y
                     iny
                     bne 0x3127
-                    inc 0x03
-                    inc 0x05
-                    inc 0xa8
+                    inc zp03
+                    inc zp05
+                    inc zpA8
                     dex
                     bne 0x3125
                     rts
@@ -1324,12 +1342,12 @@ datenschrott08:
 eventuellcode08:
                     jsr 0xa920
                     php
-                    sta 0x05
+                    sta zp05
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     lda #0x00
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     rts
                     jsr 0x3525
                     cpy #0x00
@@ -1337,51 +1355,51 @@ eventuellcode08:
                     clc
                     adc #0x28
                     bcc 0x3544
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     dey
                     bne 0x353b
                     clc
                     adc #0x15
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     bcc 0x3554
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     ldx #0x03
                     lda #0x00
                     sta 0x09
                     ldy #0x00
-                    lda 0xa7
+                    lda zpA7
                     bne 0x3566
                     lda #0xdf
-                    sta (0x02),y
+                    sta (zp02),y
                     bne 0x3581
                     cmp #0x01
                     bne 0x3574
-                    lda 0xa8
-                    sta (0x02),y
+                    lda zpA8
+                    sta (zp02),y
                     lda 0x0a
-                    sta (0x04),y
+                    sta (zp04),y
                     bne 0x3581
-                    lda (0x02),y
+                    lda (zp02),y
                     stx 0x10
                     ldx 0x09
                     sta 0x033c,x
                     inc 0x09
                     ldx 0x10
-                    inc 0xa8
+                    inc zpA8
                     iny
                     cpy #0x03
                     bne 0x355c
-                    lda 0x02
+                    lda zp02
                     clc
                     adc #0x28
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     bcc 0x3597
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     dex
                     bne 0x355a
                     rts
@@ -1414,7 +1432,7 @@ eventuellcode08:
                     stx 0x35ed
                     stx 0x3549
                     lda #0x02
-                    sta 0xa7
+                    sta zpA7
                     jsr 0x3534
                     ldx #0x09
                     lda 0x033b,x
@@ -1431,9 +1449,9 @@ eventuellcode08:
                     lda #0xff
                     sta 0xff08
                     lda #0x01
-                    sta 0xa7
+                    sta zpA7
                     lda #0x93
-                    sta 0xa8
+                    sta zpA8
                     lda #0x3d
                     sta 0x0a
                     ldy 0x35a4
@@ -1445,12 +1463,12 @@ eventuellcode08:
                     cmp 0xff1d
                     bne 0x3611
                     lda #0x00
-                    sta 0xa7
+                    sta zpA7
                     jmp 0x3a6d
                     bne 0x361a
                     rts
                     lda #0x00
-                    sta 0xa7
+                    sta zpA7
                     ldx #0x0f
                     ldy #0x0f
                     jsr 0x3608
@@ -1475,7 +1493,7 @@ eventuellcode08:
                     stx 0x3549
                     sty 0x366e
                     lda #0x02
-                    sta 0xa7
+                    sta zpA7
                     jsr 0x3534
                     ldx #0x09
                     lda 0x033b,x
@@ -1488,64 +1506,64 @@ eventuellcode08:
                     ldy #0x0e
                     sty 0x3627
                     lda #0x9c
-                    sta 0xa8
+                    sta zpA8
                     lda #0x3e
                     sta 0x0a
                     ldy 0x3627
                     ldx 0x3625
                     stx 0x3549
                     lda #0x01
-                    sta 0xa7
+                    sta zpA7
                     jmp 0x3534
 datenschrott09:
                     !source "includes/datenschrott09.asm"
 eventuellcode09:
-                    lda 0xa7
+                    lda zpA7
                     clc
                     adc #0x01
-                    sta 0xa7
+                    sta zpA7
                     bcc 0x3845
-                    inc 0xa8
+                    inc zpA8
                     rts
                     lda #0x36
-                    sta 0xa8
+                    sta zpA8
                     lda #0x8a
-                    sta 0xa7
+                    sta zpA7
                     ldy #0x00
-                    lda (0xa7),y
+                    lda (zpA7),y
                     cmp #0xff
                     beq 0x385c
                     jsr 0x383a
                     jmp 0x3850
                     jsr 0x383a
-                    lda (0xa7),y
+                    lda (zpA7),y
                     cmp #0xff
                     beq 0x38df
                     cmp 0x3051
                     bne 0x3856
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     lda #0x00
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     jsr 0x383a
-                    lda (0xa7),y
+                    lda (zpA7),y
                     cmp #0xfe
                     beq 0x388c
                     cmp #0xf9
                     bne 0x3892
-                    lda 0x02
+                    lda zp02
                     jsr 0x38d7
                     bcc 0x3890
-                    inc 0x03
-                    inc 0x05
-                    lda (0xa7),y
+                    inc zp03
+                    inc zp05
+                    lda (zpA7),y
                     cmp #0xfb
                     bne 0x389f
                     jsr 0x383a
-                    lda (0xa7),y
+                    lda (zpA7),y
                     sta 0x09
                     bne 0x38bf
                     cmp #0xf8
@@ -1557,55 +1575,55 @@ eventuellcode09:
                     cmp #0xfa
                     bne 0x38bf
                     jsr 0x383a
-                    lda (0xa7),y
+                    lda (zpA7),y
                     sta 0x0a
                     lda 0x09
-                    sta (0x04),y
+                    sta (zp04),y
                     lda 0x0a
-                    sta (0x02),y
+                    sta (zp02),y
                     cmp #0xfd
                     bne 0x38cc
                     jsr 0x383a
-                    lda (0xa7),y
-                    sta 0x02
-                    sta 0x04
+                    lda (zpA7),y
+                    sta zp02
+                    sta zp04
                     jsr 0x383a
-                    lda (0xa7),y
+                    lda (zpA7),y
                     cmp #0xff
                     bne 0x387d
                     beq 0x38df
                     clc
                     adc #0x01
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     rts
                     lda 0x3051
                     cmp #0x02
                     bne 0x3919
                     lda #0x0d
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     ldx #0x18
-                    lda (0x02),y
+                    lda (zp02),y
                     cmp #0xdf
                     beq 0x3900
                     cmp #0xf5
                     bne 0x3906
                     lda #0xf5
-                    sta (0x02),y
-                    sta (0x04),y
-                    lda 0x02
+                    sta (zp02),y
+                    sta (zp04),y
+                    lda zp02
                     clc
                     adc #0x28
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     bcc 0x3915
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     dex
                     bne 0x38f6
                     rts
@@ -1791,16 +1809,16 @@ init:
                     lda #0xff
                     jsr 0x1cff
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     lda #0x00
-                    sta 0x02
+                    sta zp02
                     ldx #0x04
                     ldy #0x00
                     lda #0xdf
-                    sta (0x02),y
+                    sta (zp02),y
                     iny
                     bne 0x3ae5
-                    inc 0x03
+                    inc zp03
                     dex
                     bne 0x3ae5
                     jsr 0x3a7d
@@ -1811,25 +1829,25 @@ init:
                     jsr 0x3b02
                     jmp 0x3b3a
                     lda #0x27
-                    sta 0x02
-                    sta 0x04
+                    sta zp02
+                    sta zp04
                     lda #0x08
-                    sta 0x05
+                    sta zp05
                     lda #0x0c
-                    sta 0x03
+                    sta zp03
                     ldx #0x18
                     ldy #0x00
                     lda #0x5d
-                    sta (0x02),y
+                    sta (zp02),y
                     lda #0x12
-                    sta (0x04),y
+                    sta (zp04),y
                     tya
                     clc
                     adc #0x28
                     tay
                     bcc 0x3b27
-                    inc 0x03
-                    inc 0x05
+                    inc zp03
+                    inc zp05
                     dex
                     bne 0x3b14
                     lda #0x5d
