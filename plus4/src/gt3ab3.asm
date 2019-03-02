@@ -989,18 +989,21 @@ eventuellcode03:
                     rts
 datenschrott04:
                     !source "includes/datenschrott04.asm"
+; ==============================================================================
+                    ; *= 0x1DD2
 eventuellcode04:
-                    ldy #0x00
-                    bne 0x1df3
+m1DD2:
+rsav2:              ldy #0x00
+                    bne +               ; bne 0x1df3
                     lda #0x40
-                    sta 0x1e39
-                    jsr 0x1e38
+                    sta rsav3+1         ; sta 0x1e39
+                    jsr m1E38           ; jsr 0x1e38
                     ldx #0x00
                     lda 0x1d14,x
                     inc 0x1ddf
                     tay
                     and #0x1f
-                    sta 0x1e39
+                    sta rsav3+1         ; sta 0x1e39
                     tya
                     lsr
                     lsr
@@ -1008,8 +1011,8 @@ eventuellcode04:
                     lsr
                     lsr
                     tay
-                    dey
-                    sty 0x1dd3
++                   dey
+                    sty rsav2+1         ; sty 0x1dd3
                     ldy #0x00
                     bne 0x1e1d
                     lda #0x40
@@ -1036,27 +1039,31 @@ eventuellcode04:
                     jsr 0x1e38
                     jmp 0x1e60
                     lda #0x00
-                    sta 0x1dd3
+                    sta rsav2+1         ; sta 0x1dd3
                     sta 0x1ddf
                     sta 0x1df8
                     sta 0x1e04
-                    jmp 0x1dd2
-                    ldx #0x04
+                    jmp m1DD2           ; jmp 0x1dd2
+                    ; *= 0x1E38
+m1E38:
+rsav3:              ldx #0x04
                     cpx #0x1c
-                    bcc 0x1e46
+                    bcc +               ; bcc 0x1e46
                     lda 0xff11
                     and #0xef
                     jmp 0x1e5c
-                    lda 0x1e88,x
-                    sta 0xff0e
+
++                   lda 0x1e88,x        ; 0x1E88 ... : music data lo ?
+                    sta 0xff0e          ; Low byte of frequency for voice 1
                     lda 0xff12
                     and #0xfc
-                    ora 0x1ea0,x
-                    sta 0xff12
+                    ora 0x1ea0,x        ; 0x1EA0 ... : music data hi ?
+                    sta 0xff12          ; High bits of frequency for voice 1
                     lda 0xff11
                     ora #0x10
                     sta 0xff11
                     rts
+
                     ldx #0x0d
                     cpx #0x1c
                     bcc 0x1e6e
@@ -1075,24 +1082,27 @@ eventuellcode04:
                     rts
 datenschrott05:
                     !source "includes/datenschrott05.asm"
-eventuellcode05:
-                    ldx #0x09
+; ==============================================================================
+m1EBC:
+rsav0:              ldx #0x09
                     dex
-                    stx 0x1ebd
-                    beq 0x1ece
+                    stx rsav0+1         ; stx 0x1ebd
+                    beq +               ; beq 0x1ece
                     rts
-                    ldy #0x01
+                    ; *= 0x1EC5
+rsav1:              ldy #0x01
                     dey
-                    sty 0x1ec6
-                    beq 0x1ece
+                    sty rsav1+1         ; sty 0x1ec6
+                    beq +               ; beq 0x1ece
                     rts
-                    ldy #0x0b
-                    sty 0x1ebd
+                    ; *= 0x1ECE
++                   ldy #0x0b
+                    sty rsav0+1         ; sty 0x1ebd
                     lda 0xff11
                     ora #0x37
                     and #0xbf
-                    sta 0xff11
-                    jmp 0x1dd2
+                    sta 0xff11          ; sth. with SOUND / MUSIC ?
+                    jmp m1DD2           ; jmp 0x1dd2
 ; ==============================================================================
                     ; *= 0x1EE0
 irq_init0:
@@ -1121,7 +1131,7 @@ irq_init0:
 irq0:
                     lda 0xff09
                     sta 0xff09          ; ack IRQ
-                    jsr 0x1ebc
+                    jsr m1EBC           ; jsr 0x1ebc
                     pla
                     tay
                     pla
