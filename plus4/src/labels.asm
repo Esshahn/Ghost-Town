@@ -23,5 +23,7 @@
 	eventuellcode11	= $3a17	; unused
 	datenschrott13	= $3b5a	; unused
 	datenschrott10	= $399d	; unused
+	irq_init0	= $1ee0	; unused
+	m1F15	= $1f15
 	m1000	= $1000
 	code_start	= $3ab3	; unused

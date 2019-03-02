@@ -1093,16 +1093,22 @@ eventuellcode05:
                     and #0xbf
                     sta 0xff11
                     jmp 0x1dd2
+; ==============================================================================
+                    ; *= 0x1EE0
+irq_init0:
                     sei
-                    lda #0x06
-                    sta 0x0314
-                    lda #0x1f
-                    sta 0x0315
+                    lda #<irq0          ; lda #0x06
+                    sta 0x0314          ; irq lo
+                    lda #>irq0          ; lda #0x1f
+                    sta 0x0315          ; irq hi
+                                        ; irq at 0x1F06
                     lda #0x02
-                    sta 0xff0a
+                    sta 0xff0a          ; set IRQ source to RASTER
+
                     lda #0xbf
                     sta 0x1ed9
                     cli
+
                     jmp 0x3a9d
                     lda #0xfd
                     sta 0xff08
@@ -1110,8 +1116,11 @@ eventuellcode05:
                     and #0x80
                     bne 0x1ef9
                     rts
+; ==============================================================================
+                    ; *= 0x1F06
+irq0:
                     lda 0xff09
-                    sta 0xff09
+                    sta 0xff09          ; ack IRQ
                     jsr 0x1ebc
                     pla
                     tay
@@ -1119,21 +1128,23 @@ eventuellcode05:
                     tax
                     pla
                     rti
+; ==============================================================================
+m1F15:                                  ; call from init
                     lda 0x1ed9
-                    cmp #0xbf
-                    bne 0x1f1f
-                    jmp 0x1ee0
-                    ldx #0x04
-                    stx 0xa8
+--                  cmp #0xbf           ; is true on init
+                    bne +               ; bne 0x1f1f
+                    jmp irq_init0       ; jmp 0x1ee0
++                   ldx #0x04
+-                   stx 0xa8            ; buffer serial input byte ?
                     ldy #0xff
                     jsr wait
                     ldx 0xa8
                     dex
-                    bne 0x1f21
+                    bne -               ; bne 0x1f21 / some weird wait loop ?
                     clc
-                    adc #0x01
-                    sta 0x1ed9
-                    jmp 0x1f18
+                    adc #0x01           ; add 1 (#0xC0 on init)
+                    sta 0x1ed9          ; store in 0x1ED9
+                    jmp --              ; jmp 0x1f18
 datenschrott06:
                     !source "includes/datenschrott06.asm"
 eventuellcode06:
@@ -1751,7 +1762,7 @@ wait:               dex
                     rts
 ; ==============================================================================
 init:
-                    jsr 0x1f15
+                    jsr m1F15           ; jsr 0x1f15
                     lda #0x01
                     sta 0xff15          ; background color
                     sta 0xff19          ; border color
