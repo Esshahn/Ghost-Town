@@ -19,15 +19,23 @@ code_start          = 0x3AB3
 vidmem0             = 0x0C00            ; PLUS/4 default SCREEN
 colram              = 0x0800            ; PLUS/4 COLOR RAM
 charset0            = 0x2000
+screen_win_src      = 0x175C
+screen_start_src    = 0x313C
 ; ==============================================================================
                     !cpu 6502
 
                     *= charset0
                     !bin "includes/charset.chr"
 
+                    *= screen_win_src
+                    !bin "includes/screen_win.scr"
+
+                    *= screen_start_src
+                    !bin "includes/screen_start.scr"
+
                     !if KANNDOCHNICHWEG=1 {
                         *= 0x0f90
-datenschrott01:         !source "includes/datenschrott01.asm"
+datenschrott01:         !source "includes/trash/datenschrott01.asm"
                     }
 ; ==============================================================================
                     *= 0x1000
@@ -66,8 +74,8 @@ m1031:
                     cpy #0x03
                     bne 0x10b1
                     jsr m1003           ; jsr 0x1003
-                    jsr 0xda89
-                    jsr 0xda89
+                    jsr 0xda89          ; ?!? scroll screen down ?!?
+                    jsr 0xda89          ; ?!? scroll screen down ?!?
                     ldy #0x01
                     jsr m1003           ; jsr 0x1003
                     ldx #0x00
@@ -131,7 +139,6 @@ m1031:
                     bne 0x10b6
                     jmp 0x10d1
                     ldy #0x05
-testlabel:
                     jsr m1003           ; jsr 0x1003
                     jmp 0x3ef9
                     bmi 0x1104
@@ -908,10 +915,23 @@ m11CC:
                     lda 0x1747,x
                     sta 0x3953
                     jmp print_title     ; jmp 0x310d
-datenschrott02:
-                    !source "includes/datenschrott02.asm"
+
+                    !byte 0x02
+                    !byte 0x07
+                    !byte 0x04
+                    asl 0x08
+                    ora (0x05,x)
+                    !byte 0x03
+
+                    cpx #0x0c
+                    bne 0x1755
+                    lda #0x49
+                    cpx #0x0d
+                    bne 0x175b
+                    lda #0x45
+                    rts
 ; ==============================================================================
-                    ; *= 0x1B44
+                    *= 0x1B44
 print_endscreen:
                     lda #>vidmem0       ; lda #0x0c
                     sta zp03
@@ -1351,9 +1371,7 @@ print_title:
                     bne --              ; bne 0x3125
                     rts
 ; ==============================================================================
-datenschrott08:
-                    !source "includes/datenschrott08.asm"
-; ==============================================================================
+                    *= 0x3525
 m3525:
                     lda #>colram        ; lda #0x08
                     sta zp05

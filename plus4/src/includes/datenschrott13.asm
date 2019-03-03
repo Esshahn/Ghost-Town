@@ -1,4 +1,4 @@
-eor 0x150f,y
+                    eor 0x150f,y
                     jsr 0x0506
                     !byte 0x0c
                     !byte 0x0c
@@ -576,4 +576,5 @@ eor 0x150f,y
                     !byte 0x14
                     jsr 0x0914
                     ora 0x2105
-                    jsr 0x0000
+                    !byte 0x20
+                    ;jsr 0x0000

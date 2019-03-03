@@ -6,7 +6,6 @@
 	KANNDOCHNICHWEG	= $0
 	datenschrott09	= $368a	; unused
 	m2FF5	= $2ff5
-	datenschrott08	= $313c	; unused
 	rsav2	= $1dd2
 	datenschrott07	= $2ffd	; unused
 	rsav3	= $1e38	; ?
@@ -17,7 +16,6 @@
 	rsav1	= $1ec5
 	datenschrott03	= $1b9d	; unused
 	rsav6	= $1e03
-	datenschrott02	= $1747	; unused
 	rsav7	= $1ed8	; ?
 	rsav4	= $1dde
 	rsav5	= $1df7
@@ -35,14 +33,14 @@
 	init	= $3ab3	; ?
 	zp03	= $3
 	zp02	= $2
-	testlabel	= $10c6	; unused
 	zp05	= $5
 	zp04	= $4
 	eventuellcode12	= $3a76	; unused
-	charset0_end	= $2400	; unused
+	charset0_end	= $2800	; unused
 	eventuellcode10	= $39f4	; unused
 	eventuellcode11	= $3a17	; unused
 	m1E60	= $1e60	; ?
+	screen_start_src	= $313c
 	m3040	= $3040
 	datenschrott13	= $3b5a	; unused
 	print_title	= $310d	; ?
@@ -52,6 +50,7 @@
 	irq_init0	= $1ee0
 	zpA7	= $a7
 	SILENT_MODE	= $0
+	screen_win_src	= $175c
 	zpA8	= $a8
 	m1F15	= $1f15
 	m3525	= $3525
