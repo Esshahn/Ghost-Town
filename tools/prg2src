@@ -1,0 +1,17 @@
+#!/bin/sh
+if [ "$#" -eq 1 ]
+    then
+        INFILE=$1
+        xxd -i -c 8 -s2 "$INFILE" |
+        tail -n +2 |
+        head -n -2 |
+        cut -d\, -f1-8 |
+        tr '[a-f]' '[A-F]' |
+        sed 's/^[ \t]*//' |
+        sed 's/^/!byte /'
+    else
+        echo "[ERROR] parameter error."
+        echo "usage: prg2src INFILE"
+        exit 1;
+fi
+

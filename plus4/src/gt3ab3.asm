@@ -6,6 +6,7 @@ KANNDOCHNICHWEG     = 0
 ; ==============================================================================
 ; KERNAL / BASIC ROM CALLS
 PRINT               = 0xc56b
+BASIC_DA89          = 0xda89            ; scroll screen down?
 ; ==============================================================================
 ; ZEROPAGE
 zp02                = 0x02
@@ -66,22 +67,22 @@ m1003:
                     rts
                     !byte 0x00
 ; ==============================================================================
-                    sta 0xff19
+                    sta 0xff19          ; ?!? womöglich unbenutzt ?!?
                     rts
 ; ==============================================================================
 m1031:
                     jsr m11CC           ; jsr 0x11cc
                     cpy #0x03
-                    bne 0x10b1
+                    bne m10B1           ; bne 0x10b1
                     jsr m1003           ; jsr 0x1003
-                    jsr 0xda89          ; ?!? scroll screen down ?!?
-                    jsr 0xda89          ; ?!? scroll screen down ?!?
+                    jsr BASIC_DA89      ; ?!? scroll screen down ?!?
+                    jsr BASIC_DA89      ; ?!? scroll screen down ?!?
                     ldy #0x01
                     jsr m1003           ; jsr 0x1003
                     ldx #0x00
                     ldy #0x00
-                    beq 0x105f
-                    lda vidmem0+0x1B9,x ; lda 0x0db9,x
+                    beq m105F           ; beq 0x105f
+m104C:              lda vidmem0+0x1B9,x ; lda 0x0db9,x
                     clc
                     adc #0x80
                     sta vidmem0+0x1B9,x ; sta 0x0db9,x
@@ -90,126 +91,86 @@ m1031:
                     adc #0x80
                     sta vidmem0+0x188,y ; sta 0x0d88,y
                     rts
-                    jsr 0x104c
+m105F:              jsr m104C           ; jsr 0x104c
                     sty zp02
                     stx zp04
-                    jsr 0x10a7
-                    jsr 0x104c
-                    jsr 0x10a7
-                    lda #0xfd
-                    sta 0xff08
-                    lda 0xff08
+                    jsr m10A7           ; jsr 0x10a7 / wait
+                    jsr m104C           ; jsr 0x104c / some screen stuff
+                    jsr m10A7           ; jsr 0x10a7 / wait
+                    lda #0xfd           ; KEYBOARD stuff
+                    sta 0xff08          ; .
+                    lda 0xff08          ; .
+                    lsr                 ; .
                     lsr
                     lsr
-                    lsr
-                    bcs 0x1081
+                    bcs +               ; bcs 0x1081
                     cpx #0x00
-                    beq 0x1081
+                    beq +               ; beq 0x1081
                     dex
-                    lsr
-                    bcs 0x1089
++                   lsr
+                    bcs +               ; bcs 0x1089
                     cpx #0x25
-                    beq 0x1089
+                    beq +               ; beq 0x1089
                     inx
-                    and #0x08
-                    bne 0x105f
-                    lda 0x0db9,x
++                   and #0x08
+                    bne m105F           ; bne 0x105f
+                    lda vidmem0+0x1B9,x ; lda 0x0db9,x
                     cmp #0xbc
-                    bne 0x109c
+                    bne ++              ; bne 0x109c
                     cpy #0x00
-                    beq 0x1099
+                    beq +               ; beq 0x1099
                     dey
-                    jmp 0x105f
-                    sta 0x0d88,y
++                   jmp m105F           ; jmp 0x105f
+++                  sta vidmem0+0x188,y ; sta 0x0d88,y
                     iny
                     cpy #0x05
-                    bne 0x105f
-                    jmp 0x10b4
+                    bne m105F           ; bne 0x105f
+                    jmp m10B4           ; jmp 0x10b4
+; ==============================================================================
+m10A7:
                     ldy #0x35
                     jsr wait
                     ldy zp02
                     ldx zp04
                     rts
-                    jmp 0x1155
-                    ldx #0x05
-                    lda 0x0d87,x
-                    cmp 0x10cb,x
-                    bne 0x10c4
-                    dex
-                    bne 0x10b6
-                    jmp 0x10d1
-                    ldy #0x05
-                    jsr m1003           ; jsr 0x1003
-                    jmp 0x3ef9
-                    bmi 0x1104
-                    and (0x33),y
-                    sec
-                    jsr 0x3a7d
-                    jsr 0x3a17
-                    jsr m3B02           ; jsr 0x3b02
-                    jmp 0x3b4c
 ; ==============================================================================
-                    jsr 0x0854
-                    ora 0x12
-                    ora 0x20
-                    ora #0x13
-                    jsr 0x2001
-                    !byte 0x0b
-                    ora 0x19
-                    jsr 0x0e09
-                    jsr 0x0814
-                    ora 0x20
-                    !byte 0x02
-                    !byte 0x0f
-                    !byte 0x14
-                    !byte 0x14
-                    !byte 0x0c
-                    ora 0x20
-                    and (0x20,x)
-                    jsr 0x2020
-                    jsr 0x2020
-                    jsr 0x2020
-                    jsr 0x2020
-                    !byte 0x54
-                    php
-                    ora 0x12
-                    ora 0x20
-                    ora #0x13
-                    jsr 0x2001
-                    !byte 0x0b
-                    ora 0x19
-                    jsr 0x0e09
-                    jsr 0x0814
-                    ora 0x20
-                    !byte 0x03
-                    !byte 0x0f
-                    asl 0x06
-                    ora #0x0e
-                    jsr 0x2021
-                    jsr 0x2020
-                    jsr 0x2020
-                    !byte 0x54
-                    php
-                    ora 0x12
-                    ora 0x20
-                    ora #0x13
-                    jsr 0x2001
-                    !byte 0x02
-                    !byte 0x12
-                    ora 0x01
-                    !byte 0x14
-                    php
-                    ora #0x0e
-                    !byte 0x07
-                    jsr 0x1514
-                    !byte 0x02
-                    ora 0x20
-                    and (0x20,x)
-                    jsr 0x2020
-                    jsr 0x2020
-                    jsr 0x2020
-                    jsr 0xc020
-                    !byte 0x00
+m10B1:
+                    jmp m1155           ; jmp 0x1155
+; ==============================================================================
+m10B4:
+                    ldx #0x05
+-                   lda vidmem0+0x187,x ; lda 0x0d87,x
+                    cmp m10CC-1,x       ; cmp 0x10cb,x
+                    bne +               ; bne 0x10c4
+                    dex
+                    bne -               ; bne 0x10b6
+                    jmp ++              ; jmp 0x10d1
++                   ldy #0x05
+                    jsr m1003           ; jsr 0x1003
+                    jmp m3EF9           ; jmp 0x3ef9
+m10CC:              !byte 0x30, 0x36, 0x31, 0x33, 0x38
+++                  jsr m3A7D           ; jsr 0x3a7d
+                    jsr m3A17           ; jsr 0x3a17
+                    jsr m3B02           ; jsr 0x3b02
+                    jmp m3B4C           ; jmp 0x3b4c
+; ==============================================================================
+                    !byte 0x20, 0x54, 0x08, 0x05, 0x12, 0x05, 0x20, 0x09
+                    !byte 0x13, 0x20, 0x01, 0x20, 0x0B, 0x05, 0x19, 0x20
+                    !byte 0x09, 0x0E, 0x20, 0x14, 0x08, 0x05, 0x20, 0x02
+                    !byte 0x0F, 0x14, 0x14, 0x0C, 0x05, 0x20, 0x21, 0x20
+                    !byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+                    !byte 0x20, 0x20, 0x20, 0x20, 0x54, 0x08, 0x05, 0x12
+                    !byte 0x05, 0x20, 0x09, 0x13, 0x20, 0x01, 0x20, 0x0B
+                    !byte 0x05, 0x19, 0x20, 0x09, 0x0E, 0x20, 0x14, 0x08
+                    !byte 0x05, 0x20, 0x03, 0x0F, 0x06, 0x06, 0x09, 0x0E
+                    !byte 0x20, 0x21, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+                    !byte 0x20, 0x54, 0x08, 0x05, 0x12, 0x05, 0x20, 0x09
+                    !byte 0x13, 0x20, 0x01, 0x20, 0x02, 0x12, 0x05, 0x01
+                    !byte 0x14, 0x08, 0x09, 0x0E, 0x07, 0x20, 0x14, 0x15
+                    !byte 0x02, 0x05, 0x20, 0x21, 0x20, 0x20, 0x20, 0x20
+                    !byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+; ==============================================================================
+m1155:              cpy #0x00
                     bne 0x11a2
                     jsr m1000
                     ldx 0x3051
@@ -240,9 +201,9 @@ m1031:
                     lda 0xff08
                     and #0x80
                     bne 0x118d
-                    jsr 0x3a7d
+                    jsr m3A7D           ; jsr 0x3a7d
                     jsr 0x3a2d
-                    jmp 0x3b4c
+                    jmp m3B4C           ; jmp 0x3b4c
                     cpy #0x02
                     bne 0x11ac
                     jsr m1000
@@ -278,7 +239,7 @@ m11CC:
                     nop
                     nop
                     jsr 0x3846
-                    jmp 0x3b4c
+                    jmp m3B4C           ; jmp 0x3b4c
                     ldx #0x00
                     lda 0x033c,x
                     cmp #0x1e
@@ -288,7 +249,7 @@ m11CC:
                     inx
                     cpx #0x09
                     bne 0x11e2
-                    jmp 0x3b4c
+                    jmp m3B4C           ; jmp 0x3b4c
                     ldy 0x3051
                     bne 0x120a
                     cmp #0xa9
@@ -373,7 +334,7 @@ m11CC:
                     ldy #0x04
                     jmp m1031           ; jmp 0x1031
 ; ==============================================================================
-                    jmp 0x3b4c
+                    jmp m3B4C           ; jmp 0x3b4c
 ; ==============================================================================
                     cpy #0x04
                     bne 0x12db
@@ -450,7 +411,7 @@ m11CC:
                     sta 0x35a6
                     lda #0x0c
                     sta 0x35a4
-                    jmp 0x3b4c
+                    jmp m3B4C           ; jmp 0x3b4c
                     cmp #0x56
                     bne 0x1374
                     ldy 0x3994
@@ -970,7 +931,7 @@ print_endscreen:
                     jmp init            ; jmp 0x3ab3
                     lda 0x12a4
                     bne 0x1b97
-                    jmp 0x3b4c
+                    jmp m3B4C           ; jmp 0x3b4c
                     jsr m3A9D           ; jsr 0x3a9d
                     jmp print_endscreen ; jmp 0x1b44
 datenschrott03:
@@ -1222,7 +1183,7 @@ eventuellcode06:
                     bne 0x2fec
                     sta 0x3994
                     jmp 0x12f4
-                    jmp 0x3b4c
+                    jmp m3B4C           ; jmp 0x3b4c
                     jsr 0x39f4
                     jmp 0x15d1
 ; ==============================================================================
@@ -1732,7 +1693,7 @@ eventuellcode10:
                     cmp #0x05
                     beq 0x3a08
                     cmp #0x03
-                    beq 0x3a17
+                    beq m3A17           ; beq 0x3a17
                     dex
                     bne 0x39f9
                     rts
@@ -1746,7 +1707,7 @@ eventuellcode10:
                     !byte 0x38 ;sec
                     !byte 0x02
                     !byte 0xff
-eventuellcode11:
+m3A17:
                     ldx 0x3051
                     inx
                     stx 0x3051
@@ -1803,6 +1764,7 @@ wait:               dex
                     bne wait
 fake:               rts
 ; ==============================================================================
+m3A7D:
                     lda 0xff12
                     and #0xfb           ; clear bit 2
                     sta 0xff12          ; => get data from RAM
@@ -1861,7 +1823,7 @@ init:
                     inc zp03
                     dex
                     bne 0x3ae5
-                    jsr 0x3a7d
+                    jsr m3A7D           ; jsr 0x3a7d
                     lda #0x00
                     sta 0xff15
                     lda #0x12
@@ -1908,6 +1870,7 @@ m3B02:
                     lda #0x00
                     sta 0x3051
                     jsr 0x3a2d
+m3B4C:
                     jsr 0x2fef
                     ldy #0x30
                     jsr wait
@@ -1916,7 +1879,58 @@ m3B02:
 ; ==============================================================================
 datenschrott13:
                     !source "includes/datenschrott13.asm"
+; ==============================================================================
+                    lda #0x3b
+                    sta 0xa8
+                    lda #0x5a
+                    sta 0xa7
+                    cpy #0x00
+                    beq 0x3ec4
+                    clc
+                    adc #0x32
+                    sta 0xa7
+                    bcc 0x3ec1
+                    inc 0xa8
+                    dey
+                    bne 0x3eb8
+                    lda #0x0c
+                    sta 0x03
+                    sty 0x02
+                    ldx #0x04
+                    lda #0x20
+                    sta (0x02),y
+                    iny
+                    bne 0x3ece
+                    inc 0x03
+                    dex
+                    bne 0x3ece
+                    jsr 0x3a9d
+                    lda (0xa7),y
+                    sta 0x0dc0,x
+                    lda #0x00
+                    sta 0x09c0,x
+                    inx
+                    iny
+                    cpx #0x19
+                    bne 0x3eed
+                    ldx #0x50
+                    cpy #0x32
+                    bne 0x3edb
+                    lda #0xfd
+                    sta 0xff15
+                    sta 0xff19
+m3EF9:
+                    lda #0x08
+                    ldy #0xff
+                    jsr 0x3a76
+                    sec
+                    sbc #0x01
+                    bne 0x3efb
+                    jmp 0x3ab3
 
+; ==============================================================================
+datenschrott14:
+                    !source "includes/datenschrott14.asm"
 ; ==============================================================================
 
 ; jsr 0xc56b        Aufruf print Routine ?!?
