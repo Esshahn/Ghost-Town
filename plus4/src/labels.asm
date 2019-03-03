@@ -1,6 +1,5 @@
 	m1E38	= $1e38	; ?
 	eventuellcode06	= $2fbf	; unused
-	eventuellcode03	= $1cb1	; unused
 	m3B02	= $3b02	; ?
 	eventuellcode09	= $383a	; unused
 	KANNDOCHNICHWEG	= $0
@@ -15,7 +14,6 @@
 	rsav0	= $1ebc
 	datenschrott04	= $1d11	; unused
 	rsav1	= $1ec5
-	datenschrott03	= $1b9d	; unused
 	rsav6	= $1e03
 	rsav7	= $1ed8	; ?
 	m10CC	= $10cc	; ?
@@ -23,7 +21,9 @@
 	rsav5	= $1df7
 	m105F	= $105f	; ?
 	colram	= $800
+	m11A2	= $11a2	; ?
 	writeFF11	= $1e5c	; ?
+	m1CB5	= $1cb5
 	m3A9D	= $3a9d	; ?
 	irq0	= $1f06	; ?
 	m3A7D	= $3a7d	; ?
@@ -48,13 +48,14 @@
 	m1E60	= $1e60	; ?
 	screen_start_src	= $313c
 	m3040	= $3040
-	datenschrott14	= $3f08	; unused
+	m10DD	= $10dd	; unused
 	datenschrott13	= $3b5a	; unused
 	print_title	= $310d	; ?
 	datenschrott10	= $399d	; unused
 	m104C	= $104c
 	vidmem0	= $c00
 	music_play	= $1ebc
+	m1B9D	= $1b9d	; unused
 	irq_init0	= $1ee0
 	zpA7	= $a7
 	SILENT_MODE	= $0
