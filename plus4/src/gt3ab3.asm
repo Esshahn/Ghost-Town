@@ -4,6 +4,9 @@
 SILENT_MODE         = 0
 KANNDOCHNICHWEG     = 0
 ; ==============================================================================
+; KERNAL / BASIC ROM CALLS
+PRINT               = 0xc56b
+; ==============================================================================
 ; ZEROPAGE
 zp02                = 0x02
 zp03                = 0x03
@@ -29,33 +32,37 @@ datenschrott01:         !source "includes/datenschrott01.asm"
 ; ==============================================================================
                     *= 0x1000
 m1000:
-                    jsr 0xc56b          ; ????
+                    jsr PRINT           ; jsr 0xc56b ? wird gar nicht benutzt ?!
+; ==============================================================================
 m1003:
                     lda #0x3f
                     sta zpA8
                     lda #0x08
                     cpy #0x00
-                    beq 0x1017
-                    clc
+                    beq ++              ; beq 0x1017
+-                   clc
                     adc #0x28
-                    bcc 0x1014
+                    bcc +               ; bcc 0x1014
                     inc zpA8
-                    dey
-                    bne 0x100d
-                    sta zpA7
++                   dey
+                    bne -               ; bne 0x100d
+++                  sta zpA7
                     jsr m3A9D           ; jsr 0x3a9d
                     ldy #0x27
-                    lda (zpA7),y
-                    sta 0x0db8,y
+-                   lda (zpA7),y
+                    sta vidmem0+0x1B8,y ; sta 0x0db8,y
                     lda #0x07
-                    sta 0x09b8,y
+                    sta colram+0x1B8,y  ; sta 0x09b8,y
                     dey
-                    bne 0x101e
+                    bne -               ; bne 0x101e
                     rts
                     !byte 0x00
+; ==============================================================================
                     sta 0xff19
                     rts
-                    jsr 0x11cc
+; ==============================================================================
+m1031:
+                    jsr m11CC           ; jsr 0x11cc
                     cpy #0x03
                     bne 0x10b1
                     jsr m1003           ; jsr 0x1003
@@ -66,14 +73,14 @@ m1003:
                     ldx #0x00
                     ldy #0x00
                     beq 0x105f
-                    lda 0x0db9,x
+                    lda vidmem0+0x1B9,x ; lda 0x0db9,x
                     clc
                     adc #0x80
-                    sta 0x0db9,x
-                    lda 0x0d88,y
+                    sta vidmem0+0x1B9,x ; sta 0x0db9,x
+                    lda vidmem0+0x188,y ; lda 0x0d88,y
                     clc
                     adc #0x80
-                    sta 0x0d88,y
+                    sta vidmem0+0x188,y ; sta 0x0d88,y
                     rts
                     jsr 0x104c
                     sty zp02
@@ -124,6 +131,7 @@ m1003:
                     bne 0x10b6
                     jmp 0x10d1
                     ldy #0x05
+testlabel:
                     jsr m1003           ; jsr 0x1003
                     jmp 0x3ef9
                     bmi 0x1104
@@ -133,6 +141,7 @@ m1003:
                     jsr 0x3a17
                     jsr m3B02           ; jsr 0x3b02
                     jmp 0x3b4c
+; ==============================================================================
                     jsr 0x0854
                     ora 0x12
                     ora 0x20
@@ -248,8 +257,11 @@ m1003:
                     lda #0xdd
                     jsr 0x1009
                     jmp 0x118d
+; ==============================================================================
+m11CC:
                     jsr m3A9D           ; jsr 0x3a9d
-                    jmp 0xc56b
+                    jmp PRINT           ; jmp 0xc56b
+; ==============================================================================
                     nop
                     nop
                     nop
@@ -296,7 +308,7 @@ m1003:
                     cmp #0x27
                     bcs 0x1233
                     ldy #0x00
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
                     cmp #0xad
                     bne 0x11ed
                     lda 0x3692
@@ -344,15 +356,18 @@ m1003:
                     lda #0x01
                     sta 0x12a4
                     ldy #0x05
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
                     !byte 0x00
+; ==============================================================================
                     cpy #0x03
                     bne 0x12b5
                     cmp #0x27
                     bcs 0x12b2
                     ldy #0x04
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     jmp 0x3b4c
+; ==============================================================================
                     cpy #0x04
                     bne 0x12db
                     cmp #0x3b
@@ -369,20 +384,23 @@ m1003:
                     lda #0x00
                     sta 0x394b
                     ldy #0x06
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     cpy #0x05
                     bne 0x12f9
                     cmp #0x27
                     bcs 0x12e8
                     ldy #0x00
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     cmp #0xfd
                     beq 0x12ef
                     jmp 0x11ed
                     lda #0x00
                     jmp 0x2fdf
                     ldy #0x07
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     cpy #0x06
                     bne 0x1306
                     cmp #0xf6
@@ -455,13 +473,15 @@ m1003:
                     cmp #0x27
                     bcs 0x13b0
                     ldy #0x02
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     cpy #0x0a
                     bne 0x13d2
                     cmp #0x27
                     bcs 0x13b3
                     ldy #0x00
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     jmp 0x11ed
                     cmp #0xcc
                     beq 0x13bb
@@ -488,7 +508,8 @@ m1003:
                     cmp #0x27
                     bcs 0x13ee
                     ldy #0x00
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     cmp #0xd2
                     beq 0x13f6
                     cmp #0xd5
@@ -501,7 +522,8 @@ m1003:
                     cmp #0x27
                     bcs 0x140a
                     ldy #0x00
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     cmp #0xd6
                     bne 0x13b0
                     lda 0x370e
@@ -523,8 +545,10 @@ m1003:
                     cmp #0x27
                     bcs 0x143b
                     ldy #0x00
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     jmp 0x13b0
+; ==============================================================================
                     cpy #0x10
                     bne 0x1464
                     cmp #0xf4
@@ -542,7 +566,8 @@ m1003:
                     cmp #0xbb
                     bne 0x143b
                     ldy #0x03
-                    jmp 0x1031
+                    jmp m1031           ; jmp 0x1031
+; ==============================================================================
                     cpy #0x11
                     bne 0x1474
                     cmp #0xdd
@@ -974,7 +999,7 @@ eventuellcode03:
                     sta 0xff15
                     rts
                     sta 0xff08
-                    jsr 0xc56b
+                    jsr PRINT           ; jsr 0xc56b
                     jsr 0x1cb5
                     jsr 0x1ef9
                     lda #0xba
@@ -1874,3 +1899,13 @@ m3B02:
 datenschrott13:
                     !source "includes/datenschrott13.asm"
 
+; ==============================================================================
+
+; jsr 0xc56b        Aufruf print Routine ?!?
+;                   im PLUS/4 ROM:
+;
+; .C:c56b  A9 93       LDA #$93
+; .C:c56d  4C D2 FF    JMP $FFD2        ; Output (print usually)($EC4B)
+;
+; .C:ffd2  6C 24 03    JMP ($0324)      ; Vector bei $0324 steht auf $EC4B
+;

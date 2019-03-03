@@ -27,11 +27,15 @@
 	irq0	= $1f06	; ?
 	fake	= $3a7c	; unused
 	m3534	= $3534
+	m1031	= $1031
+	m11CC	= $11cc	; ?
+	PRINT	= $c56b
 	charset0	= $2000
 	wait	= $3a76	; ?
 	init	= $3ab3	; ?
 	zp03	= $3
 	zp02	= $2
+	testlabel	= $10c6	; unused
 	zp05	= $5
 	zp04	= $4
 	eventuellcode12	= $3a76	; unused
