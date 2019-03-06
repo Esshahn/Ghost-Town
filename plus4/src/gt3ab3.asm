@@ -1878,7 +1878,35 @@ m3B4C:
                     jmp 0x162d
 ; ==============================================================================
 datenschrott13:
-                    !source "includes/datenschrott13.asm"
+death_messages:
+                    ; death messages
+                    ; like "You fell into a snake pit"
+                    
+                    ; scr conversion
+
+                    !scr "You fell into a          snake pit !    "
+                    !scr "          You'd better watched out for t"
+                    !scr "he sacred column!   You drowned in the d"
+                    !scr "eep river !                   You drank "
+                    !scr "from the       poisened bottle ........ "
+                    !scr "Boris, the spider, got   you and killed "
+                    !scr "you !     Didn't you see the       laser"
+                    !scr " beam ?!?           240 Volts ! You got "
+                    !scr "an electrical shock !         You steppe"
+                    !scr "d on a nail !                           "
+                    !scr "A foot trap stopped you !               "
+                    !scr "          This room is doomed      by th"
+                    !scr "e wizard Manilo !   You were locked in a"
+                    !scr "nd starved !                  You were h"
+                    !scr "it by a big    rock and died !          "
+                    !scr "Belegro killed           you !          "
+                    !scr "          You found a thirsty      zombi"
+                    !scr "e .......           The monster grapped "
+                    !scr "      you. You are dead !     You were w"
+                    !scr "ounded by      the bush !               "
+                    !scr "You are trapped in       wire-nettings !"
+                    !scr "          "
+                    
 ; ==============================================================================
                     lda #0x3b
                     sta 0xa8
