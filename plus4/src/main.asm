@@ -2,7 +2,7 @@
 ; skip bytes:        2
 ; ==============================================================================
 SILENT_MODE         = 0
-KANNDOCHNICHWEG     = 1
+KANNDOCHNICHWEG     = 0
 EXTENDED            = 0                ; 0 = original version, 1 = tweaks and cosmetics
 
 ; ==============================================================================
@@ -74,10 +74,13 @@ m1000:
                     jsr PRINT           ; jsr $c56b ? wird gar nicht benutzt ?!
 ; ==============================================================================
 m1003:
+                    ; might be the part that decides
+                    ; which level to display
+
                     lda #$3f
                     sta zpA8
                     lda #$08
-                    cpy #$00
+m1009:              cpy #$00
                     beq ++              ; beq $1017
 -                   clc
                     adc #$28
@@ -241,47 +244,47 @@ m1155:              cpy #$00
                     jsr m1000
                     ldx $3051
                     cpx #$01
-                    bne $1165
+                    bne +               ; bne $1165
                     lda #$28
-                    cpx #$05
-                    bne $116b
++                   cpx #$05
+                    bne +               ; bne $116b
                     lda #$29
-                    cpx #$0a
-                    bne $1171
++                   cpx #$0a
+                    bne +               ; bne $1171
                     lda #$47
-                    nop
++                   nop
                     nop
                     nop
                     jsr $174f
                     cpx #$0f
-                    bne $1185
+                    bne +               ; bne $1185
                     lda #$45
                     sta $0a6f
                     lda #$0f
                     sta $0e6f
-                    sta $0e1f
++                   sta $0e1f
                     lda #$48
                     sta $0a1f
-                    lda #$fd
+-                   lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
                     and #$80
-                    bne $118d
+                    bne -               ; bne $118d
                     jsr m3A7D           ; jsr $3a7d
                     jsr $3a2d
                     jmp m3B4C           ; jmp $3b4c
 m11A2:              cpy #$02
-                    bne $11ac
-                    jsr m1000
+                    bne +               ; bne $11ac
+m11A6:              jsr m1000
                     jmp $118d
-                    cpy #$04
-                    bne $11bb
++                   cpy #$04
+                    bne +               ; bne $11bb
                     lda $3953
                     clc
                     adc #$40
                     sta $3fc6
-                    bne $11a6
-                    dey
+                    bne m11A6               ; bne $11a6
++                   dey
                     dey
                     dey
                     dey
@@ -289,13 +292,14 @@ m11A2:              cpy #$02
                     lda #$10
                     sta zpA8
                     lda #$dd
-                    jsr $1009
-                    jmp $118d
+                    jsr m1009
+                    jmp -
 ; ==============================================================================
 m11CC:
                     jsr m3A9D           ; jsr $3a9d
                     jmp PRINT           ; jmp $c56b
 ; ==============================================================================
+tmp
                     nop
                     nop
                     nop
@@ -1346,7 +1350,27 @@ m1F15:                                  ; call from init
                     adc #$01           ; add 1 (#$C0 on init)
                     sta rsav7+1         ; sta $1ed9
                     jmp --              ; jmp $1f18
+
+;
+;
+;
+;                                                   ***    ***
+;                                                   ****  ****      ************
+;                                                     ******        ************
+;                                                   **********
+;                                                     ******        ************
+;                                                   ****  ****      ************
+;                                                   ***    ***
+;
+;
+;
+
+
 datenschrott06:
+                    *= 0x2800
+                    ; this file is huge
+                    ; could be a place for the levels
+
                     !source "code/includes/datenschrott06.asm"
 eventuellcode06:
                     ora ($a9,x)
@@ -1801,9 +1825,9 @@ eventuellcode09:
                     lda (zpA7),y
                     cmp #$ff
                     beq $385c
-                    jsr $383a
+                    jsr eventuellcode09
                     jmp $3850
-                    jsr $383a
+                    jsr eventuellcode09
                     lda (zpA7),y
                     cmp #$ff
                     beq $38df
@@ -1816,7 +1840,7 @@ eventuellcode09:
                     lda #$00
                     sta zp02
                     sta zp04
-                    jsr $383a
+                    jsr eventuellcode09
                     lda (zpA7),y
                     cmp #$fe
                     beq $388c
@@ -1830,7 +1854,7 @@ eventuellcode09:
                     lda (zpA7),y
                     cmp #$fb
                     bne $389f
-                    jsr $383a
+                    jsr eventuellcode09
                     lda (zpA7),y
                     sta $09
                     bne $38bf
@@ -1842,7 +1866,7 @@ eventuellcode09:
                     jmp $399f
                     cmp #$fa
                     bne $38bf
-                    jsr $383a
+                    jsr eventuellcode09
                     lda (zpA7),y
                     sta $0a
                     lda $09
@@ -1851,11 +1875,11 @@ eventuellcode09:
                     sta (zp02),y
                     cmp #$fd
                     bne $38cc
-                    jsr $383a
+                    jsr eventuellcode09
                     lda (zpA7),y
                     sta zp02
                     sta zp04
-                    jsr $383a
+                    jsr eventuellcode09
                     lda (zpA7),y
                     cmp #$ff
                     bne $387d
@@ -1925,7 +1949,7 @@ eventuellcode09:
 ; ==============================================================================
 
                     cmp #$06
-                    bne $3942
+                    bne +
                     lda #$f6
                     sta $0c9c
                     sta $0c9c
@@ -1938,53 +1962,53 @@ eventuellcode09:
 ;
 ; ==============================================================================
 
-                    cmp #$04
-                    bne $398d
++                   cmp #$04
+                    bne ++
                     ldx #$f7
                     ldy #$f8
                     lda #$01
-                    bne $3952
+                    bne +           ; bne $3952
                     ldx #$3b
                     ldy #$42
-                    lda #$01
++                   lda #$01        ; there seems to happen some self mod here
                     cmp #$01
-                    bne $395b
+                    bne +           ; bne $395b
                     stx $0c7a
-                    cmp #$02
-                    bne $3962
++                   cmp #$02
+                    bne +           ; bne $3962
                     stx $0d6a
-                    cmp #$03
-                    bne $3969
++                   cmp #$03
+                    bne +           ; bne $3969
                     stx $0e5a
-                    cmp #$04
-                    bne $3970
++                   cmp #$04
+                    bne +           ; bne $3970
                     stx $0f4a
-                    cmp #$05
-                    bne $3977
++                   cmp #$05
+                    bne +           ; bne $3977
                     sty $0c9c
-                    cmp #$06
-                    bne $397e
++                   cmp #$06
+                    bne +           ; bne $397e
                     sty $0d8c
-                    cmp #$07
-                    bne $3985
++                   cmp #$07
+                    bne +           ; bne $3985
                     sty $0e7c
-                    cmp #$08
-                    bne $398c
++                   cmp #$08
+                    bne +           ; bne $398c
                     sty $0f6c
-                    rts
++                   rts
 
 ; ==============================================================================
 ;
 ;
 ; ==============================================================================
 
-                    cmp #$05
-                    bne $399d
+++                  cmp #$05
+                    bne datenschrott10          ; todo: understand why it jumps to an RTS
                     lda #$fd
                     ldx #$01
-                    bne $3999
+                    bne +               ; bne $3999
                     lda #$7a
-                    sta $0ed2
++                   sta $0ed2
                     rts
 
 ; ==============================================================================
