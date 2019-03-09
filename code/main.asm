@@ -1,9 +1,43 @@
 ; input filename:    gt3ab3.prg
 ; skip bytes:        2
 ; ==============================================================================
+
 SILENT_MODE         = 0
 KANNDOCHNICHWEG     = 0
-EXTENDED            = 0                ; 0 = original version, 1 = tweaks and cosmetics
+
+; ==============================================================================
+; thse settings change the appearance of the game
+; EXTENDED = 0 -> original version
+; EXTENDED = 1 -> altered version
+; ==============================================================================
+
+EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
+
+!if EXTENDED = 0{
+    COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
+    MULTICOLOR_1    = $db 
+    MULTICOLOR_2    = $29
+    BORDER_COLOR_VALUE = $12
+
+}
+
+!if EXTENDED = 1{
+    COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $01 ; grey
+    MULTICOLOR_1    = $6b
+    MULTICOLOR_2    = $19
+    BORDER_COLOR_VALUE = $01
+}
+
+
+; ==============================================================================
+; cheats
+; 
+; 
+; ==============================================================================
+
+START_ROOM          = 0             ; default 0
+PLAYER_START_POS_X  = 3             ; default 3
+PLAYER_START_POS_Y  = 6             ; default 6
 
 ; ==============================================================================
 ; KERNAL / BASIC ROM CALLS
@@ -16,18 +50,21 @@ zp02                = $02
 zp03                = $03
 zp04                = $04
 zp05                = $05
+zp0A                = $0A
 zpA7                = $A7
 zpA8                = $A8
 ; ==============================================================================
 code_start          = $3AB3
-SCREEN             = $0C00            ; PLUS/4 default SCREEN
+SCREEN              = $0C00            ; PLUS/4 default SCREEN
 COLRAM              = $0800            ; PLUS/4 COLOR RAM
-CHARSET            = $2000
+CHARSET             = $2000
 screen_win_src      = $175C
 screen_start_src    = $313C
 
 KEYBOARD_LATCH     = $FF08
 INTERRUPT           = $FF09
+VOICE1_FREQ_LOW     = $FF0E         ; Low byte of frequency for voice 1
+VOICE2_FREQ_LOW     = $FF0F
 VOICE2              = $FF10
 VOLUME_AND_VOICE_SELECT = $FF11
 VOICE1              = $FF12 ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
@@ -107,7 +144,7 @@ m1009:              cpy #$00
 +                   dey
                     bne -               ; bne $100d
 ++                  sta zpA7
-                    jsr m3A9D           ; jsr $3a9d
+                    jsr set_charset_and_screen_for_title           ; jsr $3a9d
                     ldy #$27
 -                   lda (zpA7),y
                     sta SCREEN+$1B8,y ; sta $0db8,y
@@ -221,9 +258,9 @@ m10B4:
                     jsr display_hint_message           ; jsr $1003
                     jmp m3EF9           ; jmp $3ef9
 m10CC:              !byte $30, $36, $31, $33, $38
-++                  jsr m3A7D           ; jsr $3a7d
+++                  jsr set_game_basics           ; jsr $3a7d
                     jsr m3A17           ; jsr $3a17
-                    jsr m3B02           ; jsr $3b02
+                    jsr draw_empty_column_and_row           ; jsr $3b02
                     jmp m3B4C           ; jmp $3b4c
 
 ; ==============================================================================
@@ -260,7 +297,7 @@ item_pickup_message:              ; item pickup messages
 m1155:              cpy #$00
                     bne m11A2           ; bne $11a2
                     jsr m1000
-                    ldx $3051
+                    ldx m3050 + 1
                     cpx #$01
                     bne +               ; bne $1165
                     lda #$28
@@ -288,13 +325,13 @@ m1155:              cpy #$00
                     lda KEYBOARD_LATCH
                     and #$80
                     bne -               ; bne $118d
-                    jsr m3A7D           ; jsr $3a7d
-                    jsr $3a2d
+                    jsr set_game_basics           ; jsr $3a7d
+                    jsr m3A2D           ; jsr $3a2d
                     jmp m3B4C           ; jmp $3b4c
 m11A2:              cpy #$02
                     bne +               ; bne $11ac
 m11A6:              jsr m1000
-                    jmp $118d
+                    jmp -               ; jmp $118d
 +                   cpy #$04
                     bne +               ; bne $11bb
                     lda $3953
@@ -314,7 +351,7 @@ m11A6:              jsr m1000
                     jmp -
 ; ==============================================================================
 m11CC:
-                    jsr m3A9D           ; jsr $3a9d
+                    jsr set_charset_and_screen_for_title           ; jsr $3a9d
                     jmp PRINT           ; jmp $c56b
 ; ==============================================================================
 
@@ -341,7 +378,7 @@ m11ED               inx
                     cpx #$09
                     bne -               ; bne $11e2
 -                   jmp m3B4C           ; jmp $3b4c
-++                  ldy $3051
+++                  ldy m3050 + 1
                     bne +               ; bne $120a
                     cmp #$a9
                     bne m11ED
@@ -423,7 +460,7 @@ check_death_bush:                 ; $1233
                     bne $1264
                     cmp #$b9
                     beq $128e
-                    jmp $11ed
+                    jmp m11ED
                     lda INVENTORY_HAMMER
                     cmp #$df            ; df = empty spot where the hammer was. = hammer taken
                     beq $129a
@@ -465,7 +502,7 @@ check_death_bush:                 ; $1233
                     beq $12d1
                     cmp #$f8
                     beq $12d1
-                    jmp $11ed
+                    jmp m11ED
                     lda #$00
                     sta $394b
                     ldy #$06
@@ -480,9 +517,9 @@ check_death_bush:                 ; $1233
 ; ==============================================================================
                     cmp #$fd
                     beq $12ef
-                    jmp $11ed
+                    jmp m11ED
                     lda #$00
-                    jmp $2fdf
+                    jmp m2FDF
 
 ; ==============================================================================
 
@@ -534,9 +571,9 @@ m12f4:              ldy #$07
                     bne $1366
                     jsr m3602
                     lda #$18
-                    sta $35a6
+                    sta m35A3 + 3
                     lda #$0c
-                    sta $35a4
+                    sta m35A3 + 1
                     jmp m3B4C           ; jmp $3b4c
 
 ; ==============================================================================
@@ -565,7 +602,7 @@ m12f4:              ldy #$07
 
 
                     cmp #$cb
-                    bne $13b0
+                    bne m13B0
                     lda INVENTORY_HAMMER
                     cmp #$df
                     bne $135c
@@ -575,7 +612,7 @@ m12f4:              ldy #$07
                     cpy #$09
                     bne $13a3
                     cmp #$27
-                    bcs $13b0
+                    bcs m13B0
                     ldy #$02
                     jmp m1031           ; jmp $1031
 ; ==============================================================================
@@ -586,14 +623,14 @@ m12f4:              ldy #$07
                     ldy #$00
                     jmp m1031           ; jmp $1031
 ; ==============================================================================
-                    jmp $11ed
+m13B0:              jmp m11ED
 
 ; ==============================================================================
 
                     cmp #$cc
                     beq $13bb
                     cmp #$cf
-                    bne $13b0
+                    bne m13B0
                     lda #$df
                     cmp $36fe
                     bne $13cd
@@ -613,7 +650,7 @@ m12f4:              ldy #$07
                     cpy #$0b
                     bne $13e1
                     cmp #$d1
-                    bne $13b0
+                    bne m13B0
                     lda #$df                ; player takes the hammer
                     sta INVENTORY_HAMMER
                     bne $13ca
@@ -627,7 +664,7 @@ m12f4:              ldy #$07
                     cmp #$d2
                     beq $13f6
                     cmp #$d5
-                    bne $13b0
+                    bne m13B0
                     lda #$df
                     sta $3752
                     bne $13ca
@@ -639,7 +676,7 @@ m12f4:              ldy #$07
                     jmp m1031           ; jmp $1031
 ; ==============================================================================
                     cmp #$d6
-                    bne $13b0
+                    bne m13B0
                     lda $370e
                     cmp #$df
                     beq $141a
@@ -654,7 +691,7 @@ m12f4:              ldy #$07
                     cpy #$0e
                     bne $142e
                     cmp #$d7
-                    bne $13b0
+                    bne m13B0
                     ldy #$08
                     jmp death    ; 08 A foot trap stopped you!
 
@@ -667,7 +704,7 @@ m12f4:              ldy #$07
                     ldy #$00
                     jmp m1031           ; jmp $1031
 ; ==============================================================================
-                    jmp $13b0
+                    jmp m13B0
 ; ==============================================================================
                     cpy #$10
                     bne $1464
@@ -706,12 +743,12 @@ m12f4:              ldy #$07
                     bcs $147b
                     jmp check_death
 
-                    jmp $1b8f
+                    jmp m1B8F
 
 
 ; ==============================================================================
 
-                    ldy $3051
+                    ldy m3050 + 1
                     cpy #$0e
                     bne $148a
                     ldy #$20
@@ -725,11 +762,11 @@ m12f4:              ldy #$07
                     sta zpA7
                     ldy #$0c
                     ldx #$06
-                    jsr $3608
+                    jsr m3608
                     lda #$eb
                     sta zpA8
                     lda #$39
-                    sta $0a
+                    sta zp0A
                     ldx $1495
                     lda #$01
                     bne $14b2
@@ -750,7 +787,7 @@ m12f4:              ldy #$07
                     lda #$01
                     sta zpA7
                     ldy #$0c
-                    jmp $3608
+                    jmp m3608
 
 ; ==============================================================================
 
@@ -928,7 +965,7 @@ m12f4:              ldy #$07
 ; ==============================================================================
 
                     dec $15c2
-                    jmp $3620
+                    jmp m3620
 
 ; ==============================================================================
 
@@ -937,15 +974,15 @@ m12f4:              ldy #$07
                     bne $15dd
                     lda #$59
                     sta $37b6
-                    lda $3051
+                    lda m3050 + 1
                     cmp #$11
                     bne $162a
                     lda $14cd
                     bne $15fc
-                    lda $35a4
+                    lda m35A3 + 1
                     cmp #$06
                     bne $15fc
-                    lda $35a6
+                    lda m35A3 + 3
                     cmp #$18
                     bne $15fc
                     lda #$00
@@ -956,7 +993,7 @@ m12f4:              ldy #$07
                     ldx #$1e
                     lda #$00
                     sta zpA7
-                    jsr $3608
+                    jsr m3608
                     ldx $1603
                     cpx #$03
                     beq $1613
@@ -965,16 +1002,16 @@ m12f4:              ldy #$07
                     lda #$78
                     sta zpA8
                     lda #$49
-                    sta $0a
+                    sta zp0A
                     ldy #$06
                     lda #$01
                     sta zpA7
                     ldx $1603
-                    jsr $3608
+                    jsr m3608
                     jmp $147e
 
 ; ==============================================================================
-
+m162d:
                     ldx #$09
                     lda $033b,x
                     sta $034b,x
@@ -982,9 +1019,9 @@ m12f4:              ldy #$07
                     bne $162f
                     lda #$02
                     sta zpA7
-                    ldx $35a6
-                    ldy $35a4
-                    jsr $3608
+                    ldx m35A3 + 3
+                    ldy m35A3 + 1
+                    jsr m3608
                     ldx #$09
                     lda $033b,x
                     cmp #$d8
@@ -994,7 +1031,7 @@ m12f4:              ldy #$07
 
 ; ==============================================================================
 
-                    ldy $3051
+                    ldy m3050 + 1
                     cpy #$11
                     bne $166a
                     cmp #$78
@@ -1047,7 +1084,7 @@ m12f4:              ldy #$07
 ; ==============================================================================
 ; this might be the inventory/ world reset
 ; puts all items into the level data again
-; maybe not. not all characters for e.g. the heckenschere are put back
+; maybe not. not all characters for e.g. the wirecutter is put back
 ; ==============================================================================
 m16BA:
                     lda #$a5
@@ -1183,10 +1220,10 @@ print_endscreen:
 
 ; ==============================================================================
 
-                    lda $12a4
+m1B8F:              lda $12a4
                     bne $1b97
                     jmp m3B4C           ; jmp $3b4c
-                    jsr m3A9D           ; jsr $3a9d
+                    jsr set_charset_and_screen_for_title           ; jsr $3a9d
                     jmp print_endscreen ; jmp $1b44
 
 ; ==============================================================================
@@ -1210,7 +1247,7 @@ intro_text:
 
 display_intro_text:
 
-                    ; i think this part displays the introductin text
+                    ; i think this part displays the introduction text
 
                     lda #>SCREEN       ; lda #$0c
                     sta zp03
@@ -1255,36 +1292,36 @@ display_intro_text:
 ; ==============================================================================
 ;
 ; DISPLAY INTRO TEXT AND WAIT FOR INPUT (SHIFT & JOY)
+; DECREASES MUSIC VOLUME
 ; ==============================================================================
 
-                    sta KEYBOARD_LATCH
+start_intro:        sta KEYBOARD_LATCH
                     jsr PRINT           ; jsr $c56b
                     jsr display_intro_text           ; jsr $1cb5
                     jsr check_shift_key ; jsr $1ef9
                     lda #$ba
-                    sta rsav7+1         ; sta $1ed9
+                    sta rsav7+1         ; sta $1ed9    ; sound volume
                     rts
 
 ; ==============================================================================
 ;
-;
+; music data
 ; ==============================================================================
-                       
-datenschrott04:
-                    
-                    !source "code/includes/datenschrott04.asm"
+; * = $1d11                    
+music:                   
+                    !source "code/includes/music.asm"
                    
 ; ==============================================================================
                     ; *= $1DD2
-m1DD2:                                  ; Teil von music_play
+music_player:                                  ; Teil von music_play
 rsav2:              ldy #$00
                     bne +               ; bne $1df3
                     lda #$40
                     sta rsav3+1         ; sta $1e39
-                    jsr m1E38           ; jsr $1e38
+                    jsr more_music           ; jsr $1e38
 rsav4:              ldx #$00
-                    lda $1d14,x
-                    inc $1ddf
+                    lda music+3,x       ; lda $1d14,x                     ; first voice
+                    inc rsav4+1         ; inc $1ddf
                     tay
                     and #$1f
                     sta rsav3+1         ; sta $1e39
@@ -1298,19 +1335,19 @@ rsav4:              ldx #$00
 +                   dey
                     sty rsav2+1         ; sty $1dd3
 rsav5:              ldy #$00
-                    bne $1e1d
+                    bne +
                     lda #$40
-                    sta $1e61
-                    jsr m1E60           ; jsr $1e60
+                    sta even_more_music + 1
+                    jsr even_more_music           ; jsr $1e60
 rsav6:              ldx #$00
-                    lda $1d6e,x
+                    lda music + $5d,x     ; lda $1d6e,x                 ; second voice
                     tay
                     inx
                     cpx #$65
-                    beq $1e27
-                    stx $1e04
+                    beq m1E27           ; beq $1e27
+                    stx rsav6 + 1       ; stx $1e04
                     and #$1f
-                    sta $1e61
+                    sta even_more_music + 1       ; sta $1e61
                     tya
                     lsr
                     lsr
@@ -1318,24 +1355,24 @@ rsav6:              ldx #$00
                     lsr
                     lsr
                     tay
-                    dey
-                    sty $1df8
-                    jsr m1E38           ; jsr $1e38
-                    jmp m1E60           ; jmp $1e60
++                   dey
+                    sty rsav5 + 1       ; sty $1df8
+                    jsr more_music           ; jsr $1e38
+                    jmp even_more_music           ; jmp $1e60
 
 ; ==============================================================================
 
-                    lda #$00
+m1E27:              lda #$00
                     sta rsav2+1         ; sta $1dd3
                     sta rsav4+1         ; sta $1ddf
                     sta rsav5+1         ; sta $1df8
                     sta rsav6+1         ; sta $1e04
-                    jmp m1DD2           ; jmp $1dd2
+                    jmp music_player           ; jmp $1dd2
 
 ; ==============================================================================
 
                     
-m1E38:
+more_music:
 rsav3:              ldx #$04
                     cpx #$1c
                     bcc +               ; bcc $1e46
@@ -1343,11 +1380,11 @@ rsav3:              ldx #$04
                     and #$ef           ; clear bit 4
                     jmp writeFF11       ; jmp $1e5c
 
-+                   lda $1e88,x        ; $1E88 ... : music data lo ?
-                    sta $ff0e          ; Low byte of frequency for voice 1
++                   lda m1E88,x         ; lda $1e88,x        ; $1E88 ... : music data lo ?
+                    sta VOICE1_FREQ_LOW          ; Low byte of frequency for voice 1
                     lda VOICE1
                     and #$fc
-                    ora $1ea0,x        ; $1EA0 ... : music data hi ?
+                    ora m1E88 + $18, x  ; ora $1ea0,x        ; $1EA0 ... : music data hi ?
                     sta VOICE1          ; High bits of frequency for voice 1
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$10           ; set bit 4
@@ -1360,18 +1397,18 @@ writeFF11           sta VOLUME_AND_VOICE_SELECT          ; (de-)select voice 1
 ; ==============================================================================
 
                     ; *= $1E60
-m1E60:              
+even_more_music:              
                     ldx #$0d
                     cpx #$1c
-                    bcc $1e6e
+                    bcc +
                     lda VOLUME_AND_VOICE_SELECT
                     and #$df
                     jmp writeFF11       ; jmp $1e5c
-                    lda $1e88,x
-                    sta $ff0f
++                   lda m1E88,x         ; lda $1e88,x
+                    sta VOICE2_FREQ_LOW ; sta $ff0f
                     lda VOICE2
                     and #$fc
-                    ora $1ea0,x
+                    ora m1E88 + $18,x   ; ora $1ea0,x
                     sta VOICE2
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$20
@@ -1380,12 +1417,22 @@ m1E60:
 
 ; ==============================================================================
 ;
+; seems to be the instruments or pitch/octave of the music
+; ==============================================================================
+
+; part of the music or the music intruments
+; $1e88
+m1E88:
+!byte $07, $76, $a9, $06, $59, $7f, $c5, $04, $3b, $54, $83, $ad, $c0, $e3, $02, $1e
+!byte $2a, $42, $56, $60, $71, $81, $8f, $95, $00, $00, $00, $01, $01, $01, $01, $02
+!byte $02, $02, $02, $02, $02, $02, $03, $03, $03, $03, $03, $03, $03, $03, $03, $03
+!byte $03, $03, $03, $03
+
+; ==============================================================================
+;
 ;
 ; ==============================================================================
 
-datenschrott05:
-                    !source "code/includes/datenschrott05.asm"
-; ==============================================================================
 music_play:
 rsav0:              ldx #$09
                     dex
@@ -1393,9 +1440,6 @@ rsav0:              ldx #$09
                     beq +               ; beq $1ece
                     rts
 
-; ==============================================================================
-;
-;
 ; ==============================================================================
 
                     ; *= $1EC5
@@ -1406,19 +1450,21 @@ rsav1:              ldy #$01
                     rts
 
 ; ==============================================================================
-;
-;
-; ==============================================================================
 
                     ; *= $1ECE
 +                   ldy #$0b
                     sty rsav0+1         ; sty $1ebd
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$37
-rsav7:              and #$bf           ; $1ED8 $1ED9
+rsav7:              and #$bf           ; $1ED8 $1ED9     ; rsav7+1 = sound volume
                     sta VOLUME_AND_VOICE_SELECT          ; sth. with SOUND / MUSIC ?
-                    jmp m1DD2           ; jmp $1dd2
+                    jmp music_player           ; jmp $1dd2
+
 ; ==============================================================================
+; irq init
+;
+; ==============================================================================
+
                     ; *= $1EE0
 irq_init0:
                     sei
@@ -1431,16 +1477,18 @@ irq_init0:
                     sta $ff0a          ; set IRQ source to RASTER
 
                     lda #$bf
-                    sta rsav7+1         ; sta $1ed9
+                    sta rsav7+1         ; sta $1ed9    ; sound volume
                     cli
 
-                    jmp m3A9D           ; jmp $3a9d
+                    jmp set_charset_and_screen_for_title           ; jmp $3a9d
 
 ; ==============================================================================
 ; intro text
 ; wait for shift or joy2 fire press
 ; ==============================================================================
+
 check_shift_key:
+
 -                   lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
@@ -1471,12 +1519,13 @@ irq0:
                     rti
 
 ; ==============================================================================
-;
-;
+; gets called immediately after start of game
+; looks like some sound/irq initialization?
+; i think the branching part does fade the sound
 ; ==============================================================================
 
 m1F15:                                  ; call from init
-                    lda rsav7+1         ; lda $1ed9
+                    lda rsav7+1         ; lda $1ed9           ; sound volume
 --                  cmp #$bf           ; is true on init
                     bne +               ; bne $1f1f
                     jmp irq_init0       ; jmp $1ee0
@@ -1489,7 +1538,7 @@ m1F15:                                  ; call from init
                     bne -               ; bne $1f21 / some weird wait loop ?
                     clc
                     adc #$01           ; add 1 (#$C0 on init)
-                    sta rsav7+1         ; sta $1ed9
+                    sta rsav7+1         ; sta $1ed9             ; sound volume
                     jmp --              ; jmp $1f18
 
 ;
@@ -1526,7 +1575,7 @@ eventuellcode06:
 ;
 ; ==============================================================================
 
-                    lda $3051
+                    lda m3050 + 1
                     cmp #$04
                     bne $2fca
                     lda #$03
@@ -1541,7 +1590,7 @@ eventuellcode06:
 ;
 ; ==============================================================================
 
-                    ldy $3720
+m2FDF:              ldy $3720
                     cpy #$df
                     bne +               ; bne $2fec
                     sta $3994
@@ -1556,8 +1605,8 @@ eventuellcode06:
 ; ==============================================================================
 
 m2FF5:
-                    jsr m3B02           ; jsr $3b02
-                    lda #$00
+                    jsr draw_empty_column_and_row           ; jsr $3b02
+                    lda #$00            ; settings this to e.g. 1 mirrors the level layout (to some extend)
                     sta zp02
                     rts
 
@@ -1571,25 +1620,25 @@ datenschrott07:
 ; ==============================================================================
 m3040:              nop
                     jsr m2FF5           ; jsr $2FF5
-                    ldx #$08
+                    ldx #$08            ; i think this sets the colram (0800)
                     stx zp05
-                    ldx #$0c
+                    ldx #$0c            ; and this the screen (0c00)
                     stx zp03
                     ldx #$28
-                    stx $0a
-                    ldx #$01
+                    stx zp0A
+m3050:              ldx #$01
                     beq $305e
                     clc
                     adc #$68
                     bcc $305b
-                    inc $0a
+                    inc zp0A
                     dex
                     bne $3054
                     sta $09
                     ldy #$00
                     sty zpA8
                     sty zpA7
-                    lda ($09),y
+m3066:              lda ($09),y
                     tax
                     lda $302f,x
                     sta $10
@@ -1636,7 +1685,7 @@ m3040:              nop
                     dec zp03
                     dec zp05
                     ldy zpA7
-                    jmp $3066
+                    jmp m3066
                     rts
 
 ; ==============================================================================
@@ -1703,9 +1752,9 @@ print_title:
                     lda #<SCREEN       ; lda #$00
                     sta zp02
                     sta zp04
-                    lda #$31
+                    lda #>screen_start_src
                     sta zpA8
-                    lda #$3c
+                    lda #<screen_start_src
                     sta zpA7
                     ldx #$04
 --                  ldy #$00
@@ -1788,7 +1837,7 @@ m3534:
                     bne $3574
                     lda zpA8
                     sta (zp02),y
-                    lda $0a
+                    lda zp0A
                     sta (zp04),y
                     bne $3581
                     lda (zp02),y
@@ -1817,11 +1866,11 @@ m3534:
 ;
 ;
 ; ==============================================================================
-
+m359B:
                     lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
-                    ldy #$09
+m35A3:              ldy #$09
                     ldx #$15
                     lsr
                     bcs $35af
@@ -1858,9 +1907,9 @@ m3534:
                     dex
                     bne $35d9
                     lda #$0a
-                    sta $35a4
+                    sta m35A3 + 1
                     lda #$15
-                    sta $35a6
+                    sta m35A3 + 3
                     lda #$ff
                     sta KEYBOARD_LATCH
                     lda #$01
@@ -1868,16 +1917,17 @@ m3534:
                     lda #$93
                     sta zpA8
                     lda #$3d
-                    sta $0a
-m3602:              ldy $35a4
-                    ldx $35a6
-                    stx $3549
+                    sta zp0A
+m3602:              ldy m35A3 + 1
+                    ldx m35A3 + 3
+m3608:              stx $3549
                     jmp m3534           ; jmp $3534
 
 ; ==============================================================================
 ;
 ;
 ; ==============================================================================
+
 m360E:
                     sei
                     lda #$c0
@@ -1885,35 +1935,35 @@ m360E:
                     bne -               ; bne $3611
                     lda #$00
                     sta zpA7
-                    jmp m3A6D   
-                    bne $361a
+-                   jmp m3A6D   
+                    bne -               ; bne $361a
                     rts
 
 ; ==============================================================================
 ;
 ;
 ; ==============================================================================
-
+m3620:
                     lda #$00
                     sta zpA7
                     ldx #$0f
                     ldy #$0f
-                    jsr $3608
+                    jsr m3608
                     nop
                     ldx $3625
                     ldy $3627
-                    cpx $35a6
+                    cpx m35A3 + 3
                     bcs $3639
                     inx
                     inx
-                    cpx $35a6
+                    cpx m35A3 + 3
                     beq $363f
                     dex
-                    cpy $35a4
+                    cpy m35A3 + 1
                     bcs $3646
                     iny
                     iny
-                    cpy $35a4
+                    cpy m35A3 + 1
                     beq $364c
                     dey
                     stx $3669
@@ -1935,7 +1985,7 @@ m360E:
                     lda #$9c
                     sta zpA8
                     lda #$3e
-                    sta $0a
+                    sta zp0A
                     ldy $3627
                     ldx $3625
                     stx $3549
@@ -1963,16 +2013,16 @@ m3846:
                     lda #$8a
                     sta zpA7
                     ldy #$00
-                    lda (zpA7),y
+m3850:              lda (zpA7),y
                     cmp #$ff
                     beq $385c
                     jsr eventuellcode09
-                    jmp $3850
+                    jmp m3850
                     jsr eventuellcode09
                     lda (zpA7),y
                     cmp #$ff
                     beq $38df
-                    cmp $3051
+                    cmp m3050 + 1
                     bne $3856
                     lda #>COLRAM        ; lda #$08
                     sta zp05
@@ -2003,16 +2053,16 @@ m3846:
                     beq $38b7
                     cmp #$fc
                     bne $38ac
-                    lda $0a
-                    jmp $399f
+                    lda zp0A
+                    jmp $399f                       ; jumps into datenschrott 11, which is 1 byte shifted
                     cmp #$fa
                     bne $38bf
                     jsr eventuellcode09
                     lda (zpA7),y
-                    sta $0a
+                    sta zp0A
                     lda $09
                     sta (zp04),y
-                    lda $0a
+                    lda zp0A
                     sta (zp02),y
                     cmp #$fd
                     bne $38cc
@@ -2036,7 +2086,7 @@ m3846:
 ;
 ; ==============================================================================
 
-                    lda $3051
+                    lda m3050 + 1
                     cmp #$02
                     bne $3919
                     lda #$0d
@@ -2176,7 +2226,7 @@ eventuellcode10:
 ;
 ; ==============================================================================
 
-                    ldx $3051
+                    ldx m3050 + 1
                     beq $3a07
                     dex
                     jmp $3a64
@@ -2187,15 +2237,15 @@ eventuellcode10:
                     !byte $02
                     !byte $ff
 m3A17:
-                    ldx $3051
+                    ldx m3050 + 1
                     inx
-                    stx $3051
+                    stx m3050 + 1
                     ldy $3a4a,x
                     lda $39aa,y
-                    sta $35a4
+                    sta m35A3 + 1
                     lda $39ab,y
-                    sta $35a6
-                    jsr m3040           ; jsr $3040
+                    sta m35A3 + 3
+m3A2D:              jsr m3040           ; jsr $3040
                     jmp m3846
 
 ; ==============================================================================
@@ -2203,7 +2253,7 @@ m3A17:
 ;
 ; ==============================================================================
 ; not called from within the code. Schrott?
-tmp
+
 !byte $02 ,$06 ,$0a ,$0e ,$12 ,$16 ,$1a ,$1e ,$22 ,$26 ,$2a ,$2e ,$32 ,$36 ,$3a ,$3e
 !byte $42 ,$46 ,$4a ,$4e ,$52 ,$56 ,$5a ,$5e ,$04 ,$08 ,$0c ,$10 ,$14 ,$18 ,$1c ,$20
 !byte $24 ,$28 ,$2c ,$30 ,$34 ,$38 ,$3c ,$40 ,$44 ,$48 ,$4c ,$50 ,$54 ,$58 ,$5c ,$60
@@ -2211,13 +2261,14 @@ tmp
 
 m3A6D:
 
-                    jsr m3602           ; todo
-                    jsr $359B
+                    jsr m3602           
+                    jsr m359B
                     cli
                     rts
                     brk             ; $00
 
 ; ==============================================================================
+
 wait:               
                     dex
                     bne wait
@@ -2226,11 +2277,11 @@ wait:
 fake:               rts
 
 ; ==============================================================================
-;
-;
+; sets the game screen
+; multicolor, charset, main colors
 ; ==============================================================================
 
-m3A7D:
+set_game_basics:
                     lda VOICE1           ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
                     and #$fb           ; clear bit 2
                     sta VOICE1          ; => get data from RAM  
@@ -2245,28 +2296,20 @@ m3A7D:
 
                     ; set the main colors for the game
 
-                    !if EXTENDED=1 {
-                    lda #$6b            ; original: #$db  
+                   
+                    lda #MULTICOLOR_1            ; original: #$db  
                     sta COLOR_1           ; char color 1
-                    lda #$19            ; original: #$29
+                    lda #MULTICOLOR_2            ; original: #$29
                     sta COLOR_2           ; char color 2
-                    }
-
-                    !if EXTENDED=0 {
-                    lda #$db            ; original: #$db  
-                    sta COLOR_1           ; char color 1
-                    lda #$29            ; original: #$29
-                    sta COLOR_2           ; char color 2
-                    }
                     
                     rts
 
 ; ==============================================================================
-;
+; set font and screen setup (40 columns and hires)
 ;
 ; ==============================================================================
-
-m3A9D:                                  ; set text screen
+; $3a9d
+set_charset_and_screen_for_title:    ; set text screen
                     lda VOICE1
                     ora #$04           ; set bit 2
                     sta VOICE1          ; => get data from ROM
@@ -2278,8 +2321,8 @@ m3A9D:                                  ; set text screen
                     rts
 
 ; ==============================================================================
-;
-;
+; init
+; start of game
 ; ==============================================================================
 
 init:
@@ -2287,7 +2330,7 @@ init:
                     lda #$01
                     sta BG_COLOR          ; background color
                     sta BORDER_COLOR          ; border color
-                    jsr m16BA           ; might be a level data reset
+                    jsr m16BA           ; might be a level data reset, and print the title screen
                     ldy #$20
                     jsr wait
 
@@ -2300,7 +2343,11 @@ init:
                     bne -               ; bne $3ac8 / wait for keypress ?
                     
                     lda #$ff
-                    jsr $1cff
+                    jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
+                    
+                    
+                    ; TODO: unclear what the code below does
+                    ; i think it fills the level data with "DF", which is a blank character
                     lda #>SCREEN       ; lda #$0c
                     sta zp03
                     lda #$00
@@ -2314,26 +2361,28 @@ init:
                     inc zp03
                     dex
                     bne -               ; bne $3ae5
-                    jsr m3A7D           ; jsr $3a7d
+
+                    jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
+                    
+                    ; set background color
                     lda #$00
                     sta BG_COLOR
                     
                     ; border color. default is a dark red
-                    ; extended version is distinguished by dark grey
-                    !if EXTENDED = 1{
-                    lda #$01
-                    }
-                    !if EXTENDED = 0{
-                    lda #$12
-                    }
+                    lda #BORDER_COLOR_VALUE
                     sta BORDER_COLOR
-                    jsr m3B02           ; jsr $3b02
-                    jmp m3B3A           ; jmp $3b3a
+
+                    jsr draw_empty_column_and_row           ; jsr $3b02
+                    jmp set_start_screen           ; jmp $3b3a
 ; ==============================================================================
-m3B02:
+
+draw_empty_column_and_row:
                     ; this seems to mainly draw the
                     ; horizontal and vertical blank lines
                     ; in the game
+
+                    ; TODO: there is probably more to it. too complicated for such a simple task
+                    ; is the level itself drawn here too?
 
                     lda #$27
                     sta zp02
@@ -2346,12 +2395,9 @@ m3B02:
                     ldy #$00
 -                   lda #$5d
                     sta (zp02),y
-                    !if EXTENDED = 0{
-                    lda #$12            ; draws blank column 40
-                    }
-                    !if EXTENDED = 1{
-                    lda #$01            ; draws blank column 40   
-                    }
+                    
+                    lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank column 40
+                   
                     sta (zp04),y
                     tya
                     clc
@@ -2362,38 +2408,41 @@ m3B02:
                     inc zp05
 +                   dex
                     bne -               ; bne $3b14
+
+
+                    ; fills the bottom line with blank colored space (making it invisible)
 -                   lda #$5d
-                    sta $0fc0,x
-                    !if EXTENDED = 0{
-                    lda #$12            ; draws blank row 25
-                    }
-                    !if EXTENDED = 1{
-                    lda #$01            ; draws blank row 25
-                    }
-                    sta $0bc0,x
+                    sta SCREEN + $3c0,x  ;sta $0fc0,x ; last row of the screen
+                    
+                    lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank row 25
+                    
+                    sta $0bc0,x             ; writes the line into the color ram
+                    
                     inx
                     cpx #$28
                     bne -               ; bne $3b2a
                     rts
 
 ; ==============================================================================
-;
-;
+; SETUP FIRST ROOM
+; player xy position and room number
 ; ==============================================================================
 
-m3B3A:              lda #$06
-                    sta $35a4
-                    lda #$03
-                    sta $35a6
-                    lda #$00
-                    sta $3051
-                    jsr $3a2d
+set_start_screen:
+                    lda #PLAYER_START_POS_Y
+                    sta m35A3 + 1               ; Y player start position (0 = top)
+                    lda #PLAYER_START_POS_X
+                    sta m35A3 + 3               ; X player start position (0 = left)
+                    lda #START_ROOM              ; room number (start screen)
+                    sta m3050 + 1
+                    jsr m3A2D;                  jsr $3a2d
+
 m3B4C:
                     jsr $2fef
                     ldy #$30
                     jsr wait
                     jsr $2fcb
-                    jmp $162d
+                    jmp m162d           
 ; ==============================================================================
 
 death_messages:
@@ -2473,7 +2522,7 @@ death:
                     inc $03
                     dex
                     bne -               ; bne $3ece
-                    jsr m3A9D
+                    jsr set_charset_and_screen_for_title
 -                   lda (zpA7),y
                     sta $0dc0,x
                     lda #$00

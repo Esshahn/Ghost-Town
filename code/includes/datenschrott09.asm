@@ -1,3 +1,5 @@
+; vermutlich leveldaten
+
 datenschrott09 
                     !byte 0xff
                     !byte 0x00

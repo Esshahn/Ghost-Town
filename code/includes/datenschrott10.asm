@@ -1,3 +1,5 @@
+; definitiv kein Schrott
+; Aber z.T. um ein Byte geshifted
 
                     rts
                     !byte 0xff
