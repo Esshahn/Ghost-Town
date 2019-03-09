@@ -50,7 +50,9 @@ zp02                = $02
 zp03                = $03
 zp04                = $04
 zp05                = $05
+zp09                = $09
 zp0A                = $0A
+zp10                = $10
 zpA7                = $A7
 zpA8                = $A8
 ; ==============================================================================
@@ -270,9 +272,9 @@ m10CC:              !byte $30, $36, $31, $33, $38
 
 item_pickup_message:              ; item pickup messages
 
-                    !scr " There is a key in the bottle !         "
-                    !scr "   There is a key in the coffin !       "
-                    !scr " There is a breathing tube !            "
+!scr " There is a key in the bottle !         "
+!scr "   There is a key in the coffin !       "
+!scr " There is a breathing tube !            "
                     
 
 ;
@@ -1233,16 +1235,16 @@ m1B8F:              lda $12a4
 
 intro_text:
 
-                    ; instructions screen
-                    ; "Search the treasure..."
+; instructions screen
+; "Search the treasure..."
 
-                    !scr "Search the treasure of Ghost Town and   "
-                    !scr "open it ! Kill Belegro, the wizard, and "
-                    !scr "dodge all other dangers. Don't forget to"
-                    !scr "use all the items you'll find during    "
-                    !scr "your yourney through 19 amazing hires-  "
-                    !scr "graphics-rooms! Enjoy the quest and play"
-                    !scr "it again and again and again ...      > "
+!scr "Search the treasure of Ghost Town and   "
+!scr "open it ! Kill Belegro, the wizard, and "
+!scr "dodge all other dangers. Don't forget to"
+!scr "use all the items you'll find during    "
+!scr "your yourney through 19 amazing hires-  "
+!scr "graphics-rooms! Enjoy the quest and play"
+!scr "it again and again and again ...      > "
                     
 
 display_intro_text:
@@ -1612,36 +1614,46 @@ m2FF5:
 
 ; ==============================================================================
 ;
+; related to level data
+; ==============================================================================
+
+room_01_tiles:
+
+!byte $df, $df, $df, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+!byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+!byte $00, $df, $0c, $15, $1e, $27, $30, $39, $42, $4b, $54, $5d, $66, $6f, $78, $81
+!byte $8a, $03, $00, $39, $19, $0e, $3d, $7f, $2a, $2a, $1e, $1e, $1e, $3d, $3d, $19
+!byte $2f, $2f, $39
+
+; ==============================================================================
+; game related. could be building the actual room layout
 ;
 ; ==============================================================================
 
-datenschrott07:
-                    !source "code/includes/datenschrott07.asm"
-; ==============================================================================
 m3040:              nop
                     jsr m2FF5           ; jsr $2FF5
                     ldx #$08            ; i think this sets the colram (0800)
                     stx zp05
                     ldx #$0c            ; and this the screen (0c00)
                     stx zp03
-                    ldx #$28
+                    ldx #$28            ; when changed shifts level data
                     stx zp0A
 m3050:              ldx #$01
-                    beq $305e
-                    clc
+                    beq ++               ; beq $305e
+-                   clc
                     adc #$68
-                    bcc $305b
+                    bcc +               ; bcc $305b
                     inc zp0A
-                    dex
-                    bne $3054
-                    sta $09
++                   dex
+                    bne -               ; bne $3054
+++                  sta zp09
                     ldy #$00
                     sty zpA8
                     sty zpA7
-m3066:              lda ($09),y
+m3066:              lda (zp09),y
                     tax
                     lda $302f,x
-                    sta $10
+                    sta zp10
                     lda $301e,x
                     sta $11
                     ldx #$03
@@ -1650,7 +1662,7 @@ m3066:              lda ($09),y
                     sta zp04
                     lda $11
                     sta (zp02),y
-                    lda $10
+                    lda zp10
                     sta (zp04),y
                     jsr $30c8
                     cpy #$03
@@ -1826,7 +1838,7 @@ m3534:
                     inc zp05
                     ldx #$03
                     lda #$00
-                    sta $09
+                    sta zp09
                     ldy #$00
                     lda zpA7
                     bne $3566
@@ -1841,11 +1853,11 @@ m3534:
                     sta (zp04),y
                     bne $3581
                     lda (zp02),y
-                    stx $10
-                    ldx $09
+                    stx zp10
+                    ldx zp09
                     sta $033c,x
-                    inc $09
-                    ldx $10
+                    inc zp09
+                    ldx zp10                
                     inc zpA8
                     iny
                     cpy #$03
@@ -2047,7 +2059,7 @@ m3850:              lda (zpA7),y
                     bne $389f
                     jsr eventuellcode09
                     lda (zpA7),y
-                    sta $09
+                    sta zp09
                     bne $38bf
                     cmp #$f8
                     beq $38b7
@@ -2060,7 +2072,7 @@ m3850:              lda (zpA7),y
                     jsr eventuellcode09
                     lda (zpA7),y
                     sta zp0A
-                    lda $09
+                    lda zp09
                     sta (zp04),y
                     lda zp0A
                     sta (zp02),y
@@ -2446,51 +2458,52 @@ m3B4C:
 ; ==============================================================================
 
 death_messages:
-                    ; death messages
-                    ; like "You fell into a snake pit"
-                    
-                    ; scr conversion
 
-                    ; 00 You fell into a snake pit
-                    ; 01 You'd better watched out for the sacred column
-                    ; 02 You drowned in the deep river
-                    ; 03 You drank from the poisend bottle
-                    ; 04 Boris the spider got you and killed you
-                    ; 05 Didn't you see the laser beam?
-                    ; 06 240 Volts! You got an electrical shock!
-                    ; 07 You stepped on a nail!
-                    ; 08 A foot trap stopped you!
-                    ; 09 This room is doomed by the wizard Manilo!
-                    ; 0a You were locked in and starved!
-                    ; 0b You were hit by a big rock and died!
-                    ; 0c Belegro killed you!
-                    ; 0d You found a thirsty zombie....
-                    ; 0e The monster grabbed you you. You are dead!
-                    ; 0f You were wounded by the bush!
-                    ; 10 You are trapped in wire-nettings!
+; death messages
+; like "You fell into a snake pit"
 
-                    !scr "You fell into a          snake pit !    "
-                    !scr "          You'd better watched out for t"
-                    !scr "he sacred column!   You drowned in the d"
-                    !scr "eep river !                   You drank "
-                    !scr "from the       poisened bottle ........ "
-                    !scr "Boris, the spider, got   you and killed "
-                    !scr "you !     Didn't you see the       laser"
-                    !scr " beam ?!?           240 Volts ! You got "
-                    !scr "an electrical shock !         You steppe"
-                    !scr "d on a nail !                           "
-                    !scr "A foot trap stopped you !               "
-                    !scr "          This room is doomed      by th"
-                    !scr "e wizard Manilo !   You were locked in a"
-                    !scr "nd starved !                  You were h"
-                    !scr "it by a big    rock and died !          "
-                    !scr "Belegro killed           you !          "
-                    !scr "          You found a thirsty      zombi"
-                    !scr "e .......           The monster grapped "
-                    !scr "      you. You are dead !     You were w"
-                    !scr "ounded by      the bush !               "
-                    !scr "You are trapped in       wire-nettings !"
-                    !scr "          "
+; scr conversion
+
+; 00 You fell into a snake pit
+; 01 You'd better watched out for the sacred column
+; 02 You drowned in the deep river
+; 03 You drank from the poisend bottle
+; 04 Boris the spider got you and killed you
+; 05 Didn't you see the laser beam?
+; 06 240 Volts! You got an electrical shock!
+; 07 You stepped on a nail!
+; 08 A foot trap stopped you!
+; 09 This room is doomed by the wizard Manilo!
+; 0a You were locked in and starved!
+; 0b You were hit by a big rock and died!
+; 0c Belegro killed you!
+; 0d You found a thirsty zombie....
+; 0e The monster grabbed you you. You are dead!
+; 0f You were wounded by the bush!
+; 10 You are trapped in wire-nettings!
+
+!scr "You fell into a          snake pit !    "
+!scr "          You'd better watched out for t"
+!scr "he sacred column!   You drowned in the d"
+!scr "eep river !                   You drank "
+!scr "from the       poisened bottle ........ "
+!scr "Boris, the spider, got   you and killed "
+!scr "you !     Didn't you see the       laser"
+!scr " beam ?!?           240 Volts ! You got "
+!scr "an electrical shock !         You steppe"
+!scr "d on a nail !                           "
+!scr "A foot trap stopped you !               "
+!scr "          This room is doomed      by th"
+!scr "e wizard Manilo !   You were locked in a"
+!scr "nd starved !                  You were h"
+!scr "it by a big    rock and died !          "
+!scr "Belegro killed           you !          "
+!scr "          You found a thirsty      zombi"
+!scr "e .......           The monster grapped "
+!scr "      you. You are dead !     You were w"
+!scr "ounded by      the bush !               "
+!scr "You are trapped in       wire-nettings !"
+!scr "          "
                     
 ; ==============================================================================
 ;
@@ -2546,16 +2559,18 @@ m3EF9:
                     bne -               ; bne $3efb
                     jmp init            ; jmp $3ab3
 ; ==============================================================================
-                    ; screen messages
-                    ; and the code entry text
+; screen messages
+; and the code entry text
+; ==============================================================================
 
 hint_messages
-                    !scr " A part of the code number is :         "
-                    !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-                    !scr " You need: bulb, bulb holder, socket !  "
-                    !scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
-                    !scr " *****   A helping letter :   C   ***** "
-                    !scr " Sorry, bad code number! Better luck next time! "
+
+!scr " A part of the code number is :         "
+!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+!scr " You need: bulb, bulb holder, socket !  "
+!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
+!scr " *****   A helping letter :   C   ***** "
+!scr " Sorry, bad code number! Better luck next time! "
 
 ; ==============================================================================
 
