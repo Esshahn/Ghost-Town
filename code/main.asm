@@ -50,9 +50,11 @@ zp02                = $02
 zp03                = $03
 zp04                = $04
 zp05                = $05
+zp08                = $08
 zp09                = $09
 zp0A                = $0A
 zp10                = $10
+zp11                = $11
 zpA7                = $A7
 zpA8                = $A8
 ; ==============================================================================
@@ -86,7 +88,7 @@ BORDER_COLOR        = $FF19
 ; ==============================================================================
 
 INVENTORY_GLOVES    = $3692             ; 6b = gloves
-INVENTORY_CLIPPERS  = $36a3             ; ac = clippers not picked up, f9 clippers picked up
+INVENTORY_WIRECUTTER  = $36a3             ; ac = clippers not picked up, f9 clippers picked up
 INVENTORY_HAMMER    = $3745             ; d0 = hammer not picked up, df = hammer picked up
 ; ==============================================================================
 
@@ -421,7 +423,7 @@ check_death_bush:                 ; $1233
 ; ==============================================================================
 
                     lda #$f9                ; clippers picked up
-                    sta INVENTORY_CLIPPERS
+                    sta INVENTORY_WIRECUTTER
                     jmp check_death
 
 ; ==============================================================================
@@ -431,7 +433,7 @@ check_death_bush:                 ; $1233
                     bne $12a5
                     cmp #$f5        ; f5 = fence character
                     bne $1267
-                    lda INVENTORY_CLIPPERS       ; fence was hit, so check if clippers are picked up
+                    lda INVENTORY_WIRECUTTER       ; fence was hit, so check if clippers are picked up
                     cmp #$f9        ; f9 = clippers were picked up
                     beq $125f
                     ldy #$10
@@ -536,12 +538,12 @@ m12f4:              ldy #$07
                     jmp death    ; 00 You fell into a snake pit
 
 ; ==============================================================================
-
+sacred_column:
                     cpy #$07
                     bne $133e
-                    cmp #$e3
+                    cmp #$e3            ; $e3 is the char for the invisible, I mean SACRED, column
                     bne $1312
-                    ldy #$01
+                    ldy #$01            ; 01 You'd better watched out for the sacred column
                     bne $1303
                     cmp #$5f
                     bne $12ec
@@ -721,7 +723,7 @@ m13B0:              jmp m11ED
                     beq $1453
                     cmp #$db
                     bne $1457
-                    ldy #$09
+                    ldy #$09          ; 09 This room is doomed by the wizard Manilo!
                     bne $1448
                     cmp #$b8
                     beq $145f
@@ -971,7 +973,7 @@ m13B0:              jmp m11ED
 
 ; ==============================================================================
 
-                    lda $3736
+m15D1:              lda $3736
                     cmp #$df
                     bne $15dd
                     lda #$59
@@ -1029,7 +1031,7 @@ m162d:
                     cmp #$d8
                     bne $1653
                     ldy #$05
-                    jmp death    ; 05 Didn't you see the laser beam?
+                    jmp death               ; 05 Didn't you see the laser beam?
 
 ; ==============================================================================
 
@@ -1042,7 +1044,7 @@ m162d:
                     beq $1666
                     cmp #$7e
                     bne $166a
-                    ldy #$0b
+                    ldy #$0b                      ; 0b You were hit by a big rock and died!
                     bne $1650
                     cmp #$9c
                     bcc $1676
@@ -1054,11 +1056,11 @@ m162d:
                     bcc $168a
                     cmp #$eb
                     bcs $1682
-                    ldy #$04
+                    ldy #$04                        ; 04 Boris the spider got you and killed you
                     bne $1650
                     cmp #$f4
                     bcs $168a
-                    ldy #$0e
+                    ldy #$0e                      ; 0e The monster grabbed you you. You are dead!
                     bne $1650
                     dex
                     bne $1647
@@ -1077,7 +1079,7 @@ m162d:
                     ldy $3831
                     cpy #$df
                     beq $16b2
-                    ldy #$0c
+                    ldy #$0c                      ; 0c Belegro killed you!
                     bne $1650
                     ldy #$00
                     sty $14cd
@@ -1098,7 +1100,7 @@ m16BA:
                     lda #$e0
                     sta $369a
                     lda #$ac
-                    sta INVENTORY_CLIPPERS
+                    sta INVENTORY_WIRECUTTER
                     lda #$b8
                     sta $36b3
                     lda #$b0
@@ -1152,8 +1154,8 @@ m16BA:
                     !byte $02
                     !byte $07
                     !byte $04
-                    asl $08
-                    ora ($05,x)
+                    asl zp08
+                    ora (zp05,x)
                     !byte $03
 
                     cpx #$0c
@@ -1363,7 +1365,7 @@ rsav6:              ldx #$00
                     jmp even_more_music           ; jmp $1e60
 
 ; ==============================================================================
-
+; music
 m1E27:              lda #$00
                     sta rsav2+1         ; sta $1dd3
                     sta rsav4+1         ; sta $1ddf
@@ -1372,7 +1374,7 @@ m1E27:              lda #$00
                     jmp music_player           ; jmp $1dd2
 
 ; ==============================================================================
-
+; music
                     
 more_music:
 rsav3:              ldx #$04
@@ -1397,7 +1399,7 @@ writeFF11           sta VOLUME_AND_VOICE_SELECT          ; (de-)select voice 1
 ;
 ;
 ; ==============================================================================
-
+; music
                     ; *= $1E60
 even_more_music:              
                     ldx #$0d
@@ -1422,7 +1424,7 @@ even_more_music:
 ; seems to be the instruments or pitch/octave of the music
 ; ==============================================================================
 
-; part of the music or the music intruments
+; part of the music or the music instruments
 ; $1e88
 m1E88:
 !byte $07, $76, $a9, $06, $59, $7f, $c5, $04, $3b, $54, $83, $ad, $c0, $e3, $02, $1e
@@ -1434,6 +1436,7 @@ m1E88:
 ;
 ;
 ; ==============================================================================
+; music
 
 music_play:
 rsav0:              ldx #$09
@@ -1443,7 +1446,7 @@ rsav0:              ldx #$09
                     rts
 
 ; ==============================================================================
-
+; music
                     ; *= $1EC5
 rsav1:              ldy #$01
                     dey
@@ -1452,7 +1455,7 @@ rsav1:              ldy #$01
                     rts
 
 ; ==============================================================================
-
+; music
                     ; *= $1ECE
 +                   ldy #$0b
                     sty rsav0+1         ; sty $1ebd
@@ -1558,14 +1561,13 @@ m1F15:                                  ; call from init
 ;
 
 
-datenschrott06:
                     *= 0x2800
                     ; this file is huge
                     ; could be a place for the levels
 
                     !source "code/includes/datenschrott06.asm"
 eventuellcode06:
-                    ora ($a9,x)
+                    ora (zp09,x)
                     !byte $6b
                     sta INVENTORY_GLOVES               ; store 6b = gloves in inventory
                     lda #$3d
@@ -1598,8 +1600,8 @@ m2FDF:              ldy $3720
                     sta $3994
                     jmp m12f4           ; jmp $12f4
 +                   jmp m3B4C           ; jmp $3b4c
-                    jsr $39f4
-                    jmp $15d1
+m2FEF:              jsr eventuellcode10 ; jsr $39f4
+                    jmp m15D1           ; jmp $15d1
 
 ; ==============================================================================
 ;
@@ -1612,25 +1614,31 @@ m2FF5:
                     sta zp02
                     rts
 
+
+; $2ffd
+unknown: ; haven't found a call for this code area yet. might be waste
+!byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+!byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+!byte $00
+
 ; ==============================================================================
 ;
-; related to level data
+; I think this is the tileset definition
+; these are the first characters in the charset of each tile.
+; example: rocks start at $0c and span 9 characters in total
 ; ==============================================================================
-
-room_01_tiles:
-
-!byte $df, $df, $df, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-!byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-!byte $00, $df, $0c, $15, $1e, $27, $30, $39, $42, $4b, $54, $5d, $66, $6f, $78, $81
+; $301e
+tileset_definition:
+!byte $df, $0c, $15, $1e, $27, $30, $39, $42, $4b, $54, $5d, $66, $6f, $78, $81
 !byte $8a, $03, $00, $39, $19, $0e, $3d, $7f, $2a, $2a, $1e, $1e, $1e, $3d, $3d, $19
 !byte $2f, $2f, $39
 
 ; ==============================================================================
-; game related. could be building the actual room layout
-;
+; 
+; displays a room based on tiles
 ; ==============================================================================
 
-m3040:              nop
+display_room:       nop
                     jsr m2FF5           ; jsr $2FF5
                     ldx #$08            ; i think this sets the colram (0800)
                     stx zp05
@@ -1652,64 +1660,65 @@ m3050:              ldx #$01
                     sty zpA7
 m3066:              lda (zp09),y
                     tax
-                    lda $302f,x
+                    lda tileset_definition + $11,x
                     sta zp10
-                    lda $301e,x
-                    sta $11
+                    lda tileset_definition,x
+                    sta zp11
                     ldx #$03
-                    ldy #$00
-                    lda zp02
+--                  ldy #$00
+-                   lda zp02
                     sta zp04
-                    lda $11
+                    lda zp11
                     sta (zp02),y
                     lda zp10
                     sta (zp04),y
-                    jsr $30c8
+                    jsr m30C8           ; jsr $30c8
                     cpy #$03
-                    bne $3077
+                    bne -               ; bne $3077
                     lda zp02
                     clc
                     adc #$28
                     sta zp02
-                    bcc $3097
+                    bcc +               ; bcc $3097
                     inc zp03
                     inc zp05
-                    dex
-                    bne $3075
++                   dex
+                    bne --              ; bne $3075
                     inc zpA8
                     inc zpA7
                     lda #$75
                     ldx zpA8
                     cpx #$0d
-                    bcc $30b2
+                    bcc +               ; bcc $30b2
                     ldx zpA7
                     cpx #$66
-                    bcs $30d2
+                    bcs print_X         ; bcs $30d2
                     lda #$00
                     sta zpA8
                     lda #$24
-                    sta $30b9
++                   sta m30B8 + 1      ; sta $30b9
                     lda zp02
                     sec
-                    sbc #$75
+m30B8:              sbc #$75
                     sta zp02
-                    bcs $30c2
+                    bcs +               ; bcs $30c2
                     dec zp03
                     dec zp05
-                    ldy zpA7
++                   ldy zpA7
                     jmp m3066
-                    rts
+                    rts               ; will this ever be used?
 
 ; ==============================================================================
 ;
 ;
 ; ==============================================================================
 
-                    lda $11
+m30C8:
+                    lda zp11
                     cmp #$df
-                    beq $30d0
-                    inc $11
-                    iny
+                    beq +               ;beq $30d0
+                    inc zp11
++                   iny
                     rts
 
 ; ==============================================================================
@@ -2004,9 +2013,10 @@ m3620:
                     lda #$01
                     sta zpA7
                     jmp m3534           ; jmp $3534
-datenschrott09:
+m368A:
+; $368a
                     !source "code/includes/datenschrott09.asm"
-eventuellcode09:
+m383A:
                     lda zpA7
                     clc
                     adc #$01
@@ -2016,26 +2026,28 @@ eventuellcode09:
                     rts
 
 ; ==============================================================================
-;
+; TODO
+; no clue yet. level data has already been drawn when this is called
 ;
 ; ==============================================================================
+
 m3846:
-                    lda #$36                ; datenschrott09
+                    lda #>m368A                ; datenschrott09
                     sta zpA8
-                    lda #$8a
+                    lda #<m368A
                     sta zpA7
                     ldy #$00
 m3850:              lda (zpA7),y
                     cmp #$ff
-                    beq $385c
-                    jsr eventuellcode09
+                    beq +                       ; beq $385c
+-                   jsr m383A
                     jmp m3850
-                    jsr eventuellcode09
++                   jsr m383A
                     lda (zpA7),y
                     cmp #$ff
-                    beq $38df
+                    beq m38DF               ; beq $38df
                     cmp m3050 + 1
-                    bne $3856
+                    bne -                   ; bne $3856
                     lda #>COLRAM        ; lda #$08
                     sta zp05
                     lda #>SCREEN       ; lda #$0c
@@ -2043,7 +2055,7 @@ m3850:              lda (zpA7),y
                     lda #$00
                     sta zp02
                     sta zp04
-                    jsr eventuellcode09
+                    jsr m383A
                     lda (zpA7),y
                     cmp #$fe
                     beq $388c
@@ -2057,7 +2069,7 @@ m3850:              lda (zpA7),y
                     lda (zpA7),y
                     cmp #$fb
                     bne $389f
-                    jsr eventuellcode09
+                    jsr m383A
                     lda (zpA7),y
                     sta zp09
                     bne $38bf
@@ -2069,7 +2081,7 @@ m3850:              lda (zpA7),y
                     jmp $399f                       ; jumps into datenschrott 11, which is 1 byte shifted
                     cmp #$fa
                     bne $38bf
-                    jsr eventuellcode09
+                    jsr m383A
                     lda (zpA7),y
                     sta zp0A
                     lda zp09
@@ -2078,11 +2090,11 @@ m3850:              lda (zpA7),y
                     sta (zp02),y
                     cmp #$fd
                     bne $38cc
-                    jsr eventuellcode09
+                    jsr m383A
                     lda (zpA7),y
                     sta zp02
                     sta zp04
-                    jsr eventuellcode09
+                    jsr m383A
                     lda (zpA7),y
                     cmp #$ff
                     bne $387d
@@ -2098,7 +2110,7 @@ m3850:              lda (zpA7),y
 ;
 ; ==============================================================================
 
-                    lda m3050 + 1
+m38DF:              lda m3050 + 1
                     cmp #$02
                     bne $3919
                     lda #$0d
@@ -2150,7 +2162,7 @@ m3850:              lda (zpA7),y
 ;
 ;
 ; ==============================================================================
-
+m392F:
                     cmp #$06
                     bne +
                     lda #$f6
@@ -2257,7 +2269,7 @@ m3A17:
                     sta m35A3 + 1
                     lda $39ab,y
                     sta m35A3 + 3
-m3A2D:              jsr m3040           ; jsr $3040
+m3A2D:              jsr display_room           ; jsr $3040
                     jmp m3846
 
 ; ==============================================================================
@@ -2450,7 +2462,7 @@ set_start_screen:
                     jsr m3A2D;                  jsr $3a2d
 
 m3B4C:
-                    jsr $2fef
+                    jsr m2FEF                   ; jsr $2fef
                     ldy #$30
                     jsr wait
                     jsr $2fcb
@@ -2510,6 +2522,7 @@ death_messages:
 ; Display the death message
 ; End of game and return to start screen
 ; ==============================================================================
+
 death:
                     lda #>death_messages
                     sta zpA8
@@ -2521,18 +2534,18 @@ death:
                     adc #$32
                     sta zpA7
                     bcc +            ; bcc $3ec1
-                    inc $a8
+                    inc zpA8
 +                   dey
                     bne -           ; bne $3eb8
 ++                  lda #$0c
-                    sta $03
-                    sty $02
+                    sta zp03
+                    sty zp02
                     ldx #$04
                     lda #$20
--                   sta ($02),y
+-                   sta (zp02),y
                     iny
                     bne -               ; bne $3ece
-                    inc $03
+                    inc zp03
                     dex
                     bne -               ; bne $3ece
                     jsr set_charset_and_screen_for_title

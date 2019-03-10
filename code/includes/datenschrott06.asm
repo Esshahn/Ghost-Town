@@ -1,6 +1,4 @@
-; ==============================================================================
-    
-charset0_end:
+datenschrott06:
                     ora (0x00,x)
                     !byte 0x00
                     !byte 0x00
@@ -1733,4 +1731,4 @@ charset0_end:
                     !byte 0x00
                     !byte 0x00
                     !byte 0x00
-                    !byte 0x00
+datenschrott06_ende:!byte 0x00
