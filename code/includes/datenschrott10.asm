@@ -1,6 +1,5 @@
 ; definitiv kein Schrott
 ; Aber z.T. um ein Byte geshifted
-tp
                     rts
                     !byte 0xff
                     cmp #0xdf

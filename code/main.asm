@@ -35,7 +35,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ; 
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0
+START_ROOM          = 18             ; default 0
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 
@@ -1093,49 +1093,49 @@ m16A7:
 ; maybe not. not all characters for e.g. the wirecutter is put back
 ; ==============================================================================
 m16BA:
-                    lda #$df
+                    lda #$a5                        ; $a5 = the door of the shed where the ladder is
                     sta $36c2
                     lda #$a9                        ; a9 = NO gloves
-                    sta INVENTORY_GLOVES           ; inventory gloves
+                    sta INVENTORY_GLOVES            ; inventory gloves
                     lda #$79
                     sta $3690
-                    lda #$e0
+                    lda #$e0                        ; empty char
                     sta $369a
-                    lda #$ac
+                    lda #$ac                        ; wirecutter
                     sta INVENTORY_WIRECUTTER
-                    lda #$b8
+                    lda #$b8                        ; part of the bottle - hmmm...
                     sta $36b3
-                    lda #$b0
+                    lda #$b0                        ; the ladder
                     sta $36d7
-                    lda #$b5
+                    lda #$b5                        ; more ladder
                     sta $36e2
-                    lda #$5e
+                    lda #$5e                        ; seems to be water?
                     sta $36fe
-                    lda #$c6
+                    lda #$c6                        ; boots in the whatever box
                     sta $370e
-                    lda #$c0
+                    lda #$c0                        ; not sure
                     sta $3720
-                    lda #$cc
+                    lda #$cc                        ; power outlet
                     sta $3736
-                    lda #$d0
+                    lda #$d0                        ; the hammer
                     sta $3745
-                    lda #$d2
+                    lda #$d2                        ; unsure
                     sta $3752
-                    lda #$d6
+                    lda #$d6                        ; unsure
                     sta $375f
-                    lda #$00
+                    lda #$00                        ; door
                     sta $37b6
-                    lda #$dd
+                    lda #$dd                        ; unsure
                     sta $3831
-                    lda #$01
+                    lda #$01                        ; door
                     sta $394b
-                    lda #$01
+                    lda #$01                        ; door
                     sta $3994
-                    lda #$f5
+                    lda #$f5                        ; fence
                     sta $3901
-                    lda #$00
+                    lda #$00                        ; door
                     sta $12a4
-                    lda #$01
+                    lda #$01                        ; door
                     sta $15fd
                     lda #$1e
                     sta $1603
@@ -1564,10 +1564,18 @@ m1F15:                                  ; call from init
 
 
                     *= 0x2800
-                    ; this file is huge
-                    ; could be a place for the levels
 
-                    !source "code/includes/datenschrott06.asm"
+; ==============================================================================
+;
+; LEVEL DATA
+; Based on tiles
+; ==============================================================================
+
+                    !source "code/includes/levels.asm"
+
+!byte $00, $00, $00, $00, $00, $00, $00         
+
+;$2fbf
 eventuellcode06:
                     ora (zp09,x)
                     !byte $6b
@@ -2017,7 +2025,13 @@ m3620:
                     jmp m3534           ; jmp $3534
 m368A:
 ; $368a
-                    !source "code/includes/datenschrott09.asm"
+; ==============================================================================
+; 
+; This area seems to be responsible for items placement
+;
+; ==============================================================================
+                    !source "code/includes/items.asm"
+                    
 m383A:
                     lda zpA7
                     clc
@@ -2235,6 +2249,9 @@ m392F:
 
 datenschrott10:
                     !source "code/includes/datenschrott10.asm"
+
+; $39F4
+
 eventuellcode10:
                     jsr m360E           ; jsr $360e
                     ldx #$09
