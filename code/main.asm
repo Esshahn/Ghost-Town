@@ -57,6 +57,7 @@ zp10                = $10
 zp11                = $11
 zpA7                = $A7
 zpA8                = $A8
+zpA9                = $A9
 ; ==============================================================================
 code_start          = $3AB3
 SCREEN              = $0C00            ; PLUS/4 default SCREEN
@@ -1577,7 +1578,7 @@ m1F15:                                  ; call from init
 
 ;$2fbf
 eventuellcode06:
-                    ora (zp09,x)
+                    ora (zpA9,x)
                     !byte $6b
                     sta INVENTORY_GLOVES               ; store 6b = gloves in inventory
                     lda #$3d
