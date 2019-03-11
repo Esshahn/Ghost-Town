@@ -1636,7 +1636,7 @@ unknown: ; haven't found a call for this code area yet. might be waste
 
 ; ==============================================================================
 ;
-; I think this is the tileset definition
+; tileset definition
 ; these are the first characters in the charset of each tile.
 ; example: rocks start at $0c and span 9 characters in total
 ; ==============================================================================
