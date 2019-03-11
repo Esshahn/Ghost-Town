@@ -35,7 +35,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ; 
 ; ==============================================================================
 
-START_ROOM          = 18             ; default 0
+START_ROOM          = 0             ; default 0
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 
