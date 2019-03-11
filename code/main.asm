@@ -391,7 +391,7 @@ m11ED:              inx
                     lda #$df
                     cmp $36d7
                     bne -               ; bne $11f2
-                    jsr $2fc0
+                    jsr m2FC0
                     bne $11da
 +                   cpy #$01
                     bne $124b
@@ -1574,12 +1574,14 @@ m1F15:                                  ; call from init
 
                     !source "code/includes/levels.asm"
 
-!byte $00, $00, $00, $00, $00, $00, $00         
+!byte $00, $00, $00, $00, $00, $00, $00
 
 ;$2fbf
-eventuellcode06:
-                    ora (zpA9,x)
-                    !byte $6b
+!byte $01        
+
+; $2fc0
+m2FC0:
+                    lda #$6b
                     sta INVENTORY_GLOVES               ; store 6b = gloves in inventory
                     lda #$3d
                     sta $3690
