@@ -367,18 +367,19 @@ m11CC:
                     nop
                     nop
                     nop
-check_death         jsr m3846
+check_death:
+                    jsr m3846
                     jmp m3B4C           ; jmp $3b4c
 
 ; ==============================================================================
 
-                    ldx #$00
+m11E0:              ldx #$00
 -                   lda $033c,x
                     cmp #$1e
                     bcc m11ED           ; bcc $11ed
                     cmp #$df
                     bne ++              ; bne $11f5
-m11ED               inx
+m11ED:              inx
                     cpx #$09
                     bne -               ; bne $11e2
 -                   jmp m3B4C           ; jmp $3b4c
@@ -752,7 +753,7 @@ m13B0:              jmp m11ED
 
 ; ==============================================================================
 
-                    ldy m3050 + 1
+m147E:              ldy m3050 + 1
                     cpy #$0e
                     bne $148a
                     ldy #$20
@@ -778,7 +779,7 @@ m13B0:              jmp m11ED
                     bne $14ae
                     lda #$01
                     dex
-                    jmp $14b9
+                    jmp +                   ; jmp $14b9
 
 ; ==============================================================================
 
@@ -786,7 +787,7 @@ m13B0:              jmp m11ED
                     bne $14b8
                     lda #$00
                     inx
-                    stx $1495
++                   stx $1495
                     sta $14a5
                     lda #$01
                     sta zpA7
@@ -799,7 +800,7 @@ m13B0:              jmp m11ED
                     bne $14d3
                     lda #$01
                     beq $14e4
-                    jmp $15c1
+                    jmp m15C1                   ;jmp $15c1
                     lda #$0f
                     sta $3625
                     sta $3627
@@ -854,10 +855,10 @@ m13B0:              jmp m11ED
                     cpy #$09
                     bne $1522
                     nop
-                    jmp $15ad
+                    jmp m15AD               ; jmp $15ad
 
 ; ==============================================================================
-
+m152B:
                     lda #$0c
                     sta zp03
                     lda #$0f
@@ -939,7 +940,7 @@ m13B0:              jmp m11ED
 ;
 ; ==============================================================================
 
-                    ldx #$01
+m15AD:              ldx #$01
                     cpx #$01
                     bne $15b7
                     dec $15ae
@@ -953,11 +954,11 @@ m13B0:              jmp m11ED
                     inc $15ae
                     lda #$08
                     sta zp05
-                    jmp $152b
+                    jmp m152B           ; jmp $152b
 
 ; ==============================================================================
 
-                    lda #$00
+m15C1:              lda #$00
                     cmp #$00
                     bne $15cb
                     inc $15c2
@@ -1012,7 +1013,7 @@ m15D1:              lda $3736
                     sta zpA7
                     ldx $1603
                     jsr m3608
-                    jmp $147e
+                    jmp m147E                   ; jmp $147e
 
 ; ==============================================================================
 m162d:
@@ -1050,8 +1051,8 @@ m162d:
                     bcc $1676
                     cmp #$a5
                     bcs $1676
-                    jmp $16a7
-                    nop
+                    jmp m16A7                 ; jmp $16a7
+m1675:              nop
                     cmp #$e4
                     bcc $168a
                     cmp #$eb
@@ -1075,7 +1076,8 @@ m162d:
                     bcc $167e
                     dex
                     bne $168f
-                    jmp $11e0
+                    jmp m11E0                     ; jmp $11e0
+m16A7:
                     ldy $3831
                     cpy #$df
                     beq $16b2
@@ -1083,7 +1085,7 @@ m162d:
                     bne $1650
                     ldy #$00
                     sty $14cd
-                    jmp $1675
+                    jmp m1675                       ; jmp $1675
 
 ; ==============================================================================
 ; this might be the inventory/ world reset
@@ -1091,7 +1093,7 @@ m162d:
 ; maybe not. not all characters for e.g. the wirecutter is put back
 ; ==============================================================================
 m16BA:
-                    lda #$a5
+                    lda #$df
                     sta $36c2
                     lda #$a9                        ; a9 = NO gloves
                     sta INVENTORY_GLOVES           ; inventory gloves
@@ -2078,7 +2080,7 @@ m3850:              lda (zpA7),y
                     cmp #$fc
                     bne $38ac
                     lda zp0A
-                    jmp $399f                       ; jumps into datenschrott 11, which is 1 byte shifted
+                    jmp $399f                       
                     cmp #$fa
                     bne $38bf
                     jsr m383A
