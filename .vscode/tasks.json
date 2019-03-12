@@ -15,7 +15,10 @@
             },
             "problemMatcher": {
                 "owner": "acme",
-                "fileLocation": ["relative", "${workspaceFolder}"],
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
                 "pattern": {
                     "regexp": "^(Error - File\\s+(.*), line (\\d+) (\\(Zone .*\\))?:\\s+(.*))$",
                     "file": 2,
@@ -24,12 +27,11 @@
                 }
             }
         },
-
         {
             "label": "build -> C16 -> VICE",
             "type": "shell",
             "osx": {
-                "command": "acme -v4 -f cbm -l build/labels -o build/main.prg code/main.asm && exomizer sfx 0x3ab3 -n -t 16 -o build/main.prg build/main.prg && cat build/labels build/monitor_commands > build/vicelabels && /Applications/Vice/xplus4.app/Contents/MacOS/xplus4 -moncommands build/vicelabels build/main.prg 2> /dev/null",
+                "command": "acme -v4 -f cbm -l ../build/labels -o ../build/main.prg main.asm && exomizer sfx 0x3ab3 -n -t 4 -o ../build/main.prg ../build/main.prg && cat ../build/labels ../build/monitor_commands > ../build/vicelabels && /Applications/Vice/xplus4.app/Contents/MacOS/xplus4 -moncommands ../build/vicelabels ../build/main.prg 2> /dev/null",
             },
             "group": {
                 "kind": "build",
@@ -37,6 +39,9 @@
             },
             "presentation": {
                 "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/plus4/code"
             },
             "problemMatcher": {
                 "owner": "acme",
