@@ -1,0 +1,80 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build -> C64 -> VICE",
+            "type": "shell",
+            "osx": {
+                "command": "acme -f cbm -l build/labels -o build/main.prg code/main.asm && exomizer sfx 0x3ab3 -n -t 64 -o build/main.prg build/main.prg && /Applications/Vice/x64.app/Contents/MacOS/x64 -moncommands build/labels build/main.prg 2> /dev/null",
+            },
+            "group": "build",
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "acme",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(Error - File\\s+(.*), line (\\d+) (\\(Zone .*\\))?:\\s+(.*))$",
+                    "file": 2,
+                    "location": 3,
+                    "message": 1
+                }
+            }
+        },
+
+        {
+            "label": "build -> C16 -> VICE",
+            "type": "shell",
+            "osx": {
+                "command": "acme -v4 -f cbm -l build/labels -o build/main.prg code/main.asm && exomizer sfx 0x3ab3 -n -t 16 -o build/main.prg build/main.prg && cat build/labels build/monitor_commands > build/vicelabels && /Applications/Vice/xplus4.app/Contents/MacOS/xplus4 -moncommands build/vicelabels build/main.prg 2> /dev/null",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "acme",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(Error - File\\s+(.*), line (\\d+) (\\(Zone .*\\))?:\\s+(.*))$",
+                    "file": 2,
+                    "location": 3,
+                    "message": 1
+                }
+            }
+        },
+        {
+            "label": "build -> C128 -> VICE",
+            "type": "shell",
+            "osx": {
+                "command": "acme -f cbm -l build/labels -o build/main.prg code/main.asm && exomizer sfx 0x3ab3 -n -t 128 -o build/main.prg build/main.prg && /Applications/Vice/x128.app/Contents/MacOS/x128 -moncommands build/labels build/main.prg 2> /dev/null",
+            },
+            "group": "build",
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "acme",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": {
+                    "regexp": "^(Error - File\\s+(.*), line (\\d+) (\\(Zone .*\\))?:\\s+(.*))$",
+                    "file": 2,
+                    "location": 3,
+                    "message": 1
+                }
+            }
+        }
+    ]
+}
