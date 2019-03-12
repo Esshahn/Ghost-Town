@@ -1,5 +1,5 @@
 #!/bin/sh
-OUTFILE="../bin/testscreen.prg"
+OUTFILE="../build/testscreen.prg"
 
 rm -f "$OUTFILE"
 

@@ -15,7 +15,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
-    MULTICOLOR_1    = $db 
+    MULTICOLOR_1    = $db
     MULTICOLOR_2    = $29
     BORDER_COLOR_VALUE = $12
 
@@ -31,8 +31,8 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 ; ==============================================================================
 ; cheats
-; 
-; 
+;
+;
 ; ==============================================================================
 
 START_ROOM          = 0             ; default 0
@@ -74,7 +74,7 @@ VOICE2              = $FF10
 VOLUME_AND_VOICE_SELECT = $FF11
 VOICE1              = $FF12 ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
 BG_COLOR            = $FF15
-COLOR_1             = $FF16 
+COLOR_1             = $FF16
 COLOR_2             = $FF17
 COLOR_3             = $FF18
 BORDER_COLOR        = $FF19
@@ -97,21 +97,21 @@ INVENTORY_HAMMER    = $3745             ; d0 = hammer not picked up, df = hammer
                     !cpu 6502
 
                     *= CHARSET
-                    !if EXTENDED {                    
-                        !bin "code/includes/charset-new-charset.bin"
+                    !if EXTENDED {
+                        !bin "includes/charset-new-charset.bin"
                     }else{
-                        !bin "code/includes/charset.bin" 
+                        !bin "includes/charset.bin"
                     }
 
                     *= screen_win_src
-                    !bin "code/includes/screen_win.scr"
+                    !bin "includes/screen_win.scr"
 
                     *= screen_start_src
-                    !bin "code/includes/screen_start.scr"
+                    !bin "includes/screen_start.scr"
 
                     !if KANNDOCHNICHWEG=1 {
                         *= $0f90
-datenschrott01:         !source "code/includes/trash/datenschrott01.asm"
+datenschrott01:         !source "includes/trash/datenschrott01.asm"
                     }
 ;
 ;
@@ -136,7 +136,7 @@ m1000:
 ; ==============================================================================
 
 display_hint_message:
-        
+
                     lda #>hint_messages
                     sta zpA8
                     lda #<hint_messages
@@ -160,10 +160,10 @@ m1009:              cpy #$00
                     rts
                     !byte $00
 ; ==============================================================================
-                    sta BORDER_COLOR          ; ?!? womöglich unbenutzt ?!? 
+                    sta BORDER_COLOR          ; ?!? womöglich unbenutzt ?!?
                     rts
 ; ==============================================================================
-m1031:              
+m1031:
                     jsr m11CC           ; jsr $11cc
                     cpy #$03
                     bne m10B1           ; bne $10b1
@@ -278,7 +278,7 @@ item_pickup_message:              ; item pickup messages
 !scr " There is a key in the bottle !         "
 !scr "   There is a key in the coffin !       "
 !scr " There is a breathing tube !            "
-                    
+
 
 ;
 ;
@@ -810,7 +810,7 @@ m147E:              ldy m3050 + 1
                     dec $2fbf
                     beq $14e5
                     rts
-    
+
 ; ==============================================================================
 ;
 ;
@@ -1250,7 +1250,7 @@ intro_text:
 !scr "your yourney through 19 amazing hires-  "
 !scr "graphics-rooms! Enjoy the quest and play"
 !scr "it again and again and again ...      > "
-                    
+
 
 display_intro_text:
 
@@ -1314,10 +1314,10 @@ start_intro:        sta KEYBOARD_LATCH
 ;
 ; music data
 ; ==============================================================================
-; * = $1d11                    
-music:                   
-                    !source "code/includes/music.asm"
-                   
+; * = $1d11
+music:
+                    !source "includes/music.asm"
+
 ; ==============================================================================
                     ; *= $1DD2
 music_player:                                  ; Teil von music_play
@@ -1378,7 +1378,7 @@ m1E27:              lda #$00
 
 ; ==============================================================================
 ; music
-                    
+
 more_music:
 rsav3:              ldx #$04
                     cpx #$1c
@@ -1404,7 +1404,7 @@ writeFF11           sta VOLUME_AND_VOICE_SELECT          ; (de-)select voice 1
 ; ==============================================================================
 ; music
                     ; *= $1E60
-even_more_music:              
+even_more_music:
                     ldx #$0d
                     cpx #$1c
                     bcc +
@@ -1572,12 +1572,12 @@ m1F15:                                  ; call from init
 ; Based on tiles
 ; ==============================================================================
 
-                    !source "code/includes/levels.asm"
+                    !source "includes/levels.asm"
 
 !byte $00, $00, $00, $00, $00, $00, $00
 
 ;$2fbf
-!byte $01        
+!byte $01
 
 ; $2fc0
 m2FC0:
@@ -1647,7 +1647,7 @@ tileset_definition:
 !byte $2f, $2f, $39
 
 ; ==============================================================================
-; 
+;
 ; displays a room based on tiles
 ; ==============================================================================
 
@@ -1879,7 +1879,7 @@ m3534:
                     ldx zp09
                     sta $033c,x
                     inc zp09
-                    ldx zp10                
+                    ldx zp10
                     inc zpA8
                     iny
                     cpy #$03
@@ -1969,7 +1969,7 @@ m360E:
                     bne -               ; bne $3611
                     lda #$00
                     sta zpA7
--                   jmp m3A6D   
+-                   jmp m3A6D
                     bne -               ; bne $361a
                     rts
 
@@ -2029,12 +2029,12 @@ m3620:
 m368A:
 ; $368a
 ; ==============================================================================
-; 
+;
 ; This area seems to be responsible for items placement
 ;
 ; ==============================================================================
-                    !source "code/includes/items.asm"
-                    
+                    !source "includes/items.asm"
+
 m383A:
                     lda zpA7
                     clc
@@ -2097,7 +2097,7 @@ m3850:              lda (zpA7),y
                     cmp #$fc
                     bne $38ac
                     lda zp0A
-                    jmp $399f                       
+                    jmp $399f
                     cmp #$fa
                     bne $38bf
                     jsr m383A
@@ -2251,7 +2251,7 @@ m392F:
 ; ==============================================================================
 
 datenschrott10:
-                    !source "code/includes/datenschrott10.asm"
+                    !source "includes/datenschrott10.asm"
 
 ; $39F4
 
@@ -2307,7 +2307,7 @@ m3A2D:              jsr display_room           ; jsr $3040
 
 m3A6D:
 
-                    jsr m3602           
+                    jsr m3602
                     jsr m359B
                     cli
                     rts
@@ -2315,7 +2315,7 @@ m3A6D:
 
 ; ==============================================================================
 
-wait:               
+wait:
                     dex
                     bne wait
                     dey
@@ -2330,7 +2330,7 @@ fake:               rts
 set_game_basics:
                     lda VOICE1           ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
                     and #$fb           ; clear bit 2
-                    sta VOICE1          ; => get data from RAM  
+                    sta VOICE1          ; => get data from RAM
                     lda #$21
                     sta $ff13          ; bit 0 : Status of Clock   ( 1 )
                                         ; bit 1 : Single clock set  ( 0 )
@@ -2342,12 +2342,12 @@ set_game_basics:
 
                     ; set the main colors for the game
 
-                   
-                    lda #MULTICOLOR_1            ; original: #$db  
+
+                    lda #MULTICOLOR_1            ; original: #$db
                     sta COLOR_1           ; char color 1
                     lda #MULTICOLOR_2            ; original: #$29
                     sta COLOR_2           ; char color 2
-                    
+
                     rts
 
 ; ==============================================================================
@@ -2387,11 +2387,11 @@ init:
                     lda KEYBOARD_LATCH
                     and #$10            ; $10 = space
                     bne -               ; bne $3ac8 / wait for keypress ?
-                    
+
                     lda #$ff
                     jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
-                    
-                    
+
+
                     ; TODO: unclear what the code below does
                     ; i think it fills the level data with "DF", which is a blank character
                     lda #>SCREEN       ; lda #$0c
@@ -2409,11 +2409,11 @@ init:
                     bne -               ; bne $3ae5
 
                     jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
-                    
+
                     ; set background color
                     lda #$00
                     sta BG_COLOR
-                    
+
                     ; border color. default is a dark red
                     lda #BORDER_COLOR_VALUE
                     sta BORDER_COLOR
@@ -2441,9 +2441,9 @@ draw_empty_column_and_row:
                     ldy #$00
 -                   lda #$5d
                     sta (zp02),y
-                    
+
                     lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank column 40
-                   
+
                     sta (zp04),y
                     tya
                     clc
@@ -2459,11 +2459,11 @@ draw_empty_column_and_row:
                     ; fills the bottom line with blank colored space (making it invisible)
 -                   lda #$5d
                     sta SCREEN + $3c0,x  ;sta $0fc0,x ; last row of the screen
-                    
+
                     lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank row 25
-                    
+
                     sta $0bc0,x             ; writes the line into the color ram
-                    
+
                     inx
                     cpx #$28
                     bne -               ; bne $3b2a
@@ -2488,7 +2488,7 @@ m3B4C:
                     ldy #$30
                     jsr wait
                     jsr $2fcb
-                    jmp m162d           
+                    jmp m162d
 ; ==============================================================================
 
 death_messages:
@@ -2538,7 +2538,7 @@ death_messages:
 !scr "ounded by      the bush !               "
 !scr "You are trapped in       wire-nettings !"
 !scr "          "
-                    
+
 ; ==============================================================================
 ;
 ; Display the death message
