@@ -4,7 +4,7 @@
 
 SILENT_MODE         = 0
 KANNDOCHNICHWEG     = 0
-
+; test
 ; ==============================================================================
 ; thse settings change the appearance of the game
 ; EXTENDED = 0 -> original version
