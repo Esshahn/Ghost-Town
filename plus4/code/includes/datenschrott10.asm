@@ -1,13 +1,19 @@
 ; definitiv kein Schrott
 ; Aber z.T. um ein Byte geshifted
-tp
+
                     rts
-                    !byte $ff
+                    
+!byte $ff
+
+m399f:
                     cmp #$df
                     beq $39a5
                     inc $0a
                     lda ($a7),y
                     jmp $38b7
+
+; ==============================================================================
+
                     asl $03
                     !byte $12
                     and ($03,x)

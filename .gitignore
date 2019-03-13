@@ -1,4 +1,5 @@
 .DS_Store
-build/labels
-build/vicelabels
+plus4/build/labels
+plus4/build/vicelabels
+plus4/labels.asm
 *.prg

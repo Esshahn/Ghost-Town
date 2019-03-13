@@ -1092,18 +1092,19 @@ m16A7:
 ; this might be the inventory/ world reset
 ; puts all items into the level data again
 ; maybe not. not all characters for e.g. the wirecutter is put back
+; addresses are mostly within items.asm address space
 ; ==============================================================================
 m16BA:
                     lda #$a5                        ; $a5 = the door of the shed where the ladder is
                     sta $36c2
                     lda #$a9                        ; a9 = NO gloves
-                    sta INVENTORY_GLOVES            ; inventory gloves
+                    sta $3692                       ; inventory gloves
                     lda #$79
                     sta $3690
                     lda #$e0                        ; empty char
                     sta $369a
                     lda #$ac                        ; wirecutter
-                    sta INVENTORY_WIRECUTTER
+                    sta $36a3
                     lda #$b8                        ; part of the bottle - hmmm...
                     sta $36b3
                     lda #$b0                        ; the ladder
@@ -1564,14 +1565,15 @@ m1F15:                                  ; call from init
 ;
 
 
-                    *= 0x2800
+                   
 
 ; ==============================================================================
 ;
 ; LEVEL DATA
 ; Based on tiles
 ; ==============================================================================
-
+                     *= $2800
+level_data:
                     !source "includes/levels.asm"
 
 !byte $00, $00, $00, $00, $00, $00, $00
@@ -1657,12 +1659,12 @@ display_room:       nop
                     stx zp05
                     ldx #$0c            ; and this the screen (0c00)
                     stx zp03
-                    ldx #$28            ; when changed shifts level data
+                    ldx #$28            ; when changed shifts level data -> $2800 = start of level data
                     stx zp0A
 m3050:              ldx #$01
                     beq ++               ; beq $305e
 -                   clc
-                    adc #$68
+                    adc #$68            ; $68 = 104 = 13*8 (size of a room)
                     bcc +               ; bcc $305b
                     inc zp0A
 +                   dex
@@ -2026,10 +2028,10 @@ m3620:
                     lda #$01
                     sta zpA7
                     jmp m3534           ; jmp $3534
-m368A:
+
 ; $368a
 ; ==============================================================================
-;
+; itemd
 ; This area seems to be responsible for items placement
 ;
 ; ==============================================================================
@@ -2040,20 +2042,20 @@ m383A:
                     clc
                     adc #$01
                     sta zpA7
-                    bcc $3845
+                    bcc +                       ; bcc $3845
                     inc zpA8
-                    rts
++                   rts
 
 ; ==============================================================================
 ; TODO
 ; no clue yet. level data has already been drawn when this is called
-;
+; probably placing the items on the screen
 ; ==============================================================================
 
 m3846:
-                    lda #>m368A                ; datenschrott09
+                    lda #>items                ; items
                     sta zpA8
-                    lda #<m368A
+                    lda #<items
                     sta zpA7
                     ldy #$00
 m3850:              lda (zpA7),y
@@ -2076,49 +2078,49 @@ m3850:              lda (zpA7),y
                     sta zp04
                     jsr m383A
                     lda (zpA7),y
-                    cmp #$fe
-                    beq $388c
+-                   cmp #$fe
+                    beq +                   ; beq $388c
                     cmp #$f9
-                    bne $3892
+                    bne +++                  ; bne $3892
                     lda zp02
-                    jsr $38d7
-                    bcc $3890
-                    inc zp03
+                    jsr m38D7
+                    bcc ++                   ; bcc $3890
++                   inc zp03
                     inc zp05
-                    lda (zpA7),y
-                    cmp #$fb
-                    bne $389f
+++                  lda (zpA7),y
++++                 cmp #$fb
+                    bne +                   ; bne $389f
                     jsr m383A
                     lda (zpA7),y
                     sta zp09
-                    bne $38bf
-                    cmp #$f8
-                    beq $38b7
+                    bne ++                  ; bne $38bf
++                   cmp #$f8
+                    beq +                   ; beq $38b7
                     cmp #$fc
-                    bne $38ac
+                    bne +++                 ; bne $38ac
                     lda zp0A
-                    jmp $399f
-                    cmp #$fa
-                    bne $38bf
+                    jmp m399f
++++                 cmp #$fa
+                    bne ++                  ; bne $38bf
                     jsr m383A
                     lda (zpA7),y
                     sta zp0A
-                    lda zp09
++                   lda zp09
                     sta (zp04),y
                     lda zp0A
                     sta (zp02),y
-                    cmp #$fd
-                    bne $38cc
+++                  cmp #$fd
+                    bne +                   ; bne $38cc
                     jsr m383A
                     lda (zpA7),y
                     sta zp02
                     sta zp04
-                    jsr m383A
++                   jsr m383A
                     lda (zpA7),y
                     cmp #$ff
-                    bne $387d
-                    beq $38df
-                    clc
+                    bne -                   ; bne $387d
+                    beq m38DF               ; beq $38df
+m38D7:              clc
                     adc #$01
                     sta zp02
                     sta zp04
