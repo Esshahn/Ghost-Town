@@ -3,7 +3,6 @@
 ; ==============================================================================
 
 SILENT_MODE         = 0
-KANNDOCHNICHWEG     = 0
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
@@ -109,12 +108,7 @@ INVENTORY_HAMMER    = $3745             ; d0 = hammer not picked up, df = hammer
                     *= screen_start_src
                     !bin "includes/screen_start.scr"
 
-                    !if KANNDOCHNICHWEG=1 {
-                        *= $0f90
-datenschrott01:         !source "includes/trash/datenschrott01.asm"
-                    }
-;
-;
+
 ;
 ;                                                   ***    ***
 ;                                                   ****  ****      ************
@@ -1594,7 +1588,7 @@ m2FC0:
 ;
 ; ==============================================================================
 
-                    lda m3050 + 1
+m2fCB:              lda m3050 + 1
                     cmp #$04
                     bne $2fca
                     lda #$03
@@ -1615,7 +1609,7 @@ m2FDF:              ldy $3720
                     sta $3994
                     jmp m12f4           ; jmp $12f4
 +                   jmp m3B4C           ; jmp $3b4c
-m2FEF:              jsr eventuellcode10 ; jsr $39f4
+m2FEF:              jsr m39F4 ; jsr $39f4
                     jmp m15D1           ; jmp $15d1
 
 ; ==============================================================================
@@ -2099,7 +2093,7 @@ m3850:              lda (zpA7),y
                     cmp #$fc
                     bne +++                 ; bne $38ac
                     lda zp0A
-                    jmp m399f
+                    jmp m399F
 +++                 cmp #$fa
                     bne ++                  ; bne $38bf
                     jsr m383A
@@ -2170,11 +2164,11 @@ m38DF:              lda m3050 + 1
                     cmp #$07
                     bne $392f
                     ldx #$17
-                    lda $0d68,x
+                    lda SCREEN + $168,x     ; lda $0d68,x
                     cmp #$df
                     bne $392b
                     lda #$e3
-                    sta $0d68,x
+                    sta SCREEN + $168,x     ; sta $0d68,x
                     dex
                     bne $391f
                     rts
@@ -2187,10 +2181,10 @@ m392F:
                     cmp #$06
                     bne +
                     lda #$f6
-                    sta $0c9c
-                    sta $0c9c
-                    sta $0e7c
-                    sta $0f6c
+                    sta SCREEN + $9c        ; sta $0c9c
+                    sta SCREEN + $9c        ;sta $0c9c    (yes, it's really 2 times the same sta)
+                    sta SCREEN + $27c       ; sta $0e7c
+                    sta SCREEN + $36c       ; sta $0f6c
                     rts
 
 ; ==============================================================================
@@ -2209,28 +2203,28 @@ m392F:
 +                   lda #$01        ; there seems to happen some self mod here
                     cmp #$01
                     bne +           ; bne $395b
-                    stx $0c7a
+                    stx SCREEN+ $7a ; stx $0c7a
 +                   cmp #$02
                     bne +           ; bne $3962
-                    stx $0d6a
+                    stx SCREEN + $16a   ;stx $0d6a
 +                   cmp #$03
                     bne +           ; bne $3969
-                    stx $0e5a
+                    stx SCREEN + $25a       ;stx $0e5a
 +                   cmp #$04
                     bne +           ; bne $3970
-                    stx $0f4a
+                    stx SCREEN + $34a   ; stx $0f4a
 +                   cmp #$05
                     bne +           ; bne $3977
-                    sty $0c9c
+                    sty SCREEN + $9c    ; sty $0c9c
 +                   cmp #$06
                     bne +           ; bne $397e
-                    sty $0d8c
+                    sty SCREEN + $18c   ; sty $0d8c
 +                   cmp #$07
                     bne +           ; bne $3985
-                    sty $0e7c
+                    sty SCREEN + $27c ; sty $0e7c
 +                   cmp #$08
                     bne +           ; bne $398c
-                    sty $0f6c
+                    sty SCREEN + $36c   ; sty $0f6c
 +                   rts
 
 ; ==============================================================================
@@ -2239,12 +2233,12 @@ m392F:
 ; ==============================================================================
 
 ++                  cmp #$05
-                    bne datenschrott10          ; todo: understand why it jumps to an RTS
+                    bne m399D          ; todo: understand why it jumps to an RTS
                     lda #$fd
                     ldx #$01
                     bne +               ; bne $3999
                     lda #$7a
-+                   sta $0ed2
++                   sta SCREEN + $2d2   ;sta $0ed2
                     rts
 
 ; ==============================================================================
@@ -2252,12 +2246,31 @@ m392F:
 ;
 ; ==============================================================================
 
-datenschrott10:
-                    !source "includes/datenschrott10.asm"
+m399D:
+                    rts
+                    
+!byte $ff
+
+m399F:
+                    cmp #$df
+                    beq $39a5
+                    inc $0a
+                    lda ($a7),y
+                    jmp $38b7
+
+; ==============================================================================
+; Kein Schrott, wird in m3A17 eingelesen
+; ==============================================================================
+
+!byte $06, $03, $12, $21, $03, $03, $12, $21, $03, $03, $15, $21, $03, $03, $0f, $21
+!byte $15, $1e, $06, $06, $06, $03, $12, $21, $03, $03, $09, $21, $03, $03, $12, $21
+!byte $03, $03, $0c, $21, $03, $03, $12, $21, $0c, $03, $0c, $20, $0c, $03, $0c, $21
+!byte $0c, $03, $09, $15, $03, $03, $06, $21, $03, $03, $03, $21, $06, $03, $12, $21
+!byte $03, $03, $03, $1d, $03, $03, $06, $21, $03, $03
 
 ; $39F4
-
-eventuellcode10:
+     
+m39F4:
                     jsr m360E           ; jsr $360e
                     ldx #$09
                     lda $033b,x
@@ -2298,15 +2311,16 @@ m3A2D:              jsr display_room           ; jsr $3040
 
 ; ==============================================================================
 ;
-;
+; Kein Schrott
 ; ==============================================================================
-; not called from within the code. Schrott?
+
 
 !byte $02 ,$06 ,$0a ,$0e ,$12 ,$16 ,$1a ,$1e ,$22 ,$26 ,$2a ,$2e ,$32 ,$36 ,$3a ,$3e
 !byte $42 ,$46 ,$4a ,$4e ,$52 ,$56 ,$5a ,$5e ,$04 ,$08 ,$0c ,$10 ,$14 ,$18 ,$1c ,$20
 !byte $24 ,$28 ,$2c ,$30 ,$34 ,$38 ,$3c ,$40 ,$44 ,$48 ,$4c ,$50 ,$54 ,$58 ,$5c ,$60
 !byte $00 ,$8e ,$51 ,$30 ,$bc ,$33 ,$3a ,$4c ,$21 ,$3a
 
+                  
 m3A6D:
 
                     jsr m3602
@@ -2464,7 +2478,7 @@ draw_empty_column_and_row:
 
                     lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank row 25
 
-                    sta $0bc0,x             ; writes the line into the color ram
+                    sta COLRAM + $3c0,x         ;sta $0bc0,x             ; writes the line into the color ram
 
                     inx
                     cpx #$28
@@ -2483,13 +2497,13 @@ set_start_screen:
                     sta m35A3 + 3               ; X player start position (0 = left)
                     lda #START_ROOM              ; room number (start screen)
                     sta m3050 + 1
-                    jsr m3A2D;                  jsr $3a2d
+                    jsr m3A2D                   ; jsr $3a2d
 
 m3B4C:
                     jsr m2FEF                   ; jsr $2fef
                     ldy #$30
                     jsr wait
-                    jsr $2fcb
+                    jsr m2fCB                   ; jsr $2fcb
                     jmp m162d
 ; ==============================================================================
 
@@ -2574,9 +2588,9 @@ death:
                     bne -               ; bne $3ece
                     jsr set_charset_and_screen_for_title
 -                   lda (zpA7),y
-                    sta $0dc0,x
-                    lda #$00
-                    sta $09c0,x
+                    sta SCREEN + $1c0,x   ; sta $0dc0,x         ; position of the death message
+                    lda #$00                                    ; color of the death message
+                    sta COLRAM + $1c0,x     ; sta $09c0,x
                     inx
                     iny
                     cpx #$19

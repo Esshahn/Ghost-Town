@@ -1,13 +1,11 @@
 	m162d	= $162d
-	m399f	= $399f	; ?
 	check_shift_key	= $1ef9	; ?
 	zp0A	= $a
 	set_game_basics	= $3a7d	; ?
 	KEYBOARD_LATCH	= $ff08
 	room_06	= $2a70	; unused
-	KANNDOCHNICHWEG	= $0
 	room_07	= $2ad8	; unused
-	START_ROOM	= $5
+	START_ROOM	= $0
 	room_04	= $29a0	; unused
 	m1155	= $1155	; ?
 	room_05	= $2a08	; unused
@@ -43,7 +41,9 @@
 	m147E	= $147e
 	m359B	= $359b
 	draw_empty_column_and_row	= $3b02	; ?
+	m399F	= $399f	; ?
 	m30C8	= $30c8	; ?
+	m399D	= $399d	; ?
 	m11A6	= $11a6
 	VOICE1	= $ff12
 	m13B0	= $13b0	; ?
@@ -99,7 +99,6 @@
 	hint_messages	= $3f08	; ?
 	items	= $368a
 	m1E88	= $1e88	; ?
-	eventuellcode10	= $39f4	; ?
 	m1E27	= $1e27	; ?
 	m2FC0	= $2fc0	; ?
 	room_16	= $2e80	; unused
@@ -117,7 +116,6 @@
 	room_18	= $2f50	; unused
 	display_hint_message	= $1003
 	print_title	= $310d	; ?
-	datenschrott10	= $399d	; ?
 	m392F	= $392f	; unused
 	m104C	= $104c
 	m30B8	= $30b8	; ?
@@ -151,7 +149,9 @@
 	m152B	= $152b
 	INTERRUPT	= $ff09
 	m10B4	= $10b4	; ?
+	m39F4	= $39f4	; ?
 	m16A7	= $16a7	; ?
+	m2fCB	= $2fcb
 	intro_text	= $1b9d
 	m10B1	= $10b1	; ?
 	BASIC_DA89	= $da89
