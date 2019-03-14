@@ -40,11 +40,13 @@ PLAYER_START_POS_Y  = 6             ; default 6
 
 ; ==============================================================================
 ; KERNAL / BASIC ROM CALLS
-PRINT               = $c56b
+
+PRINT_KERNAL        = $c56b
 BASIC_DA89          = $da89            ; scroll screen down?
 
 ; ==============================================================================
 ; ZEROPAGE
+
 zp02                = $02
 zp03                = $03
 zp04                = $04
@@ -57,15 +59,17 @@ zp11                = $11
 zpA7                = $A7
 zpA8                = $A8
 zpA9                = $A9
+
 ; ==============================================================================
+
 code_start          = $3AB3
-SCREEN              = $0C00            ; PLUS/4 default SCREEN
+SCREENRAM           = $0C00            ; PLUS/4 default SCREEN
 COLRAM              = $0800            ; PLUS/4 COLOR RAM
 CHARSET             = $2000
 screen_win_src      = $175C
 screen_start_src    = $313C
 
-KEYBOARD_LATCH     = $FF08
+KEYBOARD_LATCH      = $FF08
 INTERRUPT           = $FF09
 VOICE1_FREQ_LOW     = $FF0E         ; Low byte of frequency for voice 1
 VOICE2_FREQ_LOW     = $FF0F
@@ -90,6 +94,7 @@ BORDER_COLOR        = $FF19
 INVENTORY_GLOVES    = $3692             ; 6b = gloves
 INVENTORY_WIRECUTTER  = $36a3             ; ac = clippers not picked up, f9 clippers picked up
 INVENTORY_HAMMER    = $3745             ; d0 = hammer not picked up, df = hammer picked up
+
 ; ==============================================================================
 
 
@@ -105,8 +110,14 @@ INVENTORY_HAMMER    = $3745             ; d0 = hammer not picked up, df = hammer
                     *= screen_win_src
                     !bin "includes/screen_win.scr"
 
+                
                     *= screen_start_src
-                    !bin "includes/screen_start.scr"
+                    !if EXTENDED {
+                        !bin "includes/screen_start_extended.scr"
+                    }else{
+                        !bin "includes/screen_start.scr"
+                    }
+                    
 
 
 ;
@@ -122,7 +133,7 @@ INVENTORY_HAMMER    = $3745             ; d0 = hammer not picked up, df = hammer
 ;
                     *= $1000
 m1000:
-                    jsr PRINT           ; jsr $c56b ? wird gar nicht benutzt ?!
+                    jsr PRINT_KERNAL           ; jsr $c56b ? wird gar nicht benutzt ?!
 
 ; ==============================================================================
 ;
@@ -146,7 +157,7 @@ m1009:              cpy #$00
                     jsr set_charset_and_screen_for_title           ; jsr $3a9d
                     ldy #$27
 -                   lda (zpA7),y
-                    sta SCREEN+$1B8,y ; sta $0db8,y
+                    sta SCREENRAM+$1B8,y ; sta $0db8,y
                     lda #$07
                     sta COLRAM+$1B8,y  ; sta $09b8,y
                     dey
@@ -169,14 +180,14 @@ m1031:
                     ldx #$00
                     ldy #$00
                     beq m105F           ; beq $105f
-m104C:              lda SCREEN+$1B9,x ; lda $0db9,x
+m104C:              lda SCREENRAM+$1B9,x ; lda $0db9,x
                     clc
                     adc #$80
-                    sta SCREEN+$1B9,x ; sta $0db9,x
-                    lda SCREEN+$188,y ; lda $0d88,y
+                    sta SCREENRAM+$1B9,x ; sta $0db9,x
+                    lda SCREENRAM+$188,y ; lda $0d88,y
                     clc
                     adc #$80
-                    sta SCREEN+$188,y ; sta $0d88,y
+                    sta SCREENRAM+$188,y ; sta $0d88,y
                     rts
 
 ; ==============================================================================
@@ -207,14 +218,14 @@ m105F:              jsr m104C           ; jsr $104c
                     inx
 +                   and #$08
                     bne m105F           ; bne $105f
-                    lda SCREEN+$1B9,x ; lda $0db9,x
+                    lda SCREENRAM+$1B9,x ; lda $0db9,x
                     cmp #$bc
                     bne ++              ; bne $109c
                     cpy #$00
                     beq +               ; beq $1099
                     dey
 +                   jmp m105F           ; jmp $105f
-++                  sta SCREEN+$188,y ; sta $0d88,y
+++                  sta SCREENRAM+$188,y ; sta $0d88,y
                     iny
                     cpy #$05
                     bne m105F           ; bne $105f
@@ -238,7 +249,7 @@ m10A7:
 ; ==============================================================================
 
 m10B1:
-                    jmp m1155           ; jmp $1155
+                    jmp display_hint           ; jmp $1155
 
 ; ==============================================================================
 ;
@@ -247,7 +258,7 @@ m10B1:
 
 m10B4:
                     ldx #$05
--                   lda SCREEN+$187,x ; lda $0d87,x
+-                   lda SCREENRAM+$187,x ; lda $0d87,x
                     cmp m10CC-1,x       ; cmp $10cb,x
                     bne +               ; bne $10c4
                     dex
@@ -284,16 +295,17 @@ item_pickup_message:              ; item pickup messages
 ;                                                     ******        ************
 ;                                                   ****  ****      ************
 ;                                                   ***    ***
-;
-;
-;
+
+
+
 ; ==============================================================================
 ;
-;
+; hint system (question marks)
 ; ==============================================================================
 
                     *= $1155
-m1155:              cpy #$00
+display_hint:       
+                    cpy #$00
                     bne m11A2           ; bne $11a2
                     jsr m1000
                     ldx m3050 + 1
@@ -309,16 +321,16 @@ m1155:              cpy #$00
 +                   nop
                     nop
                     nop
-                    jsr $174f
+                    jsr m174F           ; jsr $174f
                     cpx #$0f
                     bne +               ; bne $1185
                     lda #$45
-                    sta $0a6f
+                    sta COLRAM + $26f       ; sta $0a6f
                     lda #$0f
-                    sta $0e6f
-+                   sta $0e1f
+                    sta SCREENRAM + $26f       ; sta $0e6f
++                   sta SCREENRAM + $21f       ; sta $0e1f
                     lda #$48
-                    sta $0a1f
+                    sta COLRAM + $21f       ; sta $0a1f
 -                   lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
@@ -333,10 +345,10 @@ m11A6:              jsr m1000
                     jmp -               ; jmp $118d
 +                   cpy #$04
                     bne +               ; bne $11bb
-                    lda $3953
+                    lda m3952 + 1       ; lda $3953
                     clc
-                    adc #$40
-                    sta $3fc6
+                    adc #$40            ; this is the helping letter
+                    sta $3fc6           ; this value seems to be never read anywhere
                     bne m11A6               ; bne $11a6
 +                   dey
                     dey
@@ -351,7 +363,7 @@ m11A6:              jsr m1000
 ; ==============================================================================
 m11CC:
                     jsr set_charset_and_screen_for_title           ; jsr $3a9d
-                    jmp PRINT           ; jmp $c56b
+                    jmp PRINT_KERNAL           ; jmp $c56b
 ; ==============================================================================
 
                     nop
@@ -633,15 +645,16 @@ m13B0:              jmp m11ED
                     bne m13B0
                     lda #$df
                     cmp $36fe
-                    bne $13cd
+                    bne m13CD           ; bne $13cd
                     cmp $3752
-                    bne $13cd
+                    bne m13CD           ; bne $13cd
                     sta $3736
                     jmp check_death
 
 ; ==============================================================================
+; death by 240 volts
 
-
+m13CD:
                     ldy #$06
                     jmp death    ; 06 240 Volts! You got an electrical shock!
 
@@ -1013,25 +1026,25 @@ m15D1:              lda $3736
 ; ==============================================================================
 m162d:
                     ldx #$09
-                    lda $033b,x
-                    sta $034b,x
+-                   lda $033b,x              ; cassette tape buffer
+                    sta $034b,x              ; cassette tape buffer
                     dex
-                    bne $162f
+                    bne -                       ; bne $162f
                     lda #$02
                     sta zpA7
                     ldx m35A3 + 3
                     ldy m35A3 + 1
                     jsr m3608
                     ldx #$09
-                    lda $033b,x
+                    lda $033b,x              ; cassette tape buffer
                     cmp #$d8
-                    bne $1653
+                    bne +                   ; bne $1653
                     ldy #$05
                     jmp death               ; 05 Didn't you see the laser beam?
 
 ; ==============================================================================
 
-                    ldy m3050 + 1
++                   ldy m3050 + 1
                     cpy #$11
                     bne $166a
                     cmp #$78
@@ -1156,13 +1169,14 @@ m16BA:
                     ora (zp05,x)
                     !byte $03
 
+m174F:
                     cpx #$0c
-                    bne $1755
+                    bne +           ; bne $1755
                     lda #$49
-                    cpx #$0d
-                    bne $175b
++                   cpx #$0d
+                    bne +           ; bne $175b
                     lda #$45
-                    rts
++                   rts
 
 ;
 ;
@@ -1184,11 +1198,11 @@ m16BA:
 ; ==============================================================================
                     *= $1B44
 print_endscreen:
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #>COLRAM        ; lda #$08
                     sta zp05
-                    lda #<SCREEN       ; lda #$00
+                    lda #<SCREENRAM       ; lda #$00
                     sta zp02
                     sta zp04
                     ldx #$04
@@ -1251,7 +1265,7 @@ display_intro_text:
 
                     ; i think this part displays the introduction text
 
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #>COLRAM        ; lda #$08
                     sta zp05
@@ -1298,7 +1312,7 @@ display_intro_text:
 ; ==============================================================================
 
 start_intro:        sta KEYBOARD_LATCH
-                    jsr PRINT           ; jsr $c56b
+                    jsr PRINT_KERNAL           ; jsr $c56b
                     jsr display_intro_text           ; jsr $1cb5
                     jsr check_shift_key ; jsr $1ef9
                     lda #$ba
@@ -1595,7 +1609,7 @@ m2fCB:              lda m3050 + 1
                     ldy $394b
                     beq +
                     lda #$f6
-+                   sta $0cf9
++                   sta SCREENRAM + $f9     ; sta $0cf9
                     rts
 
 ; ==============================================================================
@@ -1737,7 +1751,7 @@ m30C8:
 
                     ; *= $30D2
 print_X:
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #>COLRAM        ; lda #$08
                     sta zp05
@@ -1775,11 +1789,11 @@ print_X:
 ; ==============================================================================
 
 print_title:
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #>COLRAM        ; lda #$08
                     sta zp05
-                    lda #<SCREEN       ; lda #$00
+                    lda #<SCREENRAM       ; lda #$00
                     sta zp02
                     sta zp04
                     lda #>screen_start_src
@@ -1824,7 +1838,7 @@ print_title:
 m3525:
                     lda #>COLRAM        ; lda #$08
                     sta zp05
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #$00
                     sta zp02
@@ -1848,7 +1862,7 @@ m3534:
                     dey
                     bne $353b
                     clc
-                    adc #$15
+m3548:              adc #$15
                     sta zp02
                     sta zp04
                     bcc $3554
@@ -1873,7 +1887,7 @@ m3534:
                     lda (zp02),y
                     stx zp10
                     ldx zp09
-                    sta $033c,x
+                    sta $033c,x                 ; cassette tape buffer
                     inc zp09
                     ldx zp10
                     inc zpA8
@@ -1893,38 +1907,39 @@ m3534:
                     rts
 
 ; ==============================================================================
-;
-;
+; $359b
+; JOYSTICK CONTROLS
 ; ==============================================================================
-m359B:
+
+check_joystick:
                     lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
 m35A3:              ldy #$09
                     ldx #$15
                     lsr
-                    bcs $35af
+                    bcs +                   ; bcs $35af
                     cpy #$00
-                    beq $35af
-                    dey
-                    lsr
-                    bcs $35b7
+                    beq +                   ; beq $35af
+                    dey                                           ; JOYSTICK UP
++                   lsr
+                    bcs +                   ; bcs $35b7
                     cpy #$15
-                    bcs $35b7
-                    iny
-                    lsr
-                    bcs $35bf
+                    bcs +                   ; bcs $35b7
+                    iny                                           ; JOYSTICK DOWN
++                   lsr
+                    bcs +                   ; bcs $35bf
                     cpx #$00
-                    beq $35bf
-                    dex
-                    lsr
-                    bcs $35c7
+                    beq +                   ; beq $35bf
+                    dex                                           ; JOYSTICK LEFT
++                   lsr
+                    bcs +                   ; bcs $35c7
                     cpx #$24
-                    bcs $35c7
-                    inx
-                    sty $35e8
-                    stx $35ed
-                    stx $3549
+                    bcs +                   ; bcs $35c7
+                    inx                                           ; JOYSTICK RIGHT
++                   sty m35E7 + 1           ; sty $35e8
+                    stx m35EC + 1           ; stx $35ed
+                    stx m3548 + 1           ; stx $3549
                     lda #$02
                     sta zpA7
                     jsr m3534           ; jsr $3534
@@ -1936,9 +1951,9 @@ m35A3:              ldy #$09
                     bne $35f1
                     dex
                     bne $35d9
-                    lda #$0a
+m35E7:              lda #$0a
                     sta m35A3 + 1
-                    lda #$15
+m35EC:              lda #$15
                     sta m35A3 + 3
                     lda #$ff
                     sta KEYBOARD_LATCH
@@ -2065,7 +2080,7 @@ m3850:              lda (zpA7),y
                     bne -                   ; bne $3856
                     lda #>COLRAM        ; lda #$08
                     sta zp05
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #$00
                     sta zp02
@@ -2133,7 +2148,7 @@ m38DF:              lda m3050 + 1
                     sta zp04
                     lda #>COLRAM        ; lda #$08
                     sta zp05
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     ldx #$18
                     lda (zp02),y
@@ -2164,11 +2179,11 @@ m38DF:              lda m3050 + 1
                     cmp #$07
                     bne $392f
                     ldx #$17
-                    lda SCREEN + $168,x     ; lda $0d68,x
+                    lda SCREENRAM + $168,x     ; lda $0d68,x
                     cmp #$df
                     bne $392b
                     lda #$e3
-                    sta SCREEN + $168,x     ; sta $0d68,x
+                    sta SCREENRAM + $168,x     ; sta $0d68,x
                     dex
                     bne $391f
                     rts
@@ -2181,10 +2196,10 @@ m392F:
                     cmp #$06
                     bne +
                     lda #$f6
-                    sta SCREEN + $9c        ; sta $0c9c
-                    sta SCREEN + $9c        ;sta $0c9c    (yes, it's really 2 times the same sta)
-                    sta SCREEN + $27c       ; sta $0e7c
-                    sta SCREEN + $36c       ; sta $0f6c
+                    sta SCREENRAM + $9c        ; sta $0c9c
+                    sta SCREENRAM + $9c        ;sta $0c9c    (yes, it's really 2 times the same sta)
+                    sta SCREENRAM + $27c       ; sta $0e7c
+                    sta SCREENRAM + $36c       ; sta $0f6c
                     rts
 
 ; ==============================================================================
@@ -2197,34 +2212,34 @@ m392F:
                     ldx #$f7
                     ldy #$f8
                     lda #$01
-                    bne +           ; bne $3952
+                    bne m3952           ; bne $3952
                     ldx #$3b
                     ldy #$42
-+                   lda #$01        ; there seems to happen some self mod here
+m3952:              lda #$01        ; there seems to happen some self mod here
                     cmp #$01
                     bne +           ; bne $395b
-                    stx SCREEN+ $7a ; stx $0c7a
+                    stx SCREENRAM+ $7a ; stx $0c7a
 +                   cmp #$02
                     bne +           ; bne $3962
-                    stx SCREEN + $16a   ;stx $0d6a
+                    stx SCREENRAM + $16a   ;stx $0d6a
 +                   cmp #$03
                     bne +           ; bne $3969
-                    stx SCREEN + $25a       ;stx $0e5a
+                    stx SCREENRAM + $25a       ;stx $0e5a
 +                   cmp #$04
                     bne +           ; bne $3970
-                    stx SCREEN + $34a   ; stx $0f4a
+                    stx SCREENRAM + $34a   ; stx $0f4a
 +                   cmp #$05
                     bne +           ; bne $3977
-                    sty SCREEN + $9c    ; sty $0c9c
+                    sty SCREENRAM + $9c    ; sty $0c9c
 +                   cmp #$06
                     bne +           ; bne $397e
-                    sty SCREEN + $18c   ; sty $0d8c
+                    sty SCREENRAM + $18c   ; sty $0d8c
 +                   cmp #$07
                     bne +           ; bne $3985
-                    sty SCREEN + $27c ; sty $0e7c
+                    sty SCREENRAM + $27c ; sty $0e7c
 +                   cmp #$08
                     bne +           ; bne $398c
-                    sty SCREEN + $36c   ; sty $0f6c
+                    sty SCREENRAM + $36c   ; sty $0f6c
 +                   rts
 
 ; ==============================================================================
@@ -2238,7 +2253,7 @@ m392F:
                     ldx #$01
                     bne +               ; bne $3999
                     lda #$7a
-+                   sta SCREEN + $2d2   ;sta $0ed2
++                   sta SCREENRAM + $2d2   ;sta $0ed2
                     rts
 
 ; ==============================================================================
@@ -2324,7 +2339,7 @@ m3A2D:              jsr display_room           ; jsr $3040
 m3A6D:
 
                     jsr m3602
-                    jsr m359B
+                    jsr check_joystick
                     cli
                     rts
                     brk             ; $00
@@ -2410,7 +2425,7 @@ init:
 
                     ; TODO: unclear what the code below does
                     ; i think it fills the level data with "DF", which is a blank character
-                    lda #>SCREEN       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #$00
                     sta zp02
@@ -2474,7 +2489,7 @@ draw_empty_column_and_row:
 
                     ; fills the bottom line with blank colored space (making it invisible)
 -                   lda #$5d
-                    sta SCREEN + $3c0,x  ;sta $0fc0,x ; last row of the screen
+                    sta SCREENRAM + $3c0,x  ;sta $0fc0,x ; last row of the screen
 
                     lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank row 25
 
@@ -2588,7 +2603,7 @@ death:
                     bne -               ; bne $3ece
                     jsr set_charset_and_screen_for_title
 -                   lda (zpA7),y
-                    sta SCREEN + $1c0,x   ; sta $0dc0,x         ; position of the death message
+                    sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
                     lda #$00                                    ; color of the death message
                     sta COLRAM + $1c0,x     ; sta $09c0,x
                     inx
