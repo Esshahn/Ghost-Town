@@ -1,4 +1,81 @@
 ; ==============================================================================
+m162d:
+                    ldx #$09
+-                   lda $033b,x              ; cassette tape buffer
+                    sta $034b,x              ; cassette tape buffer
+                    dex
+                    bne -                       ; bne $162f
+                    lda #$02
+                    sta zpA7
+                    ldx m35A3 + 3
+                    ldy m35A3 + 1
+                    jsr m3608
+                    ldx #$09
+m1647:              lda $033b,x              ; cassette tape buffer
+                    cmp #$d8
+                    bne +                   ; bne $1653
+m164E:              ldy #$05
+m1650:              jmp death               ; 05 Didn't you see the laser beam?
+
+; ==============================================================================
+
++                   ldy m3050 + 1
+                    cpy #$11
+                    bne +                       ; bne $166a
+                    cmp #$78
+                    beq ++                      ; beq $1666
+                    cmp #$7b
+                    beq ++                      ; beq $1666
+                    cmp #$7e
+                    bne +                       ; bne $166a
+++                  ldy #$0b                      ; 0b You were hit by a big rock and died!
+                    bne m1650                   ; bne $1650
++                   cmp #$9c
+                    bcc m1676                   ; bcc $1676
+                    cmp #$a5
+                    bcs m1676                   ; bcs $1676
+                    jmp m16A7                 ; jmp $16a7
+
+
+m1675:
+                    nop
+m1676:              cmp #$e4
+                    bcc +                           ; bcc $168a
+                    cmp #$eb
+                    bcs ++                          ; bcs $1682
+-                   ldy #$04                        ; 04 Boris the spider got you and killed you
+                    bne m1650                       ; bne $1650
+++                  cmp #$f4
+                    bcs +                           ; bcs $168a
+                    ldy #$0e                      ; 0e The monster grabbed you you. You are dead!
+                    bne m1650                       ; bne $1650
++                   dex
+                    bne m1647                       ; bne $1647
+                    ldx #$09
+--                  lda $034b,x
+                    sta $033b,x
+                    cmp #$d8
+                    beq m164E                       ; beq $164e
+                    cmp #$e4
+                    bcc +                           ; bcc $16a1
+                    cmp #$ea
+                    bcc -                           ; bcc $167e
++                   dex
+                    bne --                          ; bne $168f
+                    jmp m11E0                     ; jmp $11e0
+
+m16A7:
+                    ldy items + $1a7                ; ldy $3831
+                    cpy #$df
+                    beq +                           ; beq $16b2
+                    ldy #$0c                      ; 0c Belegro killed you!
+                    bne m1650                       ; bne $1650
++                   ldy #$00
+                    sty m14CC + 1                   ; sty $14cd
+                    jmp m1675                       ; jmp $1675
+
+
+; ==============================================================================
 ; this might be the inventory/ world reset
 ; puts all items into the level data again
 ; maybe not. not all characters for e.g. the wirecutter is put back
