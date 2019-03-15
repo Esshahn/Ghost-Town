@@ -1,11 +1,75 @@
 ; ==============================================================================
+; this might be the inventory/ world reset
+; puts all items into the level data again
+; maybe not. not all characters for e.g. the wirecutter is put back
+; addresses are mostly within items.asm address space ( $368a )
+; ==============================================================================
 
-                    !byte $02
-                    !byte $07
-                    !byte $04
-                    asl zp08
-                    ora (zp05,x)
-                    !byte $03
+m16BA:
+                    lda #$a5                        ; $a5 = the door of the shed where the ladder is
+                    sta items + $38                        ; sta $36c2
+                    lda #$a9                        ; a9 = NO gloves
+                    sta items + $8                        ; sta $3692                       ; inventory gloves
+                    lda #$79
+                    sta items + $6                        ; sta $3690
+                    lda #$e0                        ; empty char
+                    sta items + $10                        ; sta $369a
+                    lda #$ac                        ; wirecutter
+                    sta items + $19                        ; sta $36a3
+                    lda #$b8                        ; part of the bottle - hmmm...
+                    sta items + $29                        ; sta $36b3
+                    lda #$b0                        ; the ladder
+                    sta items + $4d                        ; sta $36d7
+                    lda #$b5                        ; more ladder
+                    sta items + $58                        ; sta $36e2
+                    lda #$5e                        ; seems to be water?
+                    sta items + $74                        ; sta $36fe
+                    lda #$c6                        ; boots in the whatever box
+                    sta items + $84                        ; sta $370e
+                    lda #$c0                        ; not sure
+                    sta items + $96                        ; sta $3720
+                    lda #$cc                        ; power outlet
+                    sta items + $ac                        ; sta $3736
+                    lda #$d0                        ; the hammer
+                    sta items + $bb                        ; sta $3745
+                    lda #$d2                        ; unsure
+                    sta items + $c8                        ; sta $3752
+                    lda #$d6                        ; unsure
+                    sta items + $d5                        ; sta $375f
+                    lda #$00                        ; door
+                    sta items + $12c                        ; sta $37b6
+                    lda #$dd                        ; unsure
+                    sta items + $1a7                        ; sta $3831
+                    lda #$01                        ; door
+                    sta items + $2c1                        ; sta $394b
+                    lda #$01                        ; door
+                    sta items + $30a                        ; sta $3994
+                    lda #$f5                        ; fence
+                    sta items + $277                        ; sta $3901
+                    lda #$00                        ; door
+                    sta m12A4                               ; sta $12a4
+                    lda #$01                        ; door
+                    sta m15FC + 1                           ; sta $15fd
+                    lda #$1e
+                    sta m1602 + 1                           ; sta $1603
+                    lda #$01
+                    sta m14CC + 1                           ; sta $14cd
+m1732:              ldx #$05
+                    cpx #$07
+                    bne +                                   ; bne $173a
+                    ldx #$ff
++                   inx
+                    stx m1732 + 1                           ; stx $1733
+                    lda m1747,x                             ; lda $1747,x
+                    sta m3952 + 1                   ; sta $3953
+                    jmp print_title     ; jmp $310d
+
+
+; ==============================================================================
+
+m1747:
+                    !byte $02, $07, $04, $06, $08, $01, $05, $03
+
 
 m174F:
                     cpx #$0c

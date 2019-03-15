@@ -4,6 +4,7 @@
 	zp0A	= $a
 	set_game_basics	= $3a7d	; ?
 	KEYBOARD_LATCH	= $ff08
+	m1747	= $1747	; ?
 	room_06	= $2a70	; unused
 	m3624	= $3624
 	room_07	= $2ad8	; unused
@@ -37,9 +38,10 @@
 	m10CC	= $10cc	; ?
 	m3668	= $3668	; ?
 	rsav4	= $1dde
-	rsav5	= $1df7
+	m14CC	= $14cc
 	room_09	= $2ba8	; unused
 	m39AA	= $39aa
+	rsav5	= $1df7
 	m105F	= $105f	; ?
 	more_music	= $1e38	; ?
 	EXTENDED	= $0
@@ -73,11 +75,14 @@
 	COLOR_1	= $ff16
 	m1267	= $1267	; unused
 	m3534	= $3534
+	m3993	= $3993	; ?
 	SCREENRAM	= $c00
 	COLOR_3	= $ff18	; unused
 	COLOR_2	= $ff17
 	m1031	= $1031
 	m3952	= $3952	; ?
+	m1203	= $1203	; unused
+	m1602	= $1602
 	BG_COLOR	= $ff15
 	start_intro	= $1cff
 	m15AD	= $15ad	; ?
@@ -99,7 +104,7 @@
 	m35A3	= $35a3	; ?
 	check_item_shovel	= $1374	; unused
 	zp09	= $9
-	zp08	= $8
+	zp08	= $8	; unused
 	music	= $1d11
 	wait	= $3a76	; ?
 	init	= $3ab3	; ?
@@ -110,7 +115,7 @@
 	zp05	= $5
 	zp04	= $4
 	hint_messages	= $3f08	; ?
-	items	= $368a
+	items	= $368a	; ?
 	m1E88	= $1e88	; ?
 	m1E27	= $1e27	; ?
 	m2FC0	= $2fc0	; ?
@@ -123,6 +128,7 @@
 	room_15	= $2e18	; unused
 	room_12	= $2ce0	; unused
 	room_13	= $2d48	; unused
+	m1732	= $1732
 	room_10	= $2c10	; unused
 	room_11	= $2c78	; unused
 	BORDER_COLOR_VALUE	= $12
@@ -135,6 +141,7 @@
 	m129A	= $129a	; unused
 	m392F	= $392f	; ?
 	m104C	= $104c
+	m394A	= $394a	; ?
 	m30B8	= $30b8	; ?
 	m38B7	= $38b7
 	items_end	= $383a	; unused
@@ -164,12 +171,14 @@
 	m13CD	= $13cd	; ?
 	m38DF	= $38df	; ?
 	m1009	= $1009
+	m15FC	= $15fc
 	m3548	= $3548
 	death	= $3eac	; ?
 	print_X	= $30d2	; ?
 	m2FEF	= $2fef
 	m152B	= $152b
 	INTERRUPT	= $ff09
+	m12A4	= $12a4
 	m10B4	= $10b4	; ?
 	m12A5	= $12a5	; ?
 	m39F4	= $39f4	; ?

@@ -425,7 +425,7 @@ m11ED:              inx
                     cmp #$a9            ; egg plant gloves ;)
                     bne m11ED
                     lda #$df
-                    cmp $36d7
+                    cmp items + $4d                        ; cmp $36d7
 m1203:              bne -               ; bne $11f2
                     jsr m2FC0
                     bne check_death     ; bne $11da
@@ -436,12 +436,12 @@ m1203:              bne -               ; bne $11f2
                     cmp #$e1
                     bne ++              ; bne $122a
 +                   lda #$aa
-                    sta $369a
+                    sta items + $10                        ; sta $369a
                     jsr m3846
                     ldy #$f0
                     jsr wait
                     lda #$df
-                    sta $369a
+                    sta items + $10                        ; sta $369a
                     bne check_death     ; bne $11da
 ++                  cmp #$27            ; part of a bush
                     bcs check_death_bush
@@ -489,17 +489,17 @@ m125F:
 m1267:
 +                   cmp #$a6            ; lock
                     bne $1279
-                    lda $369a
+                    lda items + $10                        ; lda $369a
                     cmp #$df
                     bne $1264
                     lda #$df
-                    sta $36c2
+                    sta items + $38                        ; sta $36c2
                     bne $1264
                     cmp #$b1            ; ladder
                     bne $1287
                     lda #$df
-                    sta $36d7
-                    sta $36e2
+                    sta items + $4d                        ; sta $36d7
+                    sta items + $58                        ; sta $36e2
                     bne $1264
                     cmp #$b9            ; bottle
                     beq $128e
@@ -587,9 +587,9 @@ sacred_column:
                     cmp #$5f            ; water?
                     bne $12ec
                     lda #$bc            ; light picked up
-                    sta $36fe           ; but I dont understand how the whole light is shown
+                    sta items + $74                        ; sta $36fe           ; but I dont understand how the whole light is shown
                     lda #$5f
-                    sta $36fc
+                    sta items + $72                        ; sta $36fc
                     jsr m3846
                     ldy #$ff
                     jsr wait
@@ -597,9 +597,9 @@ sacred_column:
                     jsr wait
                     jsr wait
                     lda #$df
-                    sta $36fe
+                    sta items + $74                        ; sta $36fe
                     lda #$00
-                    sta $36fc
+                    sta items + $72                        ; sta $36fc
                     jmp check_death
 
 ; ==============================================================================
@@ -638,7 +638,7 @@ check_item_shovel:
                     cmp #$c3            ; shovel
                     bne $1384
                     lda #$df
-                    sta $3720
+                    sta items + $96                        ; sta $3720
                     jmp check_death
 
 ; ==============================================================================
@@ -650,7 +650,7 @@ check_item_shovel:
                     cmp #$df
                     bne $135c
                     lda #$df
-                    sta $370e
+                    sta items + $84                        ; sta $370e
                     bne $1381
                     cpy #$09
                     bne $13a3
@@ -675,11 +675,11 @@ m13B0:              jmp m11ED
                     cmp #$cf
                     bne m13B0
                     lda #$df
-                    cmp $36fe
+                    cmp items + $74                        ; cmp $36fe
                     bne m13CD           ; bne $13cd
-                    cmp $3752
+                    cmp items + $c8                        ; cmp $3752
                     bne m13CD           ; bne $13cd
-                    sta $3736
+                    sta items + $ac                        ; sta $3736
                     jmp check_death
 
 ; ==============================================================================
@@ -710,7 +710,7 @@ m13CD:
                     cmp #$d5
                     bne m13B0
                     lda #$df
-                    sta $3752
+                    sta items + $c8                        ; sta $3752
                     bne $13ca
                     cpy #$0d
                     bne $1421
@@ -721,7 +721,7 @@ m13CD:
 ; ==============================================================================
                     cmp #$d6
                     bne m13B0
-                    lda $370e
+                    lda items + $84                        ; lda $370e
                     cmp #$df
                     beq $141a
                     ldy #$07
@@ -730,7 +730,7 @@ m13CD:
 ; ==============================================================================
 
                     lda #$e2
-                    sta $375f
+                    sta items + $d5                        ; sta $375f
                     bne $13ca
                     cpy #$0e
                     bne $142e
@@ -777,7 +777,7 @@ m13CD:
                     cmp #$dd
                     bne $143b
                     lda #$df
-                    sta $3831
+                    sta items + $1a7                        ; sta $3831
                     jmp check_death
 
 ; ==============================================================================
@@ -837,7 +837,7 @@ m147E:              ldy m3050 + 1
 
                     cpy #$11
                     bne $14d3
-                    lda #$01
+m14CC:              lda #$01
                     beq $14e4
                     jmp m15C1                   ;jmp $15c1
                     lda #$0f
@@ -1013,11 +1013,11 @@ m15C1:              lda #$00
 
 ; ==============================================================================
 
-m15D1:              lda $3736
+m15D1:              lda items + $ac                        ; lda $3736
                     cmp #$df
                     bne $15dd
                     lda #$59
-                    sta $37b6
+                    sta items + $12c                        ; sta $37b6
                     lda m3050 + 1
                     cmp #$11
                     bne $162a
@@ -1031,10 +1031,10 @@ m15D1:              lda $3736
                     bne $15fc
                     lda #$00
                     sta $15fd
-                    lda #$01
+m15FC:              lda #$01
                     bne $1616
                     ldy #$06
-                    ldx #$1e
+m1602:              ldx #$1e
                     lda #$00
                     sta zpA7
                     jsr m3608
@@ -1091,7 +1091,9 @@ m162d:
                     cmp #$a5
                     bcs $1676
                     jmp m16A7                 ; jmp $16a7
-m1675:              nop
+
+m1675:
+                    nop
                     cmp #$e4
                     bcc $168a
                     cmp #$eb
@@ -1116,8 +1118,9 @@ m1675:              nop
                     dex
                     bne $168f
                     jmp m11E0                     ; jmp $11e0
+
 m16A7:
-                    ldy $3831
+                    ldy items + $1a7                ; ldy $3831
                     cpy #$df
                     beq $16b2
                     ldy #$0c                      ; 0c Belegro killed you!
@@ -1125,72 +1128,6 @@ m16A7:
                     ldy #$00
                     sty $14cd
                     jmp m1675                       ; jmp $1675
-
-; ==============================================================================
-; this might be the inventory/ world reset
-; puts all items into the level data again
-; maybe not. not all characters for e.g. the wirecutter is put back
-; addresses are mostly within items.asm address space
-; ==============================================================================
-m16BA:
-                    lda #$a5                        ; $a5 = the door of the shed where the ladder is
-                    sta $36c2
-                    lda #$a9                        ; a9 = NO gloves
-                    sta $3692                       ; inventory gloves
-                    lda #$79
-                    sta $3690
-                    lda #$e0                        ; empty char
-                    sta $369a
-                    lda #$ac                        ; wirecutter
-                    sta $36a3
-                    lda #$b8                        ; part of the bottle - hmmm...
-                    sta $36b3
-                    lda #$b0                        ; the ladder
-                    sta $36d7
-                    lda #$b5                        ; more ladder
-                    sta $36e2
-                    lda #$5e                        ; seems to be water?
-                    sta $36fe
-                    lda #$c6                        ; boots in the whatever box
-                    sta $370e
-                    lda #$c0                        ; not sure
-                    sta $3720
-                    lda #$cc                        ; power outlet
-                    sta $3736
-                    lda #$d0                        ; the hammer
-                    sta $3745
-                    lda #$d2                        ; unsure
-                    sta $3752
-                    lda #$d6                        ; unsure
-                    sta $375f
-                    lda #$00                        ; door
-                    sta $37b6
-                    lda #$dd                        ; unsure
-                    sta $3831
-                    lda #$01                        ; door
-                    sta $394b
-                    lda #$01                        ; door
-                    sta $3994
-                    lda #$f5                        ; fence
-                    sta $3901
-                    lda #$00                        ; door
-                    sta $12a4
-                    lda #$01                        ; door
-                    sta $15fd
-                    lda #$1e
-                    sta $1603
-                    lda #$01
-                    sta $14cd
-                    ldx #$05
-                    cpx #$07
-                    bne $173a
-                    ldx #$ff
-                    inx
-                    stx $1733
-                    lda $1747,x
-                    sta $3953
-                    jmp print_title     ; jmp $310d
-
 
 
 !source "main-converted.asm"
