@@ -25,7 +25,7 @@
 EN = 0
 DE = 1
 
-LANGUAGE = DE 
+LANGUAGE = EN 
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
@@ -33,7 +33,7 @@ LANGUAGE = DE
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED            = 1       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
@@ -61,7 +61,7 @@ EXTENDED            = 1       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 16             ; default 0 ; address $3b45
+START_ROOM          = 0             ; default 0 ; address $3b45
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -126,14 +126,18 @@ BORDER_COLOR        = $FF19
                     }
 
                     *= screen_win_src
-                    !bin "includes/screen_win.scr"
-
+                    !if LANGUAGE = EN{
+                        !bin "includes/screen-win-en.scr"
+                    }
+                    !if LANGUAGE = DE{
+                        !bin "includes/screen-win-de.scr"
+                    }
                 
                     *= screen_start_src
                     !if EXTENDED {
-                        !bin "includes/screen_start_extended.scr"
+                        !bin "includes/screen-start-extended.scr"
                     }else{
-                        !bin "includes/screen_start.scr"
+                        !bin "includes/screen-start.scr"
                     }
                     
 
