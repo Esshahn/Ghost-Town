@@ -28,17 +28,21 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
-    MULTICOLOR_1    = $db
-    MULTICOLOR_2    = $29
-    BORDER_COLOR_VALUE = $12
+    MULTICOLOR_1        = $db
+    MULTICOLOR_2        = $29
+    BORDER_COLOR_VALUE  = $12
+    TITLE_KEY_MATRIX    = $fd           ; Original key to press on title screen: 1
+    TITLE_KEY           = $01
 
 }
 
 !if EXTENDED = 1{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $01 ; grey
-    MULTICOLOR_1    = $6b
-    MULTICOLOR_2    = $19
-    BORDER_COLOR_VALUE = $01
+    MULTICOLOR_1        = $6b
+    MULTICOLOR_2        = $19
+    BORDER_COLOR_VALUE  = $01
+    TITLE_KEY_MATRIX    = $7f           ; Extended version key to press on title screen: space
+    TITLE_KEY           = $10
 }
 
 
@@ -2518,11 +2522,11 @@ init:
                     jsr wait
 
                     ; waiting for key press on title screen
-
-                    lda #$7f           ; read row 7 of keyboard matrix (http://plus4world.powweb.com/plus4encyclopedia/500012)
+bp
+                    lda #TITLE_KEY_MATRIX    ;#$7f           ; read row 7 of keyboard matrix (http://plus4world.powweb.com/plus4encyclopedia/500012)
 -                   sta KEYBOARD_LATCH          ; Latch register for keyboard
                     lda KEYBOARD_LATCH
-                    and #$10            ; $10 = space
+                    and #TITLE_KEY    ;#$10            ; $10 = space
                     bne -               ; bne $3ac8 / wait for keypress ?
 
                     lda #$ff
