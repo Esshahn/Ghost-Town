@@ -33,7 +33,7 @@ LANGUAGE = DE
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED            = 1       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0
+START_ROOM          = 16             ; default 0 ; address $3b45
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -308,9 +308,17 @@ m10CC:              !byte $30, $36, $31, $33, $38
 
 item_pickup_message:              ; item pickup messages
 
+!if LANGUAGE = EN{
 !scr " There is a key in the bottle !         "
 !scr "   There is a key in the coffin !       "
 !scr " There is a breathing tube !            "
+}
+
+!if LANGUAGE = DE{
+!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
+!scr "    In dem Sarg lag ein Schluessel !    "
+!scr " Unter dem Stein lag ein Taucheranzug ! "
+}
 
 
                     ;  1111111      1111111   555555555555555555 555555555555555555 
@@ -2632,7 +2640,7 @@ set_start_screen:
                     sta m35A3 + 1               ; Y player start position (0 = top)
                     lda #PLAYER_START_POS_X
                     sta m35A3 + 3               ; X player start position (0 = left)
-                    lda #START_ROOM              ; room number (start screen)
+                    lda #START_ROOM              ; room number (start screen) ($3b45)
                     sta m3050 + 1
                     jsr m3A2D                   ; jsr $3a2d
 
@@ -2649,7 +2657,7 @@ death_messages:
 ; death messages
 ; like "You fell into a snake pit"
 
-; scr conversion
+; scr conversion 
 
 ; 00 You fell into a snake pit
 ; 01 You'd better watched out for the sacred column
@@ -2672,15 +2680,15 @@ death_messages:
 !if LANGUAGE = EN{
 !scr "You fell into a          snake pit !              "
 !scr "You'd better watched out for the sacred column!   "
-!scr "You drowned in the deep river !                   "
+!scr "You drowned in the deep  river !                  "
 !scr "You drank from the       poisened bottle ........ "
 !scr "Boris, the spider, got   you and killed you !     "
 !scr "Didn't you see the       laser beam ?!?           "
-!scr "240 Volts ! You got an electrical shock !         "
+!scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
 !scr "You stepped on a nail !                           "
 !scr "A foot trap stopped you !                         "
 !scr "This room is doomed      by the wizard Manilo !   "
-!scr "You were locked in and starved !                  "
+!scr "You were locked in and   starved !                " ; original: !scr "You were locked in and starved !                  "
 !scr "You were hit by a big    rock and died !          "
 !scr "Belegro killed           you !                    "
 !scr "You found a thirsty      zombie .......           "
@@ -2689,25 +2697,25 @@ death_messages:
 !scr "You are trapped in       wire-nettings !          "
 }
 
-; TODO - NOT TRANSLATED FULLY YET
+
 !if LANGUAGE = DE{
-!scr "You fell into a          snake pit !              "
-!scr "You'd better watched out for the sacred column!   "
-!scr "You drowned in the deep river !                   "
-!scr "You drank from the       poisened bottle ........ "
-!scr "Boris, the spider, got   you and killed you !     "
-!scr "Didn't you see the       laser beam ?!?           "
-!scr "240 Volts ! You got an electrical shock !         "
-!scr "You stepped on a nail !                           "
-!scr "A foot trap stopped you !                         "
-!scr "This room is doomed      by the wizard Manilo !   "
-!scr "You were locked in and starved !                  "
-!scr "You were hit by a big    rock and died !          "
-!scr "Belegro killed           you !                    "
-!scr "You found a thirsty      zombie .......           "
-!scr "The monster grapped       you. You are dead !     "
+!scr "Sie sind in eine         Schlangengrube gefallen !"
+!scr "Gotteslaesterung wird    mit dem Tod bestraft !   "
+!scr "Sie sind in dem tiefen   Fluss ertrunken !        "
+!scr "Sie haben aus der Gift-  flasche getrunken....... "
+!scr "Boris, die Spinne, hat   Sie verschlungen !!      "
+!scr "Den Laserstrahl muessen  Sie uebersehen haben ?!  "
+!scr "220 Volt !! Sie erlitten einen Elektroschock !    "
+!scr "Sie sind in einen Nagel  getreten !               "
+!scr "Eine Fussangel verhindertIhr Weiterkommen !       "
+!scr "Auf diesem Raum liegt einFluch des Magiers Manilo!"
+!scr "Sie wurden eingeschlossenund verhungern !         "
+!scr "Sie wurden von einem     Stein ueberollt !!       "
+!scr "Belegro hat Sie          vernichtet !             "
+!scr "Im Sarg lag ein durstigerZombie........           "
+!scr "Das Monster hat Sie      erwischt !!!!!           "
 !scr "Sie haben sich an dem    Dornenbusch verletzt !   "
-!scr "You are trapped in       wire-nettings !          "
+!scr "Sie haben sich im        Stacheldraht verfangen !!"
 }
 
 ; ==============================================================================
@@ -2778,7 +2786,7 @@ hint_messages
 !scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
 !scr " *****   A helping letter :   "
 helping_letter !scr "C   ***** "
-!scr " Sorry, bad code number! Better luck next time! "
+!scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
 
 }
 
@@ -2787,11 +2795,11 @@ helping_letter !scr "C   ***** "
 hint_messages 
 !scr " Ein Teil des Loesungscodes lautet:     "
 !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-!scr " You need: bulb, bulb holder, socket !  "
-!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
-!scr " *****   A helping letter :   "
+!scr " Du brauchst:Fassung,Gluehbirne,Strom ! "
+!scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
+!scr " *****   Ein Hilfsbuchstabe:  "
 helping_letter !scr "C   ***** "
-!scr " Sorry, bad code number! Better luck next time! "
+!scr " Falscher Loesungscode ! TODESSTRAFE !!!"
 
 }
 
