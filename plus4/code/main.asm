@@ -16,7 +16,16 @@
 ;
 ; ==============================================================================
 
+; ==============================================================================
+; language
+; ENGLISH and GERMAN are available
+; OPTIONS: EN / DE
+; ==============================================================================
 
+EN = 0
+DE = 1
+
+LANGUAGE = DE 
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
@@ -1238,22 +1247,22 @@ m174F:
 
 
 
-                                ;  1111111    BBBBBBBBBBBBBBBBB          444444444         444444444  
-                                ; 1::::::1    B::::::::::::::::B        4::::::::4        4::::::::4  
-                                ;1:::::::1    B::::::BBBBBB:::::B      4:::::::::4       4:::::::::4  
-                                ;111:::::1    BB:::::B     B:::::B    4::::44::::4      4::::44::::4  
-                                ;   1::::1      B::::B     B:::::B   4::::4 4::::4     4::::4 4::::4  
-                                ;   1::::1      B::::B     B:::::B  4::::4  4::::4    4::::4  4::::4  
-                                ;   1::::1      B::::BBBBBB:::::B  4::::4   4::::4   4::::4   4::::4  
-                                ;   1::::l      B:::::::::::::BB  4::::444444::::4444::::444444::::444
-                                ;   1::::l      B::::BBBBBB:::::B 4::::::::::::::::44::::::::::::::::4
-                                ;   1::::l      B::::B     B:::::B4444444444:::::4444444444444:::::444
-                                ;   1::::l      B::::B     B:::::B          4::::4            4::::4  
-                                ;   1::::l      B::::B     B:::::B          4::::4            4::::4  
-                                ;111::::::111 BB:::::BBBBBB::::::B          4::::4            4::::4  
-                                ;1::::::::::1 B:::::::::::::::::B         44::::::44        44::::::44
-                                ;1::::::::::1 B::::::::::::::::B          4::::::::4        4::::::::4
-                                ;111111111111 BBBBBBBBBBBBBBBBB           4444444444        4444444444
+                    ;  1111111    BBBBBBBBBBBBBBBBB          444444444         444444444  
+                    ; 1::::::1    B::::::::::::::::B        4::::::::4        4::::::::4  
+                    ;1:::::::1    B::::::BBBBBB:::::B      4:::::::::4       4:::::::::4  
+                    ;111:::::1    BB:::::B     B:::::B    4::::44::::4      4::::44::::4  
+                    ;   1::::1      B::::B     B:::::B   4::::4 4::::4     4::::4 4::::4  
+                    ;   1::::1      B::::B     B:::::B  4::::4  4::::4    4::::4  4::::4  
+                    ;   1::::1      B::::BBBBBB:::::B  4::::4   4::::4   4::::4   4::::4  
+                    ;   1::::l      B:::::::::::::BB  4::::444444::::4444::::444444::::444
+                    ;   1::::l      B::::BBBBBB:::::B 4::::::::::::::::44::::::::::::::::4
+                    ;   1::::l      B::::B     B:::::B4444444444:::::4444444444444:::::444
+                    ;   1::::l      B::::B     B:::::B          4::::4            4::::4  
+                    ;   1::::l      B::::B     B:::::B          4::::4            4::::4  
+                    ;111::::::111 BB:::::BBBBBB::::::B          4::::4            4::::4  
+                    ;1::::::::::1 B:::::::::::::::::B         44::::::44        44::::::44
+                    ;1::::::::::1 B::::::::::::::::B          4::::::::4        4::::::::4
+                    ;111111111111 BBBBBBBBBBBBBBBBB           4444444444        4444444444
 
 
 
@@ -1323,6 +1332,7 @@ intro_text:
 ; instructions screen
 ; "Search the treasure..."
 
+!if LANGUAGE = EN{
 !scr "Search the treasure of Ghost Town and   "
 !scr "open it ! Kill Belegro, the wizard, and "
 !scr "dodge all other dangers. Don't forget to"
@@ -1330,7 +1340,17 @@ intro_text:
 !scr "your yourney through 19 amazing hires-  "
 !scr "graphics-rooms! Enjoy the quest and play"
 !scr "it again and again and again ...      > "
+}
 
+!if LANGUAGE = DE{
+!scr "Suchen Sie die Schatztruhe der Geister- "
+!scr "stadt und oeffnen Sie diese ! Toeten    "
+!scr "Sie Belegro, den Zauberer und weichen   "
+!scr "Sie vielen anderen Wesen geschickt aus. "
+!scr "Bedienen Sie sich an den vielen Gegen-  "
+!scr "staenden, welche sich in den 19 Bildern "
+!scr "befinden. Viel Spass !                > "
+}
 
 display_intro_text:
 
@@ -1634,30 +1654,22 @@ m1F15:                                  ; call from init
 
 
 
-
-
-
-
-                                ; 222222222222222         888888888          000000000           000000000     
-                                ;2:::::::::::::::22     88:::::::::88      00:::::::::00       00:::::::::00   
-                                ;2::::::222222:::::2  88:::::::::::::88  00:::::::::::::00   00:::::::::::::00 
-                                ;2222222     2:::::2 8::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
-                                ;            2:::::2 8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
-                                ;            2:::::2 8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
-                                ;         2222::::2   8:::::88888:::::8  0:::::0     0:::::0 0:::::0     0:::::0
-                                ;    22222::::::22     8:::::::::::::8   0:::::0 000 0:::::0 0:::::0 000 0:::::0
-                                ;  22::::::::222      8:::::88888:::::8  0:::::0 000 0:::::0 0:::::0 000 0:::::0
-                                ; 2:::::22222        8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
-                                ;2:::::2             8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
-                                ;2:::::2             8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
-                                ;2:::::2       2222228::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
-                                ;2::::::2222222:::::2 88:::::::::::::88   00:::::::::::::00   00:::::::::::::00 
-                                ;2::::::::::::::::::2   88:::::::::88       00:::::::::00       00:::::::::00   
-                                ;22222222222222222222     888888888           000000000           000000000   
-
-
-
-
+                    ; 222222222222222         888888888          000000000           000000000     
+                    ;2:::::::::::::::22     88:::::::::88      00:::::::::00       00:::::::::00   
+                    ;2::::::222222:::::2  88:::::::::::::88  00:::::::::::::00   00:::::::::::::00 
+                    ;2222222     2:::::2 8::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
+                    ;            2:::::2 8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
+                    ;            2:::::2 8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
+                    ;         2222::::2   8:::::88888:::::8  0:::::0     0:::::0 0:::::0     0:::::0
+                    ;    22222::::::22     8:::::::::::::8   0:::::0 000 0:::::0 0:::::0 000 0:::::0
+                    ;  22::::::::222      8:::::88888:::::8  0:::::0 000 0:::::0 0:::::0 000 0:::::0
+                    ; 2:::::22222        8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
+                    ;2:::::2             8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
+                    ;2:::::2             8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
+                    ;2:::::2       2222228::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
+                    ;2::::::2222222:::::2 88:::::::::::::88   00:::::::::::::00   00:::::::::::::00 
+                    ;2::::::::::::::::::2   88:::::::::88       00:::::::::00       00:::::::::00   
+                    ;22222222222222222222     888888888           000000000           000000000   
 
 
 
@@ -1911,22 +1923,22 @@ print_title:
 
 
 
-                                ; 333333333333333   555555555555555555  222222222222222    555555555555555555 
-                                ;3:::::::::::::::33 5::::::::::::::::5 2:::::::::::::::22  5::::::::::::::::5 
-                                ;3::::::33333::::::35::::::::::::::::5 2::::::222222:::::2 5::::::::::::::::5 
-                                ;3333333     3:::::35:::::555555555555 2222222     2:::::2 5:::::555555555555 
-                                ;            3:::::35:::::5                        2:::::2 5:::::5            
-                                ;            3:::::35:::::5                        2:::::2 5:::::5            
-                                ;    33333333:::::3 5:::::5555555555            2222::::2  5:::::5555555555   
-                                ;    3:::::::::::3  5:::::::::::::::5      22222::::::22   5:::::::::::::::5  
-                                ;    33333333:::::3 555555555555:::::5   22::::::::222     555555555555:::::5 
-                                ;            3:::::3            5:::::5 2:::::22222                    5:::::5
-                                ;            3:::::3            5:::::52:::::2                         5:::::5
-                                ;            3:::::35555555     5:::::52:::::2             5555555     5:::::5
-                                ;3333333     3:::::35::::::55555::::::52:::::2       2222225::::::55555::::::5
-                                ;3::::::33333::::::3 55:::::::::::::55 2::::::2222222:::::2 55:::::::::::::55 
-                                ;3:::::::::::::::33    55:::::::::55   2::::::::::::::::::2   55:::::::::55   
-                                ; 333333333333333        555555555     22222222222222222222     555555555  
+                    ; 333333333333333   555555555555555555  222222222222222    555555555555555555 
+                    ;3:::::::::::::::33 5::::::::::::::::5 2:::::::::::::::22  5::::::::::::::::5 
+                    ;3::::::33333::::::35::::::::::::::::5 2::::::222222:::::2 5::::::::::::::::5 
+                    ;3333333     3:::::35:::::555555555555 2222222     2:::::2 5:::::555555555555 
+                    ;            3:::::35:::::5                        2:::::2 5:::::5            
+                    ;            3:::::35:::::5                        2:::::2 5:::::5            
+                    ;    33333333:::::3 5:::::5555555555            2222::::2  5:::::5555555555   
+                    ;    3:::::::::::3  5:::::::::::::::5      22222::::::22   5:::::::::::::::5  
+                    ;    33333333:::::3 555555555555:::::5   22::::::::222     555555555555:::::5 
+                    ;            3:::::3            5:::::5 2:::::22222                    5:::::5
+                    ;            3:::::3            5:::::52:::::2                         5:::::5
+                    ;            3:::::35555555     5:::::52:::::2             5555555     5:::::5
+                    ;3333333     3:::::35::::::55555::::::52:::::2       2222225::::::55555::::::5
+                    ;3::::::33333::::::3 55:::::::::::::55 2::::::2222222:::::2 55:::::::::::::55 
+                    ;3:::::::::::::::33    55:::::::::55   2::::::::::::::::::2   55:::::::::55   
+                    ; 333333333333333        555555555     22222222222222222222     555555555  
 
 
 
@@ -2522,7 +2534,7 @@ init:
                     jsr wait
 
                     ; waiting for key press on title screen
-bp
+
                     lda #TITLE_KEY_MATRIX    ;#$7f           ; read row 7 of keyboard matrix (http://plus4world.powweb.com/plus4encyclopedia/500012)
 -                   sta KEYBOARD_LATCH          ; Latch register for keyboard
                     lda KEYBOARD_LATCH
@@ -2657,28 +2669,46 @@ death_messages:
 ; 0f You were wounded by the bush!
 ; 10 You are trapped in wire-nettings!
 
-!scr "You fell into a          snake pit !    "
-!scr "          You'd better watched out for t"
-!scr "he sacred column!   You drowned in the d"
-!scr "eep river !                   You drank "
-!scr "from the       poisened bottle ........ "
-!scr "Boris, the spider, got   you and killed "
-!scr "you !     Didn't you see the       laser"
-!scr " beam ?!?           240 Volts ! You got "
-!scr "an electrical shock !         You steppe"
-!scr "d on a nail !                           "
-!scr "A foot trap stopped you !               "
-!scr "          This room is doomed      by th"
-!scr "e wizard Manilo !   You were locked in a"
-!scr "nd starved !                  You were h"
-!scr "it by a big    rock and died !          "
-!scr "Belegro killed           you !          "
-!scr "          You found a thirsty      zombi"
-!scr "e .......           The monster grapped "
-!scr "      you. You are dead !     You were w"
-!scr "ounded by      the bush !               "
-!scr "You are trapped in       wire-nettings !"
-!scr "          "
+!if LANGUAGE = EN{
+!scr "You fell into a          snake pit !              "
+!scr "You'd better watched out for the sacred column!   "
+!scr "You drowned in the deep river !                   "
+!scr "You drank from the       poisened bottle ........ "
+!scr "Boris, the spider, got   you and killed you !     "
+!scr "Didn't you see the       laser beam ?!?           "
+!scr "240 Volts ! You got an electrical shock !         "
+!scr "You stepped on a nail !                           "
+!scr "A foot trap stopped you !                         "
+!scr "This room is doomed      by the wizard Manilo !   "
+!scr "You were locked in and starved !                  "
+!scr "You were hit by a big    rock and died !          "
+!scr "Belegro killed           you !                    "
+!scr "You found a thirsty      zombie .......           "
+!scr "The monster grapped       you. You are dead !     "
+!scr "You were wounded by      the bush !               "
+!scr "You are trapped in       wire-nettings !          "
+}
+
+; TODO - NOT TRANSLATED FULLY YET
+!if LANGUAGE = DE{
+!scr "You fell into a          snake pit !              "
+!scr "You'd better watched out for the sacred column!   "
+!scr "You drowned in the deep river !                   "
+!scr "You drank from the       poisened bottle ........ "
+!scr "Boris, the spider, got   you and killed you !     "
+!scr "Didn't you see the       laser beam ?!?           "
+!scr "240 Volts ! You got an electrical shock !         "
+!scr "You stepped on a nail !                           "
+!scr "A foot trap stopped you !                         "
+!scr "This room is doomed      by the wizard Manilo !   "
+!scr "You were locked in and starved !                  "
+!scr "You were hit by a big    rock and died !          "
+!scr "Belegro killed           you !                    "
+!scr "You found a thirsty      zombie .......           "
+!scr "The monster grapped       you. You are dead !     "
+!scr "Sie haben sich an dem    Dornenbusch verletzt !   "
+!scr "You are trapped in       wire-nettings !          "
+}
 
 ; ==============================================================================
 ;
@@ -2739,6 +2769,8 @@ m3EF9:
 ; and the code entry text
 ; ==============================================================================
 
+!if LANGUAGE = EN{
+
 hint_messages 
 !scr " A part of the code number is :         "
 !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
@@ -2747,6 +2779,21 @@ hint_messages
 !scr " *****   A helping letter :   "
 helping_letter !scr "C   ***** "
 !scr " Sorry, bad code number! Better luck next time! "
+
+}
+
+!if LANGUAGE = DE{
+
+hint_messages 
+!scr " Ein Teil des Loesungscodes lautet:     "
+!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+!scr " You need: bulb, bulb holder, socket !  "
+!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
+!scr " *****   A helping letter :   "
+helping_letter !scr "C   ***** "
+!scr " Sorry, bad code number! Better luck next time! "
+
+}
 
 ; ==============================================================================
 
