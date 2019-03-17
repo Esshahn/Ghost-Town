@@ -25,7 +25,7 @@
 EN = 0
 DE = 1
 
-LANGUAGE = EN 
+LANGUAGE = DE 
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
