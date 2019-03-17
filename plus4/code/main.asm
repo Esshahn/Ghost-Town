@@ -363,10 +363,7 @@ display_hint:
 +                   cpx #$0a
                     bne +               ; bne $1171
                     lda #$47
-+                   nop
-                    nop
-                    nop
-                    jsr m174F           ; jsr $174f
++                   jsr m174F           ; jsr $174f
                     cpx #$0f
                     bne +               ; bne $1185
                     lda #$45
@@ -411,14 +408,6 @@ m11CC:
                     jmp PRINT_KERNAL           ; jmp $c56b
 ; ==============================================================================
 
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
-                    nop
 check_death:
                     jsr m3846
                     jmp m3B4C           ; jmp $3b4c
@@ -933,7 +922,6 @@ m1506:              lda #$df
 
 m1523:              cpy #$09
                     bne -                           ; bne $1522
-                    nop
                     jmp m15AD                       ; jmp $15ad
 
 ; ==============================================================================
@@ -1133,9 +1121,8 @@ m1650:              jmp death               ; 05 Didn't you see the laser beam?
                     bcs m1676                   ; bcs $1676
                     jmp m16A7                 ; jmp $16a7
 
+; ==============================================================================
 
-m1675:
-                    nop
 m1676:              cmp #$e4
                     bcc +                           ; bcc $168a
                     cmp #$eb
@@ -1169,7 +1156,7 @@ m16A7:
                     bne m1650                       ; bne $1650
 +                   ldy #$00
                     sty m14CC + 1                   ; sty $14cd
-                    jmp m1675                       ; jmp $1675
+                    jmp m1676                       ; jmp $1675
 
 
 ; ==============================================================================
@@ -1777,7 +1764,7 @@ tileset_definition:
 ; displays a room based on tiles
 ; ==============================================================================
 
-display_room:       nop
+display_room:       
                     jsr m2FF5           ; jsr $2FF5
                     ldx #$08            ; i think this sets the colram (0800)
                     stx zp05
@@ -2400,8 +2387,8 @@ m399D:
 m399F:
                     cmp #$df
                     beq +               ; beq $39a5
-                    inc $0a
-+                   lda ($a7),y
+                    inc zp0A            ; inc $0a
++                   lda (zpA7),y        ; lda ($a7),y
                     jmp m38B7           ; jmp $38b7
 
 ; ==============================================================================
@@ -2446,7 +2433,7 @@ m3A17:
                     inx
                     stx m3050 + 1
                     ldy m3A33 + $17, x         ; ldy $3a4a,x
-                    lda m39AA,y                ; lda $39aa,y
+m3A21:              lda m39AA,y                ; lda $39aa,y
                     sta m35A3 + 1
                     lda m39AA + 1,y            ; lda $39ab,y
                     sta m35A3 + 3
@@ -2467,9 +2454,9 @@ m3A33:
 !byte $00 
 
 m3A64:
-                    stx $3051
-                    ldy $3A33,x
-                    jmp $3A21
+                    stx m3050 + 1                           ; stx $3051
+                    ldy m3A33,x                             ; ldy $3A33,x
+                    jmp m3A21                               ; jmp $3A21
 m3A6D:
 
                     jsr m3602
@@ -2521,6 +2508,7 @@ set_game_basics:
 ; ==============================================================================
 
 set_charset_and_screen_for_title:    ; set text screen
+                    
                     lda VOICE1
                     ora #$04           ; set bit 2
                     sta VOICE1          ; => get data from ROM
@@ -2530,6 +2518,7 @@ set_charset_and_screen_for_title:    ; set text screen
                     lda #$08           ; 40 columns and Multicolor OFF
                     sta $ff07
                     rts
+                    
 
 ; ==============================================================================
 ; init
