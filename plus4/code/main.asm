@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0 ; address $3b45
+START_ROOM          = 18             ; default 0 ; address $3b45
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -200,6 +200,8 @@ m1009:              cpy #$00
                     sta BORDER_COLOR          ; ?!? womöglich unbenutzt ?!?
                     rts
 ; ==============================================================================
+; TODO: understand this one, it gets called a lot
+
 m1031:
                     jsr m11CC           ; jsr $11cc
                     cpy #$03
@@ -510,22 +512,22 @@ m1267:
                     jmp m11ED
 +                   lda items + $bb
                     cmp #$df            ; df = empty spot where the hammer was. = hammer taken
-                    beq m129A                                   ; beq $129a
+                    beq take_key_out_of_bottle                                   ; beq $129a
                     ldy #$03
                     jmp death        ; 03 You drank from the poisend bottle
 
 
 ; ==============================================================================
-
-m129A: 
+; take the key out of the bottle
+take_key_out_of_bottle: 
                     lda #$01
-                    sta m12A4                                   ; sta $12a4
+                    sta key_in_bottle_storage                                   ; sta $12a4
                     ldy #$05
                     jmp m1031           ; jmp $1031
 
 ; ==============================================================================
-
-m12A4:              !byte $00
+; this is 1 if the key from the bottle was taken and 0 if not
+key_in_bottle_storage:              !byte $00
 ; ==============================================================================
 m12A5:              cpy #$03
                     bne m12B5                                   ; bne $12b5
@@ -596,7 +598,7 @@ sacred_column:
                     bne +                                   ; bne $1312
                     ldy #$01            ; 01 You'd better watched out for the sacred column
                     bne m1303                               ; bne $1303
-+                   cmp #$5f            ; water?
++                   cmp #$5f            
                     bne m12EC                               ; bne $12ec
                     lda #$bc            ; light picked up
                     sta items + $74                        ; sta $36fe           ; but I dont understand how the whole light is shown
@@ -809,11 +811,16 @@ m1464:
 ; ==============================================================================
 
 
-m1474:              cmp #$81
+m1474:              
+                    cmp #$81
                     bcs +                   ; bcs $147b
                     jmp check_death
-
-+                   jmp m1B8F
++                   
+                    lda key_in_bottle_storage           ; lda $12a4
+                    bne +               ; bne $1b97
+                    jmp m3B4C           ; jmp $3b4c
++                   jsr set_charset_and_screen_for_title           ; jsr $3a9d
+                    jmp print_endscreen ; jmp $1b44
 
 
 ; ==============================================================================
@@ -1207,8 +1214,8 @@ m16BA:
                     sta items + $30a                        ; sta $3994
                     lda #$f5                        ; fence
                     sta items + $277                        ; sta $3901
-                    lda #$00                        ; door
-                    sta m12A4                               ; sta $12a4
+                    lda #$00                        ; key in the bottle
+                    sta key_in_bottle_storage                               ; sta $12a4
                     lda #$01                        ; door
                     sta m15FC + 1                           ; sta $15fd
                     lda #$1e
@@ -1314,11 +1321,7 @@ print_endscreen:
 
 ; ==============================================================================
 
-m1B8F:              lda m12A4           ; lda $12a4
-                    bne +               ; bne $1b97
-                    jmp m3B4C           ; jmp $3b4c
-+                   jsr set_charset_and_screen_for_title           ; jsr $3a9d
-                    jmp print_endscreen ; jmp $1b44
+
 
 
 ; ==============================================================================
@@ -1725,20 +1728,12 @@ m2FDF:              ldy items + $96     ; ldy $3720
                     sta m3993 + 1       ; sta $3994
                     jmp m12F4           ; jmp $12f4
 +                   jmp m3B4C           ; jmp $3b4c
+
 m2FEF:              jsr m39F4 ; jsr $39f4
                     jmp m15D1           ; jmp $15d1
 
 
-; ==============================================================================
-;
-;
-; ==============================================================================
 
-m2FF5:
-                    jsr draw_empty_column_and_row           ; jsr $3b02
-                    lda #$00            ; settings this to e.g. 1 mirrors the level layout (to some extend)
-                    sta zp02
-                    rts
 
 
 ; $2ffd
@@ -1765,7 +1760,9 @@ tileset_definition:
 ; ==============================================================================
 
 display_room:       
-                    jsr m2FF5           ; jsr $2FF5
+                    jsr draw_empty_column_and_row           ; jsr $3b02
+                    lda #$00            ; settings this to e.g. 1 mirrors the level layout (to some extend)
+                    sta zp02
                     ldx #$08            ; i think this sets the colram (0800)
                     stx zp05
                     ldx #$0c            ; and this the screen (0c00)
@@ -1798,7 +1795,11 @@ m3066:              lda (zp09),y
                     sta (zp02),y
                     lda zp10
                     sta (zp04),y
-                    jsr m30C8           ; jsr $30c8
+                    lda zp11
+                    cmp #$df
+                    beq +               ;beq $30d0
+                    inc zp11
++                   iny
                     cpy #$03
                     bne -               ; bne $3077
                     lda zp02
@@ -1839,20 +1840,6 @@ m30B8:              sbc #$75
 ;
 ; ==============================================================================
 
-m30C8:
-                    lda zp11
-                    cmp #$df
-                    beq +               ;beq $30d0
-                    inc zp11
-+                   iny
-                    rts
-
-; ==============================================================================
-;
-;
-; ==============================================================================
-
-                    ; *= $30D2
 print_X:
                     lda #>SCREENRAM       ; lda #$0c
                     sta zp03
@@ -1949,23 +1936,20 @@ print_title:
 ; ==============================================================================
 
                     *= $3525
-m3525:
-                    lda #>COLRAM        ; lda #$08
+
+
+m3534:
+                    lda #>COLRAM        ; lda #$08              ; COULD BE WRONG TO ASSUME
                     sta zp05
-                    lda #>SCREENRAM       ; lda #$0c
+                    lda #>SCREENRAM       ; lda #$0c             ; COULD BE WRONG TO ASSUME
                     sta zp03
                     lda #$00
                     sta zp02
                     sta zp04
-                    rts
-
-; ==============================================================================
-;
-;
-; ==============================================================================
-
-m3534:
-                    jsr m3525           ; jsr $3525
+                    nop
+                    nop
+                    nop
+                    nop
                     cpy #$00
                     beq +               ; beq $3547
 -                   clc
@@ -2162,7 +2146,7 @@ m366D:              ldy #$0e
 ; ==============================================================================
                     !source "includes/items.asm"
 
-m383A:
+next_item:
                     lda zpA7
                     clc
                     adc #$01
@@ -2186,9 +2170,9 @@ m3846:
 m3850:              lda (zpA7),y
                     cmp #$ff
                     beq +                       ; beq $385c
--                   jsr m383A
+-                   jsr next_item
                     jmp m3850
-+                   jsr m383A
++                   jsr next_item
                     lda (zpA7),y
                     cmp #$ff
                     beq m38DF               ; beq $38df
@@ -2201,7 +2185,7 @@ m3850:              lda (zpA7),y
                     lda #$00
                     sta zp02
                     sta zp04
-                    jsr m383A
+                    jsr next_item
                     lda (zpA7),y
 -                   cmp #$fe
                     beq +                   ; beq $388c
@@ -2215,7 +2199,7 @@ m3850:              lda (zpA7),y
 ++                  lda (zpA7),y
 +++                 cmp #$fb
                     bne +                   ; bne $389f
-                    jsr m383A
+                    jsr next_item
                     lda (zpA7),y
                     sta zp09
                     bne ++                  ; bne $38bf
@@ -2227,7 +2211,7 @@ m3850:              lda (zpA7),y
                     jmp m399F
 +++                 cmp #$fa
                     bne ++                  ; bne $38bf
-                    jsr m383A
+                    jsr next_item
                     lda (zpA7),y
                     sta zp0A
 m38B7:
@@ -2237,11 +2221,11 @@ m38B7:
                     sta (zp02),y
 ++                  cmp #$fd
                     bne +                   ; bne $38cc
-                    jsr m383A
+                    jsr next_item
                     lda (zpA7),y
                     sta zp02
                     sta zp04
-+                   jsr m383A
++                   jsr next_item
                     lda (zpA7),y
                     cmp #$ff
                     bne -                   ; bne $387d
@@ -2293,7 +2277,8 @@ m3900:              lda #$f5
 ;
 ; ==============================================================================
 
-m3919:              cmp #$07
+m3919:              
+                    cmp #$07
                     bne m392F       ; bne $392f
                     ldx #$17
 -                   lda SCREENRAM + $168,x     ; lda $0d68,x
@@ -2465,6 +2450,10 @@ m3A6D:
                     rts
                     brk             ; $00
 
+; ==============================================================================
+;
+; wait routine
+; usually called with Y set before
 ; ==============================================================================
 
 wait:
