@@ -1,0 +1,25 @@
+Sounds recommended for the game:
+
+Music:
+Title Screen
+Win Screen 
+Short "you lost" Jingle (2-5 seconds) when player dies (blue screen)?
+
+Effects:
+Item picked up
+Question mark (like a 3 note clue sound)
+Player moving (might become annoying though, so either very subtle or not at all)
+Door opened/closed (essentially just one sound as both happen immediately together when switching rooms)
+Wind blowing (like an atmosphere/mood background sound loop when the player is "outside")
+Something opens (a lock, a chest, a coffin)
+
+Optional/specific for single use:
+Opening a coffin
+A church bell (e.g. on the graveyard)
+Water/river
+The moving spider
+Electricity (electric fence, laser beam)
+Breaking glass (the box with the shoes, the bottle)
+The moving rock on the last screen
+Belegro laughing on the last screen
+
