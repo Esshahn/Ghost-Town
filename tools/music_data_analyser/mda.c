@@ -33,13 +33,6 @@ int data_voice2[] = {
     0x100
 };
 char *notenames[] = {
-    "A-0",
-    "B-0",
-    "C-1",
-    "D-1",
-    "E-1",
-    "F-1",
-    "G-1",
     "A-1",
     "B-1",
     "C-2",
@@ -56,7 +49,14 @@ char *notenames[] = {
     "G-3",
     "A-3",
     "B-3",
-    "C-4"
+    "C-4",
+    "D-4",
+    "E-4",
+    "F-4",
+    "G-4",
+    "A-4",
+    "B-4",
+    "C-5"
 };
 int index_voice1_x = 0;
 int index_voice1_y = 0;
@@ -84,23 +84,23 @@ void parse_voice2( int index )
 {
     if ( index < 0x1C )
     {
-        printf( "%s ", notenames[index] );
+        printf( "%s", notenames[index] );
     }
     else if ( index == 0x1C )
     {
-        printf( "--- " );
+        printf( "---" );
     }
     return;
 }
 
 int main()
 {
-    printf ( "timer  | voice 1 | voice 2 \n" );
+    printf ( "       | voice 1 | voice 2 \n" );
     printf ( "-------+---------+---------\n" );
 
     while ( index_voice2_x < 0x64 )
     {
-        printf( " %04x  | ", timer_global );
+        printf( "  %02X   | ", timer_global );
 
         if ( index_voice1_y == 0 )
         {
@@ -133,6 +133,11 @@ int main()
 
         printf( "\n" );
         timer_global++;
+        if ( timer_global == 0x20 )
+        {
+            timer_global = 0x00;
+            printf ( "-------+---------+---------\n" );
+        }
     }
 
     return EXIT_SUCCESS;
