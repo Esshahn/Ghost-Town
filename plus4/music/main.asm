@@ -19,7 +19,6 @@ code_start          = 0x1000
                     jsr irq_init0
                     jmp *
 
-
 music_display:      lda temp_FF0E
                     jsr lib_hex2screen
                     sta vidmem0+(1*40)+12
@@ -99,6 +98,58 @@ temp_FF0F:          !byte 0x00
 temp_FF10:          !byte 0x00
 temp_FF11:          !byte 0x00
 clean_FF12:         !byte 0x00
+
+                    FRAME_CT_VAL = 0x05
+framecounter:       lda #FRAME_CT_VAL+1
+                    beq +
+                    dec framecounter+1
+                    rts
++                   lda #FRAME_CT_VAL
+                    sta framecounter+1
+                    inc bar_counter
+                    lda bar_counter
+                    cmp #0x20
+                    bne +
+                    lda #0x00
+                    sta bar_counter
++                   rts
+
+framecounter_display:
+                    lda framecounter+1
+                    jsr lib_hex2screen
+                    sta vidmem0+(15*40)+2
+                    stx vidmem0+(15*40)+3
+
+                    lda bar_counter
+                    jsr lib_hex2screen
+                    sta vidmem0+(15*40)+5
+                    stx vidmem0+(15*40)+6
+                    rts
+
+bar_counter:        !byte 0x00
+
+check_reset:
+                    lda #0x7F
+                    sta 0xFD30
+                    sta 0xFF08
+                    lda 0xFF08
+                    and #0x10
+                    bne +
+                    lda #0x09
+                    sta rsav0+1
+                    lda #0x01
+                    sta rsav1+1
+                    lda #0x00
+                    sta rsav2+1
+                    sta rsav4+1
+                    sta rsav5+1
+                    sta rsav6+1
+                    sta bar_counter
+                    lda #0x04
+                    sta rsav3+1
+                    lda #FRAME_CT_VAL
+                    sta framecounter+1
++                   rts
 ; ==============================================================================
 ;
 ; music data
@@ -219,10 +270,15 @@ even_more_music:
 ; part of the music or the music instruments
 ; 0x1e88
 m1E88:
-!byte 0x07, 0x76, 0xa9, 0x06, 0x59, 0x7f, 0xc5, 0x04, 0x3b, 0x54, 0x83, 0xad, 0xc0, 0xe3, 0x02, 0x1e
-!byte 0x2a, 0x42, 0x56, 0x60, 0x71, 0x81, 0x8f, 0x95, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x02
-!byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03
-!byte 0x03, 0x03, 0x03, 0x03
+freq_tab_lo:        !byte 0x07, 0x76, 0xa9, 0x06, 0x59, 0x7f, 0xc5
+                    !byte 0x04, 0x3b, 0x54, 0x83, 0xad, 0xc0, 0xe3
+                    !byte 0x02, 0x1e, 0x2a, 0x42, 0x56, 0x60, 0x71
+                    !byte 0x81, 0x8f, 0x95
+freq_tab_hi:        !byte 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01
+                    !byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
+                    !byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03
+                    !byte 0x03, 0x03, 0x03
+;test:              !byte 0x03, 0x03, 0x03, 0x03
 
 ; ==============================================================================
 ;
@@ -285,6 +341,9 @@ irq0:
                     jsr music_play  ; jsr 0x1ebc
                     jsr music_display
                     jsr music_write
+                    jsr framecounter
+                    jsr framecounter_display
+                    jsr check_reset
                     inc 0xFF19
                     pla
                     tay
