@@ -1411,30 +1411,25 @@ start_intro:        sta KEYBOARD_LATCH
                     lda #$ba
                     sta rsav7+1         ; sta $1ed9    ; sound volume
                     rts
-
-; ==============================================================================
-;
-; music data
-; ==============================================================================
-; * = $1d11
                     !byte $60, $60, $f4         ; kann vermutlich weg?
-music_data:
-                    !source "includes/music.asm"
-
 ; ==============================================================================
-                    ; *= $1DD2
-music_player:                                  ; Teil von music_play
+; MUSIC
+; ==============================================================================
+                    !zone MUSIC
+music_data:         !source "includes/music.asm"
+; ==============================================================================
+music_player:
 rsav2:              ldy #$00
-                    bne +               ; bne $1df3
+                    bne +
                     lda #$40
-                    sta rsav3+1         ; sta $1e39
-                    jsr music_voice1           ; jsr $1e38
+                    sta music_voice1+1
+                    jsr music_voice1
 rsav4:              ldx #$00
-                    lda music_data_voice1,x       ; lda $1d14,x                     ; first voice
-                    inc rsav4+1         ; inc $1ddf
+                    lda music_data_voice1,x
+                    inc rsav4+1
                     tay
                     and #$1f
-                    sta rsav3+1         ; sta $1e39
+                    sta music_voice1+1
                     tya
                     lsr
                     lsr
@@ -1443,21 +1438,21 @@ rsav4:              ldx #$00
                     lsr
                     tay
 +                   dey
-                    sty rsav2+1         ; sty $1dd3
+                    sty rsav2+1
 rsav5:              ldy #$00
                     bne +
                     lda #$40
                     sta music_voice2 + 1
-                    jsr music_voice2           ; jsr $1e60
+                    jsr music_voice2
 rsav6:              ldx #$00
-                    lda music_data_voice2,x     ; lda $1d6e,x                 ; second voice
+                    lda music_data_voice2,x
                     tay
                     inx
                     cpx #$65
-                    beq m1E27           ; beq $1e27
-                    stx rsav6 + 1       ; stx $1e04
+                    beq music_reset
+                    stx rsav6 + 1
                     and #$1f
-                    sta music_voice2 + 1       ; sta $1e61
+                    sta music_voice2 + 1
                     tya
                     lsr
                     lsr
@@ -1466,49 +1461,37 @@ rsav6:              ldx #$00
                     lsr
                     tay
 +                   dey
-                    sty rsav5 + 1       ; sty $1df8
-                    jsr music_voice1           ; jsr $1e38
-                    jmp music_voice2           ; jmp $1e60
-
+                    sty rsav5 + 1
+                    jsr music_voice1
+                    jmp music_voice2
 ; ==============================================================================
-; music
-m1E27:              lda #$00
-                    sta rsav2+1         ; sta $1dd3
-                    sta rsav4+1         ; sta $1ddf
-                    sta rsav5+1         ; sta $1df8
-                    sta rsav6+1         ; sta $1e04
-                    jmp music_player           ; jmp $1dd2
-
+music_reset:        lda #$00
+                    sta rsav2+1
+                    sta rsav4+1
+                    sta rsav5+1
+                    sta rsav6+1
+                    jmp music_player
 ; ==============================================================================
-; music
-
-music_voice1:
-rsav3:              ldx #$04
+; write music data for voice1 / voice2 into TED registers
+; ==============================================================================
+music_voice1:       ldx #$04
                     cpx #$1c
-                    bcc +               ; bcc $1e46
+                    bcc +
                     lda VOLUME_AND_VOICE_SELECT
-                    and #$ef           ; clear bit 4
-                    jmp writeFF11       ; jmp $1e5c
-
-+                   lda freq_tab_lo,x         ; lda $1e88,x        ; $1E88 ... : music data lo ?
-                    sta VOICE1_FREQ_LOW          ; Low byte of frequency for voice 1
+                    and #$ef
+                    jmp writeFF11
++                   lda freq_tab_lo,x
+                    sta VOICE1_FREQ_LOW
                     lda VOICE1
                     and #$fc
-                    ora freq_tab_hi, x  ; ora $1ea0,x        ; $1EA0 ... : music data hi ?
-                    sta VOICE1          ; High bits of frequency for voice 1
+                    ora freq_tab_hi, x
+                    sta VOICE1
                     lda VOLUME_AND_VOICE_SELECT
-                    ora #$10           ; set bit 4
-writeFF11           sta VOLUME_AND_VOICE_SELECT          ; (de-)select voice 1
+                    ora #$10
+writeFF11           sta VOLUME_AND_VOICE_SELECT
                     rts
-
 ; ==============================================================================
-;
-;
-; ==============================================================================
-; music
-                    ; *= $1E60
-music_voice2:
-                    ldx #$0d
+music_voice2:       ldx #$0d
                     cpx #$1c
                     bcc +
                     lda VOLUME_AND_VOICE_SELECT
@@ -1524,64 +1507,40 @@ music_voice2:
                     ora #$20
                     sta VOLUME_AND_VOICE_SELECT
                     rts
-
 ; ==============================================================================
-;
-; seems to be the instruments or pitch/octave of the music
-; ==============================================================================
-
 ; TED frequency tables
-; $1e88
-m1E88:
-freq_tab_lo:      !byte $07, $76, $a9, $06, $59, $7f, $c5
-                  !byte $04, $3b, $54, $83, $ad, $c0, $e3
-                  !byte $02, $1e, $2a, $42, $56, $60, $71
-                  !byte $81, $8f, $95
-freq_tab_hi:      !byte $00, $00, $00, $01, $01, $01, $01
-                  !byte $02, $02, $02, $02, $02, $02, $02
-                  !byte $03, $03, $03, $03, $03, $03, $03
-                  !byte $03, $03, $03, $03, $03, $03, $03
 ; ==============================================================================
-;
-;
+freq_tab_lo:        !byte $07, $76, $a9, $06, $59, $7f, $c5
+                    !byte $04, $3b, $54, $83, $ad, $c0, $e3
+                    !byte $02, $1e, $2a, $42, $56, $60, $71
+                    !byte $81, $8f, $95
+freq_tab_hi:        !byte $00, $00, $00, $01, $01, $01, $01
+                    !byte $02, $02, $02, $02, $02, $02, $02
+                    !byte $03, $03, $03, $03, $03, $03, $03
+                    !byte $03, $03, $03, $03, $03, $03, $03
 ; ==============================================================================
-; music
-
-music_play:
-rsav0:              ldx #$09
+music_play:         ldx #$09
                     dex
-                    stx rsav0+1         ; stx $1ebd
-                    beq +               ; beq $1ece
+                    stx music_play+1
+                    beq +
                     rts
-
-; ==============================================================================
-; music
-                    ; *= $1EC5
 rsav1:              ldy #$01
                     dey
-                    sty rsav1+1         ; sty $1ec6
-                    beq +               ; beq $1ece
+                    sty rsav1+1
+                    beq +
                     rts
-
-; ==============================================================================
-; music
-                    ; *= $1ECE
 +                   ldy #$0b
-                    sty rsav0+1         ; sty $1ebd
+                    sty music_play+1
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$37
-rsav7:              and #$bf           ; $1ED8 $1ED9     ; rsav7+1 = sound volume
-                    sta VOLUME_AND_VOICE_SELECT          ; sth. with SOUND / MUSIC ?
-                    jmp music_player           ; jmp $1dd2
-
+rsav7:              and #$bf
+                    sta VOLUME_AND_VOICE_SELECT
+                    jmp music_player
 ; ==============================================================================
 ; irq init
-;
 ; ==============================================================================
-
-                    ; *= $1EE0
-irq_init0:
-                    sei
+                    !zone IRQ
+irq_init0:          sei
                     lda #<irq0          ; lda #$06
                     sta $0314          ; irq lo
                     lda #>irq0          ; lda #$1f
