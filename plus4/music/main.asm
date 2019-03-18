@@ -1,17 +1,66 @@
                     !cpu 6502
 
-VOICE1_LO           = 0xFF0E
-VOICE1_HI           = 0xFF12
-VOICE2_LO           = 0xFF0F
-VOICE2_HI           = 0xFF10
+VOICE1_LO           = temp_FF0E
+VOICE1_HI           = temp_FF12
+VOICE2_LO           = temp_FF0F
+VOICE2_HI           = temp_FF10
+kFF11               = temp_FF11
 
+vidmem0             = 0x0c00
 
 code_start          = 0x1000
 
+                    *= vidmem0
+                    !bin "includes/screen.prg",,2
+
                     *= code_start
+                    lda 0xFF12
+                    sta temp_FF12
                     jsr irq_init0
                     jmp *
 
+
+music_display:      lda temp_FF0E
+                    jsr lib_hex2screen
+                    sta vidmem0+(1*40)+12
+                    stx vidmem0+(1*40)+13
+                    lda temp_FF12
+                    jsr lib_hex2screen
+                    sta vidmem0+(2*40)+12
+                    stx vidmem0+(2*40)+13
+
+                    lda temp_FF0F
+                    jsr lib_hex2screen
+                    sta vidmem0+(4*40)+12
+                    stx vidmem0+(4*40)+13
+                    lda temp_FF10
+                    jsr lib_hex2screen
+                    sta vidmem0+(5*40)+12
+                    stx vidmem0+(5*40)+13
+
+                    lda temp_FF11
+                    jsr lib_hex2screen
+                    sta vidmem0+(7*40)+12
+                    stx vidmem0+(7*40)+13
+                    rts
+
+music_write:        lda temp_FF0E
+                    sta 0xFF0E
+                    lda temp_FF12
+                    sta 0xFF12
+                    lda temp_FF0F
+                    sta 0xFF0F
+                    lda temp_FF10
+                    sta 0xFF10
+                    lda temp_FF11
+                    sta 0xFF11
+                    rts
+
+temp_FF0E:          !byte 0x00
+temp_FF12:          !byte 0x00
+temp_FF0F:          !byte 0x00
+temp_FF10:          !byte 0x00
+temp_FF11:          !byte 0x00
 ; ==============================================================================
 ;
 ; music data
@@ -85,7 +134,7 @@ more_music:
 rsav3:              ldx #0x04
                     cpx #0x1c
                     bcc +               ; bcc 0x1e46
-                    lda 0xFF11
+                    lda kFF11
                     and #0xef           ; clear bit 4
                     jmp writeFF11       ; jmp 0x1e5c
 
@@ -95,9 +144,9 @@ rsav3:              ldx #0x04
                     and #0xfc
                     ora m1E88 + 0x18, x  ; ora 0x1ea0,x        ; 0x1EA0 ... : music data hi ?
                     sta VOICE1_HI          ; High bits of frequency for voice 1
-                    lda 0xFF11
+                    lda kFF11
                     ora #0x10           ; set bit 4
-writeFF11           sta 0xFF11          ; (de-)select voice 1
+writeFF11           sta kFF11           ;  (de-)select voice 1
                     rts
 
 ; ==============================================================================
@@ -110,7 +159,7 @@ even_more_music:
                     ldx #0x0d
                     cpx #0x1c
                     bcc +
-                    lda 0xFF11
+                    lda kFF11
                     and #0xdf
                     jmp writeFF11       ; jmp 0x1e5c
 +                   lda m1E88,x         ; lda 0x1e88,x
@@ -119,9 +168,9 @@ even_more_music:
                     and #0xfc
                     ora m1E88 + 0x18,x   ; ora 0x1ea0,x
                     sta VOICE2_HI
-                    lda 0xFF11
+                    lda kFF11
                     ora #0x20
-                    sta 0xFF11
+                    sta kFF11
                     rts
 
 ; ==============================================================================
@@ -164,10 +213,10 @@ rsav1:              ldy #0x01
                     ; *= 0x1ECE
 +                   ldy #0x0b
                     sty rsav0+1         ; sty 0x1ebd
-                    lda 0xFF11
+                    lda kFF11
                     ora #0x37
 rsav7:              and #0xbf           ; 0x1ED8 0x1ED9     ; rsav7+1 = sound volume
-                    sta 0xFF11          ; sth. with SOUND / MUSIC ?
+                    sta kFF11          ; sth. with SOUND / MUSIC ?
                     jmp music_player           ; jmp 0x1dd2
 
 ; ==============================================================================
@@ -195,9 +244,42 @@ irq0:
                     lda 0xFF09
                     sta 0xFF09
                     jsr music_play  ; jsr 0x1ebc
+                    jsr music_display
+                    jsr music_write
                     pla
                     tay
                     pla
                     tax
                     pla
                     rti
+; ==============================================================================
+; lib_hex2screen
+; ------------+-----------------------------------------------------------------
+; depends on: | -
+; ------------+-----------------------------------------------------------------
+; uses:       | A, X
+; ------------+-----------------------------------------------------------------
+; preserves:  | Y
+; ------------+---+-------------------------------------------------------------
+; input:      | A | hexvalue to be converted
+; ------------+---+-------------------------------------------------------------
+; output:     | A | petscii/screencode high nibble
+;             | X | petscii/screencode low nibble
+; ------------+---+-------------------------------------------------------------
+!zone LIB_HEX2SCREEN
+
+lib_hex2screen:     sta .savea+1
+                    and #%00001111
+                    tax
+                    lda .hextab,x
+                    sta .low_nibble+1
+.savea              lda #0
+                    lsr
+                    lsr
+                    lsr
+                    lsr
+                    tax
+                    lda .hextab,x           ; high nibble
+.low_nibble         ldx #0
+                    rts
+.hextab:            !scr "0123456789abcdef"
