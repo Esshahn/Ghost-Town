@@ -26,6 +26,7 @@ music_display:      lda temp_FF0E
                     stx vidmem0+(1*40)+13
                     lda temp_FF12
                     and #%00000011
+                    sta clean_FF12
                     jsr lib_hex2screen
                     sta vidmem0+(2*40)+12
                     stx vidmem0+(2*40)+13
@@ -43,7 +44,42 @@ music_display:      lda temp_FF0E
                     jsr lib_hex2screen
                     sta vidmem0+(7*40)+12
                     stx vidmem0+(7*40)+13
-                    rts
+
+                    ; print human readable note value voice1
+                    ldx clean_FF12
+                    lda freq_tab_pt_lo,x
+                    sta .frtabpt0+1
+                    lda freq_tab_pt_hi,x
+                    sta .frtabpt0+2
+                    ldx temp_FF0E
+.frtabpt0:          lda 0x0000,x
+                    cmp #0xFF
+                    beq +
+                    tax
+                    lda note_tab0,x
+                    sta vidmem0+(1*40)+20
+                    lda note_tab1,x
+                    sta vidmem0+(1*40)+21
+                    lda note_tab2,x
+                    sta vidmem0+(1*40)+22
++                   ; print human readable note value voice2
+                    ldx temp_FF10
+                    lda freq_tab_pt_lo,x
+                    sta .frtabpt1+1
+                    lda freq_tab_pt_hi,x
+                    sta .frtabpt1+2
+                    ldx temp_FF0F
+.frtabpt1:          lda 0x0000,x
+                    cmp #0xFF
+                    beq +
+                    tax
+                    lda note_tab0,x
+                    sta vidmem0+(4*40)+20
+                    lda note_tab1,x
+                    sta vidmem0+(4*40)+21
+                    lda note_tab2,x
+                    sta vidmem0+(4*40)+22
++                   rts
 
 music_write:        lda temp_FF0E
                     sta 0xFF0E
@@ -62,6 +98,7 @@ temp_FF12:          !byte 0x00
 temp_FF0F:          !byte 0x00
 temp_FF10:          !byte 0x00
 temp_FF11:          !byte 0x00
+clean_FF12:         !byte 0x00
 ; ==============================================================================
 ;
 ; music data
@@ -244,9 +281,11 @@ irq_init0:
 irq0:
                     lda 0xFF09
                     sta 0xFF09
+                    dec 0xFF19
                     jsr music_play  ; jsr 0x1ebc
                     jsr music_display
                     jsr music_write
+                    inc 0xFF19
                     pla
                     tay
                     pla
@@ -267,7 +306,7 @@ irq0:
 ; output:     | A | petscii/screencode high nibble
 ;             | X | petscii/screencode low nibble
 ; ------------+---+-------------------------------------------------------------
-!zone LIB_HEX2SCREEN
+                    !zone LIB_HEX2SCREEN
 
 lib_hex2screen:     sta .savea+1
                     and #%00001111
@@ -284,3 +323,147 @@ lib_hex2screen:     sta .savea+1
 .low_nibble         ldx #0
                     rts
 .hextab:            !scr "0123456789abcdef"
+; ==============================================================================
+                    !zone TABLES
+freq_tab_pt_lo:     !byte <freq_tab0, <freq_tab1, <freq_tab2, <freq_tab3
+freq_tab_pt_hi:     !byte >freq_tab0, >freq_tab1, >freq_tab2, >freq_tab3
+freq_tab0:          !fi 255, 0xFF
+freq_tab1:          !fi 255, 0xFF
+freq_tab2:          !fi 255, 0xFF
+freq_tab3:          !fi 255, 0xFF
+note_tab0:          !scr "aabccddeffgg"
+                    !scr "aabccddeffgg"
+                    !scr "aabccddeffgg"
+                    !scr "aabccddeffgg"
+                    !scr "aabccddeffgg"
+note_tab1:          !scr "-#--#-#--#-#"
+                    !scr "-#--#-#--#-#"
+                    !scr "-#--#-#--#-#"
+                    !scr "-#--#-#--#-#"
+                    !scr "-#--#-#--#-#"
+note_tab2:          !scr "000111111111"
+                    !scr "111222222222"
+                    !scr "222333333333"
+                    !scr "333444444444"
+                    !scr "444555555555"
+                    ; indexes
+                    *= freq_tab0+0x07   ; A-0
+                    !byte 0x00
+                    *= freq_tab0+0x40   ; A#0
+                    !byte 0x01
+                    *= freq_tab0+0x76   ; B-0
+                    !byte 0x02
+                    *= freq_tab0+0xA9   ; C-1
+                    !byte 0x03
+                    *= freq_tab0+0xD9   ; C#1
+                    !byte 0x04
+                    *= freq_tab1+0x06   ; D-1
+                    !byte 0x05
+                    *= freq_tab1+0x31   ; D#1
+                    !byte 0x06
+                    *= freq_tab1+0x59   ; E-1
+                    !byte 0x07
+                    *= freq_tab1+0x7F   ; F-1
+                    !byte 0x08
+                    *= freq_tab1+0xA3   ; F#1
+                    !byte 0x09
+                    *= freq_tab1+0xC5   ; G-1
+                    !byte 0x0A
+                    *= freq_tab1+0xE5   ; G#1
+                    !byte 0x0B
+                    *= freq_tab2+0x04   ; A-1
+                    !byte 0x0C
+                    *= freq_tab2+0x20   ; A#1
+                    !byte 0x0D
+                    *= freq_tab2+0x3B   ; B-1
+                    !byte 0x0E
+                    *= freq_tab2+0x54   ; C-2
+                    !byte 0x0F
+                    *= freq_tab2+0x6C   ; C#2
+                    !byte 0x10
+                    *= freq_tab2+0x83   ; D-2
+                    !byte 0x11
+                    *= freq_tab2+0x98   ; D#2
+                    !byte 0x12
+                    *= freq_tab2+0xAD   ; E-2
+                    !byte 0x13
+                    *= freq_tab2+0xC0   ; F-2
+                    !byte 0x14
+                    *= freq_tab2+0xD2   ; F#2
+                    !byte 0x15
+                    *= freq_tab2+0xE3   ; G-2
+                    !byte 0x16
+                    *= freq_tab2+0xF3   ; G#2
+                    !byte 0x17
+                    *= freq_tab3+0x02   ; A-2
+                    !byte 0x18
+                    *= freq_tab3+0x10   ; A#2
+                    !byte 0x19
+                    *= freq_tab3+0x1E   ; B-2
+                    !byte 0x1A
+                    *= freq_tab3+0x2A   ; C-3
+                    !byte 0x1B
+                    *= freq_tab3+0x36   ; C#3
+                    !byte 0x1C
+                    *= freq_tab3+0x42   ; D-3
+                    !byte 0x1D
+                    *= freq_tab3+0x46   ; D#3
+                    !byte 0x1E
+                    *= freq_tab3+0x56   ; E-3
+                    !byte 0x1F
+                    *= freq_tab3+0x60   ; F-3
+                    !byte 0x20
+                    *= freq_tab3+0x69   ; F#3
+                    !byte 0x21
+                    *= freq_tab3+0x71   ; G-3
+                    !byte 0x22
+                    *= freq_tab3+0x79   ; G#3
+                    !byte 0x23
+                    *= freq_tab3+0x81   ; A-3
+                    !byte 0x24
+                    *= freq_tab3+0x88   ; A#3
+                    !byte 0x25
+                    *= freq_tab3+0x8F   ; B-3
+                    !byte 0x26
+                    *= freq_tab3+0x95   ; C-4
+                    !byte 0x27
+                    *= freq_tab3+0x9B   ; C#4
+                    !byte 0x28
+                    *= freq_tab3+0xA1   ; D-4
+                    !byte 0x29
+                    *= freq_tab3+0xA6   ; D#4
+                    !byte 0x2A
+                    *= freq_tab3+0xAB   ; E-4
+                    !byte 0x2B
+                    *= freq_tab3+0xB0   ; F-4
+                    !byte 0x2C
+                    *= freq_tab3+0xB4   ; F#4
+                    !byte 0x2D
+                    *= freq_tab3+0xB9   ; G-4
+                    !byte 0x2E
+                    *= freq_tab3+0xBD   ; G#4
+                    !byte 0x2F
+                    *= freq_tab3+0xC0   ; A-4
+                    !byte 0x30
+                    *= freq_tab3+0xC4   ; A#4
+                    !byte 0x31
+                    *= freq_tab3+0xC7   ; B-4
+                    !byte 0x32
+                    *= freq_tab3+0xCB   ; C-5
+                    !byte 0x33
+                    *= freq_tab3+0xCE   ; C#5
+                    !byte 0x34
+                    *= freq_tab3+0xD0   ; D-5
+                    !byte 0x35
+                    *= freq_tab3+0xD3   ; D#5
+                    !byte 0x36
+                    *= freq_tab3+0xD6   ; E-5
+                    !byte 0x37
+                    *= freq_tab3+0xD8   ; F-5
+                    !byte 0x38
+                    *= freq_tab3+0xDA   ; F#5
+                    !byte 0x39
+                    *= freq_tab3+0xDC   ; G-5
+                    !byte 0x3A
+                    *= freq_tab3+0xDE   ; G#5
+                    !byte 0x3B
