@@ -1409,24 +1409,23 @@ start_intro:        sta KEYBOARD_LATCH
                     jsr display_intro_text           ; jsr $1cb5
                     jsr check_shift_key ; jsr $1ef9
                     lda #$ba
-                    sta rsav7+1         ; sta $1ed9    ; sound volume
+                    sta music_volume+1         ; sta $1ed9    ; sound volume
                     rts
-                    !byte $60, $60, $f4         ; kann vermutlich weg?
 ; ==============================================================================
 ; MUSIC
 ; ==============================================================================
                     !zone MUSIC
 music_data:         !source "includes/music.asm"
 ; ==============================================================================
-music_player:
-rsav2:              ldy #$00
+music_get_data:
+.voice1_dur_pt:     ldy #$00
                     bne +
                     lda #$40
                     sta music_voice1+1
                     jsr music_voice1
-rsav4:              ldx #$00
+.voice1_dat_pt:     ldx #$00
                     lda music_data_voice1,x
-                    inc rsav4+1
+                    inc .voice1_dat_pt+1
                     tay
                     and #$1f
                     sta music_voice1+1
@@ -1438,19 +1437,19 @@ rsav4:              ldx #$00
                     lsr
                     tay
 +                   dey
-                    sty rsav2+1
-rsav5:              ldy #$00
+                    sty .voice1_dur_pt + 1
+.voice2_dur_pt:     ldy #$00
                     bne +
                     lda #$40
                     sta music_voice2 + 1
                     jsr music_voice2
-rsav6:              ldx #$00
+.voice2_dat_pt:     ldx #$00
                     lda music_data_voice2,x
                     tay
                     inx
                     cpx #$65
                     beq music_reset
-                    stx rsav6 + 1
+                    stx .voice2_dat_pt + 1
                     and #$1f
                     sta music_voice2 + 1
                     tya
@@ -1461,16 +1460,16 @@ rsav6:              ldx #$00
                     lsr
                     tay
 +                   dey
-                    sty rsav5 + 1
+                    sty .voice2_dur_pt + 1
                     jsr music_voice1
                     jmp music_voice2
 ; ==============================================================================
 music_reset:        lda #$00
-                    sta rsav2+1
-                    sta rsav4+1
-                    sta rsav5+1
-                    sta rsav6+1
-                    jmp music_player
+                    sta .voice1_dur_pt + 1
+                    sta .voice1_dat_pt + 1
+                    sta .voice2_dur_pt + 1
+                    sta .voice2_dat_pt + 1
+                    jmp music_get_data
 ; ==============================================================================
 ; write music data for voice1 / voice2 into TED registers
 ; ==============================================================================
@@ -1496,12 +1495,12 @@ music_voice2:       ldx #$0d
                     bcc +
                     lda VOLUME_AND_VOICE_SELECT
                     and #$df
-                    jmp writeFF11       ; jmp $1e5c
-+                   lda freq_tab_lo,x         ; lda $1e88,x
-                    sta VOICE2_FREQ_LOW ; sta $ff0f
+                    jmp writeFF11
++                   lda freq_tab_lo,x
+                    sta VOICE2_FREQ_LOW
                     lda VOICE2
                     and #$fc
-                    ora freq_tab_hi,x   ; ora $1ea0,x
+                    ora freq_tab_hi,x
                     sta VOICE2
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$20
@@ -1517,25 +1516,22 @@ freq_tab_lo:        !byte $07, $76, $a9, $06, $59, $7f, $c5
 freq_tab_hi:        !byte $00, $00, $00, $01, $01, $01, $01
                     !byte $02, $02, $02, $02, $02, $02, $02
                     !byte $03, $03, $03, $03, $03, $03, $03
-                    !byte $03, $03, $03, $03, $03, $03, $03
+                    !byte $03, $03, $03
 ; ==============================================================================
-music_play:         ldx #$09
+                    MUSIC_DELAY_INITIAL   = $09
+                    MUSIC_DELAY           = $0B
+music_play:         ldx #MUSIC_DELAY_INITIAL
                     dex
                     stx music_play+1
                     beq +
                     rts
-rsav1:              ldy #$01
-                    dey
-                    sty rsav1+1
-                    beq +
-                    rts
-+                   ldy #$0b
-                    sty music_play+1
++                   ldx #MUSIC_DELAY
+                    stx music_play+1
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$37
-rsav7:              and #$bf
+music_volume:       and #$bf
                     sta VOLUME_AND_VOICE_SELECT
-                    jmp music_player
+                    jmp music_get_data
 ; ==============================================================================
 ; irq init
 ; ==============================================================================
@@ -1550,7 +1546,7 @@ irq_init0:          sei
                     sta $ff0a          ; set IRQ source to RASTER
 
                     lda #$bf
-                    sta rsav7+1         ; sta $1ed9    ; sound volume
+                    sta music_volume+1         ; sta $1ed9    ; sound volume
                     cli
 
                     jmp set_charset_and_screen_for_title           ; jmp $3a9d
@@ -1598,7 +1594,7 @@ irq0:
 ; ==============================================================================
 
 m1F15:                                  ; call from init
-                    lda rsav7+1         ; lda $1ed9           ; sound volume
+                    lda music_volume+1         ; lda $1ed9           ; sound volume
 --                  cmp #$bf           ; is true on init
                     bne +               ; bne $1f1f
                     jmp irq_init0       ; jmp $1ee0
@@ -1611,7 +1607,7 @@ m1F15:                                  ; call from init
                     bne -               ; bne $1f21 / some weird wait loop ?
                     clc
                     adc #$01           ; add 1 (#$C0 on init)
-                    sta rsav7+1         ; sta $1ed9             ; sound volume
+                    sta music_volume+1         ; sta $1ed9             ; sound volume
                     jmp --              ; jmp $1f18
 
 
