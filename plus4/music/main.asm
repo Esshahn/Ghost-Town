@@ -167,7 +167,7 @@ rsav2:              ldy #0x00
                     sta rsav3+1         ; sta 0x1e39
                     jsr more_music      ; jsr 0x1e38
 rsav4:              ldx #0x00
-                    lda music_data,x       ; lda 0x1d14,x / first voice
+                    lda music_data_voice1,x       ; lda 0x1d14,x / first voice
                     inc rsav4+1         ; inc 0x1ddf
                     tay
                     and #0x1f
@@ -187,7 +187,7 @@ rsav5:              ldy #0x00
                     sta even_more_music + 1
                     jsr even_more_music           ; jsr 0x1e60
 rsav6:              ldx #0x00
-                    lda music_data + 0x5d - 3,x     ; lda 0x1d6e,x                 ; second voice
+                    lda music_data_voice2,x     ; lda 0x1d6e,x                 ; second voice
                     tay
                     inx
                     cpx #0x65
