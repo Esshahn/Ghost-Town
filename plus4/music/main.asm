@@ -25,6 +25,7 @@ music_display:      lda temp_FF0E
                     sta vidmem0+(1*40)+12
                     stx vidmem0+(1*40)+13
                     lda temp_FF12
+                    and #%00000011
                     jsr lib_hex2screen
                     sta vidmem0+(2*40)+12
                     stx vidmem0+(2*40)+13
