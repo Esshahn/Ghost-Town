@@ -155,7 +155,7 @@ check_reset:
 ; music data
 ; ==============================================================================
 ; * = 0x1d11
-music:
+music_data:
                     !source "includes/music.asm"
 
 ; ==============================================================================
@@ -167,7 +167,7 @@ rsav2:              ldy #0x00
                     sta rsav3+1         ; sta 0x1e39
                     jsr more_music      ; jsr 0x1e38
 rsav4:              ldx #0x00
-                    lda music+3,x       ; lda 0x1d14,x / first voice
+                    lda music_data,x       ; lda 0x1d14,x / first voice
                     inc rsav4+1         ; inc 0x1ddf
                     tay
                     and #0x1f
@@ -187,7 +187,7 @@ rsav5:              ldy #0x00
                     sta even_more_music + 1
                     jsr even_more_music           ; jsr 0x1e60
 rsav6:              ldx #0x00
-                    lda music + 0x5d,x     ; lda 0x1d6e,x                 ; second voice
+                    lda music_data + 0x5d - 3,x     ; lda 0x1d6e,x                 ; second voice
                     tay
                     inx
                     cpx #0x65
@@ -270,9 +270,13 @@ even_more_music:
 ; part of the music or the music instruments
 ; 0x1e88
 m1E88:
+                    ;     0x00  0x01  0x02  0x03  0x04  0x05  0x06
 freq_tab_lo:        !byte 0x07, 0x76, 0xa9, 0x06, 0x59, 0x7f, 0xc5
+                    ;     0x07  0x08  0x09  0x0A  0x0B  0x0C  0x0D
                     !byte 0x04, 0x3b, 0x54, 0x83, 0xad, 0xc0, 0xe3
+                    ;     0x0E  0x0F  0x10  0x11  0x12  0x13  0x14
                     !byte 0x02, 0x1e, 0x2a, 0x42, 0x56, 0x60, 0x71
+                    ;     0x15  0x16  0x17
                     !byte 0x81, 0x8f, 0x95
 freq_tab_hi:        !byte 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01
                     !byte 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
