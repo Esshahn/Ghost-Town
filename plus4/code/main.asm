@@ -1417,7 +1417,8 @@ start_intro:        sta KEYBOARD_LATCH
 ; music data
 ; ==============================================================================
 ; * = $1d11
-music:
+                    !byte $60, $60, $f4         ; kann vermutlich weg?
+music_data:
                     !source "includes/music.asm"
 
 ; ==============================================================================
@@ -1427,9 +1428,9 @@ rsav2:              ldy #$00
                     bne +               ; bne $1df3
                     lda #$40
                     sta rsav3+1         ; sta $1e39
-                    jsr more_music           ; jsr $1e38
+                    jsr music_voice1           ; jsr $1e38
 rsav4:              ldx #$00
-                    lda music+3,x       ; lda $1d14,x                     ; first voice
+                    lda music_data_voice1,x       ; lda $1d14,x                     ; first voice
                     inc rsav4+1         ; inc $1ddf
                     tay
                     and #$1f
@@ -1446,17 +1447,17 @@ rsav4:              ldx #$00
 rsav5:              ldy #$00
                     bne +
                     lda #$40
-                    sta even_more_music + 1
-                    jsr even_more_music           ; jsr $1e60
+                    sta music_voice2 + 1
+                    jsr music_voice2           ; jsr $1e60
 rsav6:              ldx #$00
-                    lda music + $5d,x     ; lda $1d6e,x                 ; second voice
+                    lda music_data_voice2,x     ; lda $1d6e,x                 ; second voice
                     tay
                     inx
                     cpx #$65
                     beq m1E27           ; beq $1e27
                     stx rsav6 + 1       ; stx $1e04
                     and #$1f
-                    sta even_more_music + 1       ; sta $1e61
+                    sta music_voice2 + 1       ; sta $1e61
                     tya
                     lsr
                     lsr
@@ -1466,8 +1467,8 @@ rsav6:              ldx #$00
                     tay
 +                   dey
                     sty rsav5 + 1       ; sty $1df8
-                    jsr more_music           ; jsr $1e38
-                    jmp even_more_music           ; jmp $1e60
+                    jsr music_voice1           ; jsr $1e38
+                    jmp music_voice2           ; jmp $1e60
 
 ; ==============================================================================
 ; music
@@ -1481,7 +1482,7 @@ m1E27:              lda #$00
 ; ==============================================================================
 ; music
 
-more_music:
+music_voice1:
 rsav3:              ldx #$04
                     cpx #$1c
                     bcc +               ; bcc $1e46
@@ -1489,11 +1490,11 @@ rsav3:              ldx #$04
                     and #$ef           ; clear bit 4
                     jmp writeFF11       ; jmp $1e5c
 
-+                   lda m1E88,x         ; lda $1e88,x        ; $1E88 ... : music data lo ?
++                   lda freq_tab_lo,x         ; lda $1e88,x        ; $1E88 ... : music data lo ?
                     sta VOICE1_FREQ_LOW          ; Low byte of frequency for voice 1
                     lda VOICE1
                     and #$fc
-                    ora m1E88 + $18, x  ; ora $1ea0,x        ; $1EA0 ... : music data hi ?
+                    ora freq_tab_hi, x  ; ora $1ea0,x        ; $1EA0 ... : music data hi ?
                     sta VOICE1          ; High bits of frequency for voice 1
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$10           ; set bit 4
@@ -1506,18 +1507,18 @@ writeFF11           sta VOLUME_AND_VOICE_SELECT          ; (de-)select voice 1
 ; ==============================================================================
 ; music
                     ; *= $1E60
-even_more_music:
+music_voice2:
                     ldx #$0d
                     cpx #$1c
                     bcc +
                     lda VOLUME_AND_VOICE_SELECT
                     and #$df
                     jmp writeFF11       ; jmp $1e5c
-+                   lda m1E88,x         ; lda $1e88,x
++                   lda freq_tab_lo,x         ; lda $1e88,x
                     sta VOICE2_FREQ_LOW ; sta $ff0f
                     lda VOICE2
                     and #$fc
-                    ora m1E88 + $18,x   ; ora $1ea0,x
+                    ora freq_tab_hi,x   ; ora $1ea0,x
                     sta VOICE2
                     lda VOLUME_AND_VOICE_SELECT
                     ora #$20
