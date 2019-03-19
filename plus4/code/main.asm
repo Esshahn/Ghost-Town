@@ -1639,15 +1639,16 @@ m1F15:                                  ; call from init
 
 
 ; ==============================================================================
-;
 ; LEVEL DATA
 ; Based on tiles
+;                     !IMPORTANT!
+;                     has to be page aligned or
+;                     display_room routine will fail
 ; ==============================================================================
-                     *= $2800
-level_data:
-                    !source "includes/levels.asm"
+                      *= $2800
+level_data:           !source "includes/levels.asm"
 
-!byte $00, $00, $00, $00, $00, $00, $00
+                      !byte $00, $00, $00, $00, $00, $00, $00
 
 ;$2fbf
 m2FBF:
