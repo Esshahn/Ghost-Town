@@ -2526,9 +2526,9 @@ draw_border:        ; draws the extended "border"
                     lda #$27
                     sta zp02
                     sta zp04
-                    lda #$08
+                    lda #>COLRAM
                     sta zp05
-                    lda #$0c
+                    lda #>SCREENRAM
                     sta zp03
                     ldx #$18
                     ldy #$00
