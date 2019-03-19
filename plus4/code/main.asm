@@ -628,9 +628,9 @@ m133E:
                     bne m1366                               ; bne $1366
                     jsr m3602
                     lda #$18
-m1354:              sta m35A3 + 3
+m1354:              sta player_pos_x + 1
                     lda #$0c
-                    sta m35A3 + 1
+                    sta player_pos_y + 1
 m135C:              jmp m3B4C           ; jmp $3b4c
 
 
@@ -1058,10 +1058,10 @@ m15D1:              lda items + $ac                        ; lda $3736
                     bne m162A                               ; bne $162a
                     lda m14CC + 1                           ; lda $14cd
                     bne m15FC                               ; bne $15fc
-                    lda m35A3 + 1
+                    lda player_pos_y + 1
                     cmp #$06
                     bne m15FC                               ; bne $15fc
-                    lda m35A3 + 3
+                    lda player_pos_x + 1
                     cmp #$18
                     bne m15FC                               ; bne $15fc
                     lda #$00
@@ -1099,8 +1099,8 @@ m162d:
                     bne -                       ; bne $162f
                     lda #$02
                     sta zpA7
-                    ldx m35A3 + 3
-                    ldy m35A3 + 1
+                    ldx player_pos_x + 1
+                    ldy player_pos_y + 1
                     jsr m3608
                     ldx #$09
 m1647:              lda TAPE_BUFFER + $8,x      ; lda $033b,x              ; cassette tape buffer
@@ -1973,8 +1973,8 @@ check_joystick:
                     lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
-m35A3:              ldy #$09
-                    ldx #$15
+player_pos_y:       ldy #$09
+player_pos_x:       ldx #$15
                     lsr
                     bcs +                   ; bcs $35af
                     cpy #$00
@@ -2010,9 +2010,9 @@ m35A3:              ldy #$09
 +                   dex
                     bne -                   ; bne $35d9
 m35E7:              lda #$0a
-                    sta m35A3 + 1
+                    sta player_pos_y + 1
 m35EC:              lda #$15
-                    sta m35A3 + 3
+                    sta player_pos_x + 1
 ++                  lda #$ff
                     sta KEYBOARD_LATCH
                     lda #$01
@@ -2021,8 +2021,8 @@ m35EC:              lda #$15
                     sta zpA8
                     lda #$3d
                     sta zp0A
-m3602:              ldy m35A3 + 1
-                    ldx m35A3 + 3
+m3602:              ldy player_pos_y + 1
+                    ldx player_pos_x + 1
 m3608:              stx m3548 + 1           ; stx $3549
                     jmp m3534           ; jmp $3534
 
@@ -2055,18 +2055,18 @@ m3626:              ldy #$0f
                     nop
                     ldx m3624 + 1            ; ldx $3625
                     ldy m3626 + 1            ; ldy $3627
-                    cpx m35A3 + 3
+                    cpx player_pos_x + 1
                     bcs +                   ; bcs $3639
                     inx
                     inx
-+                   cpx m35A3 + 3
++                   cpx player_pos_x + 1
                     beq +                   ; beq $363f
                     dex
-+                   cpy m35A3 + 1
++                   cpy player_pos_y + 1
                     bcs +                   ; bcs $3646
                     iny
                     iny
-+                   cpy m35A3 + 1
++                   cpy player_pos_y + 1
                     beq +               ; beq $364c
                     dey
 +                   stx m3668 + 1       ; stx $3669
@@ -2378,9 +2378,9 @@ m3A17:
                     stx current_room + 1
                     ldy m3A33 + $17, x         ; ldy $3a4a,x
 m3A21:              lda m39AA,y                ; lda $39aa,y
-                    sta m35A3 + 1
+                    sta player_pos_y + 1
                     lda m39AA + 1,y            ; lda $39ab,y
-                    sta m35A3 + 3
+                    sta player_pos_x + 1
 m3A2D:              jsr display_room           ; jsr $3040
                     jmp m3846
 
@@ -2561,9 +2561,9 @@ draw_border:        ; draws the extended "border"
 
 set_start_screen:
                     lda #PLAYER_START_POS_Y
-                    sta m35A3 + 1               ; Y player start position (0 = top)
+                    sta player_pos_y + 1               ; Y player start position (0 = top)
                     lda #PLAYER_START_POS_X
-                    sta m35A3 + 3               ; X player start position (0 = left)
+                    sta player_pos_x + 1               ; X player start position (0 = left)
                     lda #START_ROOM              ; room number (start screen) ($3b45)
                     sta current_room + 1
                     jsr m3A2D                   ; jsr $3a2d
