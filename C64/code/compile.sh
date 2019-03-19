@@ -11,7 +11,12 @@ exomizer sfx 0x$STARTADDR -n -o "$OUTFILE" out.prg
 rm -f out.prg
 rm -f labels.asm
 
-#x64sc -VICIIborders 2 -moncommands vicelabels "$OUTFILE"
-codenet -n 172.16.1.164 -x "$OUTFILE"
+if [ "$HOSTNAME" = havarie ]
+    then
+        vice -VICIIborders 2 -moncommands vicelabels "$OUTFILE"
+    else
+        #x64sc -VICIIborders 2 -moncommands vicelabels "$OUTFILE"
+        codenet -n 172.16.1.164 -x "$OUTFILE"
+fi
 
 rm -f vicelabels

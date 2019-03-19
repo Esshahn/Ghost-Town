@@ -1709,9 +1709,18 @@ unknown: ; haven't found a call for this code area yet. might be waste
 ; ==============================================================================
 ; $301e
 tileset_definition:
-!byte $df, $0c, $15, $1e, $27, $30, $39, $42, $4b, $54, $5d, $66, $6f, $78, $81
-!byte $8a, $03, $00, $39, $19, $0e, $3d, $7f, $2a, $2a, $1e, $1e, $1e, $3d, $3d, $19
-!byte $2f, $2f, $39
+tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a
+                    ;     $10
+                    !byte $03
+tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $00, $39, $19, $0e, $3d, $7f, $2a, $2a
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
+                    ;     $10
+                    !byte $39
 
 ; ==============================================================================
 ;
@@ -1722,67 +1731,67 @@ display_room:
                     jsr draw_border
                     lda #$00            ; settings this to e.g. 1 mirrors the level layout (to some extend)
                     sta zp02
-                    ldx #$08            ; i think this sets the colram (0800)
+                    ldx #>COLRAM        ; i think this sets the colram (0800)
                     stx zp05
-                    ldx #$0c            ; and this the screen (0c00)
+                    ldx #>SCREENRAM     ; and this the screen (0c00)
                     stx zp03
-                    ldx #$28            ; when changed shifts level data -> $2800 = start of level data
-                    stx zp0A
-current_room:       ldx #$01
-                    beq ++               ; beq $305e
--                   clc
-                    adc #$68            ; $68 = 104 = 13*8 (size of a room)
-                    bcc +               ; bcc $305b
-                    inc zp0A
-+                   dex
-                    bne -               ; bne $3054
-++                  sta zp09
+                    ldx #>level_data    ; HiByte of level_data
+                    stx zp0A            ; in zp0A
+current_room:       ldx #$01            ; current_room in X
+                    beq ++              ; if 0 -> skip
+-                   clc                 ; else
+                    adc #$68            ; add $68 [= 104 = 13*8 (size of a room]
+                    bcc +               ; to zp09/zp0A
+                    inc zp0A            ;
++                   dex                 ; X times
+                    bne -               ; => current_room_data = ( level_data + ( $68 * current_room ) )
+++                  sta zp09            ; LoByte from above
                     ldy #$00
                     sty zpA8
                     sty zpA7
-m3066:              lda (zp09),y
-                    tax
-                    lda tileset_definition + $11,x
-                    sta zp10
-                    lda tileset_definition,x
-                    sta zp11
-                    ldx #$03
+m3066:              lda (zp09),y        ; get Tilenumber
+                    tax                 ; in X
+                    lda tiles_colors,x  ; get Tilecolor
+                    sta zp10            ; => zp10
+                    lda tiles_chars,x   ; get Tilechar
+                    sta zp11            ; => zp11
+                    ldx #$03            ; (3 rows)
 --                  ldy #$00
--                   lda zp02
-                    sta zp04
-                    lda zp11
-                    sta (zp02),y
-                    lda zp10
-                    sta (zp04),y
-                    lda zp11
-                    cmp #$df
-                    beq +               ;beq $30d0
-                    inc zp11
-+                   iny
-                    cpy #$03
-                    bne -               ; bne $3077
-                    lda zp02
+-                   lda zp02            ; LoByte of SCREENRAM pointer
+                    sta zp04            ; LoByte of COLRAM pointer
+                    lda zp11            ; Load Tilechar
+                    sta (zp02),y        ; to SCREENRAM + Y
+                    lda zp10            ; Load Tilecolor
+                    sta (zp04),y        ; to COLRAM + Y
+                    lda zp11            ; Load Tilechar again
+                    cmp #$df            ; if empty tile
+                    beq +               ; -> skip
+                    inc zp11            ; else: Tilechar + 1
++                   iny                 ; Y = Y + 1
+                    cpy #$03            ; Y = 3 ? (Tilecolumns)
+                    bne -               ; no -> next Char
+                    lda zp02            ; yes:
                     clc
-                    adc #$28
+                    adc #$28            ; next SCREEN row
                     sta zp02
-                    bcc +               ; bcc $3097
+                    bcc +
                     inc zp03
-                    inc zp05
-+                   dex
-                    bne --              ; bne $3075
-                    inc zpA8
-                    inc zpA7
-                    lda #$75
+                    inc zp05            ; and COLRAM row
++                   dex                 ; X = X - 1
+                    bne --              ; X != 0 -> next Char
+                    inc zpA8            ; else: zpA8 = zpA8 + 1
+                    inc zpA7            ; zpA7 = zpA7 + 1
+                    lda #$75            ;
                     ldx zpA8
-                    cpx #$0d
-                    bcc +               ; bcc $30b2
-                    ldx zpA7
-                    cpx #$66
-                    bcs print_X         ; bcs $30d2
-                    lda #$00
-                    sta zpA8
+                    cpx #$0d            ; zpA8 < $0d ?
+                    bcc +               ; yes: -> skip
+                    ldx zpA7            ; else:
+                    cpx #$66            ; zpA7 >= $66
+                    bcs print_X         ; yes: print_X
+                    lda #$00            ; else:
+                    sta zpA8            ; clear zpA8
                     lda #$24
-+                   sta m30B8 + 1      ; sta $30b9
++                   sta m30B8 + 1       ; sta $30b9
                     lda zp02
                     sec
 m30B8:              sbc #$75
@@ -1792,7 +1801,7 @@ m30B8:              sbc #$75
                     dec zp05
 +                   ldy zpA7
                     jmp m3066
-                    rts               ; will this ever be used?
+                    rts                 ; will this ever be used?
 
 ; ==============================================================================
 ;

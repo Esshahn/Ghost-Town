@@ -24,6 +24,9 @@ KEY_D               = 0x44
 KEY_RETURN          = 0x0D
 KEY_SPACE           = 0x20
 COL_BORDER_INGAME   = RED
+COL_BG_INGAME       = BLACK
+COL_BORDER_START    = DARK_GREY
+COL_BG_START        = DARK_GREY
 ; ==============================================================================
 zp_start            = 0x02
 zp_temp0            = zp_start
@@ -154,8 +157,9 @@ mainloop:
                     !zone PRINT
 print_screen_start: lda #0x0B
                     sta 0xD011
-                    lda #DARK_GREY
+                    lda #COL_BORDER_START
                     sta 0xD020
+                    lda #COL_BG_START
                     sta 0xD021
                     lda #BLACK
                     jsr lib_colramfill
@@ -170,7 +174,7 @@ print_room:         lda #0x0B
                     sta 0xD011
                     lda #COL_BORDER_INGAME
                     sta 0xD020
-                    lda #BLACK
+                    lda #COL_BG_INGAME
                     sta 0xD021
                     jsr print_border
                     lda #d018_val1
