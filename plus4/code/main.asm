@@ -304,7 +304,7 @@ m10B4:
 m10CC:              !byte $30, $36, $31, $33, $38
 ++                  jsr set_game_basics           ; jsr $3a7d
                     jsr m3A17           ; jsr $3a17
-                    jsr draw_empty_column_and_row           ; jsr $3b02
+                    jsr draw_border           ; jsr $3b02
                     jmp m3B4C           ; jmp $3b4c
 
 ; ==============================================================================
@@ -355,7 +355,7 @@ display_hint:
                     cpy #$00
                     bne m11A2           ; bne $11a2
                     jsr m1000
-                    ldx m3050 + 1
+                    ldx current_room + 1
                     cpx #$01
                     bne +               ; bne $1165
                     lda #$28
@@ -426,7 +426,7 @@ m11ED:              inx
                     cpx #$09
                     bne -               ; bne $11e2
 -                   jmp m3B4C           ; jmp $3b4c
-++                  ldy m3050 + 1
+++                  ldy current_room + 1
                     bne +               ; bne $120a
                     cmp #$a9            ; egg plant gloves ;)
                     bne m11ED
@@ -825,7 +825,7 @@ m1474:
 
 ; ==============================================================================
 
-m147E:              ldy m3050 + 1
+m147E:              ldy current_room + 1
                     cpy #$0e
                     bne m148A               ; bne $148a
                     ldy #$20
@@ -1053,7 +1053,7 @@ m15D1:              lda items + $ac                        ; lda $3736
                     bne +                                   ; bne $15dd
                     lda #$59
                     sta items + $12c                        ; sta $37b6
-+                   lda m3050 + 1
++                   lda current_room + 1
                     cmp #$11
                     bne m162A                               ; bne $162a
                     lda m14CC + 1                           ; lda $14cd
@@ -1111,7 +1111,7 @@ m1650:              jmp death               ; 05 Didn't you see the laser beam?
 
 ; ==============================================================================
 
-+                   ldy m3050 + 1
++                   ldy current_room + 1
                     cpy #$11
                     bne +                       ; bne $166a
                     cmp #$78
@@ -1666,7 +1666,7 @@ m2FC0:
 ;
 ; ==============================================================================
 
-m2fCB:              lda m3050 + 1
+m2fCB:              lda current_room + 1
                     cmp #$04
                     bne -                   ; bne $2fca
                     lda #$03
@@ -1719,7 +1719,7 @@ tileset_definition:
 ; ==============================================================================
 
 display_room:
-                    jsr draw_empty_column_and_row           ; jsr $3b02
+                    jsr draw_border
                     lda #$00            ; settings this to e.g. 1 mirrors the level layout (to some extend)
                     sta zp02
                     ldx #$08            ; i think this sets the colram (0800)
@@ -1728,7 +1728,7 @@ display_room:
                     stx zp03
                     ldx #$28            ; when changed shifts level data -> $2800 = start of level data
                     stx zp0A
-m3050:              ldx #$01
+current_room:       ldx #$01
                     beq ++               ; beq $305e
 -                   clc
                     adc #$68            ; $68 = 104 = 13*8 (size of a room)
@@ -2135,7 +2135,7 @@ m3850:              lda (zpA7),y
                     lda (zpA7),y
                     cmp #$ff
                     beq m38DF               ; beq $38df
-                    cmp m3050 + 1
+                    cmp current_room + 1
                     bne -                   ; bne $3856
                     lda #>COLRAM        ; lda #$08
                     sta zp05
@@ -2200,7 +2200,7 @@ m38D7:              clc
 ;
 ; ==============================================================================
 
-m38DF:              lda m3050 + 1
+m38DF:              lda current_room + 1
                     cmp #$02
                     bne m3919           ; bne $3919
                     lda #$0d
@@ -2365,7 +2365,7 @@ m39F4:
 ;
 ; ==============================================================================
 
-m3A08:              ldx m3050 + 1
+m3A08:              ldx current_room + 1
                     beq -               ;beq $3a07
                     dex
                     jmp m3A64           ; jmp $3a64
@@ -2373,9 +2373,9 @@ m3A08:              ldx m3050 + 1
 !byte $34, $38, $32, $38, $02, $ff
 
 m3A17:
-                    ldx m3050 + 1
+                    ldx current_room + 1
                     inx
-                    stx m3050 + 1
+                    stx current_room + 1
                     ldy m3A33 + $17, x         ; ldy $3a4a,x
 m3A21:              lda m39AA,y                ; lda $39aa,y
                     sta m35A3 + 1
@@ -2398,7 +2398,7 @@ m3A33:
 !byte $00
 
 m3A64:
-                    stx m3050 + 1                           ; stx $3051
+                    stx current_room + 1                           ; stx $3051
                     ldy m3A33,x                             ; ldy $3A33,x
                     jmp m3A21                               ; jmp $3A21
 m3A6D:
@@ -2519,19 +2519,10 @@ init:
                     ; border color. default is a dark red
                     lda #BORDER_COLOR_VALUE
                     sta BORDER_COLOR
-
-                    jsr draw_empty_column_and_row           ; jsr $3b02
+                    jsr draw_border
                     jmp set_start_screen           ; jmp $3b3a
 ; ==============================================================================
-
-draw_empty_column_and_row:
-                    ; this seems to mainly draw the
-                    ; horizontal and vertical blank lines
-                    ; in the game
-
-                    ; TODO: there is probably more to it. too complicated for such a simple task
-                    ; is the level itself drawn here too?
-
+draw_border:        ; draws the extended "border"
                     lda #$27
                     sta zp02
                     sta zp04
@@ -2543,32 +2534,24 @@ draw_empty_column_and_row:
                     ldy #$00
 -                   lda #$5d
                     sta (zp02),y
-
-                    lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank column 40
-
+                    lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
                     sta (zp04),y
                     tya
                     clc
                     adc #$28
                     tay
-                    bcc +               ; bcc $3b27
+                    bcc +
                     inc zp03
                     inc zp05
 +                   dex
-                    bne -               ; bne $3b14
-
-
-                    ; fills the bottom line with blank colored space (making it invisible)
+                    bne -
 -                   lda #$5d
-                    sta SCREENRAM + $3c0,x  ;sta $0fc0,x ; last row of the screen
-
-                    lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN            ; draws blank row 25
-
-                    sta COLRAM + $3c0,x         ;sta $0bc0,x             ; writes the line into the color ram
-
+                    sta SCREENRAM + $3c0,x
+                    lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
+                    sta COLRAM + $3c0,x
                     inx
                     cpx #$28
-                    bne -               ; bne $3b2a
+                    bne -
                     rts
 
 ; ==============================================================================
@@ -2582,7 +2565,7 @@ set_start_screen:
                     lda #PLAYER_START_POS_X
                     sta m35A3 + 3               ; X player start position (0 = left)
                     lda #START_ROOM              ; room number (start screen) ($3b45)
-                    sta m3050 + 1
+                    sta current_room + 1
                     jsr m3A2D                   ; jsr $3a2d
 
 m3B4C:
