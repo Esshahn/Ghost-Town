@@ -1831,7 +1831,7 @@ display_door:       lda #>SCREENRAM
                     cmp #$98            ; SCREENRAM pointer low = $98
                     bne -               ; no -> loop
                     lda zp03            ; else:
-                    cmp #$0f            ; SCREENRAM pointer hi = $0f
+                    cmp #>(SCREENRAM+$300)
                     bne -               ; no -> loop
                     rts                 ; else: finally ready with room display
 ; ==============================================================================
