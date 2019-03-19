@@ -1730,11 +1730,11 @@ tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
 
 display_room:
                     jsr draw_border
-                    lda #$00            ; settings this to e.g. 1 mirrors the level layout (to some extend)
+                    lda #$00
                     sta zp02
-                    ldx #>COLRAM        ; i think this sets the colram (0800)
+                    ldx #>COLRAM        ; HiByte of COLRAM
                     stx zp05
-                    ldx #>SCREENRAM     ; and this the screen (0c00)
+                    ldx #>SCREENRAM     ; HiByte of SCREENRAM
                     stx zp03
                     ldx #>level_data    ; HiByte of level_data
                     stx zp0A            ; in zp0A
@@ -1782,73 +1782,60 @@ m3066:              lda (zp09),y        ; get Tilenumber
                     bne --              ; X != 0 -> next Char
                     inc zpA8            ; else: zpA8 = zpA8 + 1
                     inc zpA7            ; zpA7 = zpA7 + 1
-                    lda #$75            ;
+                    lda #$75            ; for m30B8 + 1
                     ldx zpA8
-                    cpx #$0d            ; zpA8 < $0d ?
-                    bcc +               ; yes: -> skip
+                    cpx #$0d            ; zpA8 < $0d ? (same Tilerow)
+                    bcc +               ; yes: -> skip (-$75 for next Tile)
                     ldx zpA7            ; else:
                     cpx #$66            ; zpA7 >= $66
-                    bcs print_X         ; yes: print_X
+                    bcs display_door    ; yes: display_door
                     lda #$00            ; else:
                     sta zpA8            ; clear zpA8
-                    lda #$24
-+                   sta m30B8 + 1       ; sta $30b9
+                    lda #$24            ; for m30B8 + 1
++                   sta m30B8 + 1       ;
                     lda zp02
                     sec
-m30B8:              sbc #$75
+m30B8:              sbc #$75            ; -$75 (next Tile in row) or -$24 (next row )
                     sta zp02
-                    bcs +               ; bcs $30c2
+                    bcs +
                     dec zp03
                     dec zp05
 +                   ldy zpA7
                     jmp m3066
                     rts                 ; will this ever be used?
-
-; ==============================================================================
-;
-;
-; ==============================================================================
-
-print_X:
-                    lda #>SCREENRAM       ; lda #$0c
+display_door:       lda #>SCREENRAM
                     sta zp03
-                    lda #>COLRAM        ; lda #$08
+                    lda #>COLRAM
                     sta zp05
                     lda #$00
                     sta zp02
                     sta zp04
 -                   ldy #$28
-                    lda (zp02),y
-                    cmp #$06
-                    bcs +               ; bcs $30f3
-                    sec
-                    sbc #$03
-                    ldy #$00
-                    sta (zp02),y
-                    lda #$39
+                    lda (zp02),y        ; read from SCREENRAM
+                    cmp #$06            ; $06 (part from Door?)
+                    bcs +               ; >= $06 -> skip
+                    sec                 ; else:
+                    sbc #$03            ; subtract $03
+                    ldy #$00            ; set Y = $00
+                    sta (zp02),y        ; and copy to one row above
+                    lda #$39            ; color brown - luminance $3
                     sta (zp04),y
 +                   lda zp02
                     clc
-                    adc #$01
-                    bcc +               ; bcc $30fe
-                    inc zp03
+                    adc #$01            ; add 1 to SCREENRAM pointer low
+                    bcc +
+                    inc zp03            ; inc pointer HiBytes if necessary
                     inc zp05
 +                   sta zp02
                     sta zp04
-                    cmp #$98
-                    bne -               ; bne $30e0
-                    lda zp03
-                    cmp #$0f
-                    bne -               ; bne $30e0
-                    rts
-
+                    cmp #$98            ; SCREENRAM pointer low = $98
+                    bne -               ; no -> loop
+                    lda zp03            ; else:
+                    cmp #$0f            ; SCREENRAM pointer hi = $0f
+                    bne -               ; no -> loop
+                    rts                 ; else: finally ready with room display
 ; ==============================================================================
-;
-;
-; ==============================================================================
-
-print_title:
-                    lda #>SCREENRAM       ; lda #$0c
+print_title:        lda #>SCREENRAM       ; lda #$0c
                     sta zp03
                     lda #>COLRAM        ; lda #$08
                     sta zp05
