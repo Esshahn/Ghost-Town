@@ -471,6 +471,15 @@ text_intro:         ;     0123456789012345678901234567890123456789
                     !scr "graphics-rooms! Enjoy the quest and play"
                     !scr "it again and again and again ...      > "
 text_intro_end:
+text_hints:         !scr " A part of the code number is :         "
+                    !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789", $bc, " "
+                    !scr " You need: bulb, bulb holder, socket !  "
+                    !scr " Tell me the Code number ?     ", $22, "     ", $22, "  "
+                    !scr " *****   A helping letter :   "
+                    !scr "C   ***** "
+                    !scr " Sorry, bad code number! Better luck next time! "
+text_hints_end:
+text_letter         = text_hints+0xBE
 rooms:
 room_00:  !byte $01, $00, $00, $00, $01, $01, $01, $00, $0b, $00, $00, $00, $00
           !byte $01, $00, $0b, $00, $00, $00, $00, $00, $0c, $01, $01, $01, $00
@@ -677,6 +686,9 @@ tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
                     ;     $10
                     !byte $39
 tiles_end:
+; ==============================================================================
+; SPIDER / CODER colors for tiles --- should be double checked!
+; ==============================================================================
                     *= tiles_colors + $01
                     !byte RED+8
                     *= tiles_colors + $02
