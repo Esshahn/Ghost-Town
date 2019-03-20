@@ -176,6 +176,7 @@ mainloop:
                     bne +
                     lda #0
                     sta current_room
+                    jmp main_startscreen
 +                   jsr print_room
                     jmp mainloop
 ; ==============================================================================
@@ -342,6 +343,10 @@ print_intro_text:   lda #0x0B
                     sta pt_screen_hi
                     lda #0xA0
                     sta pt_screen_lo
+                    lda #<text_intro
+                    sta .text_src+1
+                    lda #>text_intro
+                    sta .text_src+2
                     ldx #0x07
 -                   ldy #0x27
 .text_src:          lda text_intro,y
