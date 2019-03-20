@@ -27,6 +27,9 @@ COL_BORDER_INGAME   = RED
 COL_BG_INGAME       = BLACK
 COL_BORDER_START    = DARK_GREY
 COL_BG_START        = DARK_GREY
+COL_BORDER_INTRO    = DARK_GREY
+COL_BG_INTRO        = BLACK
+COL_TEXT_INTRO      = ORANGE
 ; ==============================================================================
 zp_start            = 0x02
 zp_temp0            = zp_start
@@ -61,11 +64,13 @@ vicbank             = 0x0000
 charset0            = vicbank+0x1800
 charset1            = vicbank+0x0800
 vidmem0             = vicbank+0x0400
+vidmem1             = vicbank+0x2800
 vidmem_start        = vicbank+0x2000
 vidmem_win          = vicbank+0x2400
 dd00_val0           = <!(vicbank/0x4000) & 3
 d018_val0           = <(((vidmem0-vicbank)/0x400) << 4) + <(((charset0-vicbank)/0x800) << 1)
 d018_val1           = <(((vidmem0-vicbank)/0x400) << 4) + <(((charset1-vicbank)/0x800) << 1)
+d018_val2           = <(((vidmem1-vicbank)/0x400) << 4) + <(((charset0-vicbank)/0x800) << 1)
 d018_val_start      = <(((vidmem_start-vicbank)/0x400) << 4) + <(((charset0-vicbank)/0x800) << 1)
 d018_val_win        = <(((vidmem_win-vicbank)/0x400) << 4) + <(((charset0-vicbank)/0x800) << 1)
 ; ==============================================================================
@@ -159,6 +164,8 @@ init_pointers:      lda #0x00
 ; ==============================================================================
                     !zone MAINLOOP
 main_startscreen:   jsr print_screen_start
+                    jsr wait_key_action
+main_intro_text:    jsr print_intro_text
                     jsr wait_key_action
                     jsr print_room
 mainloop:
@@ -320,6 +327,49 @@ print_border:       lda #0x27
                     cpx #0x28
                     bne -
                     rts
+print_intro_text:   lda #0x0B
+                    sta 0xD011
+                    lda #COL_BORDER_INTRO
+                    sta 0xD020
+                    lda #COL_BG_INTRO
+                    sta 0xD021
+                    ldx #>vidmem1
+                    lda #0x20
+                    jsr lib_vidmemfill
+                    lda #COL_TEXT_INTRO
+                    jsr lib_colramfill
+                    lda #>vidmem1
+                    sta pt_screen_hi
+                    lda #0xA0
+                    sta pt_screen_lo
+                    ldx #0x07
+-                   ldy #0x27
+.text_src:          lda text_intro,y
+                    sta (pt_screen),y
+                    dey
+                    bpl .text_src
+                    clc
+                    lda .text_src+1
+                    adc #0x28
+                    sta .text_src+1
+                    lda .text_src+2
+                    adc #0x00
+                    sta .text_src+2
+                    clc
+                    lda pt_screen_lo
+                    adc #0x50
+                    sta pt_screen_lo
+                    bcc +
+                    inc pt_screen_hi
++                   dex
+                    bne -
+                    lda #0x08
+                    sta 0xD016
+                    lda #d018_val2
+                    sta 0xD018
+                    lda #0x1B
+                    sta 0xD011
+                    rts
 ; ==============================================================================
                     !zone WAIT
 wait:               dex
@@ -346,6 +396,20 @@ lib_colramfill:     ldx #0x00
                     sta 0xD800+0x2E8,x
                     inx
                     bne -
+                    rts
+lib_vidmemfill:     stx .mod1+2
+                    inx
+                    stx .mod2+2
+                    inx
+                    stx .mod3+2
+                    stx .mod4+2
+                    ldx #0x00
+.mod1:              sta 0x0000,x
+.mod2:              sta 0x0000,x
+.mod3:              sta 0x0000,x
+.mod4:              sta 0x00E8,x
+                    inx
+                    bne .mod1
                     rts
 ; ==============================================================================
                     !zone INPUT
@@ -393,6 +457,16 @@ input_keyboard:     !if DEBUG=1 { dec 0xD020 }
                     rts
 ; ==============================================================================
                     !zone DATA
+text_intro:         ;     0123456789012345678901234567890123456789
+                    !scr "Search the treasure of Ghost Town and   "
+                    !scr "open it ! Kill Belegro, the wizard, and "
+                    !scr "dodge all other dangers. Don't forget to"
+                    !scr "use all the items you'll find during    "
+                    !scr "your yourney through 19 amazing hires-  "
+                    !scr "graphics-rooms! Enjoy the quest and play"
+                    !scr "it again and again and again ...      > "
+text_intro_end:
+rooms:
 room_00:  !byte $01, $00, $00, $00, $01, $01, $01, $00, $0b, $00, $00, $00, $00
           !byte $01, $00, $0b, $00, $00, $00, $00, $00, $0c, $01, $01, $01, $00
           !byte $10, $00, $0c, $00, $00, $0b, $00, $00, $01, $00, $00, $00, $00
@@ -545,6 +619,7 @@ room_18:  !byte $00, $00, $02, $00, $00, $00, $00, $00, $00, $00, $00, $00, $02
           !byte $00, $02, $00, $02, $00, $00, $00, $00, $00, $00, $02, $00, $02
           !byte $00, $02, $00, $02, $00, $02, $02, $02, $02, $02, $02, $00, $02
           !byte $00, $00, $00, $02, $00, $00, $00, $00, $00, $00, $00, $00, $02
+rooms_end:
 room_tab_lo:        !byte <room_00
                     !byte <room_01
                     !byte <room_02
@@ -583,6 +658,7 @@ room_tab_hi:        !byte >room_00
                     !byte >room_16
                     !byte >room_17
                     !byte >room_18
+tiles:
 tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
                     !byte $df, $0c, $15, $1e, $27, $30, $39, $42
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
@@ -595,6 +671,7 @@ tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
                     !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
                     ;     $10
                     !byte $39
+tiles_end:
                     *= tiles_colors + $01
                     !byte RED+8
                     *= tiles_colors + $02
