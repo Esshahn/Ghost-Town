@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 16             ; default 0 ; address $3b45
+START_ROOM          = 0             ; default 0 ; address $3b45
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -2449,7 +2449,7 @@ set_charset_and_screen_for_title:    ; set text screen
 
 ; ==============================================================================
 ; init
-; start of game
+; start of game (original $3ab3)
 ; ==============================================================================
 
 init:
