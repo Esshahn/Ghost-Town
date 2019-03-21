@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0 ; address $3b45
+START_ROOM          = 16             ; default 0 ; address $3b45
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -95,7 +95,6 @@ code_start          = $3AB3
 SCREENRAM           = $0C00            ; PLUS/4 default SCREEN
 COLRAM              = $0800            ; PLUS/4 COLOR RAM
 CHARSET             = $2000
-screen_win_src      = $175C
 screen_start_src    = $313C
 
 
@@ -125,13 +124,6 @@ BORDER_COLOR        = $FF19
                         !bin "includes/charset.bin"
                     }
 
-                    *= screen_win_src
-                    !if LANGUAGE = EN{
-                        !bin "includes/screen-win-en.scr"
-                    }
-                    !if LANGUAGE = DE{
-                        !bin "includes/screen-win-de.scr"
-                    }
 
                     *= screen_start_src
                     !if EXTENDED {
@@ -214,7 +206,7 @@ m1031:
                     jsr display_hint_message           ; jsr $1003
                     ldx #$00
                     ldy #$00
-                    beq m105F           ; beq $105f
+                    beq room_16_enter_code           ; beq $105f
 m104C:              lda SCREENRAM+$1B9,x ; lda $0db9,x
                     clc
                     adc #$80
@@ -230,7 +222,8 @@ m104C:              lda SCREENRAM+$1B9,x ; lda $0db9,x
 ;
 ; ==============================================================================
 
-m105F:              jsr m104C           ; jsr $104c
+room_16_enter_code:              
+                    jsr m104C           ; jsr $104c
                     sty zp02
                     stx zp04
                     jsr m10A7           ; jsr $10a7 / wait
@@ -252,18 +245,18 @@ m105F:              jsr m104C           ; jsr $104c
                     beq +               ; beq $1089
                     inx
 +                   and #$08
-                    bne m105F           ; bne $105f
+                    bne room_16_enter_code           ; bne $105f
                     lda SCREENRAM+$1B9,x ; lda $0db9,x
                     cmp #$bc
                     bne ++              ; bne $109c
                     cpy #$00
                     beq +               ; beq $1099
                     dey
-+                   jmp m105F           ; jmp $105f
++                   jmp room_16_enter_code           ; jmp $105f
 ++                  sta SCREENRAM+$188,y ; sta $0d88,y
                     iny
                     cpy #$05
-                    bne m105F           ; bne $105f
+                    bne room_16_enter_code           ; bne $105f
                     jmp m10B4           ; jmp $10b4
 
 ; ==============================================================================
@@ -322,30 +315,12 @@ item_pickup_message:              ; item pickup messages
 }
 
 
-                    ;  1111111      1111111   555555555555555555 555555555555555555
-                    ; 1::::::1     1::::::1   5::::::::::::::::5 5::::::::::::::::5
-                    ;1:::::::1    1:::::::1   5::::::::::::::::5 5::::::::::::::::5
-                    ;111:::::1    111:::::1   5:::::555555555555 5:::::555555555555
-                    ;   1::::1       1::::1   5:::::5            5:::::5
-                    ;   1::::1       1::::1   5:::::5            5:::::5
-                    ;   1::::1       1::::1   5:::::5555555555   5:::::5555555555
-                    ;   1::::l       1::::l   5:::::::::::::::5  5:::::::::::::::5
-                    ;   1::::l       1::::l   555555555555:::::5 555555555555:::::5
-                    ;   1::::l       1::::l               5:::::5            5:::::5
-                    ;   1::::l       1::::l               5:::::5            5:::::5
-                    ;   1::::l       1::::l   5555555     5:::::55555555     5:::::5
-                    ;111::::::111 111::::::1115::::::55555::::::55::::::55555::::::5
-                    ;1::::::::::1 1::::::::::1 55:::::::::::::55  55:::::::::::::55
-                    ;1::::::::::1 1::::::::::1   55:::::::::55      55:::::::::55
-                    ;111111111111 111111111111     555555555          555555555
-
-
 ; ==============================================================================
 ;
 ; hint system (question marks)
 ; ==============================================================================
 
-                    *= $1155
+
 display_hint:
                     cpy #$00
                     bne m11A2           ; bne $11a2
@@ -1277,38 +1252,21 @@ m174F:
 
 
 
-
-
-
-                    ;  1111111    BBBBBBBBBBBBBBBBB          444444444         444444444
-                    ; 1::::::1    B::::::::::::::::B        4::::::::4        4::::::::4
-                    ;1:::::::1    B::::::BBBBBB:::::B      4:::::::::4       4:::::::::4
-                    ;111:::::1    BB:::::B     B:::::B    4::::44::::4      4::::44::::4
-                    ;   1::::1      B::::B     B:::::B   4::::4 4::::4     4::::4 4::::4
-                    ;   1::::1      B::::B     B:::::B  4::::4  4::::4    4::::4  4::::4
-                    ;   1::::1      B::::BBBBBB:::::B  4::::4   4::::4   4::::4   4::::4
-                    ;   1::::l      B:::::::::::::BB  4::::444444::::4444::::444444::::444
-                    ;   1::::l      B::::BBBBBB:::::B 4::::::::::::::::44::::::::::::::::4
-                    ;   1::::l      B::::B     B:::::B4444444444:::::4444444444444:::::444
-                    ;   1::::l      B::::B     B:::::B          4::::4            4::::4
-                    ;   1::::l      B::::B     B:::::B          4::::4            4::::4
-                    ;111::::::111 BB:::::BBBBBB::::::B          4::::4            4::::4
-                    ;1::::::::::1 B:::::::::::::::::B         44::::::44        44::::::44
-                    ;1::::::::::1 B::::::::::::::::B          4::::::::4        4::::::::4
-                    ;111111111111 BBBBBBBBBBBBBBBBB           4444444444        4444444444
-
-
-
-
-
-
-
+screen_win_src:
+                    !if LANGUAGE = EN{
+                        !bin "includes/screen-win-en.scr"
+                    }
+                    !if LANGUAGE = DE{
+                        !bin "includes/screen-win-de.scr"
+                    }
+screen_win_src_end:
+                    
 
 ; ==============================================================================
 ;
-;
+; PRINT WIN SCREEN
 ; ==============================================================================
-                    *= $1B44
+                  
 print_endscreen:
                     lda #>SCREENRAM       ; lda #$0c
                     sta zp03
@@ -1990,6 +1948,7 @@ m3548:              adc #$15
 ; ==============================================================================
 
 check_joystick:
+                    
                     lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
@@ -2723,37 +2682,26 @@ m3EF9:
 
 !if LANGUAGE = EN{
 
-hint_messages
+hint_messages:
 !scr " A part of the code number is :         "
 !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
 !scr " You need: bulb, bulb holder, socket !  "
 !scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
 !scr " *****   A helping letter :   "
-helping_letter !scr "C   ***** "
+helping_letter: !scr "C   ***** "
 !scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
 
 }
 
 !if LANGUAGE = DE{
 
-hint_messages
+hint_messages:
 !scr " Ein Teil des Loesungscodes lautet:     "
 !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
 !scr " Du brauchst:Fassung,Gluehbirne,Strom ! "
 !scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
 !scr " *****   Ein Hilfsbuchstabe:  "
-helping_letter !scr "C   ***** "
+helping_letter: !scr "C   ***** "
 !scr " Falscher Loesungscode ! TODESSTRAFE !!!"
 
 }
-
-; ==============================================================================
-
-; jsr $c56b        Aufruf print Routine ?!?
-;                   im PLUS/4 ROM:
-;
-; .C:c56b  A9 93       LDA #$93
-; .C:c56d  4C D2 FF    JMP $FFD2        ; Output (print usually)($EC4B)
-;
-; .C:ffd2  6C 24 03    JMP ($0324)      ; Vector bei $0324 steht auf $EC4B
-;
