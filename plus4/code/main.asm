@@ -91,12 +91,8 @@ zpA9                = $A9
 ; ==============================================================================
 
 TAPE_BUFFER         = $0333
-code_start          = $3AB3
 SCREENRAM           = $0C00            ; PLUS/4 default SCREEN
 COLRAM              = $0800            ; PLUS/4 COLOR RAM
-CHARSET             = $2000
-screen_start_src    = $313C
-
 
 KEYBOARD_LATCH      = $FF08
 INTERRUPT           = $FF09
@@ -117,20 +113,8 @@ BORDER_COLOR        = $FF19
 
                     !cpu 6502
 
-                    *= CHARSET
-                    !if EXTENDED {
-                        !bin "includes/charset-new-charset.bin"
-                    }else{
-                        !bin "includes/charset.bin"
-                    }
 
 
-                    *= screen_start_src
-                    !if EXTENDED {
-                        !bin "includes/screen-start-extended.scr"
-                    }else{
-                        !bin "includes/screen-start.scr"
-                    }
 
 
 
@@ -270,8 +254,6 @@ m10A7:
                     ldy zp02
                     ldx zp04
                     rts
-
-
 
 ; ==============================================================================
 ;
@@ -1592,9 +1574,21 @@ m1F15:                                  ; call from init
                     jmp --              ; jmp $1f18
 
 
+; ==============================================================================
+; CHARSET 
+; $2000 - $2800
+; ==============================================================================
 
 
-
+charset_start:
+                    *= $2000
+                    !if EXTENDED {
+                        !bin "includes/charset-new-charset.bin"
+                    }else{
+                        !bin "includes/charset.bin"
+                    }
+charset_end:    ; $2800
+                
 
                     ; 222222222222222         888888888          000000000           000000000
                     ;2:::::::::::::::22     88:::::::::88      00:::::::::00       00:::::::::00
@@ -1615,10 +1609,6 @@ m1F15:                                  ; call from init
 
 
 
-
-
-
-
 ; ==============================================================================
 ; LEVEL DATA
 ; Based on tiles
@@ -1626,10 +1616,16 @@ m1F15:                                  ; call from init
 ;                     has to be page aligned or
 ;                     display_room routine will fail
 ; ==============================================================================
-                      *= $2800
-level_data:           !source "includes/levels.asm"
 
-                      !byte $00, $00, $00, $00, $00, $00, $00
+                    *= $2800
+level_data:           
+                    !source "includes/levels.asm"
+level_data_end:
+
+!if 1=2{
+!byte $00, $00, $00, $00, $00, $00, $00
+}
+
 
 ;$2fbf
 m2FBF:
@@ -1676,12 +1672,13 @@ m2FEF:              jsr m39F4 ; jsr $39f4
 
 
 
-
+!if 1=2{
 ; $2ffd
 unknown: ; haven't found a call for this code area yet. might be waste
 !byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 !byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 !byte $00
+}
 
 ; ==============================================================================
 ;
@@ -1689,7 +1686,7 @@ unknown: ; haven't found a call for this code area yet. might be waste
 ; these are the first characters in the charset of each tile.
 ; example: rocks start at $0c and span 9 characters in total
 ; ==============================================================================
-; $301e
+
 tileset_definition:
 tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
                     !byte $df, $0c, $15, $1e, $27, $30, $39, $42
@@ -1842,9 +1839,21 @@ print_title:        lda #>SCREENRAM       ; lda #$0c
                     bne --              ; bne $3125
                     rts
 
+; ==============================================================================
+; TITLE SCREEN DATA
+;
+; ==============================================================================
 
+screen_start_src:
+                    
+                    !if EXTENDED {
+                        !bin "includes/screen-start-extended.scr"
+                    }else{
+                        !bin "includes/screen-start.scr"
+                    }
 
-
+screen_start_src_end:
+                    nop
 
                     ; 333333333333333   555555555555555555  222222222222222    555555555555555555
                     ;3:::::::::::::::33 5::::::::::::::::5 2:::::::::::::::22  5::::::::::::::::5
@@ -1867,10 +1876,7 @@ print_title:        lda #>SCREENRAM       ; lda #$0c
 
 
 
-; ==============================================================================
-;
-;
-; ==============================================================================
+
 
                     *= $3525
 
@@ -2451,7 +2457,7 @@ set_charset_and_screen_for_title:    ; set text screen
 ; init
 ; start of game (original $3ab3)
 ; ==============================================================================
-
+code_start:
 init:
                     jsr m1F15           ; jsr $1f15
                     lda #$01
