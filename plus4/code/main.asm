@@ -376,6 +376,13 @@ m11ED:              inx
                     bne -               ; bne $11e2
 -                   jmp m3B4C           ; jmp $3b4c
 
+
+
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 00
@@ -384,11 +391,12 @@ m11ED:              inx
 room_00:
                     ldy current_room + 1        ; load in the current room number
                     bne room_01                 ; is it not 0? then check for room 01
+
                     cmp #$a9                    ; has the player hit the gloves?
                     bne m11ED                   ; no
                     lda #$df                    ; yes, load in char for "empty"
                     cmp items + $4d             ; position for 1st char of ladder ($b0) -> ladder already taken?
-m1203:              bne -                       ; no
+                    bne -                       ; no
                     jsr pickup_gloves           ; yes
                     bne check_death     
 
@@ -400,6 +408,11 @@ pickup_gloves:
                     sta items + $6              ; and store the color in the items table
                     rts
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 01
@@ -408,6 +421,7 @@ pickup_gloves:
 room_01:
                     cpy #$01
                     bne room_02           ; bne $124b
+
                     cmp #$e0            ; empty character in charset
                     beq +               ; beq $1216
                     cmp #$e1
@@ -425,8 +439,6 @@ room_01:
                     ldy #$00
                     jmp m1031           ; jmp $1031
 
-; ==============================================================================
-
 check_death_bush:                 ;
                     cmp #$ad                ; wirecutters
                     bne m11ED
@@ -442,6 +454,11 @@ check_death_bush:                 ;
                     sta items + $19
                     jmp check_death
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 02
@@ -450,6 +467,7 @@ check_death_bush:                 ;
 room_02:
                     cpy #$02                ; are we in room 02?
                     bne room_03             ; no -> check for room 03
+
                     cmp #$f5                ; did the player hit the fence? f5 = fence character
                     bne check_lock          ; no, check for the lock
                     lda items + $19         ; fence was hit, so check if wirecuter was picked up
@@ -492,6 +510,7 @@ check_lock:
 
 ; ==============================================================================
 ; take the key out of the bottle
+
 take_key_out_of_bottle:
                     lda #$01
                     sta key_in_bottle_storage                                   ; sta $12a4
@@ -503,6 +522,11 @@ take_key_out_of_bottle:
 
 key_in_bottle_storage:              !byte $00
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 03
@@ -511,11 +535,17 @@ key_in_bottle_storage:              !byte $00
 room_03:            
                     cpy #$03            ; room 03
                     bne room_04                                   
+
                     cmp #$27            
                     bcc +                                                  
                     jmp m3B4C
 +                   ldy #$04
                     jmp m1031           
+
+
+
+
+
 
 ; ==============================================================================
 ;
@@ -525,6 +555,7 @@ room_03:
 room_04:
                     cpy #$04            ; room 04
                     bne room_05                               ; bne $12db
+
                     cmp #$3b            ; part of a coffin
                     beq +                                   ; beq $12c1
                     cmp #$42
@@ -545,6 +576,11 @@ m12C6:
                     ldy #$06
                     jmp m1031           ; jmp $1031
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 05
@@ -553,6 +589,7 @@ m12C6:
 room_05:
                     cpy #$05
                     bne room_06                                   ; bne $12f9
+
                     cmp #$27            ; part of a bush
                     bcs m12E8                                   ; bcs $12e8
                     ldy #$00
@@ -572,6 +609,11 @@ m12EC:              jmp m11ED
 m12F4:              ldy #$07
                     jmp m1031           ; jmp $1031
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 06
@@ -580,10 +622,16 @@ m12F4:              ldy #$07
 room_06:
                     cpy #$06
                     bne room_07                       ; bne $1306
+
                     cmp #$f6            ; is it a trapped door?
                     bne m12EC                               ; bne $12ec
                     ldy #$00
 m1303:              jmp death    ; 00 You fell into a snake pit
+
+
+
+
+
 
 ; ==============================================================================
 ;
@@ -593,6 +641,7 @@ m1303:              jmp death    ; 00 You fell into a snake pit
 room_07:
                     cpy #$07
                     bne room_08                               ; bne $133e
+
                     cmp #$e3            ; $e3 is the char for the invisible, I mean SACRED, column
                     bne +                                   ; bne $1312
                     ldy #$01            ; 01 You'd better watched out for the sacred column
@@ -615,6 +664,11 @@ room_07:
                     sta items + $72                        ; sta $36fc
                     jmp check_death
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 08
@@ -623,6 +677,7 @@ room_07:
 room_08:
                     cpy #$08
                     bne room_09                               ; bne $1396
+
                     ldy #$00
                     sty zpA7
                     cmp #$4b            ; water
@@ -673,6 +728,11 @@ m1384:
                     sta items + $84                        ; sta $370e
                     bne m1381                               ; bne $1381
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 09
@@ -680,10 +740,16 @@ m1384:
 
 room_09:            cpy #$09
                     bne room_10                               ; bne $13a3
+
                     cmp #$27
                     bcs m13B0
                     ldy #$02
                     jmp m1031           ; jmp $1031
+
+
+
+
+
 
 ; ==============================================================================
 ;
@@ -693,6 +759,7 @@ room_09:            cpy #$09
 room_10:
                     cpy #$0a
                     bne room_11                               ; bne $13d2
+
                     cmp #$27
                     bcs m13B3                               ; bcs $13b3
                     ldy #$00
@@ -723,6 +790,11 @@ m13CD:
                     ldy #$06
                     jmp death    ; 06 240 Volts! You got an electrical shock!
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 11
@@ -731,11 +803,17 @@ m13CD:
 room_11:
                     cpy #$0b
                     bne room_12                                   ; bne $13e1
+
                     cmp #$d1
                     bne m13B0
                     lda #$df                ; player takes the hammer
                     sta items + $bb                         ; hammer
                     bne m13CA                               ; bne $13ca
+
+
+
+
+
 
 ; ==============================================================================
 ;
@@ -745,6 +823,7 @@ room_11:
 room_12:
                     cpy #$0c
                     bne room_13                               ; bne $13fd
+
                     cmp #$27
                     bcs m13EE                               ; bcs $13ee
                     ldy #$00
@@ -760,6 +839,11 @@ m13EE:
                     sta items + $c8                        ; sta $3752
                     bne m13CA                               ; bne $13ca
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 13
@@ -767,6 +851,7 @@ m13EE:
 
 room_13:            cpy #$0d
                     bne room_14                               ; bne $1421
+
                     cmp #$27
                     bcs m140A                               ; bcs $140a
                     ldy #$00
@@ -790,6 +875,11 @@ m141A:
                     sta items + $d5                        ; sta $375f
                     bne m13CA                               ; bne $13ca
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 14
@@ -797,10 +887,16 @@ m141A:
 
 room_14:            cpy #$0e
                     bne room_15                               ; bne $142e
+
                     cmp #$d7
                     bne m13B0
                     ldy #$08
                     jmp death    ; 08 A foot trap stopped you!
+
+
+
+
+
 
 ; ==============================================================================
 ;
@@ -810,6 +906,7 @@ room_14:            cpy #$0e
 room_15:
                     cpy #$0f
                     bne room_16                               ; bne $143e
+
                     cmp #$27
                     bcs m143B                               ; bcs $143b
                     ldy #$00
@@ -818,7 +915,12 @@ room_15:
 ; ==============================================================================
 
 m143B:
-                    jmp m13B0
+                    jmp m11ED           ; jmp m13B0 -> target just jumps again, so replacing with target jmp address
+
+
+
+
+
 
 ; ==============================================================================
 ;
@@ -828,6 +930,7 @@ m143B:
 room_16:
                     cpy #$10
                     bne room_17                               ; bne $1464
+
                     cmp #$f4
                     bne m144B                               ; bne $144b
                     ldy #$0a
@@ -849,6 +952,11 @@ m144B:
 +                   ldy #$03
                     jmp m1031           ; jmp $1031
 
+
+
+
+
+
 ; ==============================================================================
 ;
 ; ROOM 17
@@ -857,11 +965,17 @@ m144B:
 room_17:
                     cpy #$11
                     bne room_18                               ; bne $1474
+
                     cmp #$dd
                     bne m143B                               ; bne $143b
                     lda #$df
                     sta items + $1a7                        ; sta $3831
                     jmp check_death
+
+
+
+
+
 
 ; ==============================================================================
 ;
