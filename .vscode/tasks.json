@@ -31,7 +31,7 @@
             "label": "build -> C16 -> VICE",
             "type": "shell",
             "osx": {
-                "command": "acme -v4 -f cbm -r ../build/report.asm -l ../build/labels -o ../build/main.prg main.asm && exomizer sfx 0x3aa5 -n -t 4 -o ../build/main.prg ../build/main.prg && cat ../build/labels ../build/monitor_commands > ../build/vicelabels && /Applications/Vice/xplus4.app/Contents/MacOS/xplus4 -moncommands ../build/vicelabels ../build/main.prg 2> /dev/null",
+                "command": "acme -v4 -f cbm -r ../build/report.asm -l ../build/labels -o ../build/main.prg main.asm && STARTADDR=$(grep 'code_start' ../build/labels | cut -d$ -f2 | cut -f1) && exomizer sfx 0x$STARTADDR -n -t 4 -o ../build/main.prg ../build/main.prg && cat ../build/labels ../build/monitor_commands > ../build/vicelabels && /Applications/Vice/xplus4.app/Contents/MacOS/xplus4 -moncommands ../build/vicelabels ../build/main.prg 2> /dev/null",
             },
             "group": {
                 "kind": "build",
