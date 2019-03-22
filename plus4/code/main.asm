@@ -110,24 +110,6 @@ BORDER_COLOR        = $FF19
                     !cpu 6502
 
 
-                    ;  1111111        000000000          000000000          000000000
-                    ; 1::::::1      00:::::::::00      00:::::::::00      00:::::::::00
-                    ;1:::::::1    00:::::::::::::00  00:::::::::::::00  00:::::::::::::00
-                    ;111:::::1   0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
-                    ;   1::::1   0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
-                    ;   1::::1   0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-                    ;   1::::1   0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-                    ;   1::::l   0:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
-                    ;   1::::l   0:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
-                    ;   1::::l   0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-                    ;   1::::l   0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-                    ;   1::::l   0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
-                    ;111::::::1110:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
-                    ;1::::::::::1 00:::::::::::::00  00:::::::::::::00  00:::::::::::::00
-                    ;1::::::::::1   00:::::::::00      00:::::::::00      00:::::::::00
-                    ;111111111111     000000000          000000000          000000000
-
-
                     *= $1000
 m1000:
                     jsr PRINT_KERNAL           ; jsr $c56b ? wird gar nicht benutzt ?!
@@ -360,7 +342,7 @@ m11CC:
 ; ==============================================================================
 
 check_death:
-                    jsr m3846
+                    jsr update_items_display
                     jmp m3B4C           ; jmp $3b4c
 
 ; ==============================================================================
@@ -385,7 +367,14 @@ m11ED:              inx
 
 ; ==============================================================================
 ;
-; ROOM 00
+;                                                             ###        ###   
+;          #####      ####      ####     #    #              #   #      #   #  
+;          #    #    #    #    #    #    ##  ##             #     #    #     # 
+;          #    #    #    #    #    #    # ## #             #     #    #     # 
+;          #####     #    #    #    #    #    #             #     #    #     # 
+;          #   #     #    #    #    #    #    #              #   #      #   #  
+;          #    #     ####      ####     #    #               ###        ###  
+;                                              
 ; ==============================================================================
 
 room_00:
@@ -415,42 +404,47 @@ pickup_gloves:
 
 ; ==============================================================================
 ;
-; ROOM 01
+;                                                             ###        #   
+;          #####      ####      ####     #    #              #   #      ##   
+;          #    #    #    #    #    #    ##  ##             #     #    # #   
+;          #    #    #    #    #    #    # ## #             #     #      #   
+;          #####     #    #    #    #    #    #             #     #      #   
+;          #   #     #    #    #    #    #    #              #   #       #   
+;          #    #     ####      ####     #    #               ###      ##### 
+;                                                                            
 ; ==============================================================================
 
 room_01:
-                    cpy #$01
-                    bne room_02           ; bne $124b
+                    cpy #01
+                    bne room_02                 ; if not this room, go to next  
 
-                    cmp #$e0            ; empty character in charset
-                    beq +               ; beq $1216
+                    cmp #$e0                    ; empty character in charset -> invisible key
+                    beq +                       ; yes, key is there -> +
                     cmp #$e1
-                    bne ++              ; bne $122a
-+                   lda #$aa
-                    sta items + $10                        ; sta $369a
-                    jsr m3846
-                    ldy #$f0
-                    jsr wait
-                    lda #$df
-                    sta items + $10                        ; sta $369a
-                    bne check_death     ; bne $11da
-++                  cmp #$27            ; part of a bush
+                    bne ++              
++                   lda #$aa                    ; display the key, $AA = 1st part of key
+                    sta items + $10             ; store key in items list       
+                    jsr update_items_display    ; update all items in the items list (we just made the key visible)
+                    ldy #$f0                    ; set waiting time
+                    jsr wait                    ; wait
+                    lda #$df                    ; set key to empty space
+                    sta items + $10             ; update items list        
+                    bne check_death     
+++                  cmp #$27                    ; question mark (I don't know why 27)
                     bcs check_death_bush
                     ldy #$00
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 
-check_death_bush:                 ;
-                    cmp #$ad                ; wirecutters
+check_death_bush:                 
+                    cmp #$ad                    ; wirecutters
                     bne m11ED
-                    lda items + $8           ; inventory place for the gloves! 6b = gloves
-                    cmp #$6b
-                    beq +                   ; beq $1243
+                    lda items + $8              ; inventory place for the gloves! 6b = gloves
+                    cmp #$6b                    
+                    beq +                  
                     ldy #$0f
-                    jmp death         ; 0f You were wounded by the bush!
+                    jmp death                   ; 0f You were wounded by the bush!
 
-; ==============================================================================
-
-+                   lda #$f9                ; wirecutter picked up
++                   lda #$f9                    ; wirecutter picked up
                     sta items + $19
                     jmp check_death
 
@@ -461,45 +455,52 @@ check_death_bush:                 ;
 
 ; ==============================================================================
 ;
-; ROOM 02
+;                                                             ###       #####  
+;          #####      ####      ####     #    #              #   #     #     # 
+;          #    #    #    #    #    #    ##  ##             #     #          # 
+;          #    #    #    #    #    #    # ## #             #     #     #####  
+;          #####     #    #    #    #    #    #             #     #    #       
+;          #   #     #    #    #    #    #    #              #   #     #       
+;          #    #     ####      ####     #    #               ###      ####### 
+;                                                                              
 ; ==============================================================================
 
 room_02:
-                    cpy #$02                ; are we in room 02?
-                    bne room_03             ; no -> check for room 03
+                    cpy #02                    
+                    bne room_03                 ; if not this room, go to next
 
-                    cmp #$f5                ; did the player hit the fence? f5 = fence character
-                    bne check_lock          ; no, check for the lock
-                    lda items + $19         ; fence was hit, so check if wirecuter was picked up
-                    cmp #$f9                ; where the wirecutters (f9) picked up?
-                    beq remove_fence        ; yes
-                    ldy #$10                ; no, load the correct death message
-                    jmp death               ; 10 You are trapped in wire-nettings!
+                    cmp #$f5                    ; did the player hit the fence? f5 = fence character
+                    bne check_lock              ; no, check for the lock
+                    lda items + $19             ; fence was hit, so check if wirecuter was picked up
+                    cmp #$f9                    ; where the wirecutters (f9) picked up?
+                    beq remove_fence            ; yes
+                    ldy #$10                    ; no, load the correct death message
+                    jmp death                   ; 10 You are trapped in wire-nettings!
 
 remove_fence:
-                    lda #$df                ; empty char
-                    sta m3900 + 1           ; m3900 must be the draw routine to clear out stuff?               
+                    lda #$df                    ; empty char
+                    sta m3900 + 1               ; m3900 must be the draw routine to clear out stuff?               
 m1264:              jmp check_death
 
 ; ==============================================================================
 
 check_lock:
                     cmp #$a6            ; lock
-                    bne +                                   ; bne $1279
-                    lda items + $10                        ; lda $369a
+                    bne +                                   
+                    lda items + $10                        
                     cmp #$df
-                    bne m1264                               ; bne $1264
+                    bne m1264                              
                     lda #$df
-                    sta items + $38                        ; sta $36c2
-                    bne m1264                               ; bne $1264
+                    sta items + $38                        
+                    bne m1264                     
 +                   cmp #$b1            ; ladder
-                    bne +                                   ; bne $1287
+                    bne +                                 
                     lda #$df
-                    sta items + $4d                        ; sta $36d7
-                    sta items + $58                        ; sta $36e2
-                    bne m1264                               ; bne $1264
+                    sta items + $4d                     
+                    sta items + $58                      
+                    bne m1264                             
 +                   cmp #$b9            ; bottle
-                    beq +                                   ; beq $128e
+                    beq +                                   
                     jmp m11ED
 +                   lda items + $bb
                     cmp #$df            ; df = empty spot where the hammer was. = hammer taken
@@ -507,15 +508,11 @@ check_lock:
                     ldy #$03
                     jmp death        ; 03 You drank from the poisend bottle
 
-
-; ==============================================================================
-; take the key out of the bottle
-
 take_key_out_of_bottle:
                     lda #$01
-                    sta key_in_bottle_storage                                   ; sta $12a4
+                    sta key_in_bottle_storage                                
                     ldy #$05
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 
 ; ==============================================================================
 ; this is 1 if the key from the bottle was taken and 0 if not
@@ -529,14 +526,21 @@ key_in_bottle_storage:              !byte $00
 
 ; ==============================================================================
 ;
-; ROOM 03
+;                                                             ###       #####  
+;          #####      ####      ####     #    #              #   #     #     # 
+;          #    #    #    #    #    #    ##  ##             #     #          # 
+;          #    #    #    #    #    #    # ## #             #     #     #####  
+;          #####     #    #    #    #    #    #             #     #          # 
+;          #   #     #    #    #    #    #    #              #   #     #     # 
+;          #    #     ####      ####     #    #               ###       #####  
+;                                                                              
 ; ==============================================================================
 
 room_03:            
-                    cpy #$03            ; room 03
-                    bne room_04                                   
+                    cpy #03            
+                    bne room_04                 ; if not this room, go to next                    
 
-                    cmp #$27            
+                    cmp #$27                    ; question mark (I don't know why 27)                
                     bcc +                                                  
                     jmp m3B4C
 +                   ldy #$04
@@ -549,12 +553,19 @@ room_03:
 
 ; ==============================================================================
 ;
-; ROOM 04
+;                                                             ###      #       
+;          #####      ####      ####     #    #              #   #     #    #  
+;          #    #    #    #    #    #    ##  ##             #     #    #    #  
+;          #    #    #    #    #    #    # ## #             #     #    #    #  
+;          #####     #    #    #    #    #    #             #     #    ####### 
+;          #   #     #    #    #    #    #    #              #   #          #  
+;          #    #     ####      ####     #    #               ###           #  
+;                                                                              
 ; ==============================================================================
 
 room_04:
-                    cpy #$04            ; room 04
-                    bne room_05                               ; bne $12db
+                    cpy #04            
+                    bne room_05                 ; if not this room, go to next
 
                     cmp #$3b            ; part of a coffin
                     beq +                                   ; beq $12c1
@@ -583,17 +594,24 @@ m12C6:
 
 ; ==============================================================================
 ;
-; ROOM 05
+;                                                             ###      ####### 
+;          #####      ####      ####     #    #              #   #     #       
+;          #    #    #    #    #    #    ##  ##             #     #    #       
+;          #    #    #    #    #    #    # ## #             #     #    ######  
+;          #####     #    #    #    #    #    #             #     #          # 
+;          #   #     #    #    #    #    #    #              #   #     #     # 
+;          #    #     ####      ####     #    #               ###       #####  
+;                                                                              
 ; ==============================================================================
 
 room_05:
-                    cpy #$05
-                    bne room_06                                   ; bne $12f9
+                    cpy #05
+                    bne room_06                     ; if not this room, go to next
 
-                    cmp #$27            ; part of a bush
-                    bcs m12E8                                   ; bcs $12e8
+                    cmp #$27                        ; question mark (I don't know why 27)
+                    bcs m12E8                                   
                     ldy #$00
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 
 ; ==============================================================================
 
@@ -616,12 +634,19 @@ m12F4:              ldy #$07
 
 ; ==============================================================================
 ;
-; ROOM 06
+;                                                             ###       #####  
+;          #####      ####      ####     #    #              #   #     #     # 
+;          #    #    #    #    #    #    ##  ##             #     #    #       
+;          #    #    #    #    #    #    # ## #             #     #    ######  
+;          #####     #    #    #    #    #    #             #     #    #     # 
+;          #   #     #    #    #    #    #    #              #   #     #     # 
+;          #    #     ####      ####     #    #               ###       #####  
+;                                                                              
 ; ==============================================================================
 
 room_06:
-                    cpy #$06
-                    bne room_07                       ; bne $1306
+                    cpy #06
+                    bne room_07                     ; if not this room, go to next
 
                     cmp #$f6            ; is it a trapped door?
                     bne m12EC                               ; bne $12ec
@@ -635,12 +660,19 @@ m1303:              jmp death    ; 00 You fell into a snake pit
 
 ; ==============================================================================
 ;
-; ROOM 07
+;                                                             ###      ####### 
+;          #####      ####      ####     #    #              #   #     #    #  
+;          #    #    #    #    #    #    ##  ##             #     #        #   
+;          #    #    #    #    #    #    # ## #             #     #       #    
+;          #####     #    #    #    #    #    #             #     #      #     
+;          #   #     #    #    #    #    #    #              #   #       #     
+;          #    #     ####      ####     #    #               ###        #     
+;                                                                              
 ; ==============================================================================
 
 room_07:
-                    cpy #$07
-                    bne room_08                               ; bne $133e
+                    cpy #07
+                    bne room_08                     ; if not this room, go to next
 
                     cmp #$e3            ; $e3 is the char for the invisible, I mean SACRED, column
                     bne +                                   ; bne $1312
@@ -652,7 +684,7 @@ room_07:
                     sta items + $74                        ; sta $36fe           ; but I dont understand how the whole light is shown
                     lda #$5f
                     sta items + $72                        ; sta $36fc
-                    jsr m3846
+                    jsr update_items_display
                     ldy #$ff
                     jsr wait
                     jsr wait
@@ -671,12 +703,19 @@ room_07:
 
 ; ==============================================================================
 ;
-; ROOM 08
+;                                                             ###       #####  
+;          #####      ####      ####     #    #              #   #     #     # 
+;          #    #    #    #    #    #    ##  ##             #     #    #     # 
+;          #    #    #    #    #    #    # ## #             #     #     #####  
+;          #####     #    #    #    #    #    #             #     #    #     # 
+;          #   #     #    #    #    #    #    #              #   #     #     # 
+;          #    #     ####      ####     #    #               ###       #####  
+;                                                                              
 ; ==============================================================================
 
 room_08:
-                    cpy #$08
-                    bne room_09                               ; bne $1396
+                    cpy #08
+                    bne room_09                     ; if not this room, go to next
 
                     ldy #$00
                     sty zpA7
@@ -684,7 +723,7 @@ room_08:
                     bne check_item_water                    ; bne $135f
                     ldy m3993 + 1                           ; ldy $3994
                     bne m1366                               ; bne $1366
-                    jsr m3602
+                    jsr get_player_pos
                     lda #$18
 m1354:              sta player_pos_x + 1
                     lda #$0c
@@ -699,7 +738,7 @@ check_item_water:
                     bne check_item_shovel                   ; bne $1374
                     ldy m3993 + 1                           ; ldy $3994
 m1366:              bne +                                   ; bne $136f
-                    jsr m3602
+                    jsr get_player_pos
                     lda #$0c
                     bne m1354                               ; bne $1354
 +                   ldy #$02
@@ -735,16 +774,23 @@ m1384:
 
 ; ==============================================================================
 ;
-; ROOM 09
+;                                                             ###       #####  
+;          #####      ####      ####     #    #              #   #     #     # 
+;          #    #    #    #    #    #    ##  ##             #     #    #     # 
+;          #    #    #    #    #    #    # ## #             #     #     ###### 
+;          #####     #    #    #    #    #    #             #     #          # 
+;          #   #     #    #    #    #    #    #              #   #     #     # 
+;          #    #     ####      ####     #    #               ###       #####  
+;                                                                              
 ; ==============================================================================
 
-room_09:            cpy #$09
-                    bne room_10                               ; bne $13a3
+room_09:            cpy #09
+                    bne room_10                     ; if not this room, go to next
 
-                    cmp #$27
+                    cmp #$27                        ; question mark (I don't know why 27)
                     bcs m13B0
                     ldy #$02
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 
 
 
@@ -753,17 +799,24 @@ room_09:            cpy #$09
 
 ; ==============================================================================
 ;
-; ROOM 10
+;                                                             #        ###   
+;          #####      ####      ####     #    #              ##       #   #  
+;          #    #    #    #    #    #    ##  ##             # #      #     # 
+;          #    #    #    #    #    #    # ## #               #      #     # 
+;          #####     #    #    #    #    #    #               #      #     # 
+;          #   #     #    #    #    #    #    #               #       #   #  
+;          #    #     ####      ####     #    #             #####      ###   
+;                                                                                                                                                     
 ; ==============================================================================
 
 room_10:
-                    cpy #$0a
-                    bne room_11                               ; bne $13d2
+                    cpy #10
+                    bne room_11                     ; if not this room, go to next
 
-                    cmp #$27
-                    bcs m13B3                               ; bcs $13b3
+                    cmp #$27                        ; question mark (I don't know why 27)
+                    bcs m13B3                               
                     ldy #$00
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 ; ==============================================================================
 
 m13B0:              jmp m11ED
@@ -797,12 +850,19 @@ m13CD:
 
 ; ==============================================================================
 ;
-; ROOM 11
+;                                                             #        #   
+;          #####      ####      ####     #    #              ##       ##   
+;          #    #    #    #    #    #    ##  ##             # #      # #   
+;          #    #    #    #    #    #    # ## #               #        #   
+;          #####     #    #    #    #    #    #               #        #   
+;          #   #     #    #    #    #    #    #               #        #   
+;          #    #     ####      ####     #    #             #####    ##### 
+;                                                                                                                                            
 ; ==============================================================================
 
 room_11:
-                    cpy #$0b
-                    bne room_12                                   ; bne $13e1
+                    cpy #11
+                    bne room_12                     ; if not this room, go to next
 
                     cmp #$d1
                     bne m13B0
@@ -817,17 +877,24 @@ room_11:
 
 ; ==============================================================================
 ;
-; ROOM 12
+;                                                             #       #####  
+;          #####      ####      ####     #    #              ##      #     # 
+;          #    #    #    #    #    #    ##  ##             # #            # 
+;          #    #    #    #    #    #    # ## #               #       #####  
+;          #####     #    #    #    #    #    #               #      #       
+;          #   #     #    #    #    #    #    #               #      #       
+;          #    #     ####      ####     #    #             #####    ####### 
+;                                                                            
 ; ==============================================================================
 
 room_12:
-                    cpy #$0c
-                    bne room_13                               ; bne $13fd
+                    cpy #12
+                    bne room_13                     ; if not this room, go to next
 
-                    cmp #$27
-                    bcs m13EE                               ; bcs $13ee
+                    cmp #$27                        ; question mark (I don't know why 27)
+                    bcs m13EE                               
                     ldy #$00
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 ; ==============================================================================
 
 m13EE:
@@ -846,16 +913,23 @@ m13EE:
 
 ; ==============================================================================
 ;
-; ROOM 13
+;                                                             #       #####  
+;          #####      ####      ####     #    #              ##      #     # 
+;          #    #    #    #    #    #    ##  ##             # #            # 
+;          #    #    #    #    #    #    # ## #               #       #####  
+;          #####     #    #    #    #    #    #               #            # 
+;          #   #     #    #    #    #    #    #               #      #     # 
+;          #    #     ####      ####     #    #             #####     #####  
+;                                                                            
 ; ==============================================================================
 
-room_13:            cpy #$0d
-                    bne room_14                               ; bne $1421
+room_13:            cpy #13
+                    bne room_14                     ; if not this room, go to next
 
-                    cmp #$27
-                    bcs m140A                               ; bcs $140a
+                    cmp #$27                        ; question mark (I don't know why 27)
+                    bcs m140A                               
                     ldy #$00
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 
 ; ==============================================================================
 
@@ -882,11 +956,18 @@ m141A:
 
 ; ==============================================================================
 ;
-; ROOM 14
+;                                                             #      #       
+;          #####      ####      ####     #    #              ##      #    #  
+;          #    #    #    #    #    #    ##  ##             # #      #    #  
+;          #    #    #    #    #    #    # ## #               #      #    #  
+;          #####     #    #    #    #    #    #               #      ####### 
+;          #   #     #    #    #    #    #    #               #           #  
+;          #    #     ####      ####     #    #             #####         #  
+;                                                                            
 ; ==============================================================================
 
-room_14:            cpy #$0e
-                    bne room_15                               ; bne $142e
+room_14:            cpy #14
+                    bne room_15                     ; if not this room, go to next
 
                     cmp #$d7
                     bne m13B0
@@ -900,17 +981,24 @@ room_14:            cpy #$0e
 
 ; ==============================================================================
 ;
-; ROOM 15
+;                                                             #      ####### 
+;          #####      ####      ####     #    #              ##      #       
+;          #    #    #    #    #    #    ##  ##             # #      #       
+;          #    #    #    #    #    #    # ## #               #      ######  
+;          #####     #    #    #    #    #    #               #            # 
+;          #   #     #    #    #    #    #    #               #      #     # 
+;          #    #     ####      ####     #    #             #####     #####  
+;                                                                            
 ; ==============================================================================
 
 room_15:
-                    cpy #$0f
-                    bne room_16                               ; bne $143e
+                    cpy #15
+                    bne room_16                     ; if not this room, go to next
 
-                    cmp #$27
-                    bcs m143B                               ; bcs $143b
+                    cmp #$27                        ; question mark (I don't know why 27)
+                    bcs m143B                               
                     ldy #$00
-                    jmp m1031           ; jmp $1031
+                    jmp m1031           
 
 ; ==============================================================================
 
@@ -924,12 +1012,19 @@ m143B:
 
 ; ==============================================================================
 ;
-; ROOM 16
+;                                                             #       #####  
+;          #####      ####      ####     #    #              ##      #     # 
+;          #    #    #    #    #    #    ##  ##             # #      #       
+;          #    #    #    #    #    #    # ## #               #      ######  
+;          #####     #    #    #    #    #    #               #      #     # 
+;          #   #     #    #    #    #    #    #               #      #     # 
+;          #    #     ####      ####     #    #             #####     #####  
+;                                                                            
 ; ==============================================================================
 
 room_16:
-                    cpy #$10
-                    bne room_17                               ; bne $1464
+                    cpy #16
+                    bne room_17                     ; if not this room, go to next
 
                     cmp #$f4
                     bne m144B                               ; bne $144b
@@ -959,12 +1054,19 @@ m144B:
 
 ; ==============================================================================
 ;
-; ROOM 17
+;                                                             #      ####### 
+;          #####      ####      ####     #    #              ##      #    #  
+;          #    #    #    #    #    #    ##  ##             # #          #   
+;          #    #    #    #    #    #    # ## #               #         #    
+;          #####     #    #    #    #    #    #               #        #     
+;          #   #     #    #    #    #    #    #               #        #     
+;          #    #     ####      ####     #    #             #####      #     
+;                                                                            
 ; ==============================================================================
 
 room_17:
-                    cpy #$11
-                    bne room_18                               ; bne $1474
+                    cpy #17
+                    bne room_18                     ; if not this room, go to next
 
                     cmp #$dd
                     bne m143B                               ; bne $143b
@@ -979,7 +1081,14 @@ room_17:
 
 ; ==============================================================================
 ;
-; ROOM 18
+;                                                             #       #####  
+;          #####      ####      ####     #    #              ##      #     # 
+;          #    #    #    #    #    #    ##  ##             # #      #     # 
+;          #    #    #    #    #    #    # ## #               #       #####  
+;          #####     #    #    #    #    #    #               #      #     # 
+;          #   #     #    #    #    #    #    #               #      #     # 
+;          #    #     ####      ####     #    #             #####     #####  
+;                                                                            
 ; ==============================================================================
 
 room_18:
@@ -1214,6 +1323,9 @@ m15CB:              dec m15C1 + 1                           ; dec $15c2
                     jmp m3620
 
 ; ==============================================================================
+;
+;
+; ==============================================================================
 
 m15D1:              lda items + $ac                        ; lda $3736
                     cmp #$df
@@ -1332,6 +1444,13 @@ m16A7:
 +                   ldy #$00
                     sty m14CC + 1                   ; sty $14cd
                     jmp m1676                       ; jmp $1675
+
+
+
+
+
+
+
 
 ; ==============================================================================
 ; this might be the inventory/ world reset
@@ -1900,7 +2019,9 @@ m2FDF:              ldy items + $96     ; ldy $3720
                     jmp m12F4           ; jmp $12f4
 +                   jmp m3B4C           ; jmp $3b4c
 
-m2FEF:              jsr m39F4 ; jsr $39f4
+m2FEF:              
+                    jsr poll_raster
+                    jsr check_door ; jsr $39f4
                     jmp m15D1           ; jmp $15d1
 
 
@@ -2091,68 +2212,72 @@ screen_start_src:
 screen_start_src_end:
 
 
+; ==============================================================================
+; i think this might be the draw routine for the player sprite
+;
+; ==============================================================================
 
-m3534:
-                    lda #>COLRAM        ; lda #$08              ; COULD BE WRONG TO ASSUME
+
+draw_player:
+                    lda #>COLRAM                        ; store colram high in zp05
                     sta zp05
-                    lda #>SCREENRAM       ; lda #$0c             ; COULD BE WRONG TO ASSUME
-                    sta zp03
+                    lda #>SCREENRAM                     ; store screenram high in zp03
+                    sta zp03                            
                     lda #$00
                     sta zp02
-                    sta zp04
-
-                    cpy #$00
-                    beq +               ; beq $3547
--                   clc
-                    adc #$28
-                    bcc ++              ; bcc $3544
+                    sta zp04                            ; 00 for zp02 and zp04 (colram low and screenram low)
+                    cpy #$00                            ; Y is probably the player Y position
+                    beq +                               ; Y is 0 -> +
+-                   clc                                 ; Y not 0
+                    adc #$28                            ; add $28 (=#40 = one line) to A (which is now $28)
+                    bcc ++                              ; <256? -> ++
                     inc zp03
                     inc zp05
-++                  dey
-                    bne -               ; bne $353b
-+                   clc
-m3548:              adc #$15
+++                  dey                                 ; Y = Y - 1
+                    bne -                               ; Y = 0 ? -> -
++                   clc                                 ; 
+m3548:              adc #$16                            ; add $15 (#21) why? -> selfmod address
                     sta zp02
                     sta zp04
-                    bcc +               ; bcc $3554
+                    bcc +               
                     inc zp03
                     inc zp05
-+                   ldx #$03
++                   ldx #$03                            ; draw 3 rows for the player "sprite"
                     lda #$00
                     sta zp09
 --                  ldy #$00
 -                   lda zpA7
-                    bne +               ; bne $3566
-                    lda #$df
+                    bne +               
+                    lda #$df                            ; empty char, but not sure why
                     sta (zp02),y
-                    bne ++              ; bne $3581
+                    bne ++              
 +                   cmp #$01
-                    bne +               ; bne $3574
+                    bne +               
                     lda zpA8
                     sta (zp02),y
                     lda zp0A
                     sta (zp04),y
-                    bne ++              ; bne $3581
+                    bne ++              
 +                   lda (zp02),y
                     stx zp10
                     ldx zp09
-                    sta TAPE_BUFFER + $9,x          ; sta $033c,x                 ; cassette tape buffer
+                    sta TAPE_BUFFER + $9,x          
                     inc zp09
                     ldx zp10
 ++                  inc zpA8
                     iny
-                    cpy #$03
-                    bne -               ; bne $355c
+                    cpy #$03                            ; width of the player sprite in characters (3)
+                    bne -               
                     lda zp02
                     clc
-                    adc #$28
+                    adc #$28                            ; $28 = #40, draws one row of the player under each other
                     sta zp02
                     sta zp04
-                    bcc +               ; bcc $3597
+                    bcc +              
                     inc zp03
                     inc zp05
 +                   dex
-                    bne --              ; bne $355a
+                    bne --              
                     rts
 
 
@@ -2193,7 +2318,7 @@ player_pos_x:       ldx #$15
                     stx m3548 + 1           ; stx $3549
                     lda #$02
                     sta zpA7
-                    jsr m3534           ; jsr $3534
+                    jsr draw_player           ; jsr $3534
                     ldx #$09
 -                   lda TAPE_BUFFER + $8,x      ; lda $033b,x
                     cmp #$df
@@ -2214,26 +2339,28 @@ m35EC:              lda #$15
                     sta zpA8
                     lda #$3d
                     sta zp0A
-m3602:              ldy player_pos_y + 1
+get_player_pos:     ldy player_pos_y + 1
                     ldx player_pos_x + 1
 m3608:              stx m3548 + 1           ; stx $3549
-                    jmp m3534           ; jmp $3534
+                    jmp draw_player           ; jmp $3534
 
 ; ==============================================================================
 ;
-; JOYSTICK INTERRUPT?
+; POLL RASTER
 ; ==============================================================================
 
-m360E:
-                    sei
-                    lda #$c0
--                   cmp $ff1d           ; vertical line bits 0-7
-                    bne -               ; bne $3611
-                    lda #$00
-                    sta zpA7
--                   jmp m3A6D
-                    bne -               ; bne $361a
-                    rts
+poll_raster:
+                    sei                     ; disable interrupt
+                    lda #$c0                ; A = $c0
+-                   cmp $ff1d               ; vertical line bits 0-7
+                    bne -                   ; loop until we hit line c0
+                    lda #$00                ; A = 0
+                    sta zpA7                ; zpA7 = 0
+                  
+                    jsr get_player_pos
+                    jsr check_joystick
+                    cli
+                    rts     
 
 ; ==============================================================================
 ;
@@ -2245,48 +2372,48 @@ m3620:
 m3624:              ldx #$0f
 m3626:              ldy #$0f
                     jsr m3608
-                    ldx m3624 + 1            ; ldx $3625
-                    ldy m3626 + 1            ; ldy $3627
+                    ldx m3624 + 1            
+                    ldy m3626 + 1           
                     cpx player_pos_x + 1
-                    bcs +                   ; bcs $3639
+                    bcs +                   
                     inx
                     inx
 +                   cpx player_pos_x + 1
-                    beq +                   ; beq $363f
+                    beq +                   
                     dex
 +                   cpy player_pos_y + 1
-                    bcs +                   ; bcs $3646
+                    bcs +                   
                     iny
                     iny
 +                   cpy player_pos_y + 1
-                    beq +               ; beq $364c
+                    beq +               
                     dey
-+                   stx m3668 + 1       ; stx $3669
-                    stx m3548 + 1       ; stx $3549
-                    sty m366D + 1       ; sty $366e
++                   stx m3668 + 1       
+                    stx m3548 + 1      
+                    sty m366D + 1      
                     lda #$02
                     sta zpA7
-                    jsr m3534           ; jsr $3534
+                    jsr draw_player          
                     ldx #$09
--                   lda TAPE_BUFFER + $8,x  ; lda $033b,x
+-                   lda TAPE_BUFFER + $8,x  
                     cmp #$92
-                    bcc +               ; bcc $3672
+                    bcc +               
                     dex
-                    bne -               ; bne $365e
+                    bne -              
 m3668:              ldx #$10
-                    stx m3624 + 1       ; stx $3625
+                    stx m3624 + 1      
 m366D:              ldy #$0e
-                    sty m3626 + 1       ; sty $3627
+                    sty m3626 + 1      
 +                   lda #$9c
                     sta zpA8
                     lda #$3e
                     sta zp0A
-                    ldy m3626 + 1       ; ldy $3627
-                    ldx m3624 + 1       ; ldx $3625
-                    stx m3548 + 1           ; stx $3549
+                    ldy m3626 + 1       
+                    ldx m3624 + 1      
+                    stx m3548 + 1          
                     lda #$01
                     sta zpA7
-                    jmp m3534           ; jmp $3534
+                    jmp draw_player         
 
 
 ; ==============================================================================
@@ -2314,48 +2441,48 @@ next_item:
 ; probably placing the items on the screen
 ; ==============================================================================
 
-m3846:
-                    lda #>items                ; items
+update_items_display:
+                    lda #>items                 ; load address for items into zeropage
                     sta zpA8
                     lda #<items
                     sta zpA7
-                    ldy #$00
-m3850:              lda (zpA7),y
-                    cmp #$ff
-                    beq +                       
--                   jsr next_item
-                    jmp m3850
-+                   jsr next_item
-                    lda (zpA7),y
-                    cmp #$ff
-                    beq m38DF               
-                    cmp current_room + 1
-                    bne -                   
-                    lda #>COLRAM        
-                    sta zp05
+                    ldy #$00                    ; y = 0
+--                  lda (zpA7),y                ; load first value      
+                    cmp #$ff                    ; is it $ff?
+                    beq +                       ; yes -> +
+-                   jsr next_item               ; no -> set zero page to next value
+                    jmp --                      ; and loop
++                   jsr next_item               ; value was $ff, now get the next value in the list
+                    lda (zpA7),y 
+                    cmp #$ff                    ; is the next value $ff again?
+                    beq m38DF                   ; yes -> m38DF
+                    cmp current_room + 1        ; is the number the current room number?
+                    bne -                       ; no -> loop
+                    lda #>COLRAM                ; yes the number is the current room number
+                    sta zp05                    ; store COLRAM and SCREENRAM in zeropage
                     lda #>SCREENRAM       
                     sta zp03
-                    lda #$00
-                    sta zp02
+                    lda #$00                    ; A = 0
+                    sta zp02                    ; zp02 = 0, zp04 = 0
                     sta zp04
-                    jsr next_item
-                    lda (zpA7),y
--                   cmp #$fe
-                    beq +                   
-                    cmp #$f9
-                    bne +++                  
-                    lda zp02
-                    jsr m38D7
-                    bcc ++                  
-+                   inc zp03
-                    inc zp05
-++                  lda (zpA7),y
-+++                 cmp #$fb
-                    bne +                  
-                    jsr next_item
-                    lda (zpA7),y
-                    sta zp09
-                    bne ++                  
+                    jsr next_item               ; move to next value
+                    lda (zpA7),y                ; get next value in the list
+-                   cmp #$fe                    ; is it $FE?
+                    beq +                       ; yes -> +
+                    cmp #$f9                    ; no, is it $f9?
+                    bne +++                     ; no -> +++
+                    lda zp02                    ; value is $f9
+                    jsr m38D7                   ; add 1 to zp02 and zp04
+                    bcc ++                      ; if neither zp02 nor zp04 have become 0 -> ++
++                   inc zp03                    ; value is $fe
+                    inc zp05                    ; increase zp03 and zp05
+++                  lda (zpA7),y                ; get value from list
++++                 cmp #$fb                    ; it wasn't $f9, so is it $fb?
+                    bne +                       ; no -> +
+                    jsr next_item               ; yes it's $fb, get the next value
+                    lda (zpA7),y                ; get value from list
+                    sta zp09                    ; store value in zp09
+                    bne ++                      ; if value was 0 -> ++
 +                   cmp #$f8
                     beq +                  
                     cmp #$fc
@@ -2540,18 +2667,21 @@ m39AA:
 !byte $0c, $03, $09, $15, $03, $03, $06, $21, $03, $03, $03, $21, $06, $03, $12, $21
 !byte $03, $03, $03, $1d, $03, $03, $06, $21, $03, $03
 
-; $39F4
+; ==============================================================================
+;
+;
+; ==============================================================================
 
-m39F4:
-                    jsr m360E           ; jsr $360e
-                    ldx #$09
--                   lda TAPE_BUFFER + $8,x  ; lda $033b,x
-                    cmp #$05
-                    beq m3A08           ; beq $3a08
-                    cmp #$03
-                    beq m3A17           ; beq $3a17
-                    dex
-                    bne -               ; bne $39f9
+check_door:
+                               
+                    ldx #$09                ; set loop to 9 
+-                   lda TAPE_BUFFER + $8,x  ; get value from tape buffer
+                    cmp #$05                ; is it a 05? -> right side of the door, meaning LEFT DOOR
+                    beq m3A08               ; yes -> m3A08
+                    cmp #$03                ; is it a 03? -> left side of the door, meaning RIGHT DOOR
+                    beq m3A17               ; yes -> m3A17
+                    dex                     ; decrease loop
+                    bne -                   ; loop
 -                   rts
 
 ; ==============================================================================
@@ -2578,7 +2708,7 @@ m3A21:              lda m39AA,y                ; lda $39aa,y
                     lda m39AA + 1,y            ; lda $39ab,y
                     sta player_pos_x + 1
 m3A2D:              jsr display_room           ; jsr $3040
-                    jmp m3846
+                    jmp update_items_display
 
 
 
@@ -2597,13 +2727,7 @@ m3A64:
                     stx current_room + 1                           ; stx $3051
                     ldy m3A33,x                             ; ldy $3A33,x
                     jmp m3A21                               ; jmp $3A21
-m3A6D:
 
-                    jsr m3602
-                    jsr check_joystick
-                    cli
-                    rts
-                    ;brk             ; $00
 
 ; ==============================================================================
 ;
