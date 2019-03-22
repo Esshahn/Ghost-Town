@@ -3,6 +3,8 @@
 ; ==============================================================================
 ; Items in the rooms are stored here
 ; $368a
+; table seems to contain both charset and color information
+; eg $8 is the color for the item $6
 ; ==============================================================================
 
  

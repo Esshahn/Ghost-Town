@@ -382,15 +382,23 @@ m11ED:              inx
 ; ==============================================================================
 
 room_00:
-                    ldy current_room + 1
-                    bne room_01               ; bne $120a
-                    cmp #$a9            ; egg plant gloves ;)
-                    bne m11ED
-                    lda #$df
-                    cmp items + $4d                        ; cmp $36d7
-m1203:              bne -               ; bne $11f2
-                    jsr m2FC0
-                    bne check_death     ; bne $11da
+                    ldy current_room + 1        ; load in the current room number
+                    bne room_01                 ; is it not 0? then check for room 01
+                    cmp #$a9                    ; has the player hit the gloves?
+                    bne m11ED                   ; no
+                    lda #$df                    ; yes, load in char for "empty"
+                    cmp items + $4d             ; position for 1st char of ladder ($b0) -> ladder already taken?
+m1203:              bne -                       ; no
+                    jsr pickup_gloves           ; yes
+                    bne check_death     
+
+
+pickup_gloves:
+                    lda #$6b                    ; load character for empty bush
+                    sta items + $8              ; store 6b = gloves in inventory
+                    lda #$3d                    ; set the foreground color
+                    sta items + $6              ; and store the color in the items table
+                    rts
 
 ; ==============================================================================
 ;
@@ -440,27 +448,25 @@ check_death_bush:                 ;
 ; ==============================================================================
 
 room_02:
-                    cpy #$02
-                    bne room_03           ; bne $12a5
-                    cmp #$f5        ; f5 = fence character
-                    bne +           ;bne $1267
-                    lda items + $19      ; fence was hit, so check if wirecuter was picked up
-                    cmp #$f9        ; f9 = wirecutters were picked up
-                    beq m125F           ;beq $125f
-                    ldy #$10
-                    jmp death     ; 10 You are trapped in wire-nettings!
+                    cpy #$02                ; are we in room 02?
+                    bne room_03             ; no -> check for room 03
+                    cmp #$f5                ; did the player hit the fence? f5 = fence character
+                    bne check_lock          ; no, check for the lock
+                    lda items + $19         ; fence was hit, so check if wirecuter was picked up
+                    cmp #$f9                ; where the wirecutters (f9) picked up?
+                    beq remove_fence        ; yes
+                    ldy #$10                ; no, load the correct death message
+                    jmp death               ; 10 You are trapped in wire-nettings!
 
-; ==============================================================================
-
-m125F:
-                    lda #$df
-                    sta m3900 + 1                           ; sta $3901
+remove_fence:
+                    lda #$df                ; empty char
+                    sta m3900 + 1           ; m3900 must be the draw routine to clear out stuff?               
 m1264:              jmp check_death
 
 ; ==============================================================================
 
-m1267:
-+                   cmp #$a6            ; lock
+check_lock:
+                    cmp #$a6            ; lock
                     bne +                                   ; bne $1279
                     lda items + $10                        ; lda $369a
                     cmp #$df
@@ -1218,60 +1224,83 @@ m16A7:
 ; puts all items into the level data again
 ; maybe not. not all characters for e.g. the wirecutter is put back
 ; addresses are mostly within items.asm address space ( $368a )
+; contains color information of the chars
 ; ==============================================================================
 
-m16BA:
-                    lda #$a5                        ; $a5 = the door of the shed where the ladder is
-                    sta items + $38                        ; sta $36c2
-                    lda #$a9                        ; a9 = NO gloves
-                    sta items + $8                        ; sta $3692                       ; inventory gloves
+reset_items:
+                    lda #$a5                        ; $a5 = lock of the shed
+                    sta items + $38                        
+                    
+                    lda #$a9                        ; 
+                    sta items + $8                  ; gloves
                     lda #$79
-                    sta items + $6                        ; sta $3690
+                    sta items + $6                  ; gloves color
+                    
                     lda #$e0                        ; empty char
-                    sta items + $10                        ; sta $369a
+                    sta items + $10                 ; invisible key
+
                     lda #$ac                        ; wirecutter
-                    sta items + $19                        ; sta $36a3
-                    lda #$b8                        ; part of the bottle - hmmm...
-                    sta items + $29                        ; sta $36b3
-                    lda #$b0                        ; the ladder
-                    sta items + $4d                        ; sta $36d7
+                    sta items + $19                        
+                    
+                    lda #$b8                        ; bottle 
+                    sta items + $29                      
+                    
+                    lda #$b0                        ; ladder
+                    sta items + $4d                       
                     lda #$b5                        ; more ladder
-                    sta items + $58                        ; sta $36e2
+                    sta items + $58                        
+                    
                     lda #$5e                        ; seems to be water?
-                    sta items + $74                        ; sta $36fe
+                    sta items + $74                        
+                    
                     lda #$c6                        ; boots in the whatever box
-                    sta items + $84                        ; sta $370e
-                    lda #$c0                        ; not sure
-                    sta items + $96                        ; sta $3720
+                    sta items + $84                       
+                    
+                    lda #$c0                        ; shovel
+                    sta items + $96                        
+                    
                     lda #$cc                        ; power outlet
-                    sta items + $ac                        ; sta $3736
-                    lda #$d0                        ; the hammer
-                    sta items + $bb                        ; sta $3745
-                    lda #$d2                        ; unsure
-                    sta items + $c8                        ; sta $3752
-                    lda #$d6                        ; unsure
-                    sta items + $d5                        ; sta $375f
+                    sta items + $ac                        
+                    
+                    lda #$d0                        ; hammer
+                    sta items + $bb                        
+                    
+                    lda #$d2                        ; light bulb
+                    sta items + $c8                        
+                    
+                    lda #$d6                        ; nails
+                    sta items + $d5                        
+                    
                     lda #$00                        ; door
-                    sta items + $12c                        ; sta $37b6
-                    lda #$dd                        ; unsure
-                    sta items + $1a7                        ; sta $3831
+                    sta items + $12c                        
+                    
+                    lda #$dd                        ; sword
+                    sta items + $1a7                        
+                    
                     lda #$01                        ; door
-                    sta items + $2c1                        ; sta $394b
+                    sta items + $2c1                        
+                    
                     lda #$01                        ; door
-                    sta items + $30a                        ; sta $3994
+                    sta items + $30a                        
+                    
                     lda #$f5                        ; fence
-                    sta items + $277                        ; sta $3901
+                    sta items + $277                        
+                    
                     lda #$00                        ; key in the bottle
-                    sta key_in_bottle_storage                               ; sta $12a4
+                    sta key_in_bottle_storage                               
+                    
                     lda #$01                        ; door
-                    sta m15FC + 1                           ; sta $15fd
+                    sta m15FC + 1                           
+                    
                     lda #$1e
-                    sta m1602 + 1                           ; sta $1603
+                    sta m1602 + 1                           
+                    
                     lda #$01
-                    sta m14CC + 1                           ; sta $14cd
+                    sta m14CC + 1                           
+
 m1732:              ldx #$05
                     cpx #$07
-                    bne +                                   ; bne $173a
+                    bne +                                   
                     ldx #$ff
 +                   inx
                     stx m1732 + 1                           ; stx $1733
@@ -1441,6 +1470,11 @@ start_intro:        sta KEYBOARD_LATCH
                     lda #$ba
                     sta music_volume+1         ; sta $1ed9    ; sound volume
                     rts
+
+
+
+
+
 ; ==============================================================================
 ; MUSIC
 ; ==============================================================================
@@ -1562,6 +1596,13 @@ music_play:         ldx #MUSIC_DELAY_INITIAL
 music_volume:       and #$bf
                     sta VOLUME_AND_VOICE_SELECT
                     jmp music_get_data
+
+
+
+
+
+
+
 ; ==============================================================================
 ; irq init
 ; ==============================================================================
@@ -1716,13 +1757,7 @@ level_data_end:
 m2FBF:
 !byte $01
 
-; $2fc0
-m2FC0:
-                    lda #$6b
-                    sta items + $8               ; store 6b = gloves in inventory
-                    lda #$3d
-                    sta items + $6                      ;sta $3690
--                   rts
+
 
 ; ==============================================================================
 ;
@@ -1731,13 +1766,13 @@ m2FC0:
 
 m2fCB:              lda current_room + 1
                     cmp #$04
-                    bne -                   ; bne $2fca
+                    bne ++                   ; bne $2fca
                     lda #$03
                     ldy m394A + 1           ; ldy $394b
                     beq +
                     lda #$f6
 +                   sta SCREENRAM + $f9     ; sta $0cf9
-                    rts
+++                  rts
 
 ; ==============================================================================
 ;
@@ -2140,12 +2175,12 @@ m366D:              ldy #$0e
                     jmp m3534           ; jmp $3534
 
 
-; $368a
 ; ==============================================================================
 ; items
 ; This area seems to be responsible for items placement
 ;
 ; ==============================================================================
+
 items:
                     !source "includes/items.asm"
 items_end:
@@ -2173,18 +2208,18 @@ m3846:
                     ldy #$00
 m3850:              lda (zpA7),y
                     cmp #$ff
-                    beq +                       ; beq $385c
+                    beq +                       
 -                   jsr next_item
                     jmp m3850
 +                   jsr next_item
                     lda (zpA7),y
                     cmp #$ff
-                    beq m38DF               ; beq $38df
+                    beq m38DF               
                     cmp current_room + 1
-                    bne -                   ; bne $3856
-                    lda #>COLRAM        ; lda #$08
+                    bne -                   
+                    lda #>COLRAM        
                     sta zp05
-                    lda #>SCREENRAM       ; lda #$0c
+                    lda #>SCREENRAM       
                     sta zp03
                     lda #$00
                     sta zp02
@@ -2192,29 +2227,29 @@ m3850:              lda (zpA7),y
                     jsr next_item
                     lda (zpA7),y
 -                   cmp #$fe
-                    beq +                   ; beq $388c
+                    beq +                   
                     cmp #$f9
-                    bne +++                  ; bne $3892
+                    bne +++                  
                     lda zp02
                     jsr m38D7
-                    bcc ++                   ; bcc $3890
+                    bcc ++                  
 +                   inc zp03
                     inc zp05
 ++                  lda (zpA7),y
 +++                 cmp #$fb
-                    bne +                   ; bne $389f
+                    bne +                  
                     jsr next_item
                     lda (zpA7),y
                     sta zp09
-                    bne ++                  ; bne $38bf
+                    bne ++                  
 +                   cmp #$f8
-                    beq +                   ; beq $38b7
+                    beq +                  
                     cmp #$fc
-                    bne +++                 ; bne $38ac
+                    bne +++                
                     lda zp0A
                     jmp m399F
 +++                 cmp #$fa
-                    bne ++                  ; bne $38bf
+                    bne ++                 
                     jsr next_item
                     lda (zpA7),y
                     sta zp0A
@@ -2224,7 +2259,7 @@ m38B7:
                     lda zp0A
                     sta (zp02),y
 ++                  cmp #$fd
-                    bne +                   ; bne $38cc
+                    bne +                   
                     jsr next_item
                     lda (zpA7),y
                     sta zp02
@@ -2232,8 +2267,8 @@ m38B7:
 +                   jsr next_item
                     lda (zpA7),y
                     cmp #$ff
-                    bne -                   ; bne $387d
-                    beq m38DF               ; beq $38df
+                    bne -                  
+                    beq m38DF              
 m38D7:              clc
                     adc #$01
                     sta zp02
@@ -2526,7 +2561,7 @@ init:
                     lda #$01
                     sta BG_COLOR          ; background color
                     sta BORDER_COLOR          ; border color
-                    jsr m16BA           ; might be a level data reset, and print the title screen
+                    jsr reset_items           ; might be a level data reset, and print the title screen
                     ldy #$20
                     jsr wait
 
