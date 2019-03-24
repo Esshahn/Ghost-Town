@@ -480,6 +480,10 @@ text_hints:         !scr " A part of the code number is :         "
                     !scr " Sorry, bad code number! Better luck next time! "
 text_hints_end:
 text_letter         = text_hints+0xBE
+text_items:         !scr " There is a key in the bottle !         "
+                    !scr "   There is a key in the coffin !       "
+                    !scr " There is a breathing tube !            "
+text_items_end:
 rooms:
 room_00:  !byte $01, $00, $00, $00, $01, $01, $01, $00, $0b, $00, $00, $00, $00
           !byte $01, $00, $0b, $00, $00, $00, $00, $00, $0c, $01, $01, $01, $00
