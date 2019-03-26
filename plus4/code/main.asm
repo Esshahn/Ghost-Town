@@ -33,7 +33,7 @@ LANGUAGE = DE
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED            = 1       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
@@ -422,6 +422,9 @@ m11E0:              ldx #$00
                     cmp #$df
                     beq m11ED
                     jmp check_room              ; bne $11f5
+
+; ==============================================================================
+
 m11ED:              inx
                     cpx #$09
                     bne -               ; bne $11e2
@@ -542,7 +545,7 @@ m1264:              jmp check_death
 
 
 check_lock:
-                    cmp #$a6            ; lock
+                    cmp #$a6                    ; lock
                     bne +
                     lda items + $10
                     cmp #$df
@@ -550,20 +553,20 @@ check_lock:
                     lda #$df
                     sta items + $38
                     bne m1264
-+                   cmp #$b1            ; ladder
++                   cmp #$b1                    ; ladder
                     bne +
                     lda #$df
                     sta items + $4d
                     sta items + $58
                     bne m1264
-+                   cmp #$b9            ; bottle
++                   cmp #$b9                    ; bottle
                     beq +
                     jmp m11ED
 +                   lda items + $bb
-                    cmp #$df            ; df = empty spot where the hammer was. = hammer taken
+                    cmp #$df                    ; df = empty spot where the hammer was. = hammer taken
                     beq take_key_out_of_bottle                                   ; beq $129a
                     ldy #$03
-                    jmp death        ; 03 You drank from the poisend bottle
+                    jmp death                   ; 03 You drank from the poisend bottle
 
 take_key_out_of_bottle:
                     lda #$01
@@ -807,8 +810,9 @@ m1381:              jmp check_death
 
 m1384:
                     cmp #$cb
-                    bne m13B0
-                    lda items + $bb                         ; hammer
+                    beq +
+                    jmp m11ED
++                   lda items + $bb                         ; hammer
                     cmp #$df
                     bne m135C                               ; bne $135c
                     lda #$df
@@ -835,8 +839,9 @@ m1384:
 room_09:            
 
                     cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m13B0
-                    ldy #$02
+                    bcc +
+                    jmp m11ED
++                   ldy #$02
                     jmp m1031
 
 
@@ -862,9 +867,6 @@ room_10:
                     bcs m13B3
                     ldy #$00
                     jmp m1031
-; ==============================================================================
-
-m13B0:              jmp m11ED
 
 ; ==============================================================================
 
@@ -872,7 +874,8 @@ m13B3:
                     cmp #$cc
                     beq +                                   ; beq $13bb
                     cmp #$cf
-                    bne m13B0
+                    beq +
+                    jmp m11ED
 +                   lda #$df
                     cmp items + $74                        ; cmp $36fe
                     bne m13CD           ; bne $13cd
@@ -908,8 +911,9 @@ m13CD:
 room_11:
 
                     cmp #$d1
-                    bne m13B0
-                    lda #$df                ; player takes the hammer
+                    beq +
+                    jmp m11ED
++                   lda #$df                ; player takes the hammer
                     sta items + $bb                         ; hammer
                     bne m13CA                               ; bne $13ca
 
@@ -942,7 +946,8 @@ m13EE:
                     cmp #$d2
                     beq +                                   ; beq $13f6
                     cmp #$d5
-                    bne m13B0
+                    beq +
+                    jmp m11ED
 +                   lda #$df
                     sta items + $c8                        ; sta $3752
                     bne m13CA                               ; bne $13ca
@@ -975,8 +980,9 @@ room_13:
 
 m140A:
                     cmp #$d6
-                    bne m13B0
-                    lda items + $84                        ; are the boots taken?
+                    beq +
+                    jmp m11ED
++                   lda items + $84                        ; are the boots taken?
                     cmp #$df
                     beq m141A                               ; beq $141a
                     ldy #$07
@@ -1009,8 +1015,9 @@ m141A:
 room_14:
 
                     cmp #$d7
-                    bne m13B0
-                    ldy #$08
+                    beq +
+                    jmp m11ED
++                   ldy #$08
                     jmp death    ; 08 A foot trap stopped you!
 
 
