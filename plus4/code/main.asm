@@ -61,7 +61,7 @@ EXTENDED            = 1       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0 ; address $3b45
+START_ROOM          = 10             ; default 0 ; address $3b45
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -144,8 +144,8 @@ m1009:              cpy #$00
                     rts
 
 ; ==============================================================================
-                    sta BORDER_COLOR          ; ?!? womöglich unbenutzt ?!?
-                    rts
+                    ;sta BORDER_COLOR          ; ?!? womöglich unbenutzt ?!?
+                    ;rts
 ; ==============================================================================
 ; TODO: understand this one, it gets called a lot
 
@@ -1197,30 +1197,32 @@ m14CC:              lda #$01
                     sta m3626 + 1                       ; sta $3627
                     cpy #$0a
                     bne m1523                           ; bne $1523
-                    dec m2FBF                           ; dec $2fbf
-                    beq m14E5                           ; beq $14e5
+                    dec speed_byte                      ; dec $2fbf
+                    beq laser_beam_animation                          
 ++                  rts
 
 ; ==============================================================================
-;
-;
+; ROOM 10
+; LASER BEAM ANIMATION
 ; ==============================================================================
 
-m14E5:              ldy #$08
-                    sty m2FBF                           ; sty $2fbf
+laser_beam_animation:
+
+                    ldy #$08                            ; speed of the laser flashing
+                    sty speed_byte                      ; store     
                     lda #$09
-                    sta zp05
-                    lda #$0d
+                    sta zp05                            ; affects the position of the laser
+                    lda #$0d                            ; but not understood yet
                     sta zp03
-                    lda #$7b
+                    lda #$7b                            ; position of the laser
                     sta zp02
                     sta zp04
-                    lda #$df
-                    cmp m1506 + 1                       ; cmp $1507
-                    bne +                               ; bne $1501
-                    lda #$d8
-+                   sta m1506 + 1                       ; sta $1507
-                    ldx #$06
+                    lda #$df                            ; laser beam off
+                    cmp m1506 + 1                       
+                    bne +                               
+                    lda #$d8                            ; laser beam
++                   sta m1506 + 1                       
+                    ldx #$06                            ; 6 laser beam characters
 m1506:              lda #$df
                     ldy #$00
                     sta (zp02),y
@@ -1228,27 +1230,31 @@ m1506:              lda #$df
                     sta (zp04),y
                     lda zp02
                     clc
-                    adc #$28
+                    adc #$28                            ; draws the laser beam
                     sta zp02
                     sta zp04
-                    bcc +                               ; bcc $151f
+                    bcc +                               
                     inc zp03
                     inc zp05
 +                   dex
-                    bne m1506                           ; bne $1506
+                    bne m1506                           
 -                   rts
 
 ; ==============================================================================
-;
-;
+
+m1523:              
+                    cpy #$09
+                    beq +                           ; bne $1522
+                    rts
++                   jmp m15AD                       ; jmp $15ad
+
+; ==============================================================================
+; ROOM 09
+; BORIS THE SPIDER ANIMATION
 ; ==============================================================================
 
-m1523:              cpy #$09
-                    bne -                           ; bne $1522
-                    jmp m15AD                       ; jmp $15ad
+boris_the_spider_animation:
 
-; ==============================================================================
-m152B:
                     lda #$0c
                     sta zp03
                     lda #$0f
@@ -1344,7 +1350,7 @@ m15AD:              ldx #$01
 m15B7:              inc m15AD + 1                           ; inc $15ae
                     lda #$08
                     sta zp05
-                    jmp m152B           ; jmp $152b
+                    jmp boris_the_spider_animation           ; jmp $152b
 
 ; ==============================================================================
 
@@ -1450,8 +1456,8 @@ m1650:              jmp death               ; 05 Didn't you see the laser beam?
 
 ; ==============================================================================
 
-m1676:              cmp #$e4
-                    bcc +                           ; bcc $168a
+m1676:              cmp #$e4                        ; hit by Boris the spider?
+                    bcc +                           
                     cmp #$eb
                     bcs ++                          ; bcs $1682
 -                   ldy #$04                        ; 04 Boris the spider got you and killed you
@@ -2027,7 +2033,7 @@ level_data_end:
 
 
 ;$2fbf
-m2FBF:
+speed_byte:
 !byte $01
 
 
