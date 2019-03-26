@@ -1255,6 +1255,9 @@ m1523:
 
 boris_the_spider_animation:
 
+                    inc m15AD + 1                           
+                    lda #$08                                ; affects the color ram position for boris the spider
+                    sta zp05
                     lda #$0c
                     sta zp03
                     lda #$0f
@@ -1338,19 +1341,11 @@ m159D:              lda zp02
 
 m15AD:              ldx #$01
                     cpx #$01
-                    bne m15B7                               ; bne $15b7
-                    dec m15AD + 1                           ; dec $15ae
+                    beq +                               ; bne $15b7
+                    jmp boris_the_spider_animation
++                   dec m15AD + 1                           ; dec $15ae
                     rts
 
-; ==============================================================================
-;
-;
-; ==============================================================================
-
-m15B7:              inc m15AD + 1                           ; inc $15ae
-                    lda #$08
-                    sta zp05
-                    jmp boris_the_spider_animation           ; jmp $152b
 
 ; ==============================================================================
 
