@@ -33,7 +33,7 @@ LANGUAGE = DE
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED            = 1       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
@@ -61,7 +61,7 @@ EXTENDED            = 1       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 10             ; default 0 ; address $3b45
+START_ROOM          = 0            ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -73,7 +73,7 @@ SILENT_MODE         = 0
 zp02                = $02
 zp03                = $03
 zp04                = $04
-zp05                = $05
+zp05                = $05            ; seems to always store the COLRAM information
 zp08                = $08
 zp09                = $09
 zp0A                = $0A
@@ -1068,26 +1068,23 @@ m143B:
 
 room_16:
 
-                    cmp #$f4                                ; 
-                    bne m144B                               ; bne $144b
+                    cmp #$f4
+                    bne +
                     ldy #$0a
-m1448:              jmp death                               ; 0a You were locked in and starved!
+-                   jmp death                               ; 0a You were locked in and starved!
 
-; ==============================================================================
-
-m144B:
-                    cmp #$d9
-                    beq +                                   ; beq $1453
++                   cmp #$d9
+                    beq +
                     cmp #$db
-                    bne ++                                  ; bne $1457
-+                   ldy #$09          ; 09 This room is doomed by the wizard Manilo!
-                    bne m1448                               ; bne $1448
+                    bne ++
++                   ldy #$09                                ; 09 This room is doomed by the wizard Manilo!
+                    bne -
 ++                  cmp #$b8
-                    beq +                                   ; beq $145f
+                    beq +
                     cmp #$bb
-                    bne m143B                               ; bne $143b
+                    bne m143B
 +                   ldy #$03
-                    jmp m1031           ; jmp $1031
+                    jmp m1031
 
 
 
@@ -1109,9 +1106,9 @@ m144B:
 room_17:
 
                     cmp #$dd
-                    bne m143B                               ; bne $143b
+                    bne m143B
                     lda #$df
-                    sta items + $1a7                        ; sta $3831
+                    sta items + $1a7
                     jmp check_death
 
 
@@ -1133,27 +1130,29 @@ room_17:
 
 room_18:
                     cmp #$81
-                    bcs +                   ; bcs $147b
+                    bcs +                   
                     jmp check_death
 +
-                    lda key_in_bottle_storage           ; lda $12a4
-                    bne +               ; bne $1b97
-                    jmp m3B4C           ; jmp $3b4c
-+                   jsr set_charset_and_screen_for_title           ; jsr $3a9d
-                    jmp print_endscreen ; jmp $1b44
+                    lda key_in_bottle_storage           
+                    bne +               
+                    jmp m3B4C          
++                   jsr set_charset_and_screen_for_title
+                    jmp print_endscreen
 
 ; ==============================================================================
 
-m147E:              ldy current_room + 1
-                    cpy #$0e
-                    bne m148A               ; bne $148a
-                    ldy #$20
+room_14_prep:              
+                    ldy current_room + 1                    ; load room number
+                    cpy #14                                 ; is it #14?
+                    bne room_15_prep                        ; no -> m148A
+                    ldy #$20                                ; yes, wait a bit
                     jmp wait
 
 ; ==============================================================================
 
-m148A:              cpy #$0f
-                    bne m14C8               ; bne $14c8
+room_15_prep:              
+                    cpy #15                                 ; room 15?
+                    bne room_17_prep                        ; no -> m14C8
                     lda #$00
                     sta zpA7
                     ldy #$0c
@@ -1163,18 +1162,19 @@ m1494:              ldx #$06
                     sta zpA8
                     lda #$39
                     sta zp0A
-                    ldx m1494 + 1           ; ldx $1495
+                    ldx m1494 + 1           
 m14A4:              lda #$01
-                    bne m14B2               ; bne $14b2
+                    bne m14B2               
                     cpx #$06
-                    bne +                   ; bne $14ae
+                    bne +                   
                     lda #$01
 +                   dex
-                    jmp +                   ; jmp $14b9
+                    jmp +                   
 
 ; ==============================================================================
 
-m14B2:              cpx #$0b
+m14B2:              
+                    cpx #$0b
                     bne ++                              ; bne $14b8
                     lda #$00
 ++                  inx
@@ -1187,18 +1187,19 @@ m14B2:              cpx #$0b
 
 ; ==============================================================================
 
-m14C8:              cpy #$11
-                    bne +                               ; bne $14d3
-m14CC:              lda #$01
-                    beq ++                              ; beq $14e4
-                    jmp m15C1                           ; jmp $15c1
-+                   lda #$0f
-                    sta m3624 + 1                       ; sta $3625
-                    sta m3626 + 1                       ; sta $3627
-                    cpy #$0a
-                    bne m1523                           ; bne $1523
-                    dec speed_byte                      ; dec $2fbf
-                    beq laser_beam_animation                          
+room_17_prep:              
+                    cpy #17                             ; room number 17?
+                    bne +                               ; no -> +
+m14CC:              lda #$01                            ; selfmod
+                    beq ++                              
+                    jmp m15C1                           
++                   lda #$0f                            ; a = $0f
+                    sta m3624 + 1                       ; selfmod
+                    sta m3626 + 1                       ; selfmod
+                    cpy #10                             ; room number 10?
+                    bne check_if_room_09                ; no -> m1523
+                    dec speed_byte                      ; yes, reduce speed
+                    beq laser_beam_animation            ; if positive -> laser_beam_animation            
 ++                  rts
 
 ; ==============================================================================
@@ -1211,7 +1212,7 @@ laser_beam_animation:
                     ldy #$08                            ; speed of the laser flashing
                     sty speed_byte                      ; store     
                     lda #$09
-                    sta zp05                            ; affects the position of the laser
+                    sta zp05                            ; affects the colram of the laser
                     lda #$0d                            ; but not understood yet
                     sta zp03
                     lda #$7b                            ; position of the laser
@@ -1242,11 +1243,11 @@ m1506:              lda #$df
 
 ; ==============================================================================
 
-m1523:              
-                    cpy #$09
-                    beq +                           ; bne $1522
-                    rts
-+                   jmp m15AD                       ; jmp $15ad
+check_if_room_09:              
+                    cpy #09                         ; room number 09?
+                    beq +                           ; yes -> +
+                    rts                             ; no
++                   jmp room_09_counter             ; room number is 09, jump
 
 ; ==============================================================================
 ; ROOM 09
@@ -1255,7 +1256,7 @@ m1523:
 
 boris_the_spider_animation:
 
-                    inc m15AD + 1                           
+                    inc room_09_counter + 1                           
                     lda #$08                                ; affects the color ram position for boris the spider
                     sta zp05
                     lda #$0c
@@ -1287,7 +1288,7 @@ m1537:              lda #$00
                     lda #$ea
                     sta (zp02),y
                     sta (zp04),y
-                    jsr m159D                       ; jsr $159d
+                    jsr move_boris                       
                     dex
                     bne -                           ; bne $1551
                     lda #$e4
@@ -1302,7 +1303,7 @@ m1537:              lda #$00
                     iny
                     cpy #$03
                     bne -                           ; bne $1570
-                    jsr m159D                       ; jsr $159d
+                    jsr move_boris                       
                     dex
                     bne --                          ; bne $156e
                     ldy #$00
@@ -1320,16 +1321,14 @@ m1537:              lda #$00
                     rts
 
 ; ==============================================================================
-;
-;
-; ==============================================================================
 
-m159D:              lda zp02
+move_boris:
+                    lda zp02
                     clc
                     adc #$28
                     sta zp02
                     sta zp04
-                    bcc +                                   ; bcc $15ac
+                    bcc +                                   
                     inc zp03
                     inc zp05
 +                   rts
@@ -1339,75 +1338,75 @@ m159D:              lda zp02
 ;
 ; ==============================================================================
 
-m15AD:              ldx #$01
-                    cpx #$01
-                    beq +                               ; bne $15b7
-                    jmp boris_the_spider_animation
-+                   dec m15AD + 1                           ; dec $15ae
-                    rts
-
-
-; ==============================================================================
-
-m15C1:              lda #$00
-                    cmp #$00
-                    bne m15CB                               ; bne $15cb
-                    inc m15C1 + 1                           ; inc $15c2
+room_09_counter:
+                    ldx #$01                                ; x = 1 (selfmod)
+                    cpx #$01                                ; is x = 1?
+                    beq +                                   ; yes -> +
+                    jmp boris_the_spider_animation          ; no, jump boris animation
++                   dec room_09_counter + 1                 ; decrease initial x
                     rts
 
 ; ==============================================================================
-;
-;
+
+m15C1:              lda #$00                                ; a = 0 (selfmod)
+                    cmp #$00                                ; is a = 0?
+                    bne m15CB                               ; not 0 -> 15CB
+                    inc m15C1 + 1                           ; inc m15C1
+                    rts
+
 ; ==============================================================================
 
-m15CB:              dec m15C1 + 1                           ; dec $15c2
-                    jmp m3620
+m15CB:              
+                    dec m15C1 + 1                           ; dec $15c2
+                    jmp belegro_animation
 
 ; ==============================================================================
-;
-;
+; ROOM 17
+; STONE ANIMATION
 ; ==============================================================================
 
-m15D1:              lda items + $ac                        ; lda $3736
-                    cmp #$df
-                    bne +                                   ; bne $15dd
-                    lda #$59
-                    sta items + $12c                        ; sta $37b6
-+                   lda current_room + 1
-                    cmp #$11
-                    bne m162A                               ; bne $162a
-                    lda m14CC + 1                           ; lda $14cd
-                    bne m15FC                               ; bne $15fc
-                    lda player_pos_y + 1
-                    cmp #$06
-                    bne m15FC                               ; bne $15fc
-                    lda player_pos_x + 1
-                    cmp #$18
-                    bne m15FC                               ; bne $15fc
-                    lda #$00
-                    sta m15FC + 1                           ; sta $15fd
-m15FC:              lda #$01
-                    bne +                                   ; bne $1616
-                    ldy #$06
-m1602:              ldx #$1e
-                    lda #$00
-                    sta zpA7
-                    jsr m3608
-                    ldx m1602 + 1                   ; ldx $1603
-                    cpx #$03
-                    beq ++                          ; beq $1613
-                    dex
-++                  stx m1602 + 1                   ; stx $1603
-+                   lda #$78
-                    sta zpA8
-                    lda #$49
-                    sta zp0A
-                    ldy #$06
-                    lda #$01
-                    sta zpA7
-                    ldx m1602 + 1                   ; ldx $1603
-                    jsr m3608
-m162A:              jmp m147E                   ; jmp $147e
+room_17_stone_animation:
+
+                    lda items + $ac                         ; $cc (power outlet)
+                    cmp #$df                                ; taken?
+                    bne +                                   ; no -> +
+                    lda #$59                                ; yes, $59 (part of water, wtf)
+                    sta items + $12c                        ; originally $0
++                   lda current_room + 1                    ; load room number
+                    cmp #$11                                ; is it room #17? (Belegro)
+                    bne m162A                               ; no -> m162A
+                    lda m14CC + 1                           ; yes, get value from m14CD
+                    bne m15FC                               ; 0? -> m15FC
+                    lda player_pos_y + 1                    ; not 0, get player pos Y
+                    cmp #$06                                ; is it 6?
+                    bne m15FC                               ; no -> m15FC
+                    lda player_pos_x + 1                    ; yes, get player pos X
+                    cmp #$18                                ; is player x position $18?
+                    bne m15FC                               ; no -> m15FC
+                    lda #$00                                ; yes, load 0
+                    sta m15FC + 1                           ; store 0 in m15FC+1
+m15FC:              lda #$01                                ; load A (0 if player xy = $6/$18)
+                    bne +                                   ; is it 0? -> +
+                    ldy #$06                                ; y = $6
+m1602:              ldx #$1e                                ; x = $1e
+                    lda #$00                                ; a = $0
+                    sta zpA7                                ; zpA7 = 0
+                    jsr m3608                               ; TODO
+                    ldx m1602 + 1                           ; get x again (was destroyed by previous JSR)
+                    cpx #$03                                ; is X = $3?
+                    beq ++                                  ; yes -> ++
+                    dex                                     ; x = x -1
+++                  stx m1602 + 1                           ; store x in m1602+1
++                   lda #$78                                ; a = $78
+                    sta zpA8                                ; zpA8 = $78
+                    lda #$49                                ; a = $49
+                    sta zp0A                                ; zp0A = $49
+                    ldy #$06                                ; y = $06
+                    lda #$01                                ; a = $01
+                    sta zpA7                                ; zpA7 = $01
+                    ldx m1602 + 1                           ; get stored x value (should still be the same?)
+                    jsr m3608                               ; TODO
+m162A:              jmp room_14_prep                        
 
 
 ; ==============================================================================
@@ -2062,8 +2061,8 @@ m2FDF:              ldy items + $96     ; ldy $3720
 
 m2FEF:
                     jsr poll_raster
-                    jsr check_door ; jsr $39f4
-                    jmp m15D1           ; jmp $15d1
+                    jsr check_door 
+                    jmp room_17_stone_animation           
 
 
 
@@ -2403,11 +2402,14 @@ poll_raster:
                     cli
                     rts
 
+
 ; ==============================================================================
-;
-;
+; ROOM 16
+; BELEGRO ANIMATION
 ; ==============================================================================
-m3620:
+
+belegro_animation:
+
                     lda #$00
                     sta zpA7
 m3624:              ldx #$0f
@@ -2445,7 +2447,7 @@ m3668:              ldx #$10
                     stx m3624 + 1
 m366D:              ldy #$0e
                     sty m3626 + 1
-+                   lda #$9c
++                   lda #$9c                                ; belegro chars
                     sta zpA8
                     lda #$3e
                     sta zp0A
@@ -2563,9 +2565,9 @@ m38D7:              clc
 ; ==============================================================================
 
 m38DF:              lda current_room + 1
-                    cmp #$02
-                    bne m3919           ; bne $3919
-                    lda #$0d
+                    cmp #$02                                ; is the current room 02?
+                    bne room_07_make_sacred_column          ; no 
+                    lda #$0d                                ; yes room is 02
                     sta zp02
                     sta zp04
                     lda #>COLRAM        ; lda #$08
@@ -2598,86 +2600,91 @@ m3900:              lda #$f5
 ;
 ; ==============================================================================
 
-m3919:
-                    cmp #$07
-                    bne m392F       ; bne $392f
-                    ldx #$17
--                   lda SCREENRAM + $168,x     ; lda $0d68,x
+room_07_make_sacred_column:
+
+                    cmp #$07                                    ; is the current room 07?
+                    bne room_06_make_deadly_doors               ; no
+                    ldx #$17                                    ; yes
+-                   lda SCREENRAM + $168,x     
                     cmp #$df
-                    bne +                       ; bne $392b
+                    bne +                       
                     lda #$e3
-                    sta SCREENRAM + $168,x     ; sta $0d68,x
+                    sta SCREENRAM + $168,x    
 +                   dex
-                    bne -                       ; bne $391f
+                    bne -                      
                     rts
 
 
 ; ==============================================================================
-;
-;
+; ROOM 06
+; PREPARE THE DEADLY DOORS
 ; ==============================================================================
-m392F:
-                    cmp #$06
-                    bne +
-                    lda #$f6
-                    sta SCREENRAM + $9c        ; sta $0c9c
-                    sta SCREENRAM + $9c        ;sta $0c9c    (yes, it's really 2 times the same sta)
-                    sta SCREENRAM + $27c       ; sta $0e7c
-                    sta SCREENRAM + $36c       ; sta $0f6c
+
+room_06_make_deadly_doors:
+
+                    cmp #$06                                    ; is the current room 06?
+                    bne room_04_put_zombies_in_the_coffins
+                    lda #$f6                                    ; char for wrong door
+                    sta SCREENRAM + $9c                         ; make three doors DEADLY!!!11
+                    sta SCREENRAM + $27c
+                    sta SCREENRAM + $36c       
                     rts
 
 ; ==============================================================================
-;
-;
+; ROOM 04
+; PUT SOME REALLY DEADLY ZOMBIES INSIDE THE COFFINS
 ; ==============================================================================
 
-+                   cmp #$04
-                    bne ++
-                    ldx #$f7
+room_04_put_zombies_in_the_coffins: 
+
+                    cmp #$04                                    ; is the current room 04?
+                    bne room_05_prep                            ; no
+                    ldx #$f7                                    ; yes room 04
                     ldy #$f8
 m394A:              lda #$01
-                    bne m3952           ; bne $3952
+                    bne m3952           
                     ldx #$3b
                     ldy #$42
-m3952:              lda #$01        ; there seems to happen some self mod here
+m3952:              lda #$01                                    ; some self mod here
                     cmp #$01
-                    bne +           ; bne $395b
-                    stx SCREENRAM+ $7a ; stx $0c7a
+                    bne +           
+                    stx SCREENRAM+ $7a 
 +                   cmp #$02
-                    bne +           ; bne $3962
-                    stx SCREENRAM + $16a   ;stx $0d6a
+                    bne +           
+                    stx SCREENRAM + $16a   
 +                   cmp #$03
-                    bne +           ; bne $3969
-                    stx SCREENRAM + $25a       ;stx $0e5a
+                    bne +           
+                    stx SCREENRAM + $25a       
 +                   cmp #$04
-                    bne +           ; bne $3970
-                    stx SCREENRAM + $34a   ; stx $0f4a
+                    bne +           
+                    stx SCREENRAM + $34a   
 +                   cmp #$05
-                    bne +           ; bne $3977
-                    sty SCREENRAM + $9c    ; sty $0c9c
+                    bne +           
+                    sty SCREENRAM + $9c    
 +                   cmp #$06
-                    bne +           ; bne $397e
-                    sty SCREENRAM + $18c   ; sty $0d8c
+                    bne +           
+                    sty SCREENRAM + $18c   
 +                   cmp #$07
-                    bne +           ; bne $3985
-                    sty SCREENRAM + $27c ; sty $0e7c
+                    bne +           
+                    sty SCREENRAM + $27c 
 +                   cmp #$08
-                    bne +           ; bne $398c
-                    sty SCREENRAM + $36c   ; sty $0f6c
+                    bne +           
+                    sty SCREENRAM + $36c   
 +                   rts
 
 ; ==============================================================================
-;
-;
+; ROOM 05
+; HIDE THE BREATHING TUBE UNDER THE STONE
 ; ==============================================================================
 
-++                  cmp #$05
-                    bne ++      ; bne m399D   ;bcs +           ;bne m399D          ; todo: understand why it jumps to an RTS
-+                   lda #$fd
+room_05_prep:                  
+                    cmp #$05                                    ; is the current room 02?
+                    bne ++                                      ; no, and I'm done with you guys!
++                   lda #$fd                                    ; yes
 m3993:              ldx #$01
-                    bne +               ; bne $3999
-                    lda #$7a
-+                   sta SCREENRAM + $2d2   ;sta $0ed2
+                    bne +                                       ; based on self mod, put the normal
+                    lda #$7a                                    ; stone char back again
++                   sta SCREENRAM + $2d2   
 ++                  rts
 
 
@@ -3085,6 +3092,6 @@ hint_messages:
 !scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
 !scr " *****   Ein Hilfsbuchstabe:  "
 helping_letter: !scr "C   ***** "
-!scr " Falscher Loesungscode ! TODESSTRAFE !!!"
+!scr " Falscher Loesungscode ! TODESSTRAFE !! "
 
 }
