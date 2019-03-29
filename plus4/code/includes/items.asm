@@ -4,7 +4,7 @@
 ; Items in the rooms are stored here
 ; 
 ; $ff is the separator for the next item
-; next number after $ff is the room number ($ff, $01 = next item in list, room number 01)
+; 
 ; 
 ; ==============================================================================
 
