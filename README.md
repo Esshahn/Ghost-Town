@@ -1,7 +1,8 @@
 
-### Ghost Town 1.1
+# Ghost Town 1.1
 
 This version of the Commodore 16 game "Ghost Town" is based on the fully disassembled source code. It has been commented, restructured, bug fixed and optimized.
+
 
 ## All versions
 
@@ -14,9 +15,11 @@ This version of the Commodore 16 game "Ghost Town" is based on the fully disasse
 * Walkthrough & Hints file
 * ingame hint system
 
+
 ## C16 & Plus/4 versions
 
 * option to play with an alternative graphics charset
+
 
 ## C64 & C128 versions
 
