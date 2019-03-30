@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 0           ; default 0 
+START_ROOM          = 5           ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -78,6 +78,8 @@ _gloves             = items + $8
 _key                = items + $10
 _wirecutter         = items + $19
 _light              = items + $74
+_hammer             = items + $bb
+_shovel             = items + $96
 
 ; ==============================================================================
 ; ZEROPAGE
@@ -359,8 +361,8 @@ m11A6:              jsr display_hint_message_plus_kernal
 ; ==============================================================================
 
 switch_charset:
-                    jsr set_charset_and_screen_for_title           ; jsr $3a9d
-                    jmp PRINT_KERNAL           ; jmp $c56b
+                    jsr set_charset_and_screen_for_title           
+                    jmp PRINT_KERNAL           
 
 
 
@@ -656,24 +658,22 @@ room_03:
 
 room_04:
 
-                    cmp #$3b                                    ; part of a coffin
-                    beq +
-                    cmp #$42
-                    bne m12C6
-+                   ldy #$0d
+                    cmp #$3b                                    ; you bumped into a zombie coffin?
+                    beq +                                       ; yep
+                    cmp #$42                                    ; HEY YOU! Did you bump into a zombie coffin?
+                    bne ++                                      ; no, really, I didn't ( I swear! )-> ++
++                   ldy #$0d                                    ; thinking about it, there was a person inside that kinda...
                     jmp death                                   ; 0d You found a thirsty zombie....
 
-; ==============================================================================
-
-m12C6:
-                    cmp #$f7
-                    beq +
+++
+                    cmp #$f7                                    ; Welcome those who didn't get eaten by a zombie.
+                    beq +                                       ; seems you picked a coffin that contained something different...
                     cmp #$f8
                     beq +
-                    jmp check_next_char_under_player
-+                   lda #$00
-                    sta m394A + 1
-                    ldy #$06
+                    jmp check_next_char_under_player            ; or you just didn't bump into anything yet (also well done in a way)
++                   lda #$00                                    ; 
+                    sta m394A + 1                               ; some kind of prep for the door to be unlocked 
+                    ldy #$06                                    ; display
                     jmp prep_and_display_hint
 
 
@@ -695,21 +695,26 @@ m12C6:
 
 room_05:
 
-                    cmp #$27                                ; question mark (I don't know why 27)
-                    bcs +                                   ; no
-                    ldy #$00                                ; a = 0
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +                                       ; no
+                    ldy #$00                                    ; a = 0
                     jmp prep_and_display_hint
 
-+                   cmp #$fd                                ; stone with breathing tube hit?
-                    beq +                                   ; yes -> +
-m12EC:              jmp check_next_char_under_player        ; no
-+                   lda #$00                                ; a = 0
-                    jmp m2FDF
++                   cmp #$fd                                    ; stone with breathing tube hit?
+                    beq +                                       ; yes -> +
+                    jmp check_next_char_under_player            ; no
 
-; ==============================================================================
-
-m12F4:              ldy #$07
++                   lda #$00                                    ; a = 0                  
+                    ldy items + $96                             ; do you have the shovel? 
+                    cpy #$df
+                    bne +                                       ; no I don't
+                    sta breathing_tube_mod + 1                  ; yes, take the breathing tube
+                    ldy #$07                                    ; and display the message
                     jmp prep_and_display_hint
++                   jmp m3B4C
+
+                    ;ldy #$07                                   ; same is happening above and I don't see this being called
+                    ;jmp prep_and_display_hint
 
 
 
@@ -731,8 +736,9 @@ m12F4:              ldy #$07
 room_06:
 
                     cmp #$f6                                    ; is it a trapped door?
-                    bne m12EC
-                    ldy #$00
+                    beq +
+                    jmp check_next_char_under_player
++                   ldy #$00
 m1303:              jmp death                                   ; 00 You fell into a snake pit
 
 
@@ -759,8 +765,9 @@ room_07:
                     ldy #$01                                ; 01 You'd better watched out for the sacred column
                     bne m1303
 +                   cmp #$5f
-                    bne m12EC
-                    lda #$bc                                ; light picked up
+                    beq +
+                    jmp check_next_char_under_player
++                   lda #$bc                                ; light picked up
                     sta items + $74                         ; but I dont understand how the whole light is shown
                     lda #$5f                                ; color?
                     sta items + $72
@@ -795,56 +802,52 @@ room_07:
 
 room_08:
 
-                    ldy #$00
-                    sty zpA7
-                    cmp #$4b            ; water
+                    ldy #$00                                        ; y = 0
+                    sty zpA7                                        ; zpA7 = 0
+                    cmp #$4b                                        ; water
                     bne check_item_water
-                    ldy m3993 + 1
-                    bne m1366
+                    ldy breathing_tube_mod + 1
+                    bne +
                     jsr get_player_pos
-                    lda #$18
-m1354:              sta player_pos_x + 1
+                    lda #$18                                        ; move player on the other side of the river
+--                  sta player_pos_x + 1
                     lda #$0c
                     sta player_pos_y + 1
-m135C:              jmp m3B4C
+-                   jmp m3B4C
 
-
-; ==============================================================================
 
 check_item_water:
-                    cmp #$56                                    ; water character
-                    bne check_item_shovel
-                    ldy m3993 + 1
-m1366:              bne +
-                    jsr get_player_pos
+                    cmp #$56                                    ; so you want to swim right?
+                    bne check_item_shovel                       ; nah, not this time -> check_item_shovel
+                    ldy breathing_tube_mod + 1                  ; well let's hope you got your breathing tube equipped     
++                   bne +
+                    jsr get_player_pos                          ; tube equipped and ready to submerge
                     lda #$0c
-                    bne m1354
-+                   ldy #$02
+                    bne --                                      ; see you on the other side!
+
++                   ldy #$02                                    ; breathing what?
                     jmp death                                   ; 02 You drowned in the deep river
 
-; ==============================================================================
 
 check_item_shovel:
-                    cmp #$c1                                    ; shovel
-                    beq + 
-                    cmp #$c3                                    ; shovel
-                    bne m1384
-+                   lda #$df
-                    sta items + $96
-m1381:              jmp check_death
+                    cmp #$c1                                    ; wanna have that shovel?
+                    beq +                                       ; yup
+                    cmp #$c3                                    ; I'n not asking thrice! (shovel 2nd char)
+                    bne ++                                      ; nah still not interested -> ++
++                   lda #$df                                    ; alright cool,
+                    sta items + $96                             ; shovel is yours now
+--                  jmp check_death
 
-; ==============================================================================
 
-m1384:
-                    cmp #$cb
-                    beq +
+++                  cmp #$ca                                    ; show box? (was #$cb before, but $ca seems a better char to compare to)
+                    beq +                                       ; yup
                     jmp check_next_char_under_player
-+                   lda items + $bb                         ; hammer
-                    cmp #$df
-                    bne m135C
++                   lda items + $bb                             ; so did you get the hammer to crush it to pieces?
+                    cmp #$df                                    ; (hammer picked up from items list and replaced with empty)
+                    bne -                                       ; what hammer?
                     lda #$df
-                    sta items + $84
-                    bne m1381
+                    sta items + $84                             ; these fine boots are yours now, sir
+                    bne --
 
 
 
@@ -2078,14 +2081,7 @@ room_04_prep_door:
 ;
 ;
 ; ==============================================================================
-
-m2FDF:              
-                    ldy items + $96     
-                    cpy #$df
-                    bne +               
-                    sta m3993 + 1       
-                    jmp m12F4
-+                   jmp m3B4C
+        
 
 m2FEF:
                     jsr poll_raster
@@ -2700,10 +2696,10 @@ m3952:              lda #$01                                    ; some self mod 
 ; ==============================================================================
 
 room_05_prep:                  
-                    cmp #$05                                    ; is the current room 02?
+                    cmp #$05                                    ; is the current room 05?
                     bne ++                                      ; no, and I'm done with you guys!
 +                   lda #$fd                                    ; yes
-m3993:              ldx #$01
+breathing_tube_mod: ldx #$01
                     bne +                                       ; based on self mod, put the normal
                     lda #$7a                                    ; stone char back again
 +                   sta SCREENRAM + $2d2   
@@ -2715,10 +2711,10 @@ m3993:              ldx #$01
 
 m399F:
                     cmp #$df
-                    beq +               ; beq $39a5
-                    inc zp0A            ; inc $0a
-+                   lda (zpA7),y        ; lda ($a7),y
-                    jmp m38B7           ; jmp $38b7
+                    beq +               
+                    inc zp0A           
++                   lda (zpA7),y        
+                    jmp m38B7          
 
 ; ==============================================================================
 ; PLAYER POSITION TABLE FOR EACH ROOM
