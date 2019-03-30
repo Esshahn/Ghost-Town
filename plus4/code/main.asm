@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 5           ; default 0 
+START_ROOM          = 8             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -80,6 +80,9 @@ _wirecutter         = items + $19
 _light              = items + $74
 _hammer             = items + $bb
 _shovel             = items + $96
+_poweroutlet        = items + $ac
+_lightbulb          = items + $c8
+_sword              = items + $1a7
 
 ; ==============================================================================
 ; ZEROPAGE
@@ -147,7 +150,7 @@ m1009:              cpy #$00
 +                   dey
                     bne -               
 ++                  sta zpA7
-                    jsr set_charset_and_screen_for_title          
+                    jsr set_charset_and_screen          
                     ldy #$27
 -                   lda (zpA7),y
                     sta SCREENRAM+$1B8,y 
@@ -361,7 +364,7 @@ m11A6:              jsr display_hint_message_plus_kernal
 ; ==============================================================================
 
 switch_charset:
-                    jsr set_charset_and_screen_for_title           
+                    jsr set_charset_and_screen           
                     jmp PRINT_KERNAL           
 
 
@@ -478,20 +481,20 @@ check_next_char_under_player:
 
 room_00:
 
-                    cmp #$a9                                            ; has the player hit the gloves?
-                    bne check_next_char_under_player                   ; no
-                    lda #$df                    ; yes, load in char for "empty"
-                    cmp items + $4d             ; position for 1st char of ladder ($b0) -> ladder already taken?
-                    bne -                       ; no
-                    jsr pickup_gloves           ; yes
+                    cmp #$a9                                        ; has the player hit the gloves?
+                    bne check_next_char_under_player                ; no
+                    lda #$df                                        ; yes, load in char for "empty"
+                    cmp items + $4d                                 ; position for 1st char of ladder ($b0) -> ladder already taken?
+                    bne -                                           ; no
+                    jsr pickup_gloves                               ; yes
                     bne check_death
 
 
 pickup_gloves:
-                    lda #$6b                    ; load character for empty bush
-                    sta items + $8              ; store 6b = gloves in inventory
-                    lda #$3d                    ; set the foreground color
-                    sta items + $6              ; and store the color in the items table
+                    lda #$6b                                        ; load character for empty bush
+                    sta items + $8                                  ; store 6b = gloves in inventory
+                    lda #$3d                                        ; set the foreground color
+                    sta items + $6                                  ; and store the color in the items table
                     rts
 
 
@@ -736,10 +739,10 @@ room_05:
 room_06:
 
                     cmp #$f6                                    ; is it a trapped door?
-                    beq +
-                    jmp check_next_char_under_player
+                    beq +                                       ; OMG Yes the room is full of...
+                    jmp check_next_char_under_player            ; please move on. nothing happened.
 +                   ldy #$00
-m1303:              jmp death                                   ; 00 You fell into a snake pit
+                    jmp death                                   ; 00 You fell into a snake pit
 
 
 
@@ -760,27 +763,29 @@ m1303:              jmp death                                   ; 00 You fell in
 
 room_07:
 
-                    cmp #$e3                                ; $e3 is the char for the invisible, I mean SACRED, column
+                    cmp #$e3                                    ; $e3 is the char for the invisible, I mean SACRED, column
                     bne +
-                    ldy #$01                                ; 01 You'd better watched out for the sacred column
-                    bne m1303
-+                   cmp #$5f
-                    beq +
-                    jmp check_next_char_under_player
-+                   lda #$bc                                ; light picked up
-                    sta items + $74                         ; but I dont understand how the whole light is shown
-                    lda #$5f                                ; color?
-                    sta items + $72
-                    jsr update_items_display
+                    ldy #$01                                    ; 01 You'd better watched out for the sacred column
+                    jmp death                                   ; bne m1303 <- seems unneccessary
+
++                   cmp #$5f                                    ; seems to be the invisible char for the light
+                    beq +                                       ; and it was hit -> +
+                    jmp check_next_char_under_player            ; if not, continue checking
+
++                   lda #$bc                                    ; make light visible
+                    sta items + $74                             ; but I dont understand how the whole light is shown
+                    lda #$5f                                    ; color?
+                    sta items + $72                             ; 
+                    jsr update_items_display                    ; and redraw items
                     ldy #$ff
-                    jsr wait
+                    jsr wait                                    ; wait for some time so the player can actually see the light
                     jsr wait
                     jsr wait
                     jsr wait
                     lda #$df
-                    sta items + $74
+                    sta items + $74                             ; and pick up the light/ remove it from the items list
                     lda #$00
-                    sta items + $72
+                    sta items + $72                             ; also paint the char black
                     jmp check_death
 
 
@@ -802,14 +807,14 @@ room_07:
 
 room_08:
 
-                    ldy #$00                                        ; y = 0
-                    sty zpA7                                        ; zpA7 = 0
-                    cmp #$4b                                        ; water
+                    ldy #$00                                    ; y = 0
+                    sty zpA7                                    ; zpA7 = 0
+                    cmp #$4b                                    ; water
                     bne check_item_water
                     ldy breathing_tube_mod + 1
                     bne +
                     jsr get_player_pos
-                    lda #$18                                        ; move player on the other side of the river
+                    lda #$18                                    ; move player on the other side of the river
 --                  sta player_pos_x + 1
                     lda #$0c
                     sta player_pos_y + 1
@@ -839,7 +844,7 @@ check_item_shovel:
 --                  jmp check_death
 
 
-++                  cmp #$ca                                    ; show box? (was #$cb before, but $ca seems a better char to compare to)
+++                  cmp #$ca                                    ; shoe box? (was #$cb before, but $ca seems a better char to compare to)
                     beq +                                       ; yup
                     jmp check_next_char_under_player
 +                   lda items + $bb                             ; so did you get the hammer to crush it to pieces?
@@ -868,10 +873,10 @@ check_item_shovel:
 
 room_09:            
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcc +
-                    jmp check_next_char_under_player
-+                   ldy #$02
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcc +                                       ; yes -> +
+                    jmp check_next_char_under_player            ; continue checking
++                   ldy #$02                                    ; display hint
                     jmp prep_and_display_hint
 
 
@@ -893,33 +898,26 @@ room_09:
 
 room_10:
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m13B3
-                    ldy #$00
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +
+                    ldy #$00                                    ; display hint
                     jmp prep_and_display_hint
 
-; ==============================================================================
++                   cmp #$cc                                    ; hit the power outlet?
+                    beq +                                       ; yes -> +
+                    cmp #$cf                                    ; hit the power outlet?
+                    beq +                                       ; yes -> +
+                    jmp check_next_char_under_player            ; no, continue
++                   lda #$df                                    
+                    cmp items + $74                             ; light picked up?
+                    bne +                                       ; no -> death
+                    cmp items + $c8                             ; yes, lightbulb picked up?
+                    bne +                                       ; no -> death
+                    sta items + $ac                             ; yes, pick up power outlet
+                    jmp check_death
 
-m13B3:
-                    cmp #$cc
-                    beq + 
-                    cmp #$cf
-                    beq +
-                    jmp check_next_char_under_player
-+                   lda #$df
-                    cmp items + $74
-                    bne m13CD
-                    cmp items + $c8
-                    bne m13CD
-                    sta items + $ac
-m13CA:              jmp check_death
-
-; ==============================================================================
-; death by 240 volts
-
-m13CD:
-                    ldy #$06
-                    jmp death    ; 06 240 Volts! You got an electrical shock!
++                   ldy #$06
+                    jmp death                                   ; 06 240 Volts! You got an electrical shock!
 
 
 
@@ -940,12 +938,12 @@ m13CD:
 
 room_11:
 
-                    cmp #$d1
-                    beq +
-                    jmp check_next_char_under_player
-+                   lda #$df                                ; player takes the hammer
-                    sta items + $bb                         ; hammer
-                    bne m13CA
+                    cmp #$d1                                    ; picking up the hammer?
+                    beq +                                       ; jep
+                    jmp check_next_char_under_player            ; no, continue
++                   lda #$df                                    ; player takes the hammer
+                    sta items + $bb                             ; hammer
+                    jmp check_death
 
 
 
@@ -966,21 +964,19 @@ room_11:
 
 room_12:
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m13EE
-                    ldy #$00
-                    jmp prep_and_display_hint
-; ==============================================================================
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +                                       ; no
+                    ldy #$00                                    
+                    jmp prep_and_display_hint                   ; display hint
 
-m13EE:
-                    cmp #$d2
-                    beq +
-                    cmp #$d5
-                    beq +
-                    jmp check_next_char_under_player
-+                   lda #$df
++                   cmp #$d2                                    ; light bulb hit?
+                    beq +                                       ; yes
+                    cmp #$d5                                    ; light bulb hit?
+                    beq +                                       ; yes
+                    jmp check_next_char_under_player            ; no, continue
++                   lda #$df                                    ; pick up light bulb
                     sta items + $c8
-                    bne m13CA
+                    jmp check_death
 
 
 
@@ -1001,24 +997,24 @@ m13EE:
 
 room_13:           
 
-                    cmp #$27                                ; question mark (I don't know why 27)
+                    cmp #$27                                    ; question mark (I don't know why 27)
                     bcs +
-                    ldy #$00                                ; message 0 to display
-                    jmp prep_and_display_hint               ; display hint
+                    ldy #$00                                    ; message 0 to display
+                    jmp prep_and_display_hint                   ; display hint
 
-+                   cmp #$d6                                ; argh!!! A nail!!! Who put these here!!!
-                    beq +                                   ; OUCH!! -> +
-                    jmp check_next_char_under_player        ; not stepped into a nail... yet.
-+                   lda items + $84                         ; are the boots taken?
++                   cmp #$d6                                    ; argh!!! A nail!!! Who put these here!!!
+                    beq +                                       ; OUCH!! -> +
+                    jmp check_next_char_under_player            ; not stepped into a nail... yet.
++                   lda items + $84                             ; are the boots taken?
                     cmp #$df                                
-                    beq +                                   ; yeah I'm cool these boots are made for nailin'. 
-                    ldy #$07                                ; death by a thousand nails.
-                    jmp death                               ; 07 You stepped on a nail!
+                    beq +                                       ; yeah I'm cool these boots are made for nailin'. 
+                    ldy #$07                                    ; death by a thousand nails.
+                    jmp death                                   ; 07 You stepped on a nail!
 
 +
-                    lda #$e2                                ; this is also a nail. 
-                    sta items + $d5                         ; why is it put here?
-                    bne m13CA
+                    lda #$e2                                    ; this is also a nail. 
+                    sta items + $d5                             ; it replaces the deadly nails with boot-compatible ones
+                    jmp check_death
 
 
 
@@ -1064,15 +1060,12 @@ room_14:
 
 room_15:
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m143B
-                    ldy #$00
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +
+                    ldy #$00                                    ; display hint
                     jmp prep_and_display_hint
 
-; ==============================================================================
-
-m143B:
-                    jmp check_next_char_under_player           ; jmp m13B0 -> target just jumps again, so replacing with target jmp address
++                   jmp check_next_char_under_player            ; jmp m13B0 -> target just jumps again, so replacing with target jmp address
 
 
 
@@ -1093,22 +1086,25 @@ m143B:
 
 room_16:
 
-                    cmp #$f4
-                    bne +
-                    ldy #$0a
--                   jmp death                               ; 0a You were locked in and starved!
+                    cmp #$f4                                    ; did you hit the wall in the left cell?
+                    bne +                                       ; I did not! -> +
+                    ldy #$0a                                    ; yeah....
+                    jmp death                                   ; 0a You were locked in and starved!
 
-+                   cmp #$d9
-                    beq +
-                    cmp #$db
-                    bne ++
-+                   ldy #$09                                ; 09 This room is doomed by the wizard Manilo!
-                    bne -
-++                  cmp #$b8
-                    beq +
-                    cmp #$bb
-                    bne m143B
-+                   ldy #$03
++                   cmp #$d9                                    ; so you must been hitting the other wall in the other cell then, right?
+                    beq +                                       ; not that I know of...
+                    cmp #$db                                    ; are you sure? take a look at this slightly different wall
+                    bne ++                                      ; it doesn't look familiar... -> ++
+
++                   ldy #$09                                    ; 09 This room is doomed by the wizard Manilo!
+                    jmp death
+
+++                  cmp #$b9                                    ; then you've hit the bottle! that must be it! (was $b8 which was imnpossible to hit)
+                    beq +                                       ; yes! -> +
+                    cmp #$bb                                    ; here's another part of that bottle for reference
+                    beq +                                       ; yes! -> +
+                    jmp check_next_char_under_player            ; no, continue
++                   ldy #$03                                    ; display code enter screen
                     jmp prep_and_display_hint
 
 
@@ -1130,10 +1126,11 @@ room_16:
 
 room_17:
 
-                    cmp #$dd
-                    bne m143B
-                    lda #$df
-                    sta items + $1a7
+                    cmp #$dd                                    ; The AWESOMEZ MAGICAL SWORD!! YOU FOUND IT!! IT.... KILLS PEOPLE!!
+                    beq +                                       ; yup
+                    jmp check_next_char_under_player            ; nah not yet.
++                   lda #$df                                    ; pick up sword
+                    sta items + $1a7                            ; store in items list
                     jmp check_death
 
 
@@ -1154,16 +1151,62 @@ room_17:
 ; ==============================================================================
 
 room_18:
-                    cmp #$81
+                    cmp #$81                                    ; did you hit any char $81 or higher? (chest and a lot of stuff not in the room)
                     bcs +                   
                     jmp check_death
-+
-                    lda key_in_bottle_storage           
-                    bne +               
-                    jmp m3B4C          
-+                   jsr set_charset_and_screen_for_title
-                    jmp print_endscreen
 
++                   lda key_in_bottle_storage                   ; well my friend, you sure brought that key from the fucking 3rd room, right?
+                    bne +                                       ; yes I actually did (flexes arms)
+                    jmp m3B4C                                   ; nope
++                   jsr set_charset_and_screen        ; You did it then! Let's roll the credits and get outta here
+                    jmp print_endscreen                         ; (drops mic)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; ==============================================================================
+; 
+; EVERYTHING ANIMATION RELATED STARTS HERE
 ; ==============================================================================
 
 room_14_prep:              
@@ -1524,6 +1567,35 @@ m16A7:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ; ==============================================================================
 ; this might be the inventory/ world reset
 ; puts all items into the level data again
@@ -1780,6 +1852,35 @@ start_intro:        sta KEYBOARD_LATCH
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ; ==============================================================================
 ; MUSIC
 ; ==============================================================================
@@ -1908,6 +2009,31 @@ music_volume:       and #$bf
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ; ==============================================================================
 ; irq init
 ; ==============================================================================
@@ -1925,7 +2051,7 @@ irq_init0:          sei
                     sta music_volume+1         ; sta $1ed9    ; sound volume
                     cli
 
-                    jmp set_charset_and_screen_for_title
+                    jmp set_charset_and_screen
 
 ; ==============================================================================
 ; intro text
@@ -2841,7 +2967,7 @@ set_game_basics:
 ; $3a9d
 ; ==============================================================================
 
-set_charset_and_screen_for_title:                               ; set text screen
+set_charset_and_screen:                               ; set text screen
 
                     lda VOICE1
                     ora #$04                                    ; set bit 2
@@ -3062,7 +3188,7 @@ death:
                     inc zp03
                     dex
                     bne -
-                    jsr set_charset_and_screen_for_title
+                    jsr set_charset_and_screen
 -                   lda (zpA7),y
                     sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
                     lda #$00                                    ; color of the death message
