@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 8             ; default 0 
+START_ROOM          = 3             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -272,7 +272,7 @@ code_number:        !scr "06138"                        ; !byte $30, $36, $31, $
 ++                  jsr set_game_basics                 ; code correct, continue
                     jsr set_player_xy          
                     jsr draw_border          
-                    jmp m3B4C          
+                    jmp main_loop          
 
 ; ==============================================================================
 ;
@@ -317,7 +317,7 @@ display_hint:
                     bne -               
                     jsr set_game_basics
                     jsr m3A2D          
-                    jmp m3B4C         
+                    jmp main_loop         
 m11A2:              cpy #$02
                     bne +             
 m11A6:              jsr display_hint_message_plus_kernal
@@ -354,6 +354,7 @@ switch_charset:
 ; This code is new. Previously, code execution jumped from room to room
 ; and in each room did the comparison with the room number.
 ; This is essentially the same, but bundled in one place.
+; not calles in between room changes, only e.g. for question mark
 ; ==============================================================================
 
 check_room:
@@ -423,7 +424,7 @@ check_room:
 
 check_death:
                     jsr update_items_display
-                    jmp m3B4C           
+                    jmp main_loop           
 
 ; ==============================================================================
 
@@ -442,7 +443,7 @@ check_next_char_under_player:
                     inx
                     cpx #$09
                     bne -                              ; not done checking          
--                   jmp m3B4C           
+-                   jmp main_loop           
 
 
 ; ==============================================================================
@@ -617,7 +618,7 @@ room_03:
 
                     cmp #$27                                    ; question mark (I don't know why 27)
                     bcc +
-                    jmp m3B4C
+                    jmp main_loop
 +                   ldy #$04
                     jmp prep_and_display_hint
 
@@ -693,7 +694,7 @@ room_05:
                     sta breathing_tube_mod + 1                  ; yes, take the breathing tube
                     ldy #$07                                    ; and display the message
                     jmp prep_and_display_hint
-+                   jmp m3B4C
++                   jmp main_loop
 
                     ;ldy #$07                                   ; same is happening above and I don't see this being called
                     ;jmp prep_and_display_hint
@@ -797,7 +798,7 @@ room_08:
 --                  sta player_pos_x + 1
                     lda #$0c
                     sta player_pos_y + 1
--                   jmp m3B4C
+-                   jmp main_loop
 
 
 check_item_water:
@@ -1136,8 +1137,8 @@ room_18:
 
 +                   lda key_in_bottle_storage                   ; well my friend, you sure brought that key from the fucking 3rd room, right?
                     bne +                                       ; yes I actually did (flexes arms)
-                    jmp m3B4C                                   ; nope
-+                   jsr set_charset_and_screen        ; You did it then! Let's roll the credits and get outta here
+                    jmp main_loop                               ; nope
++                   jsr set_charset_and_screen                  ; You did it then! Let's roll the credits and get outta here
                     jmp print_endscreen                         ; (drops mic)
 
 
@@ -1204,7 +1205,7 @@ room_15_prep:
                     sta zpA7
                     ldy #$0c
 m1494:              ldx #$06
-                    jsr m3608
+                    jsr draw_player
                     lda #$eb
                     sta zpA8
                     lda #$39
@@ -1230,7 +1231,7 @@ m14B2:
                     lda #$01
                     sta zpA7
                     ldy #$0c
-                    jmp m3608
+                    jmp draw_player
 
 ; ==============================================================================
 
@@ -1439,7 +1440,7 @@ m15FC:              lda #$01                                ; load A (0 if playe
 m1602:              ldx #$1e                                ; x = $1e
                     lda #$00                                ; a = $0
                     sta zpA7                                ; zpA7 = 0
-                    jsr m3608                               ; TODO
+                    jsr draw_player                         ; TODO
                     ldx m1602 + 1                           ; get x again (was destroyed by previous JSR)
                     cpx #$03                                ; is X = $3?
                     beq ++                                  ; yes -> ++
@@ -1453,28 +1454,34 @@ m1602:              ldx #$1e                                ; x = $1e
                     lda #$01                                ; a = $01
                     sta zpA7                                ; zpA7 = $01
                     ldx m1602 + 1                           ; get stored x value (should still be the same?)
-                    jsr m3608                               ; TODO
+                    jsr draw_player                         ; TODO
 m162A:              jmp room_14_prep                        
 
 
 ; ==============================================================================
 
-check_for_laser_beam:
+prep_player_pos:
 
                     ldx #$09
 -                   lda TAPE_BUFFER + $8,x                  ; cassette tape buffer
                     sta TAPE_BUFFER + $18,x                 ; the tape buffer stores the chars UNDER the player (9 in total)
                     dex
-                    bne -                       
+                    bne -                                   ; so this seems to create a copy of the area under the player
 
                     lda #$02                                ; a = 2
                     sta zpA7
                     ldx player_pos_x + 1                    ; x = player x
                     ldy player_pos_y + 1                    ; y = player y
-                    jsr m3608                               ; draw player
+                    jsr draw_player                         ; draw player
+                    rts
+
+object_collision:
 
                     ldx #$09                                ; x = 9
-m1647:              lda TAPE_BUFFER + $8,x                  ; the tape buffer stores the chars UNDER the player (9 in total)
+
+check_loop:              
+
+                    lda TAPE_BUFFER + $8,x                  ; the tape buffer stores the chars UNDER the player (9 in total)
                     cmp #$d8                                ; check for laser beam
                     bne +                  
 m164E:              ldy #$05
@@ -1486,7 +1493,7 @@ jmp_death:          jmp death                               ; 05 Didn't you see 
 ; ==============================================================================
 
 +                   ldy current_room + 1                    ; get room number
-                    cpy #$11                                ; is it $11 = #17 (Belegro)?
+                    cpy #17                                 ; is it $11 = #17 (Belegro)?
                     bne +                                   ; nope -> +
                     cmp #$78                                ; hit by the stone?
                     beq ++                                  ; yep -> ++
@@ -1502,8 +1509,6 @@ jmp_death:          jmp death                               ; 05 Didn't you see 
                     bcs m1676
                     jmp m16A7
 
-; ==============================================================================
-
 m1676:              cmp #$e4                                ; hit by Boris the spider?
                     bcc +                           
                     cmp #$eb
@@ -1515,7 +1520,10 @@ m1676:              cmp #$e4                                ; hit by Boris the s
                     ldy #$0e                                ; 0e The monster grabbed you you. You are dead!
                     bne jmp_death                       
 +                   dex
-                    bne m1647                       
+                    bne check_loop   
+
+
+
                     ldx #$09
 --                  lda $034b,x
                     sta TAPE_BUFFER + $8,x                  ; the tape buffer stores the chars UNDER the player (9 in total)
@@ -1671,7 +1679,7 @@ m1747:
 
 
 m174F:
-bp                  cpx #$0c
+                    cpx #$0c
                     bne +
                     lda #$49
 +                   cpx #$0d
@@ -2173,7 +2181,7 @@ speed_byte:
 room_04_prep_door:
 
                     lda current_room + 1                            ; get current room
-                    cmp #$04                                        ; is it 4? (coffins)
+                    cmp #04                                         ; is it 4? (coffins)
                     bne ++                                          ; nope
                     lda #$03                                        ; OMG YES! How did you know?? (and get door char)
                     ldy m394A + 1                                   ; 
@@ -2188,7 +2196,8 @@ room_04_prep_door:
 ; ==============================================================================
         
 
-m2FEF:
+rasterpoll_and_other_stuff:
+
                     jsr poll_raster
                     jsr check_door 
                     jmp room_17_stone_animation           
@@ -2296,6 +2305,7 @@ m30B8:              sbc #$75            ; -$75 (next Tile in row) or -$24 (next 
 +                   ldy zpA7
                     jmp m3066
                     rts                 ; will this ever be used?
+
 display_door:       lda #>SCREENRAM
                     sta zp03
                     lda #>COLRAM
@@ -2379,6 +2389,7 @@ screen_start_src_end:
 
 
 draw_player:
+                    stx m3548 + 1                       ; store x pos of player
                     lda #>COLRAM                        ; store colram high in zp05
                     sta zp05
                     lda #>SCREENRAM                     ; store screenram high in zp03
@@ -2475,7 +2486,6 @@ player_pos_x:       ldx #$15
                     inx                                           ; JOYSTICK RIGHT
 +                   sty m35E7 + 1
                     stx m35EC + 1
-                    stx m3548 + 1
                     lda #$02
                     sta zpA7
                     jsr draw_player
@@ -2501,7 +2511,7 @@ m35EC:              lda #$15
                     sta zp0A
 get_player_pos:     ldy player_pos_y + 1
                     ldx player_pos_x + 1
-m3608:              stx m3548 + 1
+              
                     jmp draw_player
 
 ; ==============================================================================
@@ -2534,7 +2544,7 @@ belegro_animation:
                     sta zpA7
 m3624:              ldx #$0f
 m3626:              ldy #$0f
-                    jsr m3608
+                    jsr draw_player
                     ldx m3624 + 1
                     ldy m3626 + 1
                     cpx player_pos_x + 1
@@ -2552,7 +2562,6 @@ m3626:              ldy #$0f
                     beq +
                     dey
 +                   stx m3668 + 1
-                    stx m3548 + 1
                     sty m366D + 1
                     lda #$02
                     sta zpA7
@@ -2572,8 +2581,7 @@ m366D:              ldy #$0e
                     lda #$3e
                     sta zp0A
                     ldy m3626 + 1
-                    ldx m3624 + 1
-                    stx m3548 + 1
+                    ldx m3624 + 1                    
                     lda #$01
                     sta zpA7
                     jmp draw_player
@@ -2883,6 +2891,7 @@ update_player_pos:
                     sta player_pos_y + 1                            ; player y pos = a
                     lda player_xy_pos_table + 1,y                   ; y +1 = player x pos
                     sta player_pos_x + 1
+
 m3A2D:              jsr display_room                                ; done  
                     jmp update_items_display
 
@@ -3055,19 +3064,20 @@ draw_border:        ; draws the extended "border"
 
 set_start_screen:
                     lda #PLAYER_START_POS_Y
-                    sta player_pos_y + 1               ; Y player start position (0 = top)
+                    sta player_pos_y + 1                    ; Y player start position (0 = top)
                     lda #PLAYER_START_POS_X
-                    sta player_pos_x + 1               ; X player start position (0 = left)
-                    lda #START_ROOM              ; room number (start screen) ($3b45)
+                    sta player_pos_x + 1                    ; X player start position (0 = left)
+                    lda #START_ROOM                         ; room number (start screen) ($3b45)
                     sta current_room + 1
                     jsr m3A2D
 
-m3B4C:
-                    jsr m2FEF
-                    ldy #$30                                ; wait a bit
+main_loop:
+                    jsr rasterpoll_and_other_stuff
+                    ldy #$30                                ; wait a bit -> in each frame! slows down movement
                     jsr wait
                     jsr room_04_prep_door
-                    jmp check_for_laser_beam
+                    jsr prep_player_pos
+                    jmp object_collision
 
 ; ==============================================================================
 ;
