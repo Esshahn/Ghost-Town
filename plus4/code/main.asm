@@ -68,8 +68,8 @@ SILENT_MODE         = 0
 
 ; ==============================================================================
 ; ITEMS
-;
-;
+; not used in the code, but useful for testing, 
+; e.g. "> ._sword df" to pickup the sword in VICE monitor
 ; ==============================================================================
 
 _boots              = items + $84
@@ -122,7 +122,6 @@ COLOR_3             = $FF18
 BORDER_COLOR        = $FF19
 
 ; ==============================================================================
-
 
                     !cpu 6502
                     *= $1000
@@ -277,27 +276,6 @@ code_number:        !scr "06138"                        ; !byte $30, $36, $31, $
 
 ; ==============================================================================
 ;
-; ITEM PICKUP MESSAGES
-; ==============================================================================
-
-
-item_pickup_message:              ; item pickup messages
-
-!if LANGUAGE = EN{
-!scr " There is a key in the bottle !         "
-!scr "   There is a key in the coffin !       "
-!scr " There is a breathing tube !            "
-}
-
-!if LANGUAGE = DE{
-!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
-!scr "    In dem Sarg lag ein Schluessel !    "
-!scr " Unter dem Stein lag ein Taucheranzug ! "
-}
-item_pickup_message_end:
-
-; ==============================================================================
-;
 ; hint system (question marks)
 ; ==============================================================================
 
@@ -361,6 +339,7 @@ m11A6:              jsr display_hint_message_plus_kernal
                     lda #<item_pickup_message
                     jsr m1009
                     jmp -
+
 ; ==============================================================================
 
 switch_charset:
@@ -3089,6 +3068,65 @@ m3B4C:
                     jsr wait
                     jsr room_04_prep_door
                     jmp check_for_laser_beam
+
+; ==============================================================================
+;
+; Display the death message
+; End of game and return to start screen
+; ==============================================================================
+
+death:
+                    lda #>death_messages
+                    sta zpA8
+                    lda #<death_messages
+                    sta zpA7
+                    cpy #$00
+                    beq ++
+-                   clc
+                    adc #$32
+                    sta zpA7
+                    bcc +
+                    inc zpA8
++                   dey
+                    bne -
+++                  lda #$0c
+                    sta zp03
+                    sty zp02
+                    ldx #$04
+                    lda #$20
+-                   sta (zp02),y
+                    iny
+                    bne -
+                    inc zp03
+                    dex
+                    bne -
+                    jsr set_charset_and_screen
+-                   lda (zpA7),y
+                    sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
+                    lda #$00                                    ; color of the death message
+                    sta COLRAM + $1c0,x     ; sta $09c0,x
+                    inx
+                    iny
+                    cpx #$19
+                    bne +
+                    ldx #$50
++                   cpy #$32
+                    bne -
+                    lda #$fd
+                    sta BG_COLOR
+                    sta BORDER_COLOR
+m3EF9:
+                    lda #$08
+-                   ldy #$ff
+                    jsr wait
+                    sec
+                    sbc #$01
+                    bne -
+                    jmp init
+
+; ==============================================================================
+;
+; DEATH MESSAGES
 ; ==============================================================================
 
 death_messages:
@@ -3158,60 +3196,6 @@ death_messages:
 }
 
 ; ==============================================================================
-;
-; Display the death message
-; End of game and return to start screen
-; ==============================================================================
-
-death:
-                    lda #>death_messages
-                    sta zpA8
-                    lda #<death_messages
-                    sta zpA7
-                    cpy #$00
-                    beq ++
--                   clc
-                    adc #$32
-                    sta zpA7
-                    bcc +
-                    inc zpA8
-+                   dey
-                    bne -
-++                  lda #$0c
-                    sta zp03
-                    sty zp02
-                    ldx #$04
-                    lda #$20
--                   sta (zp02),y
-                    iny
-                    bne -
-                    inc zp03
-                    dex
-                    bne -
-                    jsr set_charset_and_screen
--                   lda (zpA7),y
-                    sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
-                    lda #$00                                    ; color of the death message
-                    sta COLRAM + $1c0,x     ; sta $09c0,x
-                    inx
-                    iny
-                    cpx #$19
-                    bne +
-                    ldx #$50
-+                   cpy #$32
-                    bne -
-                    lda #$fd
-                    sta BG_COLOR
-                    sta BORDER_COLOR
-m3EF9:
-                    lda #$08
--                   ldy #$ff
-                    jsr wait
-                    sec
-                    sbc #$01
-                    bne -
-                    jmp init
-; ==============================================================================
 ; screen messages
 ; and the code entry text
 ; ==============================================================================
@@ -3241,3 +3225,25 @@ helping_letter: !scr "C   ***** "
 !scr " Falscher Loesungscode ! TODESSTRAFE !! "
 
 }
+
+
+; ==============================================================================
+;
+; ITEM PICKUP MESSAGES
+; ==============================================================================
+
+
+item_pickup_message:              ; item pickup messages
+
+!if LANGUAGE = EN{
+!scr " There is a key in the bottle !         "
+!scr "   There is a key in the coffin !       "
+!scr " There is a breathing tube !            "
+}
+
+!if LANGUAGE = DE{
+!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
+!scr "    In dem Sarg lag ein Schluessel !    "
+!scr " Unter dem Stein lag ein Taucheranzug ! "
+}
+item_pickup_message_end:
