@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 3             ; default 0 
+START_ROOM          = 0             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -1187,9 +1187,11 @@ room_18:
 ; ==============================================================================
 ; 
 ; EVERYTHING ANIMATION RELATED STARTS HERE
+; ANIMATIONS FOR
+; LASER, BORIS, BELEGRO, STONE, MONSTER
 ; ==============================================================================
 
-room_14_prep:              
+room_animations:              
                     ldy current_room + 1                    ; load room number
                     cpy #14                                 ; is it #14?
                     bne room_15_prep                        ; no -> m148A
@@ -1218,8 +1220,6 @@ m14A4:              lda #$01
                     lda #$01
 +                   dex
                     jmp +                   
-
-; ==============================================================================
 
 m14B2:              
                     cpx #$0b
@@ -1383,7 +1383,6 @@ move_boris:
 
 ; ==============================================================================
 ;
-;
 ; ==============================================================================
 
 room_09_counter:
@@ -1398,14 +1397,11 @@ room_09_counter:
 
 m15C1:              lda #$00                                ; a = 0 (selfmod)
                     cmp #$00                                ; is a = 0?
-                    bne m15CB                               ; not 0 -> 15CB
+                    bne +                                   ; not 0 -> 15CB
                     inc m15C1 + 1                           ; inc m15C1
                     rts
-
-; ==============================================================================
-
-m15CB:              
-                    dec m15C1 + 1                           ; dec $15c2
+             
++                   dec m15C1 + 1                           ; dec $15c2
                     jmp belegro_animation
 
 ; ==============================================================================
@@ -1413,7 +1409,7 @@ m15CB:
 ; STONE ANIMATION
 ; ==============================================================================
 
-room_17_stone_animation:
+animation_entrypoint:
 
                     lda items + $ac                         ; $cc (power outlet)
                     cmp #$df                                ; taken?
@@ -1455,7 +1451,24 @@ m1602:              ldx #$1e                                ; x = $1e
                     sta zpA7                                ; zpA7 = $01
                     ldx m1602 + 1                           ; get stored x value (should still be the same?)
                     jsr draw_player                         ; TODO
-m162A:              jmp room_14_prep                        
+m162A:              jmp room_animations                     ; all done, so jump to the beginning 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ; ==============================================================================
@@ -1475,6 +1488,32 @@ prep_player_pos:
                     jsr draw_player                         ; draw player
                     rts
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; ==============================================================================
+; OBJECT ANIMATION COLLISION ROUTINE
+; CHECKS FOR INTERACTION BY ANIMATION (NOT BY PLAYER MOVEMENT)
+; LASER, BELEGRO, MOVING STONE, BORIS, THE MONSTER
+; ==============================================================================
+
 object_collision:
 
                     ldx #$09                                ; x = 9
@@ -1484,13 +1523,9 @@ check_loop:
                     lda TAPE_BUFFER + $8,x                  ; the tape buffer stores the chars UNDER the player (9 in total)
                     cmp #$d8                                ; check for laser beam
                     bne +                  
+
 m164E:              ldy #$05
 jmp_death:          jmp death                               ; 05 Didn't you see the laser beam?
-
-; ==============================================================================
-; ROOM 17
-; CHECK IF PLAYER GOT HIT BY THE STONE
-; ==============================================================================
 
 +                   ldy current_room + 1                    ; get room number
                     cpy #17                                 ; is it $11 = #17 (Belegro)?
@@ -1538,9 +1573,9 @@ m1676:              cmp #$e4                                ; hit by Boris the s
                     jmp m11E0                     
 
 m16A7:
-                    ldy items + $1a7                
+                    ldy items + $1a7                        ; do you have the sword?
                     cpy #$df
-                    beq +                           
+                    beq +                                   ; yes -> +                        
                     ldy #$0c                                ; 0c Belegro killed you!
                     bne jmp_death                       
 +                   ldy #$00
@@ -2077,26 +2112,28 @@ irq0:
                     rti
 
 ; ==============================================================================
-; gets called immediately after start of game
-; looks like some sound/irq initialization?
-; i think the branching part does fade the sound
+; checks if the music volume is at the desired level
+; and increases it if not
+; if volume is high enough, it initializes the music irq routine
+; is called right at the start of the game, but also when a game ended
+; and is about to show the title screen again (increasing the volume)
 ; ==============================================================================
 
-m1F15:                                  ; call from init
-                    lda music_volume+1         ; lda $1ed9           ; sound volume
---                  cmp #$bf           ; is true on init
+init_music:                                  
+                    lda music_volume+1                              ; sound volume
+--                  cmp #$bf                                        ; is true on init
                     bne +
                     jmp irq_init0
 +                   ldx #$04
--                   stx zpA8            ; buffer serial input byte ?
+-                   stx zpA8                                        ; buffer serial input byte ?
                     ldy #$ff
                     jsr wait
                     ldx zpA8
                     dex
-                    bne -                                               ; some weird wait loop ?
+                    bne -                                               
                     clc
-                    adc #$01           ; add 1 (#$C0 on init)
-                    sta music_volume+1         ; sta $1ed9             ; sound volume
+                    adc #$01                                        ; increases volume again before returning to title screen
+                    sta music_volume+1                              ; sound volume
                     jmp --
 
 
@@ -2200,7 +2237,7 @@ rasterpoll_and_other_stuff:
 
                     jsr poll_raster
                     jsr check_door 
-                    jmp room_17_stone_animation           
+                    jmp animation_entrypoint          
 
 
 
@@ -2975,7 +3012,7 @@ set_charset_and_screen:                               ; set text screen
 
 code_start:
 init:
-                    jsr m1F15
+                    jsr init_music
                     lda #$01
                     sta BG_COLOR          ; background color
                     sta BORDER_COLOR          ; border color
