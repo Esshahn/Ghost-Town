@@ -33,11 +33,11 @@ LANGUAGE = DE
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
-    MULTICOLOR_1        = $db
+    MULTICOLOR_1        = $db           ; face pink
     MULTICOLOR_2        = $29
     BORDER_COLOR_VALUE  = $12
     TITLE_KEY_MATRIX    = $fd           ; Original key to press on title screen: 1
@@ -47,8 +47,8 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 1{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $01 ; grey
-    MULTICOLOR_1        = $6b
-    MULTICOLOR_2        = $19
+    MULTICOLOR_1        = $52           ; face pink
+    MULTICOLOR_2        = $19           ; brownish
     BORDER_COLOR_VALUE  = $01
     TITLE_KEY_MATRIX    = $7f           ; Extended version key to press on title screen: space
     TITLE_KEY           = $10
@@ -359,7 +359,6 @@ switch_charset:
 
 check_room:
                     ldy current_room + 1        ; load in the current room number
-                    cpy #0
                     bne +
                     jmp room_00
 +                   cpy #1
@@ -742,7 +741,7 @@ room_06:
 ; ==============================================================================
 
 room_07:
-                    dec BORDER_COLOR
+bp
                     cmp #$e3                                    ; $e3 is the char for the invisible, I mean SACRED, column
                     bne +
                     ldy #$01                                    ; 01 You'd better watched out for the sacred column
@@ -1307,7 +1306,7 @@ check_if_room_09:
 ; ==============================================================================
 
 room_04_prep_door:
-                    
+                   
                     lda current_room + 1                            ; get current room
                     cmp #04                                         ; is it 4? (coffins)
                     bne ++                                          ; nope
@@ -2256,17 +2255,29 @@ rasterpoll_and_other_stuff:
 
 tileset_definition:
 tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42
+                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42        ; empty, rock, brick, ?mark, bush, grave, coffin, coffin
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a
+                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a        ; water, water, water, tree, tree, boulder, treasure, treasure
                     ;     $10
-                    !byte $03
+                    !byte $03                                           ; door
+
+!if EXTENDED = 0{
 tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
                     !byte $00, $39, $19, $0e, $3d, $7f, $2a, $2a
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
                     !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
                     ;     $10
                     !byte $39
+}
+
+!if EXTENDED = 1{
+tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $00, $39, $2a, $0e, $3d, $7f, $2a, $2a
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
+                    ;     $10
+                    !byte $29   
+}
 
 ; ==============================================================================
 ;
@@ -2569,10 +2580,12 @@ poll_raster:
                     bne -                   ; loop until we hit line c0
                     lda #$00                ; A = 0
                     sta zpA7                ; zpA7 = 0
+                    
 
                     jsr get_player_pos
                     jsr check_joystick
-                    cli
+                    
+                    cli                    
                     rts
 
 
@@ -2669,7 +2682,7 @@ update_items_display:
 +                   jsr next_item               ; value was $ff, now get the next value in the list
                     lda (zpA7),y
                     cmp #$ff                    ; is the next value $ff again?
-                    beq m38DF                   ; yes -> m38DF
+                    beq prepare_rooms           ; yes -> m38DF
                     cmp current_room + 1        ; is the number the current room number?
                     bne -                       ; no -> loop
                     lda #>COLRAM                ; yes the number is the current room number
@@ -2723,7 +2736,7 @@ m38B7:
                     lda (zpA7),y
                     cmp #$ff
                     bne -
-                    beq m38DF
+                    beq prepare_rooms
 m38D7:              clc
                     adc #$01
                     sta zp02
@@ -2731,14 +2744,49 @@ m38D7:              clc
                     rts
 
 ; ==============================================================================
+; ROOM PREPARATION CHECK
+; WAS INITIALLY SCATTERED THROUGH THE LEVEL COMPARISONS
+; ==============================================================================
+
+prepare_rooms:
+                    
+                    lda current_room + 1
+
++                   cmp #02
+                    bne +
+                    jsr room_02_prep
+                    rts
+
++                   cmp #07
+                    bne +
+                    jsr room_07_make_sacred_column
+                    rts
+
++                   cmp #06
+                    bne +                   
+                    jsr room_06_make_deadly_doors
+                    rts
+
++                   cmp #04
+                    bne +
+                    jsr room_04_prep_door                           ; was in main loop before, might find a better place
+                    jsr room_04_put_zombies_in_the_coffins
+                    rts
+
++                   cmp #05
+                    bne +
+                    jsr room_05_prep
+                    rts
+
++                   rts
+
+; ==============================================================================
 ; ROOM 02
 ; DRAWS OR DELETES THE FENCE, AND THEN SOME SHIT
 ; ==============================================================================
 
-m38DF:              
-                    lda current_room + 1
-                    cmp #$02                                ; is the current room 02?
-                    bne room_07_make_sacred_column          ; no  -> room 07
+room_02_prep:              
+                    
                     lda #$0d                                ; yes room is 02, a = $0d #13
                     sta zp02                                ; zp02 = $0d
                     sta zp04                                ; zp04 = $0d
@@ -2776,8 +2824,7 @@ delete_fence:
 
 room_07_make_sacred_column:
 
-                    cmp #$07                                    ; is the current room 07?
-                    bne room_06_make_deadly_doors               ; no
+
                     ldx #$17                                    ; yes
 -                   lda SCREENRAM + $168,x     
                     cmp #$df
@@ -2796,8 +2843,6 @@ room_07_make_sacred_column:
 
 room_06_make_deadly_doors:
 
-                    cmp #$06                                    ; is the current room 06?
-                    bne room_04_put_zombies_in_the_coffins
                     lda #$f6                                    ; char for wrong door
                     sta SCREENRAM + $9c                         ; make three doors DEADLY!!!11
                     sta SCREENRAM + $27c
@@ -2811,8 +2856,7 @@ room_06_make_deadly_doors:
 
 room_04_put_zombies_in_the_coffins: 
 
-                    cmp #$04                                    ; is the current room 04?
-                    bne room_05_prep                            ; no
+
                     ldx #$f7                                    ; yes room 04
                     ldy #$f8
 m394A:              lda #$01
@@ -2852,8 +2896,7 @@ m3952:              lda #$01                                    ; some self mod 
 ; ==============================================================================
 
 room_05_prep:                  
-                    cmp #$05                                    ; is the current room 05?
-                    bne ++                                      ; no, and I'm done with you guys!
+
 +                   lda #$fd                                    ; yes
 breathing_tube_mod: ldx #$01
                     bne +                                       ; based on self mod, put the normal
@@ -2936,7 +2979,6 @@ update_player_pos:
                     sta player_pos_x + 1
 
 m3A2D:              jsr display_room                                ; done  
-                    jsr room_04_prep_door                           ; was in main loop before, might find a better place
                     jmp update_items_display
 
 

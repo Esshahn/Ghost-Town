@@ -37,7 +37,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
-    MULTICOLOR_1        = $db
+    MULTICOLOR_1        = $db           ; face pink
     MULTICOLOR_2        = $29
     BORDER_COLOR_VALUE  = $12
     TITLE_KEY_MATRIX    = $fd           ; Original key to press on title screen: 1
@@ -47,8 +47,8 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 1{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $01 ; grey
-    MULTICOLOR_1        = $6b
-    MULTICOLOR_2        = $19
+    MULTICOLOR_1        = $52           ; face pink
+    MULTICOLOR_2        = $19           ; brownish
     BORDER_COLOR_VALUE  = $01
     TITLE_KEY_MATRIX    = $7f           ; Extended version key to press on title screen: space
     TITLE_KEY           = $10
@@ -2256,17 +2256,29 @@ rasterpoll_and_other_stuff:
 
 tileset_definition:
 tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42
+                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42        ; empty, rock, brick, ?mark, bush, grave, coffin, coffin
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a
+                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a        ; water, water, water, tree, tree, boulder, treasure, treasure
                     ;     $10
-                    !byte $03
+                    !byte $03                                           ; door
+
+!if EXTENDED = 0{
 tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
                     !byte $00, $39, $19, $0e, $3d, $7f, $2a, $2a
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
                     !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
                     ;     $10
                     !byte $39
+}
+
+!if EXTENDED = 1{
+tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $00, $39, $2a, $0e, $3d, $7f, $2a, $2a
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
+                    ;     $10
+                    !byte $29   
+}
 
 ; ==============================================================================
 ;
