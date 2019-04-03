@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 3             ; default 0 
+START_ROOM          = 0             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -2569,10 +2569,11 @@ poll_raster:
                     bne -                   ; loop until we hit line c0
                     lda #$00                ; A = 0
                     sta zpA7                ; zpA7 = 0
+                    cli                     ; was before the RTS initially
 
                     jsr get_player_pos
                     jsr check_joystick
-                    cli
+                    
                     rts
 
 
@@ -2669,7 +2670,7 @@ update_items_display:
 +                   jsr next_item               ; value was $ff, now get the next value in the list
                     lda (zpA7),y
                     cmp #$ff                    ; is the next value $ff again?
-                    beq m38DF                   ; yes -> m38DF
+                    beq prepare_rooms           ; yes -> m38DF
                     cmp current_room + 1        ; is the number the current room number?
                     bne -                       ; no -> loop
                     lda #>COLRAM                ; yes the number is the current room number
@@ -2723,7 +2724,7 @@ m38B7:
                     lda (zpA7),y
                     cmp #$ff
                     bne -
-                    beq m38DF
+                    beq prepare_rooms
 m38D7:              clc
                     adc #$01
                     sta zp02
@@ -2731,14 +2732,46 @@ m38D7:              clc
                     rts
 
 ; ==============================================================================
+; ROOM PREPARATION CHECK
+; ADDED FOR CLARITY
+; ==============================================================================
+
+prepare_rooms:
+                    
+                    lda current_room + 1
+                    
+                    cmp #02
+                    bne +
+                    jsr room_02_prep
+                    rts
+
++                   cmp #04
+                    bne +
+                    jsr room_04_put_zombies_in_the_coffins
+                    rts
+
++                   cmp #05
+                    bne +
+                    jsr room_05_prep
+                    rts
+
++                   cmp #06
+                    bne +
+                    jsr room_06_make_deadly_doors
+                    rts
+
++                   cmp #07
+                    bne +
+                    jsr room_07_make_sacred_column
++                   rts
+
+; ==============================================================================
 ; ROOM 02
 ; DRAWS OR DELETES THE FENCE, AND THEN SOME SHIT
 ; ==============================================================================
 
-m38DF:              
-                    lda current_room + 1
-                    cmp #$02                                ; is the current room 02?
-                    bne room_07_make_sacred_column          ; no  -> room 07
+room_02_prep:              
+                    
                     lda #$0d                                ; yes room is 02, a = $0d #13
                     sta zp02                                ; zp02 = $0d
                     sta zp04                                ; zp04 = $0d
@@ -2776,8 +2809,7 @@ delete_fence:
 
 room_07_make_sacred_column:
 
-                    cmp #$07                                    ; is the current room 07?
-                    bne room_06_make_deadly_doors               ; no
+
                     ldx #$17                                    ; yes
 -                   lda SCREENRAM + $168,x     
                     cmp #$df
@@ -2796,8 +2828,6 @@ room_07_make_sacred_column:
 
 room_06_make_deadly_doors:
 
-                    cmp #$06                                    ; is the current room 06?
-                    bne room_04_put_zombies_in_the_coffins
                     lda #$f6                                    ; char for wrong door
                     sta SCREENRAM + $9c                         ; make three doors DEADLY!!!11
                     sta SCREENRAM + $27c
@@ -2811,8 +2841,7 @@ room_06_make_deadly_doors:
 
 room_04_put_zombies_in_the_coffins: 
 
-                    cmp #$04                                    ; is the current room 04?
-                    bne room_05_prep                            ; no
+
                     ldx #$f7                                    ; yes room 04
                     ldy #$f8
 m394A:              lda #$01
@@ -2852,8 +2881,7 @@ m3952:              lda #$01                                    ; some self mod 
 ; ==============================================================================
 
 room_05_prep:                  
-                    cmp #$05                                    ; is the current room 05?
-                    bne ++                                      ; no, and I'm done with you guys!
+
 +                   lda #$fd                                    ; yes
 breathing_tube_mod: ldx #$01
                     bne +                                       ; based on self mod, put the normal
