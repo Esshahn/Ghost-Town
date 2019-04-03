@@ -56,16 +56,33 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 
 ; ==============================================================================
-; cheats
+; CHEATS
 ;
 ;
 ; ==============================================================================
 
-START_ROOM          = 16             ; default 0 ; address $3b45
+START_ROOM          = 6             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
 
+; ==============================================================================
+; ITEMS
+; not used in the code, but useful for testing, 
+; e.g. "> ._sword df" to pickup the sword in VICE monitor
+; ==============================================================================
+
+_boots              = items + $84
+_ladder             = items + $4d
+_gloves             = items + $8
+_key                = items + $10
+_wirecutter         = items + $19
+_light              = items + $74
+_hammer             = items + $bb
+_shovel             = items + $96
+_poweroutlet        = items + $ac
+_lightbulb          = items + $c8
+_sword              = items + $1a7
 
 ; ==============================================================================
 ; ZEROPAGE
@@ -73,7 +90,7 @@ SILENT_MODE         = 0
 zp02                = $02
 zp03                = $03
 zp04                = $04
-zp05                = $05
+zp05                = $05            ; seems to always store the COLRAM information
 zp08                = $08
 zp09                = $09
 zp0A                = $0A
@@ -106,18 +123,17 @@ BORDER_COLOR        = $FF19
 
 ; ==============================================================================
 
-
                     !cpu 6502
-
-
                     *= $1000
-m1000:
-                    jsr PRINT_KERNAL           ; jsr $c56b ? wird gar nicht benutzt ?!
 
 ; ==============================================================================
 ;
 ; display the hint messages
 ; ==============================================================================
+
+display_hint_message_plus_kernal:
+
+                    jsr PRINT_KERNAL          
 
 display_hint_message:
 
@@ -125,156 +141,138 @@ display_hint_message:
                     sta zpA8
                     lda #<hint_messages
 m1009:              cpy #$00
-                    beq ++              ; beq $1017
+                    beq ++              
 -                   clc
                     adc #$28
-                    bcc +               ; bcc $1014
+                    bcc +               
                     inc zpA8
 +                   dey
-                    bne -               ; bne $100d
+                    bne -               
 ++                  sta zpA7
-                    jsr set_charset_and_screen_for_title           ; jsr $3a9d
+                    jsr set_charset_and_screen          
                     ldy #$27
 -                   lda (zpA7),y
-                    sta SCREENRAM+$1B8,y ; sta $0db8,y
+                    sta SCREENRAM+$1B8,y 
                     lda #$07
-                    sta COLRAM+$1B8,y  ; sta $09b8,y
+                    sta COLRAM+$1B8,y 
                     dey
-                    bne -               ; bne $101e
+                    bne -               
                     rts
 
-; ==============================================================================
-                    sta BORDER_COLOR          ; ?!? womöglich unbenutzt ?!?
-                    rts
-; ==============================================================================
-; TODO: understand this one, it gets called a lot
-
-m1031:
-
-                    jsr m11CC           ; jsr $11cc
-                    cpy #$03
-                    beq +                           ;bne m10B1           ; bne $10b1
-                    jmp display_hint           ; jmp $1155
-+                   jsr display_hint_message           ; jsr $1003
-                    jsr BASIC_DA89      ; ?!? scroll screen down ?!?
-                    jsr BASIC_DA89      ; ?!? scroll screen down ?!?
-                    ldy #$01
-                    jsr display_hint_message           ; jsr $1003
-                    ldx #$00
-                    ldy #$00
-bp                    beq room_16_enter_code           ; beq $105f
-m104C:              lda SCREENRAM+$1B9,x ; lda $0db9,x
-                    clc
-                    adc #$80
-                    sta SCREENRAM+$1B9,x ; sta $0db9,x
-                    lda SCREENRAM+$188,y ; lda $0d88,y
-                    clc
-                    adc #$80
-                    sta SCREENRAM+$188,y ; sta $0d88,y
-                    rts
 
 ; ==============================================================================
 ;
 ;
+; ==============================================================================
+
+prep_and_display_hint:
+
+                    jsr switch_charset           
+                    cpy #$03                                ; is the display hint the one for the code number?
+                    beq room_16_code_number_prep            ; yes -> +      ;bne m10B1 ; bne $10b1
+                    jmp display_hint                        ; no, display the hint
+
+
+room_16_code_number_prep:
+
+                    jsr display_hint_message                ; yes we are in room 3
+                    jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
+                    jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
+                    ldy #$01                                ; y = 1
+                    jsr display_hint_message              
+                    ldx #$00                                ; x = 0
+                    ldy #$00                                ; y = 0
+                    beq room_16_enter_code                  ; room 16 code? how?
+
+room_16_cursor_blinking: 
+
+                    lda SCREENRAM+$1B9,x                    ; load something from screen
+                    clc                                     
+                    adc #$80                                ; add $80 = 128 = inverted char
+                    sta SCREENRAM+$1B9,x                    ; store in the same location
+                    lda SCREENRAM+$188,y                    ; and the same for another position
+                    clc
+                    adc #$80
+                    sta SCREENRAM+$188,y 
+                    rts
+
+; ==============================================================================
+; ROOM 16
+; ENTER CODE
 ; ==============================================================================
 
 room_16_enter_code:
-                    jsr m104C           ; jsr $104c
+                    jsr room_16_cursor_blinking
                     sty zp02
                     stx zp04
-                    jsr m10A7           ; jsr $10a7 / wait
-                    jsr m104C           ; jsr $104c / some screen stuff
-                    jsr m10A7           ; jsr $10a7 / wait
-                    lda #$fd           ; KEYBOARD stuff
-                    sta KEYBOARD_LATCH          ; .
-                    lda KEYBOARD_LATCH          ; .
-                    lsr                 ; .
+                    jsr room_16_code_delay           
+                    jsr room_16_cursor_blinking           
+                    jsr room_16_code_delay
+                    lda #$fd                                        ; KEYBOARD stuff
+                    sta KEYBOARD_LATCH                              ; .
+                    lda KEYBOARD_LATCH                              ; .
+                    lsr                                             ; .
                     lsr
                     lsr
-                    bcs +               ; bcs $1081
+                    bcs +
                     cpx #$00
-                    beq +               ; beq $1081
+                    beq +
                     dex
 +                   lsr
-                    bcs +               ; bcs $1089
+                    bcs +
                     cpx #$25
-                    beq +               ; beq $1089
+                    beq +
                     inx
 +                   and #$08
-                    bne room_16_enter_code           ; bne $105f
-                    lda SCREENRAM+$1B9,x ; lda $0db9,x
+                    bne room_16_enter_code
+                    lda SCREENRAM+$1B9,x
                     cmp #$bc
-                    bne ++              ; bne $109c
+                    bne ++
                     cpy #$00
-                    beq +               ; beq $1099
+                    beq +
                     dey
-+                   jmp room_16_enter_code           ; jmp $105f
-++                  sta SCREENRAM+$188,y ; sta $0d88,y
++                   jmp room_16_enter_code
+++                  sta SCREENRAM+$188,y
                     iny
                     cpy #$05
-                    bne room_16_enter_code           ; bne $105f
-                    jmp m10B4           ; jmp $10b4
+                    bne room_16_enter_code
+                    jmp check_code_number
 
 ; ==============================================================================
 ;
-;
+; DELAYS CURSOR MOVEMENT AND BLINKING
 ; ==============================================================================
 
-m10A7:
-                    ldy #$35
-                    jsr wait
-                    ldy zp02
-                    ldx zp04
+room_16_code_delay:
+                    ldy #$35                            ; wait a bit
+                    jsr wait                        
+                    ldy zp02                            ; and load x and y 
+                    ldx zp04                            ; with shit from zp
                     rts
 
 ; ==============================================================================
-;
-;
+; ROOM 16
+; CHECK THE CODE NUMBER
 ; ==============================================================================
 
-m10B4:
-                    ldx #$05
--                   lda SCREENRAM+$187,x ; lda $0d87,x
-                    cmp m10CC-1,x       ; cmp $10cb,x
-                    bne +               ; bne $10c4
-                    dex
-                    bne -               ; bne $10b6
-                    jmp ++              ; jmp $10d1
-+                   ldy #$05
-                    jsr display_hint_message           ; jsr $1003
-                    jmp m3EF9           ; jmp $3ef9
-m10CC:              !byte $30, $36, $31, $33, $38
-++                  jsr set_game_basics           ; jsr $3a7d
-                    jsr m3A17           ; jsr $3a17
-                    jsr draw_border           ; jsr $3b02
-                    jmp m3B4C           ; jmp $3b4c
+check_code_number:
+                    ldx #$05                            ; x = 5
+-                   lda SCREENRAM+$187,x                ; get one number from code
+                    cmp code_number-1,x                 ; is it correct?
+                    bne +                               ; no -> +
+                    dex                                 ; yes, check next number
+                    bne -                               
+                    jmp ++                              ; all correct -> ++
++                   ldy #$05                            ; text for wrong code number
+                    jsr display_hint_message            ; wrong code -> death
+                    jmp m3EF9          
 
-; ==============================================================================
-;
-; ITEM PICKUP MESSAGES
-; ==============================================================================
+code_number:        !scr "06138"                        ; !byte $30, $36, $31, $33, $38
 
-; TODO this byte was added by me as
-; they put the item messages in the right address
-; I have yet no clue where this is read and how
-; as the label is not used for it
-
-!byte $00
-
-item_pickup_message:              ; item pickup messages
-
-!if LANGUAGE = EN{
-!scr " There is a key in the bottle !         "
-!scr "   There is a key in the coffin !       "
-!scr " There is a breathing tube !            "
-}
-
-!if LANGUAGE = DE{
-!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
-!scr "    In dem Sarg lag ein Schluessel !    "
-!scr " Unter dem Stein lag ein Taucheranzug ! "
-}
-item_pickup_message_end:
+++                  jsr set_game_basics                 ; code correct, continue
+                    jsr set_player_xy          
+                    jsr draw_border          
+                    jmp main_loop          
 
 ; ==============================================================================
 ;
@@ -284,47 +282,53 @@ item_pickup_message_end:
 
 display_hint:
                     cpy #$00
-                    bne m11A2           ; bne $11a2
-                    jsr m1000
+                    bne m11A2           
+                    jsr display_hint_message_plus_kernal
                     ldx current_room + 1
                     cpx #$01
-                    bne +               ; bne $1165
+                    bne +               
                     lda #$28
 +                   cpx #$05
-                    bne +               ; bne $116b
+                    bne +               
                     lda #$29
 +                   cpx #$0a
-                    bne +               ; bne $1171
-                    lda #$47
-+                   jsr m174F           ; jsr $174f
-                    cpx #$0f
-                    bne +               ; bne $1185
+                    bne +               
+                    lda #$47                   
+
++                   cpx #$0c
+                    bne +
+                    lda #$49
++                   cpx #$0d
+                    bne +
                     lda #$45
-                    sta COLRAM + $26f       ; sta $0a6f
++                   cpx #$0f
+                    bne +               
+                    lda #$45
+                    sta COLRAM + $26f       
                     lda #$0f
-                    sta SCREENRAM + $26f       ; sta $0e6f
-+                   sta SCREENRAM + $21f       ; sta $0e1f
+                    sta SCREENRAM + $26f       
++                   sta SCREENRAM + $21f       
                     lda #$48
-                    sta COLRAM + $21f       ; sta $0a1f
+                    sta COLRAM + $21f       
 -                   lda #$fd
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
                     and #$80
-                    bne -               ; bne $118d
-                    jsr set_game_basics           ; jsr $3a7d
-                    jsr m3A2D           ; jsr $3a2d
-                    jmp m3B4C           ; jmp $3b4c
+                    bne -               
+                    jsr set_game_basics
+                    jsr m3A2D          
+                    jmp main_loop         
 m11A2:              cpy #$02
-                    bne +               ; bne $11ac
-m11A6:              jsr m1000
-                    jmp -               ; jmp $118d
+                    bne +             
+m11A6:              jsr display_hint_message_plus_kernal
+                    jmp -             
 +                   cpy #$04
-                    bne +               ; bne $11bb
-                    lda m3952 + 1       ; lda $3953
+                    bne +              
+                    lda m3952 + 1    
                     clc
-                    adc #$40            ; this is the helping letter
-                    sta helping_letter          ; sta $3fc6
-                    bne m11A6               ; bne $11a6
+                    adc #$40                                        ; this is the helping letter
+                    sta helping_letter         
+                    bne m11A6          
 +                   dey
                     dey
                     dey
@@ -335,34 +339,111 @@ m11A6:              jsr m1000
                     lda #<item_pickup_message
                     jsr m1009
                     jmp -
+
 ; ==============================================================================
-m11CC:
-                    jsr set_charset_and_screen_for_title           ; jsr $3a9d
-                    jmp PRINT_KERNAL           ; jmp $c56b
+
+switch_charset:
+                    jsr set_charset_and_screen           
+                    jmp PRINT_KERNAL           
+
+
+
+; ==============================================================================
+;
+; JUMP TO ROOM LOGIC
+; This code is new. Previously, code execution jumped from room to room
+; and in each room did the comparison with the room number.
+; This is essentially the same, but bundled in one place.
+; not calles in between room changes, only e.g. for question mark
+; ==============================================================================
+
+check_room:
+                    ldy current_room + 1        ; load in the current room number
+                    cpy #0
+                    bne +
+                    jmp room_00
++                   cpy #1
+                    bne +
+                    jmp room_01
++                   cpy #2
+                    bne +
+                    jmp room_02
++                   cpy #3
+                    bne +
+                    jmp room_03
++                   cpy #4
+                    bne +
+                    jmp room_04
++                   cpy #4
+                    bne +
+                    jmp room_04
++                   cpy #5
+                    bne +
+                    jmp room_05
++                   cpy #6
+                    bne +
+                    jmp room_06
++                   cpy #7
+                    bne +
+                    jmp room_07
++                   cpy #8
+                    bne +
+                    jmp room_08
++                   cpy #9
+                    bne +
+                    jmp room_09
++                   cpy #10
+                    bne +
+                    jmp room_10
++                   cpy #11
+                    bne +
+                    jmp room_11 
++                   cpy #12
+                    bne +
+                    jmp room_12
++                   cpy #13
+                    bne +
+                    jmp room_13
++                   cpy #14
+                    bne +
+                    jmp room_14
++                   cpy #15
+                    bne +
+                    jmp room_15
++                   cpy #16
+                    bne +
+                    jmp room_16
++                   cpy #17
+                    bne +
+                    jmp room_17
++                   jmp room_18
+
+
+
 ; ==============================================================================
 
 check_death:
                     jsr update_items_display
-                    jmp m3B4C           ; jmp $3b4c
+                    jmp main_loop           
 
 ; ==============================================================================
 
-m11E0:              ldx #$00
--                   lda TAPE_BUFFER + $9,x              ;  lda $033c,x
-                    cmp #$1e            ; question mark
-                    bcc m11ED           ; bcc $11ed
+m11E0:              
+                    ldx #$00
+-                   lda TAPE_BUFFER + $9,x              
+                    cmp #$1e                            ; question mark
+                    bcc check_next_char_under_player           
                     cmp #$df
-                    bne room_00              ; bne $11f5
-m11ED:              inx
+                    beq check_next_char_under_player
+                    jmp check_room              
+
+; ==============================================================================
+
+check_next_char_under_player:
+                    inx
                     cpx #$09
-                    bne -               ; bne $11e2
--                   jmp m3B4C           ; jmp $3b4c
-
-
-
-
-
-
+                    bne -                              ; not done checking          
+-                   jmp main_loop           
 
 
 ; ==============================================================================
@@ -377,24 +458,23 @@ m11ED:              inx
 ;
 ; ==============================================================================
 
-room_00:
-                    ldy current_room + 1        ; load in the current room number
-                    bne room_01                 ; is it not 0? then check for room 01
 
-                    cmp #$a9                    ; has the player hit the gloves?
-                    bne m11ED                   ; no
-                    lda #$df                    ; yes, load in char for "empty"
-                    cmp items + $4d             ; position for 1st char of ladder ($b0) -> ladder already taken?
-                    bne -                       ; no
-                    jsr pickup_gloves           ; yes
+room_00:
+
+                    cmp #$a9                                        ; has the player hit the gloves?
+                    bne check_next_char_under_player                ; no
+                    lda #$df                                        ; yes, load in char for "empty"
+                    cmp items + $4d                                 ; position for 1st char of ladder ($b0) -> ladder already taken?
+                    bne -                                           ; no
+                    jsr pickup_gloves                               ; yes
                     bne check_death
 
 
 pickup_gloves:
-                    lda #$6b                    ; load character for empty bush
-                    sta items + $8              ; store 6b = gloves in inventory
-                    lda #$3d                    ; set the foreground color
-                    sta items + $6              ; and store the color in the items table
+                    lda #$6b                                        ; load character for empty bush
+                    sta items + $8                                  ; store 6b = gloves in inventory
+                    lda #$3d                                        ; set the foreground color
+                    sta items + $6                                  ; and store the color in the items table
                     rts
 
 
@@ -415,36 +495,34 @@ pickup_gloves:
 ; ==============================================================================
 
 room_01:
-                    cpy #01
-                    bne room_02                 ; if not this room, go to next
 
-                    cmp #$e0                    ; empty character in charset -> invisible key
-                    beq +                       ; yes, key is there -> +
+                    cmp #$e0                                    ; empty character in charset -> invisible key
+                    beq +                                       ; yes, key is there -> +
                     cmp #$e1
                     bne ++
-+                   lda #$aa                    ; display the key, $AA = 1st part of key
-                    sta items + $10             ; store key in items list
-                    jsr update_items_display    ; update all items in the items list (we just made the key visible)
-                    ldy #$f0                    ; set waiting time
-                    jsr wait                    ; wait
-                    lda #$df                    ; set key to empty space
-                    sta items + $10             ; update items list
++                   lda #$aa                                    ; display the key, $AA = 1st part of key
+                    sta items + $10                             ; store key in items list
+                    jsr update_items_display                    ; update all items in the items list (we just made the key visible)
+                    ldy #$f0                                    ; set waiting time
+                    jsr wait                                    ; wait
+                    lda #$df                                    ; set key to empty space
+                    sta items + $10                             ; update items list
                     bne check_death
-++                  cmp #$27                    ; question mark (I don't know why 27)
+++                  cmp #$27                                    ; question mark (I don't know why 27)
                     bcs check_death_bush
                     ldy #$00
-                    jmp m1031
+                    jmp prep_and_display_hint
 
 check_death_bush:
-                    cmp #$ad                    ; wirecutters
-                    bne m11ED
-                    lda items + $8              ; inventory place for the gloves! 6b = gloves
+                    cmp #$ad                                    ; wirecutters
+                    bne check_next_char_under_player
+                    lda items + $8                              ; inventory place for the gloves! 6b = gloves
                     cmp #$6b
                     beq +
                     ldy #$0f
-                    jmp death                   ; 0f You were wounded by the bush!
+                    jmp death                                   ; 0f You were wounded by the bush!
 
-+                   lda #$f9                    ; wirecutter picked up
++                   lda #$f9                                    ; wirecutter picked up
                     sta items + $19
                     jmp check_death
 
@@ -466,26 +544,23 @@ check_death_bush:
 ; ==============================================================================
 
 room_02:
-                    cpy #02
-                    bne room_03                 ; if not this room, go to next
 
-                    cmp #$f5                    ; did the player hit the fence? f5 = fence character
-                    bne check_lock              ; no, check for the lock
-                    lda items + $19             ; fence was hit, so check if wirecuter was picked up
-                    cmp #$f9                    ; where the wirecutters (f9) picked up?
-                    beq remove_fence            ; yes
-                    ldy #$10                    ; no, load the correct death message
-                    jmp death                   ; 10 You are trapped in wire-nettings!
+                    cmp #$f5                                    ; did the player hit the fence? f5 = fence character
+                    bne check_lock                              ; no, check for the lock
+                    lda items + $19                             ; fence was hit, so check if wirecuter was picked up
+                    cmp #$f9                                    ; where the wirecutters (f9) picked up?
+                    beq remove_fence                            ; yes
+                    ldy #$10                                    ; no, load the correct death message
+                    jmp death                                   ; 10 You are trapped in wire-nettings!
 
 remove_fence:
-                    lda #$df                    ; empty char
-                    sta m3900 + 1               ; m3900 must be the draw routine to clear out stuff?
+                    lda #$df                                    ; empty char
+                    sta delete_fence + 1                        ; m3900 must be the draw routine to clear out stuff?
 m1264:              jmp check_death
 
-; ==============================================================================
 
 check_lock:
-                    cmp #$a6            ; lock
+                    cmp #$a6                                    ; lock
                     bne +
                     lda items + $10
                     cmp #$df
@@ -493,31 +568,34 @@ check_lock:
                     lda #$df
                     sta items + $38
                     bne m1264
-+                   cmp #$b1            ; ladder
++                   cmp #$b1                                    ; ladder
                     bne +
                     lda #$df
                     sta items + $4d
                     sta items + $58
                     bne m1264
-+                   cmp #$b9            ; bottle
++                   cmp #$b9                                    ; bottle
                     beq +
-                    jmp m11ED
+                    jmp check_next_char_under_player
 +                   lda items + $bb
-                    cmp #$df            ; df = empty spot where the hammer was. = hammer taken
-                    beq take_key_out_of_bottle                                   ; beq $129a
+                    cmp #$df                                    ; df = empty spot where the hammer was. = hammer taken
+                    beq take_key_out_of_bottle                                   
                     ldy #$03
-                    jmp death        ; 03 You drank from the poisend bottle
+                    jmp death                                   ; 03 You drank from the poisend bottle
 
 take_key_out_of_bottle:
                     lda #$01
                     sta key_in_bottle_storage
                     ldy #$05
-                    jmp m1031
+                    jmp prep_and_display_hint
 
 ; ==============================================================================
 ; this is 1 if the key from the bottle was taken and 0 if not
 
 key_in_bottle_storage:              !byte $00
+
+
+
 
 
 
@@ -537,14 +615,12 @@ key_in_bottle_storage:              !byte $00
 ; ==============================================================================
 
 room_03:
-                    cpy #03
-                    bne room_04                 ; if not this room, go to next
 
-                    cmp #$27                    ; question mark (I don't know why 27)
+                    cmp #$27                                    ; question mark (I don't know why 27)
                     bcc +
-                    jmp m3B4C
+                    jmp main_loop
 +                   ldy #$04
-                    jmp m1031
+                    jmp prep_and_display_hint
 
 
 
@@ -564,28 +640,24 @@ room_03:
 ; ==============================================================================
 
 room_04:
-                    cpy #04
-                    bne room_05                 ; if not this room, go to next
 
-                    cmp #$3b            ; part of a coffin
-                    beq +                                   ; beq $12c1
-                    cmp #$42
-                    bne m12C6                               ; bne $12c6
-+                   ldy #$0d
-                    jmp death    ; 0d You found a thirsty zombie....
+                    cmp #$3b                                    ; you bumped into a zombie coffin?
+                    beq +                                       ; yep
+                    cmp #$42                                    ; HEY YOU! Did you bump into a zombie coffin?
+                    bne ++                                      ; no, really, I didn't ( I swear! )-> ++
++                   ldy #$0d                                    ; thinking about it, there was a person inside that kinda...
+                    jmp death                                   ; 0d You found a thirsty zombie....
 
-; ==============================================================================
-
-m12C6:
-                    cmp #$f7
-                    beq +                                       ; beq $12d1
+++
+                    cmp #$f7                                    ; Welcome those who didn't get eaten by a zombie.
+                    beq +                                       ; seems you picked a coffin that contained something different...
                     cmp #$f8
-                    beq +                                       ; beq $12d1
-                    jmp m11ED
-+                   lda #$00
-                    sta m394A + 1                               ; sta $394b
-                    ldy #$06
-                    jmp m1031           ; jmp $1031
+                    beq +
+                    jmp check_next_char_under_player            ; or you just didn't bump into anything yet (also well done in a way)
++                   lda #$00                                    ; 
+                    sta m394A + 1                               ; some kind of prep for the door to be unlocked 
+                    ldy #$06                                    ; display
+                    jmp prep_and_display_hint
 
 
 
@@ -605,27 +677,27 @@ m12C6:
 ; ==============================================================================
 
 room_05:
-                    cpy #05
-                    bne room_06                     ; if not this room, go to next
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m12E8
-                    ldy #$00
-                    jmp m1031
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +                                       ; no
+                    ldy #$00                                    ; a = 0
+                    jmp prep_and_display_hint
 
-; ==============================================================================
++                   cmp #$fd                                    ; stone with breathing tube hit?
+                    beq +                                       ; yes -> +
+                    jmp check_next_char_under_player            ; no
 
-m12E8:
-                    cmp #$fd
-                    beq +                                   ; beq $12ef
-m12EC:              jmp m11ED
-+                   lda #$00
-                    jmp m2FDF
++                   lda #$00                                    ; a = 0                  
+                    ldy items + $96                             ; do you have the shovel? 
+                    cpy #$df
+                    bne +                                       ; no I don't
+                    sta breathing_tube_mod + 1                  ; yes, take the breathing tube
+                    ldy #$07                                    ; and display the message
+                    jmp prep_and_display_hint
++                   jmp main_loop
 
-; ==============================================================================
-
-m12F4:              ldy #$07
-                    jmp m1031           ; jmp $1031
+                    ;ldy #$07                                   ; same is happening above and I don't see this being called
+                    ;jmp prep_and_display_hint
 
 
 
@@ -645,13 +717,12 @@ m12F4:              ldy #$07
 ; ==============================================================================
 
 room_06:
-                    cpy #06
-                    bne room_07                     ; if not this room, go to next
 
-                    cmp #$f6            ; is it a trapped door?
-                    bne m12EC                               ; bne $12ec
-                    ldy #$00
-m1303:              jmp death    ; 00 You fell into a snake pit
+                    cmp #$f6                                    ; is it a trapped door?
+                    beq +                                       ; OMG Yes the room is full of...
+                    jmp check_next_char_under_player            ; please move on. nothing happened.
++                   ldy #$00
+                    jmp death                                   ; 00 You fell into a snake pit
 
 
 
@@ -671,29 +742,30 @@ m1303:              jmp death    ; 00 You fell into a snake pit
 ; ==============================================================================
 
 room_07:
-                    cpy #07
-                    bne room_08                     ; if not this room, go to next
+                    dec BORDER_COLOR
+                    cmp #$e3                                    ; $e3 is the char for the invisible, I mean SACRED, column
+                    bne +
+                    ldy #$01                                    ; 01 You'd better watched out for the sacred column
+                    jmp death                                   ; bne m1303 <- seems unneccessary
 
-                    cmp #$e3            ; $e3 is the char for the invisible, I mean SACRED, column
-                    bne +                                   ; bne $1312
-                    ldy #$01            ; 01 You'd better watched out for the sacred column
-                    bne m1303                               ; bne $1303
-+                   cmp #$5f
-                    bne m12EC                               ; bne $12ec
-                    lda #$bc            ; light picked up
-                    sta items + $74                        ; sta $36fe           ; but I dont understand how the whole light is shown
-                    lda #$5f
-                    sta items + $72                        ; sta $36fc
-                    jsr update_items_display
++                   cmp #$5f                                    ; seems to be the invisible char for the light
+                    beq +                                       ; and it was hit -> +
+                    jmp check_next_char_under_player            ; if not, continue checking
+
++                   lda #$bc                                    ; make light visible
+                    sta items + $74                             ; but I dont understand how the whole light is shown
+                    lda #$5f                                    ; color?
+                    sta items + $72                             ; 
+                    jsr update_items_display                    ; and redraw items
                     ldy #$ff
-                    jsr wait
+                    jsr wait                                    ; wait for some time so the player can actually see the light
                     jsr wait
                     jsr wait
                     jsr wait
                     lda #$df
-                    sta items + $74                        ; sta $36fe
+                    sta items + $74                             ; and pick up the light/ remove it from the items list
                     lda #$00
-                    sta items + $72                        ; sta $36fc
+                    sta items + $72                             ; also paint the char black
                     jmp check_death
 
 
@@ -714,58 +786,53 @@ room_07:
 ; ==============================================================================
 
 room_08:
-                    cpy #08
-                    bne room_09                     ; if not this room, go to next
 
-                    ldy #$00
-                    sty zpA7
-                    cmp #$4b            ; water
-                    bne check_item_water                    ; bne $135f
-                    ldy m3993 + 1                           ; ldy $3994
-                    bne m1366                               ; bne $1366
+                    ldy #$00                                    ; y = 0
+                    sty zpA7                                    ; zpA7 = 0
+                    cmp #$4b                                    ; water
+                    bne check_item_water
+                    ldy breathing_tube_mod + 1
+                    bne +
                     jsr get_player_pos
-                    lda #$18
-m1354:              sta player_pos_x + 1
+                    lda #$18                                    ; move player on the other side of the river
+--                  sta player_pos_x + 1
                     lda #$0c
                     sta player_pos_y + 1
-m135C:              jmp m3B4C           ; jmp $3b4c
+-                   jmp main_loop
 
-
-; ==============================================================================
 
 check_item_water:
-                    cmp #$56        ; water character
-                    bne check_item_shovel                   ; bne $1374
-                    ldy m3993 + 1                           ; ldy $3994
-m1366:              bne +                                   ; bne $136f
-                    jsr get_player_pos
+                    cmp #$56                                    ; so you want to swim right?
+                    bne check_item_shovel                       ; nah, not this time -> check_item_shovel
+                    ldy breathing_tube_mod + 1                  ; well let's hope you got your breathing tube equipped     
++                   bne +
+                    jsr get_player_pos                          ; tube equipped and ready to submerge
                     lda #$0c
-                    bne m1354                               ; bne $1354
-+                   ldy #$02
-                    jmp death       ; 02 You drowned in the deep river
+                    bne --                                      ; see you on the other side!
 
-; ==============================================================================
++                   ldy #$02                                    ; breathing what?
+                    jmp death                                   ; 02 You drowned in the deep river
+
 
 check_item_shovel:
-                    cmp #$c1            ; shovel
-                    beq +                                   ; beq $137c
-                    cmp #$c3            ; shovel
-                    bne m1384                               ; bne $1384
-+                   lda #$df
-                    sta items + $96                        ; sta $3720
-m1381:              jmp check_death
+                    cmp #$c1                                    ; wanna have that shovel?
+                    beq +                                       ; yup
+                    cmp #$c3                                    ; I'n not asking thrice! (shovel 2nd char)
+                    bne ++                                      ; nah still not interested -> ++
++                   lda #$df                                    ; alright cool,
+                    sta items + $96                             ; shovel is yours now
+--                  jmp check_death
 
-; ==============================================================================
 
-m1384:
-                    cmp #$cb
-                    bne m13B0
-                    lda items + $bb                         ; hammer
-                    cmp #$df
-                    bne m135C                               ; bne $135c
+++                  cmp #$ca                                    ; shoe box? (was #$cb before, but $ca seems a better char to compare to)
+                    beq +                                       ; yup
+                    jmp check_next_char_under_player
++                   lda items + $bb                             ; so did you get the hammer to crush it to pieces?
+                    cmp #$df                                    ; (hammer picked up from items list and replaced with empty)
+                    bne -                                       ; what hammer?
                     lda #$df
-                    sta items + $84                        ; sta $370e
-                    bne m1381                               ; bne $1381
+                    sta items + $84                             ; these fine boots are yours now, sir
+                    bne --
 
 
 
@@ -784,13 +851,13 @@ m1384:
 ;
 ; ==============================================================================
 
-room_09:            cpy #09
-                    bne room_10                     ; if not this room, go to next
+room_09:            
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m13B0
-                    ldy #$02
-                    jmp m1031
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcc +                                       ; yes -> +
+                    jmp check_next_char_under_player            ; continue checking
++                   ldy #$02                                    ; display hint
+                    jmp prep_and_display_hint
 
 
 
@@ -810,38 +877,27 @@ room_09:            cpy #09
 ; ==============================================================================
 
 room_10:
-                    cpy #10
-                    bne room_11                     ; if not this room, go to next
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m13B3
-                    ldy #$00
-                    jmp m1031
-; ==============================================================================
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +
+                    ldy #$00                                    ; display hint
+                    jmp prep_and_display_hint
 
-m13B0:              jmp m11ED
++                   cmp #$cc                                    ; hit the power outlet?
+                    beq +                                       ; yes -> +
+                    cmp #$cf                                    ; hit the power outlet?
+                    beq +                                       ; yes -> +
+                    jmp check_next_char_under_player            ; no, continue
++                   lda #$df                                    
+                    cmp items + $74                             ; light picked up?
+                    bne +                                       ; no -> death
+                    cmp items + $c8                             ; yes, lightbulb picked up?
+                    bne +                                       ; no -> death
+                    sta items + $ac                             ; yes, pick up power outlet
+                    jmp check_death
 
-; ==============================================================================
-
-m13B3:
-                    cmp #$cc
-                    beq +                                   ; beq $13bb
-                    cmp #$cf
-                    bne m13B0
-+                   lda #$df
-                    cmp items + $74                        ; cmp $36fe
-                    bne m13CD           ; bne $13cd
-                    cmp items + $c8                        ; cmp $3752
-                    bne m13CD           ; bne $13cd
-                    sta items + $ac                        ; sta $3736
-m13CA:              jmp check_death
-
-; ==============================================================================
-; death by 240 volts
-
-m13CD:
-                    ldy #$06
-                    jmp death    ; 06 240 Volts! You got an electrical shock!
++                   ldy #$06
+                    jmp death                                   ; 06 240 Volts! You got an electrical shock!
 
 
 
@@ -861,14 +917,13 @@ m13CD:
 ; ==============================================================================
 
 room_11:
-                    cpy #11
-                    bne room_12                     ; if not this room, go to next
 
-                    cmp #$d1
-                    bne m13B0
-                    lda #$df                ; player takes the hammer
-                    sta items + $bb                         ; hammer
-                    bne m13CA                               ; bne $13ca
+                    cmp #$d1                                    ; picking up the hammer?
+                    beq +                                       ; jep
+                    jmp check_next_char_under_player            ; no, continue
++                   lda #$df                                    ; player takes the hammer
+                    sta items + $bb                             ; hammer
+                    jmp check_death
 
 
 
@@ -888,23 +943,20 @@ room_11:
 ; ==============================================================================
 
 room_12:
-                    cpy #12
-                    bne room_13                     ; if not this room, go to next
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m13EE
-                    ldy #$00
-                    jmp m1031
-; ==============================================================================
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +                                       ; no
+                    ldy #$00                                    
+                    jmp prep_and_display_hint                   ; display hint
 
-m13EE:
-                    cmp #$d2
-                    beq +                                   ; beq $13f6
-                    cmp #$d5
-                    bne m13B0
-+                   lda #$df
-                    sta items + $c8                        ; sta $3752
-                    bne m13CA                               ; bne $13ca
++                   cmp #$d2                                    ; light bulb hit?
+                    beq +                                       ; yes
+                    cmp #$d5                                    ; light bulb hit?
+                    beq +                                       ; yes
+                    jmp check_next_char_under_player            ; no, continue
++                   lda #$df                                    ; pick up light bulb
+                    sta items + $c8
+                    jmp check_death
 
 
 
@@ -923,31 +975,26 @@ m13EE:
 ;
 ; ==============================================================================
 
-room_13:            cpy #13
-                    bne room_14                     ; if not this room, go to next
+room_13:           
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m140A
-                    ldy #$00
-                    jmp m1031
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +
+                    ldy #$00                                    ; message 0 to display
+                    jmp prep_and_display_hint                   ; display hint
 
-; ==============================================================================
++                   cmp #$d6                                    ; argh!!! A nail!!! Who put these here!!!
+                    beq +                                       ; OUCH!! -> +
+                    jmp check_next_char_under_player            ; not stepped into a nail... yet.
++                   lda items + $84                             ; are the boots taken?
+                    cmp #$df                                
+                    beq +                                       ; yeah I'm cool these boots are made for nailin'. 
+                    ldy #$07                                    ; death by a thousand nails.
+                    jmp death                                   ; 07 You stepped on a nail!
 
-m140A:
-                    cmp #$d6
-                    bne m13B0
-                    lda items + $84                        ; lda $370e
-                    cmp #$df
-                    beq m141A                               ; beq $141a
-                    ldy #$07
-                    jmp death    ; 07 You stepped on a nail!
-
-; ==============================================================================
-
-m141A:
-                    lda #$e2
-                    sta items + $d5                        ; sta $375f
-                    bne m13CA                               ; bne $13ca
++
+                    lda #$e2                                    ; this is also a nail. 
+                    sta items + $d5                             ; it replaces the deadly nails with boot-compatible ones
+                    jmp check_death
 
 
 
@@ -966,13 +1013,13 @@ m141A:
 ;
 ; ==============================================================================
 
-room_14:            cpy #14
-                    bne room_15                     ; if not this room, go to next
+room_14:
 
-                    cmp #$d7
-                    bne m13B0
-                    ldy #$08
-                    jmp death    ; 08 A foot trap stopped you!
+                    cmp #$d7                                    ; foot trap char
+                    beq +                                       ; stepped into it?
+                    jmp check_next_char_under_player            ; not... yet...
++                   ldy #$08                                    ; go die
+                    jmp death                                   ; 08 A foot trap stopped you!
 
 
 
@@ -992,18 +1039,13 @@ room_14:            cpy #14
 ; ==============================================================================
 
 room_15:
-                    cpy #15
-                    bne room_16                     ; if not this room, go to next
 
-                    cmp #$27                        ; question mark (I don't know why 27)
-                    bcs m143B
-                    ldy #$00
-                    jmp m1031
+                    cmp #$27                                    ; question mark (I don't know why 27)
+                    bcs +
+                    ldy #$00                                    ; display hint
+                    jmp prep_and_display_hint
 
-; ==============================================================================
-
-m143B:
-                    jmp m11ED           ; jmp m13B0 -> target just jumps again, so replacing with target jmp address
++                   jmp check_next_char_under_player            ; jmp m13B0 -> target just jumps again, so replacing with target jmp address
 
 
 
@@ -1024,26 +1066,26 @@ m143B:
 
 room_16:
 
-                    cmp #$f4
-                    bne m144B                               ; bne $144b
-                    ldy #$0a
-m1448:              jmp death    ; 0a You were locked in and starved!
+                    cmp #$f4                                    ; did you hit the wall in the left cell?
+                    bne +                                       ; I did not! -> +
+                    ldy #$0a                                    ; yeah....
+                    jmp death                                   ; 0a You were locked in and starved!
 
-; ==============================================================================
++                   cmp #$d9                                    ; so you must been hitting the other wall in the other cell then, right?
+                    beq +                                       ; not that I know of...
+                    cmp #$db                                    ; are you sure? take a look at this slightly different wall
+                    bne ++                                      ; it doesn't look familiar... -> ++
 
-m144B:
-                    cmp #$d9
-                    beq +                                   ; beq $1453
-                    cmp #$db
-                    bne ++                                  ; bne $1457
-+                   ldy #$09          ; 09 This room is doomed by the wizard Manilo!
-                    bne m1448                               ; bne $1448
-++                  cmp #$b8
-                    beq +                                   ; beq $145f
-                    cmp #$bb
-                    bne m143B                               ; bne $143b
-+                   ldy #$03
-                    jmp m1031           ; jmp $1031
++                   ldy #$09                                    ; 09 This room is doomed by the wizard Manilo!
+                    jmp death
+
+++                  cmp #$b9                                    ; then you've hit the bottle! that must be it! (was $b8 which was imnpossible to hit)
+                    beq +                                       ; yes! -> +
+                    cmp #$bb                                    ; here's another part of that bottle for reference
+                    beq +                                       ; yes! -> +
+                    jmp check_next_char_under_player            ; no, continue
++                   ldy #$03                                    ; display code enter screen
+                    jmp prep_and_display_hint
 
 
 
@@ -1063,13 +1105,12 @@ m144B:
 ; ==============================================================================
 
 room_17:
-                    cpy #17
-                    bne room_18                     ; if not this room, go to next
 
-                    cmp #$dd
-                    bne m143B                               ; bne $143b
-                    lda #$df
-                    sta items + $1a7                        ; sta $3831
+                    cmp #$dd                                    ; The AWESOMEZ MAGICAL SWORD!! YOU FOUND IT!! IT.... KILLS PEOPLE!!
+                    beq +                                       ; yup
+                    jmp check_next_char_under_player            ; nah not yet.
++                   lda #$df                                    ; pick up sword
+                    sta items + $1a7                            ; store in items list
                     jmp check_death
 
 
@@ -1090,95 +1131,149 @@ room_17:
 ; ==============================================================================
 
 room_18:
-                    cmp #$81
-                    bcs +                   ; bcs $147b
+                    cmp #$81                                    ; did you hit any char $81 or higher? (chest and a lot of stuff not in the room)
+                    bcs +                   
                     jmp check_death
-+
-                    lda key_in_bottle_storage           ; lda $12a4
-                    bne +               ; bne $1b97
-                    jmp m3B4C           ; jmp $3b4c
-+                   jsr set_charset_and_screen_for_title           ; jsr $3a9d
-                    jmp print_endscreen ; jmp $1b44
+
++                   lda key_in_bottle_storage                   ; well my friend, you sure brought that key from the fucking 3rd room, right?
+                    bne +                                       ; yes I actually did (flexes arms)
+                    jmp main_loop                               ; nope
++                   jsr set_charset_and_screen                  ; You did it then! Let's roll the credits and get outta here
+                    jmp print_endscreen                         ; (drops mic)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ; ==============================================================================
+; 
+; EVERYTHING ANIMATION RELATED STARTS HERE
+; ANIMATIONS FOR
+; LASER, BORIS, BELEGRO, STONE, MONSTER
+; ==============================================================================
 
-m147E:              ldy current_room + 1
-                    cpy #$0e
-                    bne m148A               ; bne $148a
-                    ldy #$20
+room_animations:              
+                    ldy current_room + 1                    ; load room number
+                    cpy #14                                 ; is it #14?
+                    bne room_15_prep                        ; no -> m148A
+                    ldy #$20                                ; yes, wait a bit
                     jmp wait
 
 ; ==============================================================================
 
-m148A:              cpy #$0f
-                    bne m14C8               ; bne $14c8
+room_15_prep:              
+                    cpy #15                                 ; room 15?
+                    bne room_17_prep                        ; no -> m14C8
                     lda #$00
                     sta zpA7
                     ldy #$0c
 m1494:              ldx #$06
-                    jsr m3608
+                    jsr draw_player
                     lda #$eb
                     sta zpA8
                     lda #$39
                     sta zp0A
-                    ldx m1494 + 1           ; ldx $1495
+                    ldx m1494 + 1           
 m14A4:              lda #$01
-                    bne m14B2               ; bne $14b2
+                    bne m14B2               
                     cpx #$06
-                    bne +                   ; bne $14ae
+                    bne +                   
                     lda #$01
 +                   dex
-                    jmp +                   ; jmp $14b9
+                    jmp +                   
 
-; ==============================================================================
-
-m14B2:              cpx #$0b
-                    bne ++                              ; bne $14b8
+m14B2:              
+                    cpx #$0b
+                    bne ++
                     lda #$00
 ++                  inx
-+                   stx m1494 + 1                       ; stx $1495
-                    sta m14A4 + 1                       ; sta $14a5
++                   stx m1494 + 1
+                    sta m14A4 + 1
                     lda #$01
                     sta zpA7
                     ldy #$0c
-                    jmp m3608
+                    jmp draw_player
 
 ; ==============================================================================
 
-m14C8:              cpy #$11
-                    bne +                               ; bne $14d3
-m14CC:              lda #$01
-                    beq ++                              ; beq $14e4
-                    jmp m15C1                           ; jmp $15c1
-+                   lda #$0f
-                    sta m3624 + 1                       ; sta $3625
-                    sta m3626 + 1                       ; sta $3627
-                    cpy #$0a
-                    bne m1523                           ; bne $1523
-                    dec m2FBF                           ; dec $2fbf
-                    beq m14E5                           ; beq $14e5
+room_17_prep:              
+                    cpy #17                             ; room number 17?
+                    bne +                               ; no -> +
+m14CC:              lda #$01                            ; selfmod
+                    beq ++                              
+                    jmp m15C1                           
++                   lda #$0f                            ; a = $0f
+                    sta m3624 + 1                       ; selfmod
+                    sta m3626 + 1                       ; selfmod
+
+
+                    cpy #10                             ; room number 10?
+                    bne check_if_room_09                ; no -> m1523
+                    dec speed_byte                      ; yes, reduce speed
+                    beq laser_beam_animation            ; if positive -> laser_beam_animation            
 ++                  rts
 
 ; ==============================================================================
-;
-;
+; ROOM 10
+; LASER BEAM ANIMATION
 ; ==============================================================================
 
-m14E5:              ldy #$08
-                    sty m2FBF                           ; sty $2fbf
+laser_beam_animation:
+
+                    ldy #$08                            ; speed of the laser flashing
+                    sty speed_byte                      ; store     
                     lda #$09
-                    sta zp05
-                    lda #$0d
+                    sta zp05                            ; affects the colram of the laser
+                    lda #$0d                            ; but not understood yet
                     sta zp03
-                    lda #$7b
+                    lda #$7b                            ; position of the laser
                     sta zp02
                     sta zp04
-                    lda #$df
-                    cmp m1506 + 1                       ; cmp $1507
-                    bne +                               ; bne $1501
-                    lda #$d8
-+                   sta m1506 + 1                       ; sta $1507
-                    ldx #$06
+                    lda #$df                            ; laser beam off
+                    cmp m1506 + 1                       
+                    bne +                               
+                    lda #$d8                            ; laser beam
++                   sta m1506 + 1                       
+                    ldx #$06                            ; 6 laser beam characters
 m1506:              lda #$df
                     ldy #$00
                     sta (zp02),y
@@ -1186,27 +1281,53 @@ m1506:              lda #$df
                     sta (zp04),y
                     lda zp02
                     clc
-                    adc #$28
+                    adc #$28                            ; draws the laser beam
                     sta zp02
                     sta zp04
-                    bcc +                               ; bcc $151f
+                    bcc +                               
                     inc zp03
                     inc zp05
 +                   dex
-                    bne m1506                           ; bne $1506
+                    bne m1506                           
 -                   rts
 
 ; ==============================================================================
+
+check_if_room_09:              
+                    cpy #09                         ; room number 09?
+                    beq +                           ; yes -> +
+                    rts                             ; no
++                   jmp room_09_counter             ; room number is 09, jump
+
+
+; ==============================================================================
 ;
-;
+; I moved this out of the main loop and call it once when changing rooms
+; TODO: call it only when room 4 is entered
 ; ==============================================================================
 
-m1523:              cpy #$09
-                    bne -                           ; bne $1522
-                    jmp m15AD                       ; jmp $15ad
+room_04_prep_door:
+                    
+                    lda current_room + 1                            ; get current room
+                    cmp #04                                         ; is it 4? (coffins)
+                    bne ++                                          ; nope
+                    lda #$03                                        ; OMG YES! How did you know?? (and get door char)
+                    ldy m394A + 1                                   ; 
+                    beq +
+                    lda #$f6                                        ; put fake door char in place (making it closed)
++                   sta SCREENRAM + $f9 
+++                  rts
 
 ; ==============================================================================
-m152B:
+; ROOM 09
+; BORIS THE SPIDER ANIMATION
+; ==============================================================================
+
+boris_the_spider_animation:
+
+                    inc room_09_counter + 1                           
+                    lda #$08                                ; affects the color ram position for boris the spider
+                    sta zp05
                     lda #$0c
                     sta zp03
                     lda #$0f
@@ -1214,18 +1335,18 @@ m152B:
                     sta zp04
 m1535:              ldx #$06
 m1537:              lda #$00
-                    bne +                           ; bne $1544
+                    bne +
                     dex
                     cpx #$02
-                    bne ++                          ; bne $154b
+                    bne ++
                     lda #$01
-                    bne ++                          ; bne $154b
+                    bne ++
 +                   inx
                     cpx #$07
-                    bne ++                          ; bne $154b
+                    bne ++
                     lda #$00
-++                  sta m1537 + 1                   ; sta $1538
-                    stx m1535 + 1                   ; stx $1536
+++                  sta m1537 + 1
+                    stx m1535 + 1
 -                   ldy #$00
                     lda #$df
                     sta (zp02),y
@@ -1236,9 +1357,9 @@ m1537:              lda #$00
                     lda #$ea
                     sta (zp02),y
                     sta (zp04),y
-                    jsr m159D                       ; jsr $159d
+                    jsr move_boris                       
                     dex
-                    bne -                           ; bne $1551
+                    bne -
                     lda #$e4
                     sta zpA8
                     ldx #$02
@@ -1250,198 +1371,266 @@ m1537:              lda #$00
                     inc zpA8
                     iny
                     cpy #$03
-                    bne -                           ; bne $1570
-                    jsr m159D                       ; jsr $159d
+                    bne -
+                    jsr move_boris                       
                     dex
-                    bne --                          ; bne $156e
+                    bne --
                     ldy #$00
                     lda #$e7
                     sta zpA8
 -                   lda (zp02),y
                     cmp zpA8
-                    bne +                           ; bne $1595
+                    bne +
                     lda #$df
                     sta (zp02),y
 +                   inc zpA8
                     iny
                     cpy #$03
-                    bne -                           ; bne $158b
+                    bne -
                     rts
 
 ; ==============================================================================
-;
-;
-; ==============================================================================
 
-m159D:              lda zp02
+move_boris:
+                    lda zp02
                     clc
                     adc #$28
                     sta zp02
                     sta zp04
-                    bcc +                                   ; bcc $15ac
+                    bcc +                                   
                     inc zp03
                     inc zp05
 +                   rts
 
 ; ==============================================================================
 ;
-;
 ; ==============================================================================
 
-m15AD:              ldx #$01
-                    cpx #$01
-                    bne m15B7                               ; bne $15b7
-                    dec m15AD + 1                           ; dec $15ae
+room_09_counter:
+                    ldx #$01                                ; x = 1 (selfmod)
+                    cpx #$01                                ; is x = 1?
+                    beq +                                   ; yes -> +
+                    jmp boris_the_spider_animation          ; no, jump boris animation
++                   dec room_09_counter + 1                 ; decrease initial x
                     rts
 
 ; ==============================================================================
-;
-;
+
+m15C1:              lda #$00                                ; a = 0 (selfmod)
+                    cmp #$00                                ; is a = 0?
+                    bne +                                   ; not 0 -> 15CB
+                    inc m15C1 + 1                           ; inc m15C1
+                    rts
+             
++                   dec m15C1 + 1                           ; dec $15c2
+                    jmp belegro_animation
+
+; ==============================================================================
+; ROOM 17
+; STONE ANIMATION
 ; ==============================================================================
 
-m15B7:              inc m15AD + 1                           ; inc $15ae
-                    lda #$08
-                    sta zp05
-                    jmp m152B           ; jmp $152b
+animation_entrypoint:
+
+                    lda items + $ac                         ; $cc (power outlet)
+                    cmp #$df                                ; taken?
+                    bne +                                   ; no -> +
+                    lda #$59                                ; yes, $59 (part of water, wtf), likely color
+                    sta items + $12c                        ; originally $0
+
++                   lda current_room + 1                    ; load room number
+                    cmp #$11                                ; is it room #17? (Belegro)
+                    bne m162A                               ; no -> m162A
+                    lda m14CC + 1                           ; yes, get value from m14CD
+                    bne m15FC                               ; 0? -> m15FC
+                    lda player_pos_y + 1                    ; not 0, get player pos Y
+                    cmp #$06                                ; is it 6?
+                    bne m15FC                               ; no -> m15FC
+                    lda player_pos_x + 1                    ; yes, get player pos X
+                    cmp #$18                                ; is player x position $18?
+                    bne m15FC                               ; no -> m15FC
+                    lda #$00                                ; yes, load 0
+                    sta m15FC + 1                           ; store 0 in m15FC+1
+m15FC:              lda #$01                                ; load A (0 if player xy = $6/$18)
+                    bne +                                   ; is it 0? -> +
+                    ldy #$06                                ; y = $6
+m1602:              ldx #$1e                                ; x = $1e
+                    lda #$00                                ; a = $0
+                    sta zpA7                                ; zpA7 = 0
+                    jsr draw_player                         ; TODO
+                    ldx m1602 + 1                           ; get x again (was destroyed by previous JSR)
+                    cpx #$03                                ; is X = $3?
+                    beq ++                                  ; yes -> ++
+                    dex                                     ; x = x -1
+++                  stx m1602 + 1                           ; store x in m1602+1
++                   lda #$78                                ; a = $78
+                    sta zpA8                                ; zpA8 = $78
+                    lda #$49                                ; a = $49
+                    sta zp0A                                ; zp0A = $49
+                    ldy #$06                                ; y = $06
+                    lda #$01                                ; a = $01
+                    sta zpA7                                ; zpA7 = $01
+                    ldx m1602 + 1                           ; get stored x value (should still be the same?)
+                    jsr draw_player                         ; TODO
+m162A:              jmp room_animations                     ; all done, so jump to the beginning 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ; ==============================================================================
 
-m15C1:              lda #$00
-                    cmp #$00
-                    bne m15CB                               ; bne $15cb
-                    inc m15C1 + 1                           ; inc $15c2
+prep_player_pos:
+
+                    ldx #$09
+-                   lda TAPE_BUFFER + $8,x                  ; cassette tape buffer
+                    sta TAPE_BUFFER + $18,x                 ; the tape buffer stores the chars UNDER the player (9 in total)
+                    dex
+                    bne -                                   ; so this seems to create a copy of the area under the player
+
+                    lda #$02                                ; a = 2
+                    sta zpA7
+                    ldx player_pos_x + 1                    ; x = player x
+                    ldy player_pos_y + 1                    ; y = player y
+                    jsr draw_player                         ; draw player
                     rts
 
-; ==============================================================================
-;
-;
-; ==============================================================================
 
-m15CB:              dec m15C1 + 1                           ; dec $15c2
-                    jmp m3620
 
-; ==============================================================================
-;
-;
-; ==============================================================================
 
-m15D1:              lda items + $ac                        ; lda $3736
-                    cmp #$df
-                    bne +                                   ; bne $15dd
-                    lda #$59
-                    sta items + $12c                        ; sta $37b6
-+                   lda current_room + 1
-                    cmp #$11
-                    bne m162A                               ; bne $162a
-                    lda m14CC + 1                           ; lda $14cd
-                    bne m15FC                               ; bne $15fc
-                    lda player_pos_y + 1
-                    cmp #$06
-                    bne m15FC                               ; bne $15fc
-                    lda player_pos_x + 1
-                    cmp #$18
-                    bne m15FC                               ; bne $15fc
-                    lda #$00
-                    sta m15FC + 1                           ; sta $15fd
-m15FC:              lda #$01
-                    bne +                                   ; bne $1616
-                    ldy #$06
-m1602:              ldx #$1e
-                    lda #$00
-                    sta zpA7
-                    jsr m3608
-                    ldx m1602 + 1                   ; ldx $1603
-                    cpx #$03
-                    beq ++                          ; beq $1613
-                    dex
-++                  stx m1602 + 1                   ; stx $1603
-+                   lda #$78
-                    sta zpA8
-                    lda #$49
-                    sta zp0A
-                    ldy #$06
-                    lda #$01
-                    sta zpA7
-                    ldx m1602 + 1                   ; ldx $1603
-                    jsr m3608
-m162A:              jmp m147E                   ; jmp $147e
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ; ==============================================================================
+; OBJECT ANIMATION COLLISION ROUTINE
+; CHECKS FOR INTERACTION BY ANIMATION (NOT BY PLAYER MOVEMENT)
+; LASER, BELEGRO, MOVING STONE, BORIS, THE MONSTER
+; ==============================================================================
 
-m162d:
-                    ldx #$09
--                   lda TAPE_BUFFER + $8,x         ; lda $033b,x              ; cassette tape buffer
-                    sta TAPE_BUFFER + $18,x         ; sta $034b,x              ; cassette tape buffer
-                    dex
-                    bne -                       ; bne $162f
-                    lda #$02
-                    sta zpA7
-                    ldx player_pos_x + 1
-                    ldy player_pos_y + 1
-                    jsr m3608
-                    ldx #$09
-m1647:              lda TAPE_BUFFER + $8,x      ; lda $033b,x              ; cassette tape buffer
-                    cmp #$d8
-                    bne +                   ; bne $1653
+object_collision:
+
+                    ldx #$09                                ; x = 9
+
+check_loop:              
+
+                    lda TAPE_BUFFER + $8,x                  ; the tape buffer stores the chars UNDER the player (9 in total)
+                    cmp #$d8                                ; check for laser beam
+                    bne +                  
+
 m164E:              ldy #$05
-m1650:              jmp death               ; 05 Didn't you see the laser beam?
+jmp_death:          jmp death                               ; 05 Didn't you see the laser beam?
 
-; ==============================================================================
-
-+                   ldy current_room + 1
-                    cpy #$11
-                    bne +                       ; bne $166a
-                    cmp #$78
-                    beq ++                      ; beq $1666
-                    cmp #$7b
-                    beq ++                      ; beq $1666
-                    cmp #$7e
-                    bne +                       ; bne $166a
-++                  ldy #$0b                      ; 0b You were hit by a big rock and died!
-                    bne m1650                   ; bne $1650
-+                   cmp #$9c
-                    bcc m1676                   ; bcc $1676
++                   ldy current_room + 1                    ; get room number
+                    cpy #17                                 ; is it $11 = #17 (Belegro)?
+                    bne +                                   ; nope -> +
+                    cmp #$78                                ; hit by the stone?
+                    beq ++                                  ; yep -> ++
+                    cmp #$7b                                ; or another part of the stone?
+                    beq ++                                  ; yes -> ++
+                    cmp #$7e                                ; or another part of the stone?
+                    bne +                                   ; nah, -> +
+++                  ldy #$0b                                ; 0b You were hit by a big rock and died!
+                    bne jmp_death
++                   cmp #$9c                                ; so Belegro hit you?
+                    bcc m1676
                     cmp #$a5
-                    bcs m1676                   ; bcs $1676
-                    jmp m16A7                 ; jmp $16a7
+                    bcs m1676
+                    jmp m16A7
 
-; ==============================================================================
-
-m1676:              cmp #$e4
-                    bcc +                           ; bcc $168a
+m1676:              cmp #$e4                                ; hit by Boris the spider?
+                    bcc +                           
                     cmp #$eb
-                    bcs ++                          ; bcs $1682
--                   ldy #$04                        ; 04 Boris the spider got you and killed you
-                    bne m1650                       ; bne $1650
+                    bcs ++                          
+-                   ldy #$04                                ; 04 Boris the spider got you and killed you
+                    bne jmp_death                       
 ++                  cmp #$f4
-                    bcs +                           ; bcs $168a
-                    ldy #$0e                      ; 0e The monster grabbed you you. You are dead!
-                    bne m1650                       ; bne $1650
+                    bcs +                           
+                    ldy #$0e                                ; 0e The monster grabbed you you. You are dead!
+                    bne jmp_death                       
 +                   dex
-                    bne m1647                       ; bne $1647
+                    bne check_loop   
+
+
+
                     ldx #$09
 --                  lda $034b,x
-                    sta TAPE_BUFFER + $8,x          ; sta $033b,x
+                    sta TAPE_BUFFER + $8,x                  ; the tape buffer stores the chars UNDER the player (9 in total)
                     cmp #$d8
-                    beq m164E                       ; beq $164e
+                    beq m164E                       
                     cmp #$e4
-                    bcc +                           ; bcc $16a1
+                    bcc +                           
                     cmp #$ea
-                    bcc -                           ; bcc $167e
+                    bcc -                           
 +                   dex
-                    bne --                          ; bne $168f
-                    jmp m11E0                     ; jmp $11e0
+                    bne --                          
+                    jmp m11E0                     
 
 m16A7:
-                    ldy items + $1a7                ; ldy $3831
+                    ldy items + $1a7                        ; do you have the sword?
                     cpy #$df
-                    beq +                           ; beq $16b2
-                    ldy #$0c                      ; 0c Belegro killed you!
-                    bne m1650                       ; bne $1650
+                    beq +                                   ; yes -> +                        
+                    ldy #$0c                                ; 0c Belegro killed you!
+                    bne jmp_death                       
 +                   ldy #$00
-                    sty m14CC + 1                   ; sty $14cd
-                    jmp m1676                       ; jmp $1675
+                    sty m14CC + 1                   
+                    jmp m1676                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1547,10 +1736,10 @@ m1747:
 
 m174F:
                     cpx #$0c
-                    bne +           ; bne $1755
+                    bne +
                     lda #$49
 +                   cpx #$0d
-                    bne +           ; bne $175b
+                    bne +
                     lda #$45
 +                   rts
 
@@ -1572,17 +1761,17 @@ screen_win_src_end:
 ; ==============================================================================
 
 print_endscreen:
-                    lda #>SCREENRAM       ; lda #$0c
+                    lda #>SCREENRAM
                     sta zp03
-                    lda #>COLRAM        ; lda #$08
+                    lda #>COLRAM
                     sta zp05
-                    lda #<SCREENRAM       ; lda #$00
+                    lda #<SCREENRAM
                     sta zp02
                     sta zp04
                     ldx #$04
-                    lda #>screen_win_src;lda #$17
+                    lda #>screen_win_src
                     sta zpA8
-                    lda #<screen_win_src;lda #$5c
+                    lda #<screen_win_src
                     sta zpA7
                     ldy #$00
 -                   lda (zpA7),y        ; copy from $175c + y
@@ -1590,12 +1779,12 @@ print_endscreen:
                     lda #$00           ; color = BLACK
                     sta (zp04),y        ; to COLRAM
                     iny
-                    bne -               ; bne $1b5e
+                    bne -
                     inc zp03
                     inc zp05
                     inc zpA8
                     dex
-                    bne -               ; bne $1b5e
+                    bne -
                     lda #$ff           ; PISSGELB
                     sta BG_COLOR          ; background
                     sta BORDER_COLOR          ; und border
@@ -1603,10 +1792,10 @@ print_endscreen:
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
                     and #$80           ; WAITKEY?
-                    bne -               ; bne $1b7a
-                    jsr print_title     ; jsr $310d
-                    jsr print_title     ; jsr $310d
-                    jmp init            ; jmp $3ab3
+                    bne -
+                    jsr print_title
+                    jsr print_title
+                    jmp init
 
 
 ; ==============================================================================
@@ -1672,18 +1861,18 @@ display_intro_text:
                     clc
                     adc #$28
                     sta zpA7
-                    bcc +           ; bcc $1ce7
+                    bcc +
                     inc zpA8
 +                   lda zp02
                     clc
                     adc #$50
                     sta zp02
                     sta zp04
-                    bcc +           ; bcc $1cf6
+                    bcc +
                     inc zp03
                     inc zp05
-+                   dex                ; 1cf6
-                    bne --          ; bne $1ccd
++                   dex
+                    bne --
                     lda #$00
                     sta BG_COLOR
                     rts
@@ -1695,12 +1884,41 @@ display_intro_text:
 ; ==============================================================================
 
 start_intro:        sta KEYBOARD_LATCH
-                    jsr PRINT_KERNAL           ; jsr $c56b
-                    jsr display_intro_text           ; jsr $1cb5
-                    jsr check_shift_key ; jsr $1ef9
+                    jsr PRINT_KERNAL
+                    jsr display_intro_text
+                    jsr check_shift_key
                     lda #$ba
-                    sta music_volume+1         ; sta $1ed9    ; sound volume
+                    sta music_volume+1                          ; sound volume
                     rts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1834,6 +2052,31 @@ music_volume:       and #$bf
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ; ==============================================================================
 ; irq init
 ; ==============================================================================
@@ -1851,7 +2094,7 @@ irq_init0:          sei
                     sta music_volume+1         ; sta $1ed9    ; sound volume
                     cli
 
-                    jmp set_charset_and_screen_for_title           ; jmp $3a9d
+                    jmp set_charset_and_screen
 
 ; ==============================================================================
 ; intro text
@@ -1864,7 +2107,7 @@ check_shift_key:
                     sta KEYBOARD_LATCH
                     lda KEYBOARD_LATCH
                     and #$80            ; checks for SHIFT key, same as joy 2 fire?
-                    bne -               ; bne $1ef9
+                    bne -
                     rts
 
 ; ==============================================================================
@@ -1880,7 +2123,7 @@ irq0:
                     !if SILENT_MODE = 1 {
                         jsr fake
                     } else {
-                        jsr music_play  ; jsr $1ebc
+                        jsr music_play
                     }
                     pla
                     tay
@@ -1890,27 +2133,29 @@ irq0:
                     rti
 
 ; ==============================================================================
-; gets called immediately after start of game
-; looks like some sound/irq initialization?
-; i think the branching part does fade the sound
+; checks if the music volume is at the desired level
+; and increases it if not
+; if volume is high enough, it initializes the music irq routine
+; is called right at the start of the game, but also when a game ended
+; and is about to show the title screen again (increasing the volume)
 ; ==============================================================================
 
-m1F15:                                  ; call from init
-                    lda music_volume+1         ; lda $1ed9           ; sound volume
---                  cmp #$bf           ; is true on init
-                    bne +               ; bne $1f1f
-                    jmp irq_init0       ; jmp $1ee0
+init_music:                                  
+                    lda music_volume+1                              ; sound volume
+--                  cmp #$bf                                        ; is true on init
+                    bne +
+                    jmp irq_init0
 +                   ldx #$04
--                   stx zpA8            ; buffer serial input byte ?
+-                   stx zpA8                                        ; buffer serial input byte ?
                     ldy #$ff
                     jsr wait
                     ldx zpA8
                     dex
-                    bne -               ; bne $1f21 / some weird wait loop ?
+                    bne -                                               
                     clc
-                    adc #$01           ; add 1 (#$C0 on init)
-                    sta music_volume+1         ; sta $1ed9             ; sound volume
-                    jmp --              ; jmp $1f18
+                    adc #$01                                        ; increases volume again before returning to title screen
+                    sta music_volume+1                              ; sound volume
+                    jmp --
 
 
 
@@ -1979,59 +2224,28 @@ level_data:
                     !source "includes/levels.asm"
 level_data_end:
 
-!if 1=2{
-!byte $00, $00, $00, $00, $00, $00, $00
-}
-
 
 ;$2fbf
-m2FBF:
+speed_byte:
 !byte $01
 
 
 
-; ==============================================================================
-;
-;
-; ==============================================================================
 
-m2fCB:              lda current_room + 1
-                    cmp #$04
-                    bne ++                   ; bne $2fca
-                    lda #$03
-                    ldy m394A + 1           ; ldy $394b
-                    beq +
-                    lda #$f6
-+                   sta SCREENRAM + $f9     ; sta $0cf9
-++                  rts
 
 ; ==============================================================================
 ;
 ;
 ; ==============================================================================
+        
 
-m2FDF:              ldy items + $96     ; ldy $3720
-                    cpy #$df
-                    bne +               ; bne $2fec
-                    sta m3993 + 1       ; sta $3994
-                    jmp m12F4           ; jmp $12f4
-+                   jmp m3B4C           ; jmp $3b4c
+rasterpoll_and_other_stuff:
 
-m2FEF:
                     jsr poll_raster
-                    jsr check_door ; jsr $39f4
-                    jmp m15D1           ; jmp $15d1
+                    jsr check_door 
+                    jmp animation_entrypoint          
 
 
-
-
-!if 1=2{
-; $2ffd
-unknown: ; haven't found a call for this code area yet. might be waste
-!byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-!byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
-!byte $00
-}
 
 ; ==============================================================================
 ;
@@ -2059,7 +2273,7 @@ tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
 ; displays a room based on tiles
 ; ==============================================================================
 
-display_room:
+display_room:       
                     jsr draw_border
                     lda #$00
                     sta zp02
@@ -2134,6 +2348,7 @@ m30B8:              sbc #$75            ; -$75 (next Tile in row) or -$24 (next 
 +                   ldy zpA7
                     jmp m3066
                     rts                 ; will this ever be used?
+
 display_door:       lda #>SCREENRAM
                     sta zp03
                     lda #>COLRAM
@@ -2168,11 +2383,11 @@ display_door:       lda #>SCREENRAM
 
 ; ==============================================================================
 
-print_title:        lda #>SCREENRAM       ; lda #$0c
+print_title:        lda #>SCREENRAM
                     sta zp03
-                    lda #>COLRAM        ; lda #$08
+                    lda #>COLRAM
                     sta zp05
-                    lda #<SCREENRAM       ; lda #$00
+                    lda #<SCREENRAM
                     sta zp02
                     sta zp04
                     lda #>screen_start_src
@@ -2186,12 +2401,12 @@ print_title:        lda #>SCREENRAM       ; lda #$0c
                     lda #$00           ; BLACK
                     sta (zp04),y        ; nach COLRAM
                     iny
-                    bne -               ; bne $3127
+                    bne -
                     inc zp03
                     inc zp05
                     inc zpA8
                     dex
-                    bne --              ; bne $3125
+                    bne --
                     rts
 
 ; ==============================================================================
@@ -2217,6 +2432,7 @@ screen_start_src_end:
 
 
 draw_player:
+                    stx m3548 + 1                       ; store x pos of player
                     lda #>COLRAM                        ; store colram high in zp05
                     sta zp05
                     lda #>SCREENRAM                     ; store screenram high in zp03
@@ -2259,7 +2475,7 @@ m3548:              adc #$16                            ; add $15 (#21) why? -> 
 +                   lda (zp02),y
                     stx zp10
                     ldx zp09
-                    sta TAPE_BUFFER + $9,x
+                    sta TAPE_BUFFER + $9,x              ; the tape buffer stores the chars UNDER the player (9 in total)
                     inc zp09
                     ldx zp10
 ++                  inc zpA8
@@ -2292,39 +2508,38 @@ check_joystick:
 player_pos_y:       ldy #$09
 player_pos_x:       ldx #$15
                     lsr
-                    bcs +                   ; bcs $35af
+                    bcs +
                     cpy #$00
-                    beq +                   ; beq $35af
+                    beq +
                     dey                                           ; JOYSTICK UP
 +                   lsr
-                    bcs +                   ; bcs $35b7
+                    bcs +
                     cpy #$15
-                    bcs +                   ; bcs $35b7
+                    bcs +
                     iny                                           ; JOYSTICK DOWN
 +                   lsr
-                    bcs +                   ; bcs $35bf
+                    bcs +
                     cpx #$00
-                    beq +                   ; beq $35bf
+                    beq +
                     dex                                           ; JOYSTICK LEFT
 +                   lsr
-                    bcs +                   ; bcs $35c7
+                    bcs +
                     cpx #$24
-                    bcs +                   ; bcs $35c7
+                    bcs +
                     inx                                           ; JOYSTICK RIGHT
-+                   sty m35E7 + 1           ; sty $35e8
-                    stx m35EC + 1           ; stx $35ed
-                    stx m3548 + 1           ; stx $3549
++                   sty m35E7 + 1
+                    stx m35EC + 1
                     lda #$02
                     sta zpA7
-                    jsr draw_player           ; jsr $3534
+                    jsr draw_player
                     ldx #$09
--                   lda TAPE_BUFFER + $8,x      ; lda $033b,x
+-                   lda TAPE_BUFFER + $8,x
                     cmp #$df
-                    beq +                   ; beq $35e4
+                    beq +
                     cmp #$e2
-                    bne ++                  ; bne $35f1
+                    bne ++
 +                   dex
-                    bne -                   ; bne $35d9
+                    bne -
 m35E7:              lda #$0a
                     sta player_pos_y + 1
 m35EC:              lda #$15
@@ -2339,8 +2554,8 @@ m35EC:              lda #$15
                     sta zp0A
 get_player_pos:     ldy player_pos_y + 1
                     ldx player_pos_x + 1
-m3608:              stx m3548 + 1           ; stx $3549
-                    jmp draw_player           ; jmp $3534
+              
+                    jmp draw_player
 
 ; ==============================================================================
 ;
@@ -2360,16 +2575,19 @@ poll_raster:
                     cli
                     rts
 
+
 ; ==============================================================================
-;
-;
+; ROOM 16
+; BELEGRO ANIMATION
 ; ==============================================================================
-m3620:
+
+belegro_animation:
+
                     lda #$00
                     sta zpA7
 m3624:              ldx #$0f
 m3626:              ldy #$0f
-                    jsr m3608
+                    jsr draw_player
                     ldx m3624 + 1
                     ldy m3626 + 1
                     cpx player_pos_x + 1
@@ -2387,7 +2605,6 @@ m3626:              ldy #$0f
                     beq +
                     dey
 +                   stx m3668 + 1
-                    stx m3548 + 1
                     sty m366D + 1
                     lda #$02
                     sta zpA7
@@ -2402,13 +2619,12 @@ m3668:              ldx #$10
                     stx m3624 + 1
 m366D:              ldy #$0e
                     sty m3626 + 1
-+                   lda #$9c
++                   lda #$9c                                ; belegro chars
                     sta zpA8
                     lda #$3e
                     sta zp0A
                     ldy m3626 + 1
-                    ldx m3624 + 1
-                    stx m3548 + 1
+                    ldx m3624 + 1                    
                     lda #$01
                     sta zpA7
                     jmp draw_player
@@ -2515,39 +2731,42 @@ m38D7:              clc
                     rts
 
 ; ==============================================================================
-;
-;
+; ROOM 02
+; DRAWS OR DELETES THE FENCE, AND THEN SOME SHIT
 ; ==============================================================================
 
-m38DF:              lda current_room + 1
-                    cmp #$02
-                    bne m3919           ; bne $3919
-                    lda #$0d
-                    sta zp02
-                    sta zp04
-                    lda #>COLRAM        ; lda #$08
+m38DF:              
+                    lda current_room + 1
+                    cmp #$02                                ; is the current room 02?
+                    bne room_07_make_sacred_column          ; no  -> room 07
+                    lda #$0d                                ; yes room is 02, a = $0d #13
+                    sta zp02                                ; zp02 = $0d
+                    sta zp04                                ; zp04 = $0d
+                    lda #>COLRAM                            ; set colram zp
                     sta zp05
-                    lda #>SCREENRAM       ; lda #$0c
+                    lda #>SCREENRAM                         ; set screenram zp      
                     sta zp03
-                    ldx #$18
--                   lda (zp02),y
-                    cmp #$df
-                    beq m3900               ; beq $3900
-                    cmp #$f5
-                    bne ++              ; bne $3906
-m3900:              lda #$f5
-                    sta (zp02),y
-                    sta (zp04),y
-++                  lda zp02
+                    ldx #$18                                ; x = $18 #24
+-                   lda (zp02),y                            ; y must have been set earlier
+                    cmp #$df                                ; $df = empty space likely
+                    beq delete_fence                        ; yes, empty -> m3900
+                    cmp #$f5                                ; no, but maybe a $f5? (fence!)
+                    bne ++                                  ; nope -> ++
+
+delete_fence:
+                    lda #$f5                                ; A is either $df or $f5 -> selfmod here
+                    sta (zp02),y                            ; store that value
+                    sta (zp04),y                            ; in zp02 and zo04
+++                  lda zp02                                ; and load it in again, jeez
                     clc
-                    adc #$28
+                    adc #$28                                ; smells like we're going to draw a fence
                     sta zp02
                     sta zp04
-                    bcc +               ; bcc $3915
+                    bcc +             
                     inc zp03
                     inc zp05
 +                   dex
-                    bne -               ; bne $38f6
+                    bne -              
                     rts
 
 ; ==============================================================================
@@ -2555,115 +2774,130 @@ m3900:              lda #$f5
 ;
 ; ==============================================================================
 
-m3919:
-                    cmp #$07
-                    bne m392F       ; bne $392f
-                    ldx #$17
--                   lda SCREENRAM + $168,x     ; lda $0d68,x
+room_07_make_sacred_column:
+
+                    cmp #$07                                    ; is the current room 07?
+                    bne room_06_make_deadly_doors               ; no
+                    ldx #$17                                    ; yes
+-                   lda SCREENRAM + $168,x     
                     cmp #$df
-                    bne +                       ; bne $392b
+                    bne +                       
                     lda #$e3
-                    sta SCREENRAM + $168,x     ; sta $0d68,x
+                    sta SCREENRAM + $168,x    
 +                   dex
-                    bne -                       ; bne $391f
+                    bne -                      
                     rts
 
 
 ; ==============================================================================
-;
-;
+; ROOM 06
+; PREPARE THE DEADLY DOORS
 ; ==============================================================================
-m392F:
-                    cmp #$06
-                    bne +
-                    lda #$f6
-                    sta SCREENRAM + $9c        ; sta $0c9c
-                    sta SCREENRAM + $9c        ;sta $0c9c    (yes, it's really 2 times the same sta)
-                    sta SCREENRAM + $27c       ; sta $0e7c
-                    sta SCREENRAM + $36c       ; sta $0f6c
+
+room_06_make_deadly_doors:
+
+                    cmp #$06                                    ; is the current room 06?
+                    bne room_04_put_zombies_in_the_coffins
+                    lda #$f6                                    ; char for wrong door
+                    sta SCREENRAM + $9c                         ; make three doors DEADLY!!!11
+                    sta SCREENRAM + $27c
+                    sta SCREENRAM + $36c       
                     rts
 
 ; ==============================================================================
-;
-;
+; ROOM 04
+; PUT SOME REALLY DEADLY ZOMBIES INSIDE THE COFFINS
 ; ==============================================================================
 
-+                   cmp #$04
-                    bne ++
-                    ldx #$f7
+room_04_put_zombies_in_the_coffins: 
+
+                    cmp #$04                                    ; is the current room 04?
+                    bne room_05_prep                            ; no
+                    ldx #$f7                                    ; yes room 04
                     ldy #$f8
 m394A:              lda #$01
-                    bne m3952           ; bne $3952
+                    bne m3952           
                     ldx #$3b
                     ldy #$42
-m3952:              lda #$01        ; there seems to happen some self mod here
+m3952:              lda #$01                                    ; some self mod here
                     cmp #$01
-                    bne +           ; bne $395b
-                    stx SCREENRAM+ $7a ; stx $0c7a
+                    bne +           
+                    stx SCREENRAM+ $7a 
 +                   cmp #$02
-                    bne +           ; bne $3962
-                    stx SCREENRAM + $16a   ;stx $0d6a
+                    bne +           
+                    stx SCREENRAM + $16a   
 +                   cmp #$03
-                    bne +           ; bne $3969
-                    stx SCREENRAM + $25a       ;stx $0e5a
+                    bne +           
+                    stx SCREENRAM + $25a       
 +                   cmp #$04
-                    bne +           ; bne $3970
-                    stx SCREENRAM + $34a   ; stx $0f4a
+                    bne +           
+                    stx SCREENRAM + $34a   
 +                   cmp #$05
-                    bne +           ; bne $3977
-                    sty SCREENRAM + $9c    ; sty $0c9c
+                    bne +           
+                    sty SCREENRAM + $9c    
 +                   cmp #$06
-                    bne +           ; bne $397e
-                    sty SCREENRAM + $18c   ; sty $0d8c
+                    bne +           
+                    sty SCREENRAM + $18c   
 +                   cmp #$07
-                    bne +           ; bne $3985
-                    sty SCREENRAM + $27c ; sty $0e7c
+                    bne +           
+                    sty SCREENRAM + $27c 
 +                   cmp #$08
-                    bne +           ; bne $398c
-                    sty SCREENRAM + $36c   ; sty $0f6c
+                    bne +           
+                    sty SCREENRAM + $36c   
 +                   rts
 
 ; ==============================================================================
-;
-;
+; ROOM 05
+; HIDE THE BREATHING TUBE UNDER THE STONE
 ; ==============================================================================
 
-++                  cmp #$05
-                    bne ++      ; bne m399D   ;bcs +           ;bne m399D          ; todo: understand why it jumps to an RTS
-+                   lda #$fd
-m3993:              ldx #$01
-                    bne +               ; bne $3999
-                    lda #$7a
-+                   sta SCREENRAM + $2d2   ;sta $0ed2
+room_05_prep:                  
+                    cmp #$05                                    ; is the current room 05?
+                    bne ++                                      ; no, and I'm done with you guys!
++                   lda #$fd                                    ; yes
+breathing_tube_mod: ldx #$01
+                    bne +                                       ; based on self mod, put the normal
+                    lda #$7a                                    ; stone char back again
++                   sta SCREENRAM + $2d2   
 ++                  rts
 
 
 ; ==============================================================================
 
-!if 1=2 {
-m399D:
-                    rts
-
-!byte $ff
-}
 
 m399F:
                     cmp #$df
-                    beq +               ; beq $39a5
-                    inc zp0A            ; inc $0a
-+                   lda (zpA7),y        ; lda ($a7),y
-                    jmp m38B7           ; jmp $38b7
+                    beq +               
+                    inc zp0A           
++                   lda (zpA7),y        
+                    jmp m38B7          
 
 ; ==============================================================================
-; Kein Schrott, wird in m3A17 eingelesen
-; $39aa
+; PLAYER POSITION TABLE FOR EACH ROOM
+; FORMAT: Y left door, X left door, Y right door, X right door
 ; ==============================================================================
-m39AA:
-!byte $06, $03, $12, $21, $03, $03, $12, $21, $03, $03, $15, $21, $03, $03, $0f, $21
-!byte $15, $1e, $06, $06, $06, $03, $12, $21, $03, $03, $09, $21, $03, $03, $12, $21
-!byte $03, $03, $0c, $21, $03, $03, $12, $21, $0c, $03, $0c, $20, $0c, $03, $0c, $21
-!byte $0c, $03, $09, $15, $03, $03, $06, $21, $03, $03, $03, $21, $06, $03, $12, $21
-!byte $03, $03, $03, $1d, $03, $03, $06, $21, $03, $03
+
+player_xy_pos_table:
+
+!byte $06, $03, $12, $21                                        ; room 00
+!byte $03, $03, $12, $21                                        ; room 01
+!byte $03, $03, $15, $21                                        ; room 02
+!byte $03, $03, $0f, $21                                        ; room 03
+!byte $15, $1e, $06, $06                                        ; room 04
+!byte $06, $03, $12, $21                                        ; room 05
+!byte $03, $03, $09, $21                                        ; room 06
+!byte $03, $03, $12, $21                                        ; room 07
+!byte $03, $03, $0c, $21                                        ; room 08
+!byte $03, $03, $12, $21                                        ; room 09
+!byte $0c, $03, $0c, $20                                        ; room 10
+!byte $0c, $03, $0c, $21                                        ; room 11
+!byte $0c, $03, $09, $15                                        ; room 12
+!byte $03, $03, $06, $21                                        ; room 13
+!byte $03, $03, $03, $21                                        ; room 14
+!byte $06, $03, $12, $21                                        ; room 15
+!byte $03, $03, $03, $1d                                        ; room 16
+!byte $03, $03, $06, $21                                        ; room 17
+!byte $03, $03                                                  ; room 18 (only one door)
 
 ; ==============================================================================
 ;
@@ -2672,59 +2906,52 @@ m39AA:
 
 check_door:
 
-                    ldx #$09                ; set loop to 9
--                   lda TAPE_BUFFER + $8,x  ; get value from tape buffer
-                    cmp #$05                ; is it a 05? -> right side of the door, meaning LEFT DOOR
-                    beq m3A08               ; yes -> m3A08
-                    cmp #$03                ; is it a 03? -> left side of the door, meaning RIGHT DOOR
-                    beq m3A17               ; yes -> m3A17
-                    dex                     ; decrease loop
-                    bne -                   ; loop
+                    ldx #$09                                    ; set loop to 9
+-                   lda TAPE_BUFFER + $8,x                      ; get value from tape buffer
+                    cmp #$05                                    ; is it a 05? -> right side of the door, meaning LEFT DOOR
+                    beq +                                       ; yes -> +
+                    cmp #$03                                    ; is it a 03? -> left side of the door, meaning RIGHT DOOR
+                    beq set_player_xy                           ; yes -> m3A17
+                    dex                                         ; decrease loop
+                    bne -                                       ; loop
 -                   rts
 
-; ==============================================================================
-;
-;
-; ==============================================================================
-
-m3A08:              ldx current_room + 1
-                    beq -               ;beq $3a07
++                   ldx current_room + 1
+                    beq -               
                     dex
-                    jmp m3A64           ; jmp $3a64
+                    stx current_room + 1                        ; update room number                         
+                    ldy room_player_pos_lookup,x                ; load        
+                    jmp update_player_pos           
 
-!if 1=2{
-!byte $34, $38, $32, $38, $02, $ff
-}
+set_player_xy:
+                    ldx current_room + 1                            ; x = room number
+                    inx                                             ; room number ++
+                    stx current_room + 1                            ; update room number
+                    ldy room_player_pos_lookup + $17, x             ; y = ( $08 for room 2 ) -> get table pos for room
 
-m3A17:
-                    ldx current_room + 1
-                    inx
-                    stx current_room + 1
-                    ldy m3A33 + $17, x         ; ldy $3a4a,x
-m3A21:              lda m39AA,y                ; lda $39aa,y
-                    sta player_pos_y + 1
-                    lda m39AA + 1,y            ; lda $39ab,y
+update_player_pos:              
+                    lda player_xy_pos_table,y                       ; a = pos y ( $03 for room 2 )
+                    sta player_pos_y + 1                            ; player y pos = a
+                    lda player_xy_pos_table + 1,y                   ; y +1 = player x pos
                     sta player_pos_x + 1
-m3A2D:              jsr display_room           ; jsr $3040
+
+m3A2D:              jsr display_room                                ; done  
+                    jsr room_04_prep_door                           ; was in main loop before, might find a better place
                     jmp update_items_display
 
 
 
 ; ==============================================================================
 ; $3a33
-; Kein Schrott
+; Apparently some lookup table, e.g. to get the 
 ; ==============================================================================
 
-m3A33:
+room_player_pos_lookup:
+
 !byte $02 ,$06 ,$0a ,$0e ,$12 ,$16 ,$1a ,$1e ,$22 ,$26 ,$2a ,$2e ,$32 ,$36 ,$3a ,$3e
 !byte $42 ,$46 ,$4a ,$4e ,$52 ,$56 ,$5a ,$5e ,$04 ,$08 ,$0c ,$10 ,$14 ,$18 ,$1c ,$20
 !byte $24 ,$28 ,$2c ,$30 ,$34 ,$38 ,$3c ,$40 ,$44 ,$48 ,$4c ,$50 ,$54 ,$58 ,$5c ,$60
 !byte $00
-
-m3A64:
-                    stx current_room + 1                           ; stx $3051
-                    ldy m3A33,x                             ; ldy $3A33,x
-                    jmp m3A21                               ; jmp $3A21
 
 
 ; ==============================================================================
@@ -2746,25 +2973,24 @@ fake:               rts
 ; ==============================================================================
 
 set_game_basics:
-                    lda VOICE1           ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
-                    and #$fb           ; clear bit 2
-                    sta VOICE1          ; => get data from RAM
+                    lda VOICE1                                  ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
+                    and #$fb                                    ; clear bit 2
+                    sta VOICE1                                  ; => get data from RAM
                     lda #$21
-                    sta CHAR_BASE_ADDRESS   ; sta $ff13          ; bit 0 : Status of Clock   ( 1 )
-                                        ; bit 1 : Single clock set  ( 0 )
-                                        ; b.2-7 : character data base address
-                                        ;         %00100$x ($2000)
+                    sta CHAR_BASE_ADDRESS                       ; bit 0 : Status of Clock   ( 1 )
+                                                                ; bit 1 : Single clock set  ( 0 )
+                                                                ; b.2-7 : character data base address
+                                                                ;         %00100$x ($2000)
                     lda $ff07
-                    ora #$90           ; multicolor ON - reverse OFF
+                    ora #$90                                    ; multicolor ON - reverse OFF
                     sta $ff07
 
-                    ; set the main colors for the game
+                                                                ; set the main colors for the game
 
-
-                    lda #MULTICOLOR_1            ; original: #$db
-                    sta COLOR_1           ; char color 1
-                    lda #MULTICOLOR_2            ; original: #$29
-                    sta COLOR_2           ; char color 2
+                    lda #MULTICOLOR_1                           ; original: #$db
+                    sta COLOR_1                                 ; char color 1
+                    lda #MULTICOLOR_2                           ; original: #$29
+                    sta COLOR_2                                 ; char color 2
 
                     rts
 
@@ -2773,15 +2999,15 @@ set_game_basics:
 ; $3a9d
 ; ==============================================================================
 
-set_charset_and_screen_for_title:    ; set text screen
+set_charset_and_screen:                               ; set text screen
 
                     lda VOICE1
-                    ora #$04           ; set bit 2
-                    sta VOICE1          ; => get data from ROM
-                    lda #$d5           ; ROM FONT
-                    sta CHAR_BASE_ADDRESS   ; sta $ff13          ; set
+                    ora #$04                                    ; set bit 2
+                    sta VOICE1                                  ; => get data from ROM
+                    lda #$d5                                    ; ROM FONT
+                    sta CHAR_BASE_ADDRESS                       ; set
                     lda $ff07
-                    lda #$08           ; 40 columns and Multicolor OFF
+                    lda #$08                                    ; 40 columns and Multicolor OFF
                     sta $ff07
                     rts
 
@@ -2793,7 +3019,7 @@ set_charset_and_screen_for_title:    ; set text screen
 
 code_start:
 init:
-                    jsr m1F15           ; jsr $1f15
+                    jsr init_music
                     lda #$01
                     sta BG_COLOR          ; background color
                     sta BORDER_COLOR          ; border color
@@ -2807,7 +3033,7 @@ init:
 -                   sta KEYBOARD_LATCH          ; Latch register for keyboard
                     lda KEYBOARD_LATCH
                     and #TITLE_KEY    ;#$10            ; $10 = space
-                    bne -               ; bne $3ac8 / wait for keypress ?
+                    bne -               ; wait for keypress ?
 
                     lda #$ff
                     jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
@@ -2815,7 +3041,7 @@ init:
 
                     ; TODO: unclear what the code below does
                     ; i think it fills the level data with "DF", which is a blank character
-                    lda #>SCREENRAM       ; lda #$0c
+                    lda #>SCREENRAM
                     sta zp03
                     lda #$00
                     sta zp02
@@ -2824,10 +3050,10 @@ init:
                     lda #$df
 -                   sta (zp02),y
                     iny
-                    bne -               ; bne $3ae5
+                    bne -
                     inc zp03
                     dex
-                    bne -               ; bne $3ae5
+                    bne -
 
                     jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
 
@@ -2839,8 +3065,10 @@ init:
                     lda #BORDER_COLOR_VALUE
                     sta BORDER_COLOR
                     jsr draw_border
-                    jmp set_start_screen           ; jmp $3b3a
+                    jmp set_start_screen
+
 ; ==============================================================================
+
 draw_border:        ; draws the extended "border"
                     lda #$27
                     sta zp02
@@ -2880,19 +3108,79 @@ draw_border:        ; draws the extended "border"
 
 set_start_screen:
                     lda #PLAYER_START_POS_Y
-                    sta player_pos_y + 1               ; Y player start position (0 = top)
+                    sta player_pos_y + 1                    ; Y player start position (0 = top)
                     lda #PLAYER_START_POS_X
-                    sta player_pos_x + 1               ; X player start position (0 = left)
-                    lda #START_ROOM              ; room number (start screen) ($3b45)
+                    sta player_pos_x + 1                    ; X player start position (0 = left)
+                    lda #START_ROOM                         ; room number (start screen) ($3b45)
                     sta current_room + 1
-                    jsr m3A2D                   ; jsr $3a2d
+                    jsr m3A2D
 
-m3B4C:
-                    jsr m2FEF                   ; jsr $2fef
-                    ldy #$30
+main_loop:
+                    jsr rasterpoll_and_other_stuff
+                    ldy #$30                                ; wait a bit -> in each frame! slows down movement
                     jsr wait
-                    jsr m2fCB                   ; jsr $2fcb
-                    jmp m162d
+                                                            ;jsr room_04_prep_door
+                    jsr prep_player_pos
+                    jmp object_collision
+
+; ==============================================================================
+;
+; Display the death message
+; End of game and return to start screen
+; ==============================================================================
+
+death:
+                    lda #>death_messages
+                    sta zpA8
+                    lda #<death_messages
+                    sta zpA7
+                    cpy #$00
+                    beq ++
+-                   clc
+                    adc #$32
+                    sta zpA7
+                    bcc +
+                    inc zpA8
++                   dey
+                    bne -
+++                  lda #$0c
+                    sta zp03
+                    sty zp02
+                    ldx #$04
+                    lda #$20
+-                   sta (zp02),y
+                    iny
+                    bne -
+                    inc zp03
+                    dex
+                    bne -
+                    jsr set_charset_and_screen
+-                   lda (zpA7),y
+                    sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
+                    lda #$00                                    ; color of the death message
+                    sta COLRAM + $1c0,x     ; sta $09c0,x
+                    inx
+                    iny
+                    cpx #$19
+                    bne +
+                    ldx #$50
++                   cpy #$32
+                    bne -
+                    lda #$fd
+                    sta BG_COLOR
+                    sta BORDER_COLOR
+m3EF9:
+                    lda #$08
+-                   ldy #$ff
+                    jsr wait
+                    sec
+                    sbc #$01
+                    bne -
+                    jmp init
+
+; ==============================================================================
+;
+; DEATH MESSAGES
 ; ==============================================================================
 
 death_messages:
@@ -2962,60 +3250,6 @@ death_messages:
 }
 
 ; ==============================================================================
-;
-; Display the death message
-; End of game and return to start screen
-; ==============================================================================
-
-death:
-                    lda #>death_messages
-                    sta zpA8
-                    lda #<death_messages
-                    sta zpA7
-                    cpy #$00
-                    beq ++           ; beq $3ec4
--                   clc
-                    adc #$32
-                    sta zpA7
-                    bcc +            ; bcc $3ec1
-                    inc zpA8
-+                   dey
-                    bne -           ; bne $3eb8
-++                  lda #$0c
-                    sta zp03
-                    sty zp02
-                    ldx #$04
-                    lda #$20
--                   sta (zp02),y
-                    iny
-                    bne -               ; bne $3ece
-                    inc zp03
-                    dex
-                    bne -               ; bne $3ece
-                    jsr set_charset_and_screen_for_title
--                   lda (zpA7),y
-                    sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
-                    lda #$00                                    ; color of the death message
-                    sta COLRAM + $1c0,x     ; sta $09c0,x
-                    inx
-                    iny
-                    cpx #$19
-                    bne +               ; bne $3eed
-                    ldx #$50
-+                   cpy #$32
-                    bne -               ; bne $3edb
-                    lda #$fd
-                    sta BG_COLOR
-                    sta BORDER_COLOR
-m3EF9:
-                    lda #$08
--                   ldy #$ff
-                    jsr wait           ; jsr $3a76
-                    sec
-                    sbc #$01
-                    bne -               ; bne $3efb
-                    jmp init            ; jmp $3ab3
-; ==============================================================================
 ; screen messages
 ; and the code entry text
 ; ==============================================================================
@@ -3042,6 +3276,28 @@ hint_messages:
 !scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
 !scr " *****   Ein Hilfsbuchstabe:  "
 helping_letter: !scr "C   ***** "
-!scr " Falscher Loesungscode ! TODESSTRAFE !!!"
+!scr " Falscher Loesungscode ! TODESSTRAFE !! "
 
 }
+
+
+; ==============================================================================
+;
+; ITEM PICKUP MESSAGES
+; ==============================================================================
+
+
+item_pickup_message:              ; item pickup messages
+
+!if LANGUAGE = EN{
+!scr " There is a key in the bottle !         "
+!scr "   There is a key in the coffin !       "
+!scr " There is a breathing tube !            "
+}
+
+!if LANGUAGE = DE{
+!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
+!scr "    In dem Sarg lag ein Schluessel !    "
+!scr " Unter dem Stein lag ein Taucheranzug ! "
+}
+item_pickup_message_end:
