@@ -33,11 +33,11 @@ LANGUAGE = DE
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED                = 1       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
-    MULTICOLOR_1        = $db
+    MULTICOLOR_1        = $db           ; face pink
     MULTICOLOR_2        = $29
     BORDER_COLOR_VALUE  = $12
     TITLE_KEY_MATRIX    = $fd           ; Original key to press on title screen: 1
@@ -47,8 +47,8 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 1{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $01 ; grey
-    MULTICOLOR_1        = $6b
-    MULTICOLOR_2        = $19
+    MULTICOLOR_1        = $52           ; face pink
+    MULTICOLOR_2        = $19           ; brownish
     BORDER_COLOR_VALUE  = $01
     TITLE_KEY_MATRIX    = $7f           ; Extended version key to press on title screen: space
     TITLE_KEY           = $10
@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0 
+START_ROOM          = 6             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -359,7 +359,6 @@ switch_charset:
 
 check_room:
                     ldy current_room + 1        ; load in the current room number
-                    cpy #0
                     bne +
                     jmp room_00
 +                   cpy #1
@@ -742,7 +741,7 @@ room_06:
 ; ==============================================================================
 
 room_07:
-
+                    dec BORDER_COLOR
                     cmp #$e3                                    ; $e3 is the char for the invisible, I mean SACRED, column
                     bne +
                     ldy #$01                                    ; 01 You'd better watched out for the sacred column
@@ -1307,7 +1306,7 @@ check_if_room_09:
 ; ==============================================================================
 
 room_04_prep_door:
-                    
+                   
                     lda current_room + 1                            ; get current room
                     cmp #04                                         ; is it 4? (coffins)
                     bne ++                                          ; nope
@@ -2256,17 +2255,31 @@ rasterpoll_and_other_stuff:
 
 tileset_definition:
 tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42
+                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42        ; empty, rock, brick, ?mark, bush, grave, coffin, coffin
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a
+                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a        ; water, water, water, tree, tree, boulder, treasure, treasure
                     ;     $10
-                    !byte $03
+                    !byte $03                                           ; door
+
+!if EXTENDED = 0 {
+
 tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
                     !byte $00, $39, $19, $0e, $3d, $7f, $2a, $2a
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
                     !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
                     ;     $10
                     !byte $39
+}
+
+!if EXTENDED = 1 {
+
+tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $00, $39, $2a, $0e, $3d, $7f, $2a, $2a
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
+                    ;     $10
+                    !byte $29   
+}
 
 ; ==============================================================================
 ;
@@ -2733,20 +2746,31 @@ m38D7:              clc
 
 ; ==============================================================================
 ; ROOM PREPARATION CHECK
-; ADDED FOR CLARITY
+; WAS INITIALLY SCATTERED THROUGH THE LEVEL COMPARISONS
 ; ==============================================================================
 
 prepare_rooms:
                     
                     lda current_room + 1
-                    
-                    cmp #02
+
++                   cmp #02
                     bne +
                     jsr room_02_prep
                     rts
 
++                   cmp #07
+                    bne +
+                    jsr room_07_make_sacred_column
+                    rts
+
++                   cmp #06
+                    bne +                   
+                    jsr room_06_make_deadly_doors
+                    rts
+
 +                   cmp #04
                     bne +
+                    jsr room_04_prep_door                           ; was in main loop before, might find a better place
                     jsr room_04_put_zombies_in_the_coffins
                     rts
 
@@ -2755,14 +2779,6 @@ prepare_rooms:
                     jsr room_05_prep
                     rts
 
-+                   cmp #06
-                    bne +
-                    jsr room_06_make_deadly_doors
-                    rts
-
-+                   cmp #07
-                    bne +
-                    jsr room_07_make_sacred_column
 +                   rts
 
 ; ==============================================================================
@@ -2964,7 +2980,6 @@ update_player_pos:
                     sta player_pos_x + 1
 
 m3A2D:              jsr display_room                                ; done  
-                    jsr room_04_prep_door                           ; was in main loop before, might find a better place
                     jmp update_items_display
 
 
