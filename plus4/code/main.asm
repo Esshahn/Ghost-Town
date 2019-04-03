@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0 
+START_ROOM          = 3             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -1244,6 +1244,8 @@ m14CC:              lda #$01                            ; selfmod
 +                   lda #$0f                            ; a = $0f
                     sta m3624 + 1                       ; selfmod
                     sta m3626 + 1                       ; selfmod
+
+
                     cpy #10                             ; room number 10?
                     bne check_if_room_09                ; no -> m1523
                     dec speed_byte                      ; yes, reduce speed
@@ -1296,6 +1298,25 @@ check_if_room_09:
                     beq +                           ; yes -> +
                     rts                             ; no
 +                   jmp room_09_counter             ; room number is 09, jump
+
+
+; ==============================================================================
+;
+; I moved this out of the main loop and call it once when changing rooms
+; TODO: call it only when room 4 is entered
+; ==============================================================================
+
+room_04_prep_door:
+                    
+                    lda current_room + 1                            ; get current room
+                    cmp #04                                         ; is it 4? (coffins)
+                    bne ++                                          ; nope
+                    lda #$03                                        ; OMG YES! How did you know?? (and get door char)
+                    ldy m394A + 1                                   ; 
+                    beq +
+                    lda #$f6                                        ; put fake door char in place (making it closed)
++                   sta SCREENRAM + $f9 
+++                  rts
 
 ; ==============================================================================
 ; ROOM 09
@@ -2210,22 +2231,7 @@ speed_byte:
 
 
 
-; ==============================================================================
-;
-;
-; ==============================================================================
 
-room_04_prep_door:
-
-                    lda current_room + 1                            ; get current room
-                    cmp #04                                         ; is it 4? (coffins)
-                    bne ++                                          ; nope
-                    lda #$03                                        ; OMG YES! How did you know?? (and get door char)
-                    ldy m394A + 1                                   ; 
-                    beq +
-                    lda #$f6                                        ; put fake door char in place (making it closed)
-+                   sta SCREENRAM + $f9 
-++                  rts
 
 ; ==============================================================================
 ;
@@ -2267,7 +2273,7 @@ tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
 ; displays a room based on tiles
 ; ==============================================================================
 
-display_room:
+display_room:       
                     jsr draw_border
                     lda #$00
                     sta zp02
@@ -2930,6 +2936,7 @@ update_player_pos:
                     sta player_pos_x + 1
 
 m3A2D:              jsr display_room                                ; done  
+                    jsr room_04_prep_door                           ; was in main loop before, might find a better place
                     jmp update_items_display
 
 
@@ -3112,7 +3119,7 @@ main_loop:
                     jsr rasterpoll_and_other_stuff
                     ldy #$30                                ; wait a bit -> in each frame! slows down movement
                     jsr wait
-                    jsr room_04_prep_door
+                                                            ;jsr room_04_prep_door
                     jsr prep_player_pos
                     jmp object_collision
 
