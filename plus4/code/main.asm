@@ -1697,14 +1697,14 @@ reset_items:
                     lda #$dd                        ; sword
                     sta items + $1a7
 
-                    lda #$01                        ; door
-                    sta items + $2c1
+                    lda #$01                        ; -> wrong write, produced selfmod at the wrong place
+                    sta m394A + 1                   ; sta items + $2c1
 
-                    lda #$01                        ; door
-                    sta items + $30a
+                    lda #$01                        ; 
+                    sta breathing_tube_mod + 1      ; sta items + $30a
 
                     lda #$f5                        ; fence
-                    sta items + $277
+                    sta delete_fence + 1            ; sta items + $277
 
                     lda #$00                        ; key in the bottle
                     sta key_in_bottle_storage
@@ -3033,10 +3033,12 @@ set_charset_and_screen:                               ; set text screen
 code_start:
 init:
                     jsr init_music
+
                     lda #$01
                     sta BG_COLOR          ; background color
                     sta BORDER_COLOR          ; border color
                     jsr reset_items           ; might be a level data reset, and print the title screen
+
                     ldy #$20
                     jsr wait
 
