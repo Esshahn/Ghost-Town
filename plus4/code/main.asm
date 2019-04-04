@@ -61,7 +61,7 @@ EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
 ;
 ; ==============================================================================
 
-START_ROOM          = 6             ; default 0 
+START_ROOM          = 0             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -2681,7 +2681,7 @@ update_items_display:
 +                   jsr next_item               ; value was $ff, now get the next value in the list
                     lda (zpA7),y
                     cmp #$ff                    ; is the next value $ff again?
-                    beq m38DF                   ; yes -> m38DF
+                    beq prepare_rooms           ; yes -> m38DF
                     cmp current_room + 1        ; is the number the current room number?
                     bne -                       ; no -> loop
                     lda #>COLRAM                ; yes the number is the current room number
@@ -2735,7 +2735,7 @@ m38B7:
                     lda (zpA7),y
                     cmp #$ff
                     bne -
-                    beq m38DF
+                    beq prepare_rooms
 m38D7:              clc
                     adc #$01
                     sta zp02
@@ -2747,7 +2747,8 @@ m38D7:              clc
 ; DRAWS OR DELETES THE FENCE, AND THEN SOME SHIT
 ; ==============================================================================
 
-m38DF:              
+prepare_rooms: 
+
                     lda current_room + 1
                     cmp #$02                                ; is the current room 02?
                     bne room_07_make_sacred_column          ; no  -> room 07
