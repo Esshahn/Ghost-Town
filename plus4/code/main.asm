@@ -742,7 +742,7 @@ room_06:
 ; ==============================================================================
 
 room_07:
-                    dec BORDER_COLOR
+        
                     cmp #$e3                                    ; $e3 is the char for the invisible, I mean SACRED, column
                     bne +
                     ldy #$01                                    ; 01 You'd better watched out for the sacred column
@@ -2743,15 +2743,56 @@ m38D7:              clc
                     rts
 
 ; ==============================================================================
-; ROOM 02
-; DRAWS OR DELETES THE FENCE, AND THEN SOME SHIT
+; ROOM PREPARATION CHECK
+; WAS INITIALLY SCATTERED THROUGH THE LEVEL COMPARISONS
 ; ==============================================================================
 
-prepare_rooms: 
-
+prepare_rooms:
+            
                     lda current_room + 1
+                    
                     cmp #$02                                ; is the current room 02?
-                    bne room_07_make_sacred_column          ; no  -> room 07
+                    beq room_02_prep
+
+                    cmp #$07
+                    beq room_07_make_sacred_column
+                    
+                    cmp #$06          
+                    beq room_06_make_deadly_doors
+
+                    cmp #$04
+                    beq room_04_prep
+
+                    cmp #$05
+                    beq room_05_prep
+
+                    rts
+
+
+
+; ==============================================================================
+; ROOM 05
+; HIDE THE BREATHING TUBE UNDER THE STONE
+; ==============================================================================
+
+room_05_prep:                  
+                    
+                   
++                   lda #$fd                                    ; yes
+breathing_tube_mod: ldx #$01
+                    bne +                                       ; based on self mod, put the normal
+                    lda #$7a                                    ; stone char back again
++                   sta SCREENRAM + $2d2   
+++                  rts
+
+
+
+; ==============================================================================
+; ROOM 02 PREP
+; 
+; ==============================================================================
+
+room_02_prep:
                     lda #$0d                                ; yes room is 02, a = $0d #13
                     sta zp02                                ; zp02 = $0d
                     sta zp04                                ; zp04 = $0d
@@ -2783,14 +2824,13 @@ delete_fence:
                     rts
 
 ; ==============================================================================
-;
+; ROOM 07 PREP
 ;
 ; ==============================================================================
 
 room_07_make_sacred_column:
 
-                    cmp #$07                                    ; is the current room 07?
-                    bne room_06_make_deadly_doors               ; no
+                    
                     ldx #$17                                    ; yes
 -                   lda SCREENRAM + $168,x     
                     cmp #$df
@@ -2809,8 +2849,7 @@ room_07_make_sacred_column:
 
 room_06_make_deadly_doors:
 
-                    cmp #$06                                    ; is the current room 06?
-                    bne room_04_put_zombies_in_the_coffins
+                    
                     lda #$f6                                    ; char for wrong door
                     sta SCREENRAM + $9c                         ; make three doors DEADLY!!!11
                     sta SCREENRAM + $27c
@@ -2822,11 +2861,21 @@ room_06_make_deadly_doors:
 ; PUT SOME REALLY DEADLY ZOMBIES INSIDE THE COFFINS
 ; ==============================================================================
 
-room_04_put_zombies_in_the_coffins: 
+room_04_prep: 
 
-                    cmp #$04                                    ; is the current room 04?
-                    bne room_05_prep                            ; no
-                    ldx #$f7                                    ; yes room 04
+
+                    
+                    lda current_room + 1                            ; get current room
+                    cmp #04                                         ; is it 4? (coffins)
+                    bne ++                                          ; nope
+                    lda #$03                                        ; OMG YES! How did you know?? (and get door char)
+                    ldy m394A + 1                                   ; 
+                    beq +
+                    lda #$f6                                        ; put fake door char in place (making it closed)
++                   sta SCREENRAM + $f9 
+
+                   
+++                  ldx #$f7                                    ; yes room 04
                     ldy #$f8
 m394A:              lda #$01
                     bne m3952           
@@ -2859,20 +2908,7 @@ m3952:              lda #$01                                    ; some self mod 
                     sty SCREENRAM + $36c   
 +                   rts
 
-; ==============================================================================
-; ROOM 05
-; HIDE THE BREATHING TUBE UNDER THE STONE
-; ==============================================================================
 
-room_05_prep:                  
-                    cmp #$05                                    ; is the current room 05?
-                    bne ++                                      ; no, and I'm done with you guys!
-+                   lda #$fd                                    ; yes
-breathing_tube_mod: ldx #$01
-                    bne +                                       ; based on self mod, put the normal
-                    lda #$7a                                    ; stone char back again
-+                   sta SCREENRAM + $2d2   
-++                  rts
 
 
 ; ==============================================================================
