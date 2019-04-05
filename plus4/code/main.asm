@@ -121,6 +121,29 @@ COLOR_2             = $FF17
 COLOR_3             = $FF18
 BORDER_COLOR        = $FF19
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ; ==============================================================================
 
                     !cpu 6502
@@ -345,6 +368,30 @@ m11A6:              jsr display_hint_message_plus_kernal
 switch_charset:
                     jsr set_charset_and_screen           
                     jmp PRINT_KERNAL           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1181,15 +1228,62 @@ room_18:
 
 
 
-
-
-
 ; ==============================================================================
 ; 
 ; EVERYTHING ANIMATION RELATED STARTS HERE
 ; ANIMATIONS FOR
 ; LASER, BORIS, BELEGRO, STONE, MONSTER
 ; ==============================================================================
+
+; TODO
+; this gets called all the time, no checks 
+; needs to be optimized
+
+
+animation_entrypoint:
+                    
+                    lda items + $ac                         ; $cc (power outlet)
+                    cmp #$df                                ; taken?
+                    bne +                                   ; no -> +
+                    lda #$59                                ; yes, $59 (part of water, wtf), likely color
+                    sta items + $12c                        ; originally $0
+
++                   lda current_room + 1                    ; load room number
+                    cmp #$11                                ; is it room #17? (Belegro)
+                    bne room_animations                     ; no -> m162A
+                    lda m14CC + 1                           ; yes, get value from m14CD
+                    bne m15FC                               ; 0? -> m15FC
+                    lda player_pos_y + 1                    ; not 0, get player pos Y
+                    cmp #$06                                ; is it 6?
+                    bne m15FC                               ; no -> m15FC
+                    lda player_pos_x + 1                    ; yes, get player pos X
+                    cmp #$18                                ; is player x position $18?
+                    bne m15FC                               ; no -> m15FC
+                    lda #$00                                ; yes, load 0
+                    sta m15FC + 1                           ; store 0 in m15FC+1
+m15FC:              lda #$01                                ; load A (0 if player xy = $6/$18)
+                    bne +                                   ; is it 0? -> +
+                    ldy #$06                                ; y = $6
+m1602:              ldx #$1e                                ; x = $1e
+                    lda #$00                                ; a = $0
+                    sta zpA7                                ; zpA7 = 0
+                    jsr draw_player                         ; TODO
+                    ldx m1602 + 1                           ; get x again (was destroyed by previous JSR)
+                    cpx #$03                                ; is X = $3?
+                    beq ++                                  ; yes -> ++
+                    dex                                     ; x = x -1
+++                  stx m1602 + 1                           ; store x in m1602+1
++                   lda #$78                                ; a = $78
+                    sta zpA8                                ; zpA8 = $78
+                    lda #$49                                ; a = $49
+                    sta zp0A                                ; zp0A = $49
+                    ldy #$06                                ; y = $06
+                    lda #$01                                ; a = $01
+                    sta zpA7                                ; zpA7 = $01
+                    ldx m1602 + 1                           ; get stored x value (should still be the same?)
+                    jsr draw_player                         ; TODO
+
+
 
 room_animations:              
                     ldy current_room + 1                    ; load room number
@@ -1199,27 +1293,30 @@ room_animations:
                     jmp wait
 
 ; ==============================================================================
+; ROOM 15 ANIMATION
+; MOVEMENT OF THE MONSTER
+; ==============================================================================
 
 room_15_prep:              
                     cpy #15                                 ; room 15?
                     bne room_17_prep                        ; no -> m14C8
-                    lda #$00
+                    lda #$00                                ; 
                     sta zpA7
-                    ldy #$0c
+                    ldy #$0c                                ; x/y pos of the monster
 m1494:              ldx #$06
                     jsr draw_player
-                    lda #$eb
+                    lda #$eb                                ; the monster (try 9c for Belegro)
                     sta zpA8
-                    lda #$39
+                    lda #$39                                ; color of the monster's cape
                     sta zp0A
-                    ldx m1494 + 1           
+                    ldx m1494 + 1                           ; self mod the x position of the monster
 m14A4:              lda #$01
                     bne m14B2               
-                    cpx #$06
-                    bne +                   
+                    cpx #$06                                ; moved 6 steps?
+                    bne +                                   ; no, keep moving
                     lda #$01
 +                   dex
-                    jmp +                   
+                    jmp +                                   ; change direction
 
 m14B2:              
                     cpx #$0b
@@ -1233,6 +1330,9 @@ m14B2:
                     ldy #$0c
                     jmp draw_player
 
+; ==============================================================================
+; ROOM 17 ANIMATION
+;
 ; ==============================================================================
 
 room_17_prep:              
@@ -1425,54 +1525,7 @@ m15C1:              lda #$00                                ; a = 0 (selfmod)
 +                   dec m15C1 + 1                           ; dec $15c2
                     jmp belegro_animation
 
-; ==============================================================================
-; ROOM 17
-; STONE ANIMATION
-; ==============================================================================
 
-animation_entrypoint:
-
-                    lda items + $ac                         ; $cc (power outlet)
-                    cmp #$df                                ; taken?
-                    bne +                                   ; no -> +
-                    lda #$59                                ; yes, $59 (part of water, wtf), likely color
-                    sta items + $12c                        ; originally $0
-
-+                   lda current_room + 1                    ; load room number
-                    cmp #$11                                ; is it room #17? (Belegro)
-                    bne m162A                               ; no -> m162A
-                    lda m14CC + 1                           ; yes, get value from m14CD
-                    bne m15FC                               ; 0? -> m15FC
-                    lda player_pos_y + 1                    ; not 0, get player pos Y
-                    cmp #$06                                ; is it 6?
-                    bne m15FC                               ; no -> m15FC
-                    lda player_pos_x + 1                    ; yes, get player pos X
-                    cmp #$18                                ; is player x position $18?
-                    bne m15FC                               ; no -> m15FC
-                    lda #$00                                ; yes, load 0
-                    sta m15FC + 1                           ; store 0 in m15FC+1
-m15FC:              lda #$01                                ; load A (0 if player xy = $6/$18)
-                    bne +                                   ; is it 0? -> +
-                    ldy #$06                                ; y = $6
-m1602:              ldx #$1e                                ; x = $1e
-                    lda #$00                                ; a = $0
-                    sta zpA7                                ; zpA7 = 0
-                    jsr draw_player                         ; TODO
-                    ldx m1602 + 1                           ; get x again (was destroyed by previous JSR)
-                    cpx #$03                                ; is X = $3?
-                    beq ++                                  ; yes -> ++
-                    dex                                     ; x = x -1
-++                  stx m1602 + 1                           ; store x in m1602+1
-+                   lda #$78                                ; a = $78
-                    sta zpA8                                ; zpA8 = $78
-                    lda #$49                                ; a = $49
-                    sta zp0A                                ; zp0A = $49
-                    ldy #$06                                ; y = $06
-                    lda #$01                                ; a = $01
-                    sta zpA7                                ; zpA7 = $01
-                    ldx m1602 + 1                           ; get stored x value (should still be the same?)
-                    jsr draw_player                         ; TODO
-m162A:              jmp room_animations                     ; all done, so jump to the beginning 
 
 
 
@@ -2681,8 +2734,9 @@ update_items_display:
 +                   jsr next_item               ; value was $ff, now get the next value in the list
                     lda (zpA7),y
                     cmp #$ff                    ; is the next value $ff again?
-                    beq prepare_rooms           ; yes -> m38DF
-                    cmp current_room + 1        ; is the number the current room number?
+                    bne +
+                    jmp prepare_rooms           ; yes -> m38DF
++                   cmp current_room + 1        ; is the number the current room number?
                     bne -                       ; no -> loop
                     lda #>COLRAM                ; yes the number is the current room number
                     sta zp05                    ; store COLRAM and SCREENRAM in zeropage
@@ -2714,7 +2768,14 @@ update_items_display:
                     cmp #$fc
                     bne +++
                     lda zp0A
-                    jmp m399F
+                                                ; jmp m399F
+
+                    cmp #$df                    ; this part was moved here as it wasn't called anywhere else
+                    beq skip                    ; and I think it was just outsourced for branching length issues
+                    inc zp0A           
+skip:               lda (zpA7),y        
+                    jmp m38B7
+
 +++                 cmp #$fa
                     bne ++
                     jsr next_item
@@ -2741,6 +2802,33 @@ m38D7:              clc
                     sta zp02
                     sta zp04
                     rts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ; ==============================================================================
 ; ROOM PREPARATION CHECK
@@ -2776,14 +2864,13 @@ prepare_rooms:
 ; ==============================================================================
 
 room_05_prep:                  
-                    
-                   
-+                   lda #$fd                                    ; yes
+                               
+                    lda #$fd                                    ; yes
 breathing_tube_mod: ldx #$01
                     bne +                                       ; based on self mod, put the normal
                     lda #$7a                                    ; stone char back again
 +                   sta SCREENRAM + $2d2   
-++                  rts
+                    rts
 
 
 
@@ -2805,13 +2892,13 @@ room_02_prep:
                     cmp #$df                                ; $df = empty space likely
                     beq delete_fence                        ; yes, empty -> m3900
                     cmp #$f5                                ; no, but maybe a $f5? (fence!)
-                    bne ++                                  ; nope -> ++
+                    bne +                                   ; nope -> ++
 
 delete_fence:
                     lda #$f5                                ; A is either $df or $f5 -> selfmod here
                     sta (zp02),y                            ; store that value
                     sta (zp04),y                            ; in zp02 and zo04
-++                  lda zp02                                ; and load it in again, jeez
++                   lda zp02                                ; and load it in again, jeez
                     clc
                     adc #$28                                ; smells like we're going to draw a fence
                     sta zp02
@@ -2873,8 +2960,7 @@ room_04_prep:
                     beq +
                     lda #$f6                                        ; put fake door char in place (making it closed)
 +                   sta SCREENRAM + $f9 
-
-                   
+                
 ++                  ldx #$f7                                    ; yes room 04
                     ldy #$f8
 m394A:              lda #$01
@@ -2911,15 +2997,21 @@ m3952:              lda #$01                                    ; some self mod 
 
 
 
-; ==============================================================================
 
 
-m399F:
-                    cmp #$df
-                    beq +               
-                    inc zp0A           
-+                   lda (zpA7),y        
-                    jmp m38B7          
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ; ==============================================================================
 ; PLAYER POSITION TABLE FOR EACH ROOM
@@ -2947,6 +3039,30 @@ player_xy_pos_table:
 !byte $03, $03, $03, $1d                                        ; room 16
 !byte $03, $03, $06, $21                                        ; room 17
 !byte $03, $03                                                  ; room 18 (only one door)
+
+
+
+; ==============================================================================
+; $3a33
+; Apparently some lookup table, e.g. to get the 
+; ==============================================================================
+
+room_player_pos_lookup:
+
+!byte $02 ,$06 ,$0a ,$0e ,$12 ,$16 ,$1a ,$1e ,$22 ,$26 ,$2a ,$2e ,$32 ,$36 ,$3a ,$3e
+!byte $42 ,$46 ,$4a ,$4e ,$52 ,$56 ,$5a ,$5e ,$04 ,$08 ,$0c ,$10 ,$14 ,$18 ,$1c ,$20
+!byte $24 ,$28 ,$2c ,$30 ,$34 ,$38 ,$3c ,$40 ,$44 ,$48 ,$4c ,$50 ,$54 ,$58 ,$5c ,$60
+!byte $00
+
+
+
+
+
+
+
+
+
+
 
 ; ==============================================================================
 ;
@@ -2991,19 +3107,6 @@ m3A2D:              jsr display_room                                ; done
 
 
 ; ==============================================================================
-; $3a33
-; Apparently some lookup table, e.g. to get the 
-; ==============================================================================
-
-room_player_pos_lookup:
-
-!byte $02 ,$06 ,$0a ,$0e ,$12 ,$16 ,$1a ,$1e ,$22 ,$26 ,$2a ,$2e ,$32 ,$36 ,$3a ,$3e
-!byte $42 ,$46 ,$4a ,$4e ,$52 ,$56 ,$5a ,$5e ,$04 ,$08 ,$0c ,$10 ,$14 ,$18 ,$1c ,$20
-!byte $24 ,$28 ,$2c ,$30 ,$34 ,$38 ,$3c ,$40 ,$44 ,$48 ,$4c ,$50 ,$54 ,$58 ,$5c ,$60
-!byte $00
-
-
-; ==============================================================================
 ;
 ; wait routine
 ; usually called with Y set before
@@ -3015,6 +3118,7 @@ wait:
                     dey
                     bne wait
 fake:               rts
+
 
 ; ==============================================================================
 ; sets the game screen
@@ -3119,8 +3223,11 @@ init:
                     jmp set_start_screen
 
 ; ==============================================================================
+;
+; draws the extended "border"
+; ==============================================================================
 
-draw_border:        ; draws the extended "border"
+draw_border:        
                     lda #$27
                     sta zp02
                     sta zp04
