@@ -941,6 +941,8 @@ room_10:
                     cmp items + $c8                             ; yes, lightbulb picked up?
                     bne +                                       ; no -> death
                     sta items + $ac                             ; yes, pick up power outlet
+                    lda #$59                                    ; and make the foot traps visible
+                    sta items + $12c                            ; color position for foot traps
                     jmp check_death
 
 +                   ldy #$06
@@ -1242,15 +1244,21 @@ room_18:
 
 animation_entrypoint:
                     
-                    lda items + $ac                         ; $cc (power outlet)
-                    cmp #$df                                ; taken?
-                    bne +                                   ; no -> +
-                    lda #$59                                ; yes, $59 (part of water, wtf), likely color
-                    sta items + $12c                        ; originally $0
+                    ; code below is used to check if the foot traps should be visible
+                    ; it checked for this every single fucking frame
+                    ; moved the foot traps coloring where it belongs (when picking up power outlet)
+                    ;lda items + $ac                         ; $cc (power outlet)
+                    ;cmp #$df                                ; taken?
+                    ;bne +                                   ; no -> +
+                    ;lda #$59                                ; yes, $59 (part of water, wtf), likely color
+                    ;sta items + $12c                        ; originally $0
 
-+                   lda current_room + 1                    ; load room number
-                    cmp #$11                                ; is it room #17? (Belegro)
-                    bne room_animations                     ; no -> m162A
++                   ldy current_room + 1                    ; load room number
+
+                    cpy #$11                                ; is it room #17? (Belegro)
+                    bne room_14_prep                         ; no -> m162A
+                    
+                    
                     lda m14CC + 1                           ; yes, get value from m14CD
                     bne m15FC                               ; 0? -> m15FC
                     lda player_pos_y + 1                    ; not 0, get player pos Y
@@ -1284,13 +1292,12 @@ m1602:              ldx #$1e                                ; x = $1e
                     jsr draw_player                         ; TODO
 
 
-
-room_animations:              
+room_14_prep:              
                     ldy current_room + 1                    ; load room number
                     cpy #14                                 ; is it #14?
                     bne room_15_prep                        ; no -> m148A
-                    ldy #$20                                ; yes, wait a bit
-                    jmp wait
+                    ldy #$20                                ; yes, wait a bit, slowing down the character when moving through foot traps
+                    jsr wait                                ; was jmp wait before
 
 ; ==============================================================================
 ; ROOM 15 ANIMATION
@@ -1329,7 +1336,7 @@ m14B2:
                     sta zpA7
                     ldy #$0c
                     jmp draw_player
-
+                   
 ; ==============================================================================
 ; ROOM 17 ANIMATION
 ;
@@ -1340,7 +1347,19 @@ room_17_prep:
                     bne +                               ; no -> +
 m14CC:              lda #$01                            ; selfmod
                     beq ++                              
-                    jmp m15C1                           
+                                                       
+                    ; was moved here
+                    ; as it was called only from this place
+                    ; jmp m15C1  
+m15C1:              lda #$00                            ; a = 0 (selfmod)
+                    cmp #$00                            ; is a = 0?
+                    bne skipper                         ; not 0 -> 15CB
+                    inc m15C1 + 1                       ; inc m15C1
+                    rts
+             
+skipper:            dec m15C1 + 1                       ; dec $15c2
+                    jmp belegro_animation
+
 +                   lda #$0f                            ; a = $0f
                     sta m3624 + 1                       ; selfmod
                     sta m3626 + 1                       ; selfmod
@@ -1395,10 +1414,16 @@ m1506:              lda #$df
 
 check_if_room_09:              
                     cpy #09                         ; room number 09?
-                    beq +                           ; yes -> +
+                    beq room_09_counter                           ; yes -> +
                     rts                             ; no
-+                   jmp room_09_counter             ; room number is 09, jump
 
+room_09_counter:
+                    ldx #$01                                ; x = 1 (selfmod)
+                    cpx #$01                                ; is x = 1?
+                    beq +                                   ; yes -> +
+                    jmp boris_the_spider_animation          ; no, jump boris animation
++                   dec room_09_counter + 1                 ; decrease initial x
+                    rts
 
 ; ==============================================================================
 ;
@@ -1501,30 +1526,6 @@ move_boris:
                     inc zp03
                     inc zp05
 +                   rts
-
-; ==============================================================================
-;
-; ==============================================================================
-
-room_09_counter:
-                    ldx #$01                                ; x = 1 (selfmod)
-                    cpx #$01                                ; is x = 1?
-                    beq +                                   ; yes -> +
-                    jmp boris_the_spider_animation          ; no, jump boris animation
-+                   dec room_09_counter + 1                 ; decrease initial x
-                    rts
-
-; ==============================================================================
-
-m15C1:              lda #$00                                ; a = 0 (selfmod)
-                    cmp #$00                                ; is a = 0?
-                    bne +                                   ; not 0 -> 15CB
-                    inc m15C1 + 1                           ; inc m15C1
-                    rts
-             
-+                   dec m15C1 + 1                           ; dec $15c2
-                    jmp belegro_animation
-
 
 
 
