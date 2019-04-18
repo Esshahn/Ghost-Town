@@ -33,7 +33,7 @@ LANGUAGE = DE
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED            = 0       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED                = 1       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
@@ -90,7 +90,7 @@ _sword              = items + $1a7
 zp02                = $02
 zp03                = $03
 zp04                = $04
-zp05                = $05            ; seems to always store the COLRAM information
+zp05                = $05               ; seems to always store the COLRAM information
 zp08                = $08
 zp09                = $09
 zp0A                = $0A
@@ -103,23 +103,26 @@ zpA9                = $A9
 ; ==============================================================================
 
 TAPE_BUFFER         = $0333
-SCREENRAM           = $0C00            ; PLUS/4 default SCREEN
-COLRAM              = $0800            ; PLUS/4 COLOR RAM
+SCREENRAM           = $0C00             ; PLUS/4 default SCREEN
+COLRAM              = $0800             ; PLUS/4 COLOR RAM
 PRINT_KERNAL        = $c56b
-BASIC_DA89          = $da89            ; scroll screen down?
+BASIC_DA89          = $da89             ; scroll screen down?
+FF07                = $FF07             ; FF07 scroll & multicolor
 KEYBOARD_LATCH      = $FF08
 INTERRUPT           = $FF09
-VOICE1_FREQ_LOW     = $FF0E         ; Low byte of frequency for voice 1
+FF0A                = $FF0A
+VOICE1_FREQ_LOW     = $FF0E             ; Low byte of frequency for voice 1
 VOICE2_FREQ_LOW     = $FF0F
 VOICE2              = $FF10
 VOLUME_AND_VOICE_SELECT = $FF11
-VOICE1              = $FF12 ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
+VOICE1              = $FF12             ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
 CHAR_BASE_ADDRESS   = $FF13
 BG_COLOR            = $FF15
 COLOR_1             = $FF16
 COLOR_2             = $FF17
 COLOR_3             = $FF18
 BORDER_COLOR        = $FF19
+FF1D                = $FF1D             ; FF1D raster line
 
 
 
@@ -1635,7 +1638,7 @@ m1676:              cmp #$e4                                ; hit by Boris the s
 
 
                     ldx #$09
---                  lda $034b,x
+--                  lda TAPE_BUFFER + $18, x                ; lda $034b,x
                     sta TAPE_BUFFER + $8,x                  ; the tape buffer stores the chars UNDER the player (9 in total)
                     cmp #$d8
                     beq m164E                       
@@ -2142,7 +2145,7 @@ irq_init0:          sei
                     sta $0315          ; irq hi
                                         ; irq at $1F06
                     lda #$02
-                    sta $ff0a          ; set IRQ source to RASTER
+                    sta FF0A          ; set IRQ source to RASTER
 
                     lda #$bf
                     sta music_volume+1         ; sta $1ed9    ; sound volume
@@ -2631,7 +2634,7 @@ get_player_pos:     ldy player_pos_y + 1
 poll_raster:
                     sei                     ; disable interrupt
                     lda #$c0                ; A = $c0
--                   cmp $ff1d               ; vertical line bits 0-7
+-                   cmp FF1D               ; vertical line bits 0-7
                     bne -                   ; loop until we hit line c0
                     lda #$00                ; A = 0
                     sta zpA7                ; zpA7 = 0
@@ -3135,9 +3138,9 @@ set_game_basics:
                                                                 ; bit 1 : Single clock set  ( 0 )
                                                                 ; b.2-7 : character data base address
                                                                 ;         %00100$x ($2000)
-                    lda $ff07
+                    lda FF07
                     ora #$90                                    ; multicolor ON - reverse OFF
-                    sta $ff07
+                    sta FF07
 
                                                                 ; set the main colors for the game
 
@@ -3160,9 +3163,9 @@ set_charset_and_screen:                               ; set text screen
                     sta VOICE1                                  ; => get data from ROM
                     lda #$d5                                    ; ROM FONT
                     sta CHAR_BASE_ADDRESS                       ; set
-                    lda $ff07
+                    lda FF07
                     lda #$08                                    ; 40 columns and Multicolor OFF
-                    sta $ff07
+                    sta FF07
                     rts
 
 

@@ -7,11 +7,17 @@
             "label": "build -> C64 -> VICE",
             "type": "shell",
             "osx": {
-                "command": "acme -f cbm -l build/labels -o build/main.prg code/main.asm && exomizer sfx 0x3ab3 -n -t 64 -o build/main.prg build/main.prg && /Applications/Vice/x64.app/Contents/MacOS/x64 -moncommands build/labels build/main.prg 2> /dev/null",
+                "command": "acme -v4 -f cbm -r ../build/report.asm -l ../build/labels -o ../build/main64.prg main64.asm && STARTADDR=$(grep 'code_start' ../build/labels | cut -d$ -f2 | cut -f1) && exomizer sfx 0x$STARTADDR -n -t 64 -o ../build/main64.prg ../build/main64.prg && cat ../build/labels ../build/monitor_commands > ../build/vicelabels && /Applications/Vice/x64.app/Contents/MacOS/x64 -moncommands ../build/vicelabels ../build/main64.prg 2> /dev/null",
             },
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "presentation": {
                 "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/plus4/code"
             },
             "problemMatcher": {
                 "owner": "acme",
@@ -35,7 +41,7 @@
             },
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             },
             "presentation": {
                 "clear": true
