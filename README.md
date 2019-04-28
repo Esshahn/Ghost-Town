@@ -1,3 +1,5 @@
+![screenshot 2019-04-28 um 20 59 43](https://user-images.githubusercontent.com/434355/56868875-925ec100-69f8-11e9-84e1-2cb37ed6f368.jpg)
+
 
 # Ghost Town 1.1
 
