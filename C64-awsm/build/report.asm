@@ -2689,7 +2689,7 @@
   2430  308c e903                                   sbc #$03            ; subtract $03
   2431  308e a000                                   ldy #$00            ; set Y = $00
   2432  3090 9102                                   sta (zp02),y        ; and copy to one row above
-  2433  3092 a90a                                   lda #$0a            ; color brown - luminance $3
+  2433  3092 a90a                                   lda #$0a            ; lda #$39 ; color brown - luminance $3  -> color of the top of a door
   2434  3094 9104                                   sta (zp04),y
   2435  3096 a502               +                   lda zp02
   2436  3098 18                                     clc
@@ -2890,7 +2890,7 @@
   2631                          
   2632                          poll_raster:
   2633  359f 78                                     sei                     ; disable interrupt
-  2634  35a0 a9c0                                   lda #$c0                ; A = $c0
+  2634  35a0 a9f0                                   lda #$f0                ; A = $c0
   2635  35a2 cd12d0             -                   cmp FF1D               ; vertical line bits 0-7
   2636                                              
   2637  35a5 d0fb                                   bne -                   ; loop until we hit line c0

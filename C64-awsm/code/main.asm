@@ -2631,8 +2631,8 @@ get_player_pos:     ldy player_pos_y + 1
 
 poll_raster:
                     sei                     ; disable interrupt
-                    lda #$c0                ; A = $c0
--                   cmp FF1D               ; vertical line bits 0-7
+                    lda #$f0                ; lda #$c0  ;A = $c0
+-                   cmp FF1D                ; vertical line bits 0-7
                     
                     bne -                   ; loop until we hit line c0
                     lda #$00                ; A = 0
