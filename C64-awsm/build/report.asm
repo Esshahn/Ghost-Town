@@ -2890,8 +2890,8 @@
   2631                          
   2632                          poll_raster:
   2633  359f 78                                     sei                     ; disable interrupt
-  2634  35a0 a9f0                                   lda #$f0                ; A = $c0
-  2635  35a2 cd12d0             -                   cmp FF1D               ; vertical line bits 0-7
+  2634  35a0 a9f0                                   lda #$f0                ; lda #$c0  ;A = $c0
+  2635  35a2 cd12d0             -                   cmp FF1D                ; vertical line bits 0-7
   2636                                              
   2637  35a5 d0fb                                   bne -                   ; loop until we hit line c0
   2638  35a7 a900                                   lda #$00                ; A = 0
@@ -3590,7 +3590,7 @@
   3289                          main_loop:
   3290                                              
   3291  3ad5 20b92f                                 jsr rasterpoll_and_other_stuff
-  3292  3ad8 a030                                   ldy #$30                                ; wait a bit -> in each frame! slows down movement
+  3292  3ad8 a01b                                   ldy #$1b                                ; ldy #$30  ; wait a bit -> in each frame! slows down movement
   3293  3ada 20ff39                                 jsr wait
   3294                                                                                      ;jsr room_04_prep_door
   3295  3add 202316                                 jsr prep_player_pos
