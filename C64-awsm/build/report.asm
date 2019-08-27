@@ -109,7 +109,7 @@
    107                          COLRAM              = $d800             ; $0800             ; PLUS/4 COLOR RAM
    108                          PRINT_KERNAL        = $c56b
    109                          BASIC_DA89          = $da89             ; scroll screen down?
-   110                          FF07                = $FF07             ; FF07 scroll & multicolor
+   110                          FF07                = $d016             ; $FF07             ; FF07 scroll & multicolor
    111                          KEYBOARD_LATCH      = $FF08
    112                          INTERRUPT           = $FF09
    113                          FF0A                = $FF0A
@@ -118,7 +118,7 @@
    116                          VOICE2              = $FF10
    117                          VOLUME_AND_VOICE_SELECT = $FF11
    118                          VOICE1              = $FF12             ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
-   119                          CHAR_BASE_ADDRESS   = $FF13
+   119                          CHAR_BASE_ADDRESS   = $d018             ; $FF13
    120                          BG_COLOR            = $D021
    121                          COLOR_1             = $d022             ;$FF16
    122                          COLOR_2             = $d023             ; $FF17
@@ -3433,338 +3433,340 @@
   3132  3a0b ad12ff                                 lda VOICE1                                  ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
   3133  3a0e 29fb                                   and #$fb                                    ; clear bit 2
   3134  3a10 8d12ff                                 sta VOICE1                                  ; => get data from RAM
-  3135  3a13 a921                                   lda #$21
-  3136  3a15 8d13ff                                 sta CHAR_BASE_ADDRESS                       ; bit 0 : Status of Clock   ( 1 )
-  3137                                                                                          ; bit 1 : Single clock set  ( 0 )
-  3138                                                                                          ; b.2-7 : character data base address
-  3139                                                                                          ;         %00100$x ($2000)
-  3140  3a18 ad07ff                                 lda FF07
-  3141  3a1b 0990                                   ora #$90                                    ; multicolor ON - reverse OFF
-  3142  3a1d 8d07ff                                 sta FF07
-  3143                          
-  3144                                                                                          ; set the main colors for the game
-  3145                          
-  3146  3a20 a9db                                   lda #MULTICOLOR_1                           ; original: #$db
-  3147  3a22 8d22d0                                 sta COLOR_1                                 ; char color 1
-  3148  3a25 a929                                   lda #MULTICOLOR_2                           ; original: #$29
-  3149  3a27 8d23d0                                 sta COLOR_2                                 ; char color 2
-  3150                          
-  3151  3a2a 60                                     rts
-  3152                          
-  3153                          ; ==============================================================================
-  3154                          ; set font and screen setup (40 columns and hires)
-  3155                          ; $3a9d
-  3156                          ; ==============================================================================
-  3157                          
-  3158                          set_charset_and_screen:                               ; set text screen
-  3159                          
-  3160  3a2b ad12ff                                 lda VOICE1
-  3161  3a2e 0904                                   ora #$04                                    ; set bit 2
-  3162  3a30 8d12ff                                 sta VOICE1                                  ; => get data from ROM
-  3163  3a33 a9d5                                   lda #$d5                                    ; ROM FONT
-  3164  3a35 8d13ff                                 sta CHAR_BASE_ADDRESS                       ; set
-  3165  3a38 ad07ff                                 lda FF07
-  3166  3a3b a908                                   lda #$08                                    ; 40 columns and Multicolor OFF
-  3167  3a3d 8d07ff                                 sta FF07
-  3168  3a40 60                                     rts
-  3169                          
-  3170                          test:
-  3171  3a41 ee20d0                                 inc BORDER_COLOR
-  3172  3a44 4c413a                                 jmp test
-  3173                          
-  3174                          ; ==============================================================================
-  3175                          ; init
-  3176                          ; start of game (original $3ab3)
-  3177                          ; ==============================================================================
-  3178                          
-  3179                          code_start:
-  3180                          init:
-  3181                                              ;jsr init_music           ; TODO
-  3182                                              
-  3183                          
-  3184  3a47 a90b                                   lda #$0b
-  3185  3a49 8d21d0                                 sta BG_COLOR          ; background color
-  3186  3a4c 8d20d0                                 sta BORDER_COLOR          ; border color
-  3187  3a4f 20c016                                 jsr reset_items           ; might be a level data reset, and print the title screen
-  3188                          
-  3189  3a52 a020                                   ldy #$20
-  3190  3a54 20043a                                 jsr wait
-  3191                                              
-  3192                                              ; waiting for key press on title screen
-  3193                          
-  3194  3a57 a5cb               -                   lda $cb                   ; zp position of currently pressed key
-  3195  3a59 c938                                   cmp #$38                  ; is it the space key?
-  3196  3a5b d0fa                                   bne -
-  3197                          
-  3198                                                                        ;clda #$ff
-  3199  3a5d 20f71c                                 jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
-  3200                                              
-  3201                          
-  3202                                              ; TODO: unclear what the code below does
-  3203                                              ; i think it fills the level data with "DF", which is a blank character
-  3204  3a60 a904                                   lda #>SCREENRAM
-  3205  3a62 8503                                   sta zp03
-  3206  3a64 a900                                   lda #$00
-  3207  3a66 8502                                   sta zp02
-  3208  3a68 a204                                   ldx #$04
-  3209  3a6a a000                                   ldy #$00
-  3210  3a6c a9df                                   lda #$df
-  3211  3a6e 9102               -                   sta (zp02),y
-  3212  3a70 c8                                     iny
-  3213  3a71 d0fb                                   bne -
-  3214  3a73 e603                                   inc zp03
-  3215  3a75 ca                                     dex
-  3216  3a76 d0f6                                   bne -
-  3217                                              
-  3218  3a78 200b3a                                 jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
-  3219                          
-  3220                                              ; set background color
-  3221  3a7b a900                                   lda #$00
-  3222  3a7d 8d21d0                                 sta BG_COLOR
-  3223                          
-  3224                                              ; border color. default is a dark red
-  3225  3a80 a912                                   lda #BORDER_COLOR_VALUE
-  3226  3a82 8d20d0                                 sta BORDER_COLOR
-  3227                                              
-  3228  3a85 208b3a                                 jsr draw_border
-  3229                                              
-  3230  3a88 4cc33a                                 jmp set_start_screen
-  3231                          
-  3232                          ; ==============================================================================
-  3233                          ;
-  3234                          ; draws the extended "border"
-  3235                          ; ==============================================================================
-  3236                          
-  3237                          draw_border:        
-  3238  3a8b a927                                   lda #$27
-  3239  3a8d 8502                                   sta zp02
-  3240  3a8f 8504                                   sta zp04
-  3241  3a91 a9d8                                   lda #>COLRAM
-  3242  3a93 8505                                   sta zp05
-  3243  3a95 a904                                   lda #>SCREENRAM
-  3244  3a97 8503                                   sta zp03
-  3245  3a99 a218                                   ldx #$18
-  3246  3a9b a000                                   ldy #$00
-  3247  3a9d a95d               -                   lda #$5d
-  3248  3a9f 9102                                   sta (zp02),y
-  3249  3aa1 a912                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
-  3250  3aa3 9104                                   sta (zp04),y
-  3251  3aa5 98                                     tya
-  3252  3aa6 18                                     clc
-  3253  3aa7 6928                                   adc #$28
-  3254  3aa9 a8                                     tay
-  3255  3aaa 9004                                   bcc +
-  3256  3aac e603                                   inc zp03
-  3257  3aae e605                                   inc zp05
-  3258  3ab0 ca                 +                   dex
-  3259  3ab1 d0ea                                   bne -
-  3260  3ab3 a95d               -                   lda #$5d
-  3261  3ab5 9dc007                                 sta SCREENRAM + $3c0,x
-  3262  3ab8 a912                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
-  3263  3aba 9dc0db                                 sta COLRAM + $3c0,x
-  3264  3abd e8                                     inx
-  3265  3abe e028                                   cpx #$28
-  3266  3ac0 d0f1                                   bne -
-  3267  3ac2 60                                     rts
-  3268                          
-  3269                          ; ==============================================================================
-  3270                          ; SETUP FIRST ROOM
-  3271                          ; player xy position and room number
-  3272                          ; ==============================================================================
-  3273                          
-  3274                          set_start_screen:
-  3275  3ac3 a906                                   lda #PLAYER_START_POS_Y
-  3276  3ac5 8d4035                                 sta player_pos_y + 1                    ; Y player start position (0 = top)
-  3277  3ac8 a903                                   lda #PLAYER_START_POS_X
-  3278  3aca 8d4235                                 sta player_pos_x + 1                    ; X player start position (0 = left)
-  3279  3acd a900                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
-  3280  3acf 8df82f                                 sta current_room + 1
-  3281  3ad2 20fb39                                 jsr m3A2D
-  3282                                              
-  3283                          
-  3284                          main_loop:
-  3285  3ad5 20b92f                                 jsr rasterpoll_and_other_stuff
-  3286  3ad8 a030                                   ldy #$30                                ; wait a bit -> in each frame! slows down movement
-  3287  3ada 20043a                                 jsr wait
-  3288                                                                                      ;jsr room_04_prep_door
-  3289  3add 203316                                 jsr prep_player_pos
-  3290  3ae0 4c4c16                                 jmp object_collision
-  3291                          
-  3292                          ; ==============================================================================
-  3293                          ;
-  3294                          ; Display the death message
-  3295                          ; End of game and return to start screen
-  3296                          ; ==============================================================================
-  3297                          
-  3298                          death:
-  3299  3ae3 a93b                                   lda #>death_messages
-  3300  3ae5 85a8                                   sta zpA8
-  3301  3ae7 a93f                                   lda #<death_messages
-  3302  3ae9 85a7                                   sta zpA7
-  3303  3aeb c000                                   cpy #$00
-  3304  3aed f00c                                   beq ++
-  3305  3aef 18                 -                   clc
-  3306  3af0 6932                                   adc #$32
-  3307  3af2 85a7                                   sta zpA7
-  3308  3af4 9002                                   bcc +
-  3309  3af6 e6a8                                   inc zpA8
-  3310  3af8 88                 +                   dey
-  3311  3af9 d0f4                                   bne -
-  3312  3afb a90c               ++                  lda #$0c
-  3313  3afd 8503                                   sta zp03
-  3314  3aff 8402                                   sty zp02
-  3315  3b01 a204                                   ldx #$04
-  3316  3b03 a920                                   lda #$20
-  3317  3b05 9102               -                   sta (zp02),y
-  3318  3b07 c8                                     iny
-  3319  3b08 d0fb                                   bne -
-  3320  3b0a e603                                   inc zp03
-  3321  3b0c ca                                     dex
-  3322  3b0d d0f6                                   bne -
-  3323  3b0f 202b3a                                 jsr set_charset_and_screen
-  3324  3b12 b1a7               -                   lda (zpA7),y
-  3325  3b14 9dc005                                 sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
-  3326  3b17 a900                                   lda #$00                                    ; color of the death message
-  3327  3b19 9dc0d9                                 sta COLRAM + $1c0,x     ; sta $09c0,x
-  3328  3b1c e8                                     inx
-  3329  3b1d c8                                     iny
-  3330  3b1e e019                                   cpx #$19
-  3331  3b20 d002                                   bne +
-  3332  3b22 a250                                   ldx #$50
-  3333  3b24 c032               +                   cpy #$32
-  3334  3b26 d0ea                                   bne -
-  3335  3b28 a9fd                                   lda #$fd
-  3336  3b2a 8d21d0                                 sta BG_COLOR
-  3337  3b2d 8d20d0                                 sta BORDER_COLOR
-  3338                          m3EF9:
-  3339  3b30 a908                                   lda #$08
-  3340  3b32 a0ff               -                   ldy #$ff
-  3341  3b34 20043a                                 jsr wait
-  3342  3b37 38                                     sec
-  3343  3b38 e901                                   sbc #$01
-  3344  3b3a d0f6                                   bne -
-  3345  3b3c 4c473a                                 jmp init
-  3346                          
-  3347                          ; ==============================================================================
-  3348                          ;
-  3349                          ; DEATH MESSAGES
-  3350                          ; ==============================================================================
-  3351                          
-  3352                          death_messages:
+  3135  3a13 a918                                   lda #$18            ;lda #$21
+  3136  3a15 8d18d0                                 sta CHAR_BASE_ADDRESS                       ; bit 0 : Status of Clock   ( 1 )
+  3137                                              
+  3138                                                                                          ; bit 1 : Single clock set  ( 0 )
+  3139                                                                                          ; b.2-7 : character data base address
+  3140                                                                                          ; %00100$x ($2000)
+  3141  3a18 ad16d0                                 lda FF07
+  3142  3a1b 0990                                   ora #$90                                    ; multicolor ON - reverse OFF
+  3143  3a1d 8d16d0                                 sta FF07
+  3144                          
+  3145                                                                                          ; set the main colors for the game
+  3146                          
+  3147  3a20 a9db                                   lda #MULTICOLOR_1                           ; original: #$db
+  3148  3a22 8d22d0                                 sta COLOR_1                                 ; char color 1
+  3149  3a25 a929                                   lda #MULTICOLOR_2                           ; original: #$29
+  3150  3a27 8d23d0                                 sta COLOR_2                                 ; char color 2
+  3151                                              
+  3152  3a2a 60                                     rts
+  3153                          
+  3154                          ; ==============================================================================
+  3155                          ; set font and screen setup (40 columns and hires)
+  3156                          ; $3a9d
+  3157                          ; ==============================================================================
+  3158                          
+  3159                          set_charset_and_screen:                               ; set text screen
+  3160                          
+  3161  3a2b ad12ff                                 lda VOICE1
+  3162  3a2e 0904                                   ora #$04                                    ; set bit 2
+  3163  3a30 8d12ff                                 sta VOICE1                                  ; => get data from ROM
+  3164  3a33 a9d5                                   lda #$d5                                    ; ROM FONT
+  3165  3a35 8d18d0                                 sta CHAR_BASE_ADDRESS                       ; set
+  3166  3a38 ad16d0                                 lda FF07
+  3167  3a3b a908                                   lda #$08                                    ; 40 columns and Multicolor OFF
+  3168  3a3d 8d16d0                                 sta FF07
+  3169  3a40 60                                     rts
+  3170                          
+  3171                          test:
+  3172  3a41 ee20d0                                 inc BORDER_COLOR
+  3173  3a44 4c413a                                 jmp test
+  3174                          
+  3175                          ; ==============================================================================
+  3176                          ; init
+  3177                          ; start of game (original $3ab3)
+  3178                          ; ==============================================================================
+  3179                          
+  3180                          code_start:
+  3181                          init:
+  3182                                              ;jsr init_music           ; TODO
+  3183                                              
+  3184                          
+  3185  3a47 a90b                                   lda #$0b
+  3186  3a49 8d21d0                                 sta BG_COLOR          ; background color
+  3187  3a4c 8d20d0                                 sta BORDER_COLOR          ; border color
+  3188  3a4f 20c016                                 jsr reset_items           ; might be a level data reset, and print the title screen
+  3189                          
+  3190  3a52 a020                                   ldy #$20
+  3191  3a54 20043a                                 jsr wait
+  3192                                              
+  3193                                              ; waiting for key press on title screen
+  3194                          
+  3195  3a57 a5cb               -                   lda $cb                   ; zp position of currently pressed key
+  3196  3a59 c938                                   cmp #$38                  ; is it the space key?
+  3197  3a5b d0fa                                   bne -
+  3198                          
+  3199                                                                        ;clda #$ff
+  3200  3a5d 20f71c                                 jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
+  3201                                              
+  3202                          
+  3203                                              ; TODO: unclear what the code below does
+  3204                                              ; i think it fills the level data with "DF", which is a blank character
+  3205  3a60 a904                                   lda #>SCREENRAM
+  3206  3a62 8503                                   sta zp03
+  3207  3a64 a900                                   lda #$00
+  3208  3a66 8502                                   sta zp02
+  3209  3a68 a204                                   ldx #$04
+  3210  3a6a a000                                   ldy #$00
+  3211  3a6c a9df                                   lda #$df
+  3212  3a6e 9102               -                   sta (zp02),y
+  3213  3a70 c8                                     iny
+  3214  3a71 d0fb                                   bne -
+  3215  3a73 e603                                   inc zp03
+  3216  3a75 ca                                     dex
+  3217  3a76 d0f6                                   bne -
+  3218                                              
+  3219  3a78 200b3a                                 jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
+  3220                          
+  3221                                              ; set background color
+  3222  3a7b a900                                   lda #$00
+  3223  3a7d 8d21d0                                 sta BG_COLOR
+  3224                          
+  3225                                              ; border color. default is a dark red
+  3226  3a80 a912                                   lda #BORDER_COLOR_VALUE
+  3227  3a82 8d20d0                                 sta BORDER_COLOR
+  3228                                              
+  3229  3a85 208b3a                                 jsr draw_border
+  3230                                              
+  3231  3a88 4cc33a                                 jmp set_start_screen
+  3232                          
+  3233                          ; ==============================================================================
+  3234                          ;
+  3235                          ; draws the extended "border"
+  3236                          ; ==============================================================================
+  3237                          
+  3238                          draw_border:        
+  3239  3a8b a927                                   lda #$27
+  3240  3a8d 8502                                   sta zp02
+  3241  3a8f 8504                                   sta zp04
+  3242  3a91 a9d8                                   lda #>COLRAM
+  3243  3a93 8505                                   sta zp05
+  3244  3a95 a904                                   lda #>SCREENRAM
+  3245  3a97 8503                                   sta zp03
+  3246  3a99 a218                                   ldx #$18
+  3247  3a9b a000                                   ldy #$00
+  3248  3a9d a95d               -                   lda #$5d
+  3249  3a9f 9102                                   sta (zp02),y
+  3250  3aa1 a912                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
+  3251  3aa3 9104                                   sta (zp04),y
+  3252  3aa5 98                                     tya
+  3253  3aa6 18                                     clc
+  3254  3aa7 6928                                   adc #$28
+  3255  3aa9 a8                                     tay
+  3256  3aaa 9004                                   bcc +
+  3257  3aac e603                                   inc zp03
+  3258  3aae e605                                   inc zp05
+  3259  3ab0 ca                 +                   dex
+  3260  3ab1 d0ea                                   bne -
+  3261  3ab3 a95d               -                   lda #$5d
+  3262  3ab5 9dc007                                 sta SCREENRAM + $3c0,x
+  3263  3ab8 a912                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
+  3264  3aba 9dc0db                                 sta COLRAM + $3c0,x
+  3265  3abd e8                                     inx
+  3266  3abe e028                                   cpx #$28
+  3267  3ac0 d0f1                                   bne -
+  3268  3ac2 60                                     rts
+  3269                          
+  3270                          ; ==============================================================================
+  3271                          ; SETUP FIRST ROOM
+  3272                          ; player xy position and room number
+  3273                          ; ==============================================================================
+  3274                          
+  3275                          set_start_screen:
+  3276  3ac3 a906                                   lda #PLAYER_START_POS_Y
+  3277  3ac5 8d4035                                 sta player_pos_y + 1                    ; Y player start position (0 = top)
+  3278  3ac8 a903                                   lda #PLAYER_START_POS_X
+  3279  3aca 8d4235                                 sta player_pos_x + 1                    ; X player start position (0 = left)
+  3280  3acd a900                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
+  3281  3acf 8df82f                                 sta current_room + 1
+  3282  3ad2 20fb39                                 jsr m3A2D
+  3283                                              
+  3284                          
+  3285                          main_loop:
+  3286                                              
+  3287  3ad5 20b92f                                 jsr rasterpoll_and_other_stuff
+  3288  3ad8 a030                                   ldy #$30                                ; wait a bit -> in each frame! slows down movement
+  3289  3ada 20043a                                 jsr wait
+  3290                                                                                      ;jsr room_04_prep_door
+  3291  3add 203316                                 jsr prep_player_pos
+  3292  3ae0 4c4c16                                 jmp object_collision
+  3293                          
+  3294                          ; ==============================================================================
+  3295                          ;
+  3296                          ; Display the death message
+  3297                          ; End of game and return to start screen
+  3298                          ; ==============================================================================
+  3299                          
+  3300                          death:
+  3301  3ae3 a93b                                   lda #>death_messages
+  3302  3ae5 85a8                                   sta zpA8
+  3303  3ae7 a93f                                   lda #<death_messages
+  3304  3ae9 85a7                                   sta zpA7
+  3305  3aeb c000                                   cpy #$00
+  3306  3aed f00c                                   beq ++
+  3307  3aef 18                 -                   clc
+  3308  3af0 6932                                   adc #$32
+  3309  3af2 85a7                                   sta zpA7
+  3310  3af4 9002                                   bcc +
+  3311  3af6 e6a8                                   inc zpA8
+  3312  3af8 88                 +                   dey
+  3313  3af9 d0f4                                   bne -
+  3314  3afb a90c               ++                  lda #$0c
+  3315  3afd 8503                                   sta zp03
+  3316  3aff 8402                                   sty zp02
+  3317  3b01 a204                                   ldx #$04
+  3318  3b03 a920                                   lda #$20
+  3319  3b05 9102               -                   sta (zp02),y
+  3320  3b07 c8                                     iny
+  3321  3b08 d0fb                                   bne -
+  3322  3b0a e603                                   inc zp03
+  3323  3b0c ca                                     dex
+  3324  3b0d d0f6                                   bne -
+  3325  3b0f 202b3a                                 jsr set_charset_and_screen
+  3326  3b12 b1a7               -                   lda (zpA7),y
+  3327  3b14 9dc005                                 sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
+  3328  3b17 a900                                   lda #$00                                    ; color of the death message
+  3329  3b19 9dc0d9                                 sta COLRAM + $1c0,x     ; sta $09c0,x
+  3330  3b1c e8                                     inx
+  3331  3b1d c8                                     iny
+  3332  3b1e e019                                   cpx #$19
+  3333  3b20 d002                                   bne +
+  3334  3b22 a250                                   ldx #$50
+  3335  3b24 c032               +                   cpy #$32
+  3336  3b26 d0ea                                   bne -
+  3337  3b28 a9fd                                   lda #$fd
+  3338  3b2a 8d21d0                                 sta BG_COLOR
+  3339  3b2d 8d20d0                                 sta BORDER_COLOR
+  3340                          m3EF9:
+  3341  3b30 a908                                   lda #$08
+  3342  3b32 a0ff               -                   ldy #$ff
+  3343  3b34 20043a                                 jsr wait
+  3344  3b37 38                                     sec
+  3345  3b38 e901                                   sbc #$01
+  3346  3b3a d0f6                                   bne -
+  3347  3b3c 4c473a                                 jmp init
+  3348                          
+  3349                          ; ==============================================================================
+  3350                          ;
+  3351                          ; DEATH MESSAGES
+  3352                          ; ==============================================================================
   3353                          
-  3354                          ; death messages
-  3355                          ; like "You fell into a snake pit"
-  3356                          
-  3357                          ; scr conversion
+  3354                          death_messages:
+  3355                          
+  3356                          ; death messages
+  3357                          ; like "You fell into a snake pit"
   3358                          
-  3359                          ; 00 You fell into a snake pit
-  3360                          ; 01 You'd better watched out for the sacred column
-  3361                          ; 02 You drowned in the deep river
-  3362                          ; 03 You drank from the poisend bottle
-  3363                          ; 04 Boris the spider got you and killed you
-  3364                          ; 05 Didn't you see the laser beam?
-  3365                          ; 06 240 Volts! You got an electrical shock!
-  3366                          ; 07 You stepped on a nail!
-  3367                          ; 08 A foot trap stopped you!
-  3368                          ; 09 This room is doomed by the wizard Manilo!
-  3369                          ; 0a You were locked in and starved!
-  3370                          ; 0b You were hit by a big rock and died!
-  3371                          ; 0c Belegro killed you!
-  3372                          ; 0d You found a thirsty zombie....
-  3373                          ; 0e The monster grabbed you you. You are dead!
-  3374                          ; 0f You were wounded by the bush!
-  3375                          ; 10 You are trapped in wire-nettings!
-  3376                          
-  3377                          !if LANGUAGE = EN{
-  3378  3b3f 590f152006050c0c...!scr "You fell into a          snake pit !              "
-  3379  3b71 590f152704200205...!scr "You'd better watched out for the sacred column!   "
-  3380  3ba3 590f152004120f17...!scr "You drowned in the deep  river !                  "
-  3381  3bd5 590f15200412010e...!scr "You drank from the       poisened bottle ........ "
-  3382  3c07 420f1209132c2014...!scr "Boris, the spider, got   you and killed you !     "
-  3383  3c39 4409040e27142019...!scr "Didn't you see the       laser beam ?!?           "
-  3384  3c6b 32343020560f0c14...!scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
-  3385  3c9d 590f152013140510...!scr "You stepped on a nail !                           "
-  3386  3ccf 4120060f0f142014...!scr "A foot trap stopped you !                         "
-  3387  3d01 5408091320120f0f...!scr "This room is doomed      by the wizard Manilo !   "
-  3388  3d33 590f152017051205...!scr "You were locked in and   starved !                " ; original: !scr "You were locked in and starved !                  "
-  3389  3d65 590f152017051205...!scr "You were hit by a big    rock and died !          "
-  3390  3d97 42050c0507120f20...!scr "Belegro killed           you !                    "
-  3391  3dc9 590f1520060f150e...!scr "You found a thirsty      zombie .......           "
-  3392  3dfb 540805200d0f0e13...!scr "The monster grapped       you. You are dead !     "
-  3393  3e2d 590f152017051205...!scr "You were wounded by      the bush !               "
-  3394  3e5f 590f152001120520...!scr "You are trapped in       wire-nettings !          "
-  3395                          }
-  3396                          
-  3397                          
-  3398                          !if LANGUAGE = DE{
-  3399                          !scr "Sie sind in eine         Schlangengrube gefallen !"
-  3400                          !scr "Gotteslaesterung wird    mit dem Tod bestraft !   "
-  3401                          !scr "Sie sind in dem tiefen   Fluss ertrunken !        "
-  3402                          !scr "Sie haben aus der Gift-  flasche getrunken....... "
-  3403                          !scr "Boris, die Spinne, hat   Sie verschlungen !!      "
-  3404                          !scr "Den Laserstrahl muessen  Sie uebersehen haben ?!  "
-  3405                          !scr "220 Volt !! Sie erlitten einen Elektroschock !    "
-  3406                          !scr "Sie sind in einen Nagel  getreten !               "
-  3407                          !scr "Eine Fussangel verhindertIhr Weiterkommen !       "
-  3408                          !scr "Auf diesem Raum liegt einFluch des Magiers Manilo!"
-  3409                          !scr "Sie wurden eingeschlossenund verhungern !         "
-  3410                          !scr "Sie wurden von einem     Stein ueberollt !!       "
-  3411                          !scr "Belegro hat Sie          vernichtet !             "
-  3412                          !scr "Im Sarg lag ein durstigerZombie........           "
-  3413                          !scr "Das Monster hat Sie      erwischt !!!!!           "
-  3414                          !scr "Sie haben sich an dem    Dornenbusch verletzt !   "
-  3415                          !scr "Sie haben sich im        Stacheldraht verfangen !!"
-  3416                          }
-  3417                          
-  3418                          ; ==============================================================================
-  3419                          ; screen messages
-  3420                          ; and the code entry text
-  3421                          ; ==============================================================================
-  3422                          
-  3423                          !if LANGUAGE = EN{
+  3359                          ; scr conversion
+  3360                          
+  3361                          ; 00 You fell into a snake pit
+  3362                          ; 01 You'd better watched out for the sacred column
+  3363                          ; 02 You drowned in the deep river
+  3364                          ; 03 You drank from the poisend bottle
+  3365                          ; 04 Boris the spider got you and killed you
+  3366                          ; 05 Didn't you see the laser beam?
+  3367                          ; 06 240 Volts! You got an electrical shock!
+  3368                          ; 07 You stepped on a nail!
+  3369                          ; 08 A foot trap stopped you!
+  3370                          ; 09 This room is doomed by the wizard Manilo!
+  3371                          ; 0a You were locked in and starved!
+  3372                          ; 0b You were hit by a big rock and died!
+  3373                          ; 0c Belegro killed you!
+  3374                          ; 0d You found a thirsty zombie....
+  3375                          ; 0e The monster grabbed you you. You are dead!
+  3376                          ; 0f You were wounded by the bush!
+  3377                          ; 10 You are trapped in wire-nettings!
+  3378                          
+  3379                          !if LANGUAGE = EN{
+  3380  3b3f 590f152006050c0c...!scr "You fell into a          snake pit !              "
+  3381  3b71 590f152704200205...!scr "You'd better watched out for the sacred column!   "
+  3382  3ba3 590f152004120f17...!scr "You drowned in the deep  river !                  "
+  3383  3bd5 590f15200412010e...!scr "You drank from the       poisened bottle ........ "
+  3384  3c07 420f1209132c2014...!scr "Boris, the spider, got   you and killed you !     "
+  3385  3c39 4409040e27142019...!scr "Didn't you see the       laser beam ?!?           "
+  3386  3c6b 32343020560f0c14...!scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
+  3387  3c9d 590f152013140510...!scr "You stepped on a nail !                           "
+  3388  3ccf 4120060f0f142014...!scr "A foot trap stopped you !                         "
+  3389  3d01 5408091320120f0f...!scr "This room is doomed      by the wizard Manilo !   "
+  3390  3d33 590f152017051205...!scr "You were locked in and   starved !                " ; original: !scr "You were locked in and starved !                  "
+  3391  3d65 590f152017051205...!scr "You were hit by a big    rock and died !          "
+  3392  3d97 42050c0507120f20...!scr "Belegro killed           you !                    "
+  3393  3dc9 590f1520060f150e...!scr "You found a thirsty      zombie .......           "
+  3394  3dfb 540805200d0f0e13...!scr "The monster grapped       you. You are dead !     "
+  3395  3e2d 590f152017051205...!scr "You were wounded by      the bush !               "
+  3396  3e5f 590f152001120520...!scr "You are trapped in       wire-nettings !          "
+  3397                          }
+  3398                          
+  3399                          
+  3400                          !if LANGUAGE = DE{
+  3401                          !scr "Sie sind in eine         Schlangengrube gefallen !"
+  3402                          !scr "Gotteslaesterung wird    mit dem Tod bestraft !   "
+  3403                          !scr "Sie sind in dem tiefen   Fluss ertrunken !        "
+  3404                          !scr "Sie haben aus der Gift-  flasche getrunken....... "
+  3405                          !scr "Boris, die Spinne, hat   Sie verschlungen !!      "
+  3406                          !scr "Den Laserstrahl muessen  Sie uebersehen haben ?!  "
+  3407                          !scr "220 Volt !! Sie erlitten einen Elektroschock !    "
+  3408                          !scr "Sie sind in einen Nagel  getreten !               "
+  3409                          !scr "Eine Fussangel verhindertIhr Weiterkommen !       "
+  3410                          !scr "Auf diesem Raum liegt einFluch des Magiers Manilo!"
+  3411                          !scr "Sie wurden eingeschlossenund verhungern !         "
+  3412                          !scr "Sie wurden von einem     Stein ueberollt !!       "
+  3413                          !scr "Belegro hat Sie          vernichtet !             "
+  3414                          !scr "Im Sarg lag ein durstigerZombie........           "
+  3415                          !scr "Das Monster hat Sie      erwischt !!!!!           "
+  3416                          !scr "Sie haben sich an dem    Dornenbusch verletzt !   "
+  3417                          !scr "Sie haben sich im        Stacheldraht verfangen !!"
+  3418                          }
+  3419                          
+  3420                          ; ==============================================================================
+  3421                          ; screen messages
+  3422                          ; and the code entry text
+  3423                          ; ==============================================================================
   3424                          
-  3425                          hint_messages:
-  3426  3e91 2041201001121420...!scr " A part of the code number is :         "
-  3427  3eb9 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-  3428  3ee1 20590f15200e0505...!scr " You need: bulb, bulb holder, socket !  "
-  3429  3f09 2054050c0c200d05...!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
-  3430  3f31 202a2a2a2a2a2020...!scr " *****   A helping letter :   "
-  3431  3f4f 432020202a2a2a2a...helping_letter: !scr "C   ***** "
-  3432  3f59 2057120f0e072003...!scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
-  3433                          
-  3434                          }
+  3425                          !if LANGUAGE = EN{
+  3426                          
+  3427                          hint_messages:
+  3428  3e91 2041201001121420...!scr " A part of the code number is :         "
+  3429  3eb9 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+  3430  3ee1 20590f15200e0505...!scr " You need: bulb, bulb holder, socket !  "
+  3431  3f09 2054050c0c200d05...!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
+  3432  3f31 202a2a2a2a2a2020...!scr " *****   A helping letter :   "
+  3433  3f4f 432020202a2a2a2a...helping_letter: !scr "C   ***** "
+  3434  3f59 2057120f0e072003...!scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
   3435                          
-  3436                          !if LANGUAGE = DE{
+  3436                          }
   3437                          
-  3438                          hint_messages:
-  3439                          !scr " Ein Teil des Loesungscodes lautet:     "
-  3440                          !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-  3441                          !scr " Du brauchst:Fassung,Gluehbirne,Strom ! "
-  3442                          !scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
-  3443                          !scr " *****   Ein Hilfsbuchstabe:  "
-  3444                          helping_letter: !scr "C   ***** "
-  3445                          !scr " Falscher Loesungscode ! TODESSTRAFE !! "
-  3446                          
-  3447                          }
+  3438                          !if LANGUAGE = DE{
+  3439                          
+  3440                          hint_messages:
+  3441                          !scr " Ein Teil des Loesungscodes lautet:     "
+  3442                          !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+  3443                          !scr " Du brauchst:Fassung,Gluehbirne,Strom ! "
+  3444                          !scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
+  3445                          !scr " *****   Ein Hilfsbuchstabe:  "
+  3446                          helping_letter: !scr "C   ***** "
+  3447                          !scr " Falscher Loesungscode ! TODESSTRAFE !! "
   3448                          
-  3449                          
-  3450                          ; ==============================================================================
-  3451                          ;
-  3452                          ; ITEM PICKUP MESSAGES
-  3453                          ; ==============================================================================
-  3454                          
-  3455                          
-  3456                          item_pickup_message:              ; item pickup messages
+  3449                          }
+  3450                          
+  3451                          
+  3452                          ; ==============================================================================
+  3453                          ;
+  3454                          ; ITEM PICKUP MESSAGES
+  3455                          ; ==============================================================================
+  3456                          
   3457                          
-  3458                          !if LANGUAGE = EN{
-  3459  3f81 2054080512052009...!scr " There is a key in the bottle !         "
-  3460  3fa9 2020205408051205...!scr "   There is a key in the coffin !       "
-  3461  3fd1 2054080512052009...!scr " There is a breathing tube !            "
-  3462                          }
-  3463                          
-  3464                          !if LANGUAGE = DE{
-  3465                          !scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
-  3466                          !scr "    In dem Sarg lag ein Schluessel !    "
-  3467                          !scr " Unter dem Stein lag ein Taucheranzug ! "
-  3468                          }
-  3469                          item_pickup_message_end:
+  3458                          item_pickup_message:              ; item pickup messages
+  3459                          
+  3460                          !if LANGUAGE = EN{
+  3461  3f81 2054080512052009...!scr " There is a key in the bottle !         "
+  3462  3fa9 2020205408051205...!scr "   There is a key in the coffin !       "
+  3463  3fd1 2054080512052009...!scr " There is a breathing tube !            "
+  3464                          }
+  3465                          
+  3466                          !if LANGUAGE = DE{
+  3467                          !scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
+  3468                          !scr "    In dem Sarg lag ein Schluessel !    "
+  3469                          !scr " Unter dem Stein lag ein Taucheranzug ! "
+  3470                          }
+  3471                          item_pickup_message_end:

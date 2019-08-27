@@ -109,7 +109,7 @@
 	check_item_shovel	= $1373	; ?
 	zp09	= $9
 	zp08	= $8	; unused
-	FF07	= $ff07
+	FF07	= $d016
 	wait	= $3a04	; ?
 	init	= $3a47	; ?
 	room_data_18	= $2f50	; unused
@@ -117,7 +117,7 @@
 	get_player_pos	= $359b	; ?
 	room_data_17	= $2ee8	; unused
 	zp02	= $2
-	CHAR_BASE_ADDRESS	= $ff13
+	CHAR_BASE_ADDRESS	= $d018
 	room_data_16	= $2e80	; unused
 	room_data_15	= $2e18	; unused
 	room_data_14	= $2db0	; unused

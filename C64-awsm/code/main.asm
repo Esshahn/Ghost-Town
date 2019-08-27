@@ -107,7 +107,7 @@ SCREENRAM           = $0400             ; $0C00             ; PLUS/4 default SCR
 COLRAM              = $d800             ; $0800             ; PLUS/4 COLOR RAM
 PRINT_KERNAL        = $c56b
 BASIC_DA89          = $da89             ; scroll screen down?
-FF07                = $FF07             ; FF07 scroll & multicolor
+FF07                = $d016             ; $FF07             ; FF07 scroll & multicolor
 KEYBOARD_LATCH      = $FF08
 INTERRUPT           = $FF09
 FF0A                = $FF0A
@@ -116,7 +116,7 @@ VOICE2_FREQ_LOW     = $FF0F
 VOICE2              = $FF10
 VOLUME_AND_VOICE_SELECT = $FF11
 VOICE1              = $FF12             ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
-CHAR_BASE_ADDRESS   = $FF13
+CHAR_BASE_ADDRESS   = $d018             ; $FF13
 BG_COLOR            = $D021
 COLOR_1             = $d022             ;$FF16
 COLOR_2             = $d023             ; $FF17
@@ -3132,11 +3132,12 @@ set_game_basics:
                     lda VOICE1                                  ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
                     and #$fb                                    ; clear bit 2
                     sta VOICE1                                  ; => get data from RAM
-                    lda #$21
+                    lda #$18            ;lda #$21
                     sta CHAR_BASE_ADDRESS                       ; bit 0 : Status of Clock   ( 1 )
+                    
                                                                 ; bit 1 : Single clock set  ( 0 )
                                                                 ; b.2-7 : character data base address
-                                                                ;         %00100$x ($2000)
+                                                                ; %00100$x ($2000)
                     lda FF07
                     ora #$90                                    ; multicolor ON - reverse OFF
                     sta FF07
@@ -3147,7 +3148,7 @@ set_game_basics:
                     sta COLOR_1                                 ; char color 1
                     lda #MULTICOLOR_2                           ; original: #$29
                     sta COLOR_2                                 ; char color 2
-
+                    
                     rts
 
 ; ==============================================================================
@@ -3282,6 +3283,7 @@ set_start_screen:
                     
 
 main_loop:
+                    
                     jsr rasterpoll_and_other_stuff
                     ldy #$30                                ; wait a bit -> in each frame! slows down movement
                     jsr wait
