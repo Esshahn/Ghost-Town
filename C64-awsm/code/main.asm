@@ -3289,7 +3289,7 @@ set_start_screen:
 main_loop:
                     
                     jsr rasterpoll_and_other_stuff
-                    ldy #$1b                                ; ldy #$30  ; wait a bit -> in each frame! slows down movement
+                    ldy #$1b                                ; ldy #$30    ; wait a bit -> in each frame! slows down movement
                     jsr wait
                                                             ;jsr room_04_prep_door
                     jsr prep_player_pos
