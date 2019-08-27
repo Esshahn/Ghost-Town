@@ -36,10 +36,10 @@ LANGUAGE = EN
 EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
-    COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
-    MULTICOLOR_1        = $db           ; face pink
-    MULTICOLOR_2        = $29
-    BORDER_COLOR_VALUE  = $12
+    COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $02 ; red
+    MULTICOLOR_1        = $0a           ; face pink
+    MULTICOLOR_2        = $09
+    BORDER_COLOR_VALUE  = $02
     TITLE_KEY_MATRIX    = $fd           ; Original key to press on title screen: 1
     TITLE_KEY           = $01
 
@@ -202,8 +202,8 @@ prep_and_display_hint:
 room_16_code_number_prep:
 
                     jsr display_hint_message                ; yes we are in room 3
-                    jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
-                    jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
+                    ;jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
+                    ;jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
                     ldy #$01                                ; y = 1
                     jsr display_hint_message              
                     ldx #$00                                ; x = 0
@@ -234,9 +234,10 @@ room_16_enter_code:
                     jsr room_16_code_delay           
                     jsr room_16_cursor_blinking           
                     jsr room_16_code_delay
-                    lda #$fd                                        ; KEYBOARD stuff
-                    sta KEYBOARD_LATCH                              ; .
-                    lda KEYBOARD_LATCH                              ; .
+                    lda $dc00
+                    ;lda #$fd                                        ; KEYBOARD stuff
+                    ;sta KEYBOARD_LATCH                              ; .
+                    ;lda KEYBOARD_LATCH                              ; .
                     lsr                                             ; .
                     lsr
                     lsr
@@ -1830,7 +1831,7 @@ print_endscreen:
                     ldy #$00
 -                   lda (zpA7),y        ; copy from $175c + y
                     sta (zp02),y        ; to SCREEN
-                    lda #$00           ; color = BLACK
+                    lda #$00            ; color = BLACK
                     sta (zp04),y        ; to COLRAM
                     iny
                     bne -
@@ -1839,8 +1840,8 @@ print_endscreen:
                     inc zpA8
                     dex
                     bne -
-                    lda #$ff           ; PISSGELB
-                    sta BG_COLOR          ; background
+                    lda #$07                  ; yellow
+                    sta BG_COLOR              ; background
                     sta BORDER_COLOR          ; und border
 -                   lda #$fd
                     sta KEYBOARD_LATCH
@@ -2317,11 +2318,11 @@ tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
 
 !if EXTENDED = 0{
 tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $00, $39, $19, $0e, $3d, $7f, $2a, $2a
+                    !byte $00, $39, $0a, $0e, $3d, $7f, $2a, $2a
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
                     !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
                     ;     $10
-                    !byte $39
+                    !byte $0a
 }
 
 !if EXTENDED = 1{
@@ -2429,7 +2430,7 @@ display_door:       lda #>SCREENRAM
                     sbc #$03            ; subtract $03
                     ldy #$00            ; set Y = $00
                     sta (zp02),y        ; and copy to one row above
-                    lda #$39            ; color brown - luminance $3
+                    lda #$0a            ; lda #$39 ; color brown - luminance $3  -> color of the top of a door
                     sta (zp04),y
 +                   lda zp02
                     clc
@@ -2610,8 +2611,8 @@ m35E7:              lda #$0a
                     sta player_pos_y + 1
 m35EC:              lda #$15
                     sta player_pos_x + 1
-++                  lda #$ff
-                    sta KEYBOARD_LATCH
+++                  ;lda #$ff
+                    ;sta KEYBOARD_LATCH
                     lda #$01
                     sta zpA7
                     lda #$93                ; first character of the player graphic
