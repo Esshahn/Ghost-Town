@@ -105,7 +105,7 @@ zpA9                = $A9
 TAPE_BUFFER         = $033c             ; $0333
 SCREENRAM           = $0400             ; $0C00             ; PLUS/4 default SCREEN
 COLRAM              = $d800             ; $0800             ; PLUS/4 COLOR RAM
-PRINT_KERNAL        = $c56b
+PRINT_KERNAL        = $ffd2             ; $c56b
 BASIC_DA89          = $da89             ; scroll screen down?
 FF07                = $d016             ; $FF07             ; FF07 scroll & multicolor
 KEYBOARD_LATCH      = $FF08
@@ -149,7 +149,7 @@ FF1D                = $D012             ; $FF1D             ; FF1D raster line
 
 ; ==============================================================================
 
-                    !cpu 6502
+                    !cpu 6510
                     *= $1000
 
 ; ==============================================================================
@@ -158,11 +158,11 @@ FF1D                = $D012             ; $FF1D             ; FF1D raster line
 ; ==============================================================================
 
 display_hint_message_plus_kernal:
-
+                   
                     jsr PRINT_KERNAL          
 
 display_hint_message:
-
+                   
                     lda #>hint_messages
                     sta zpA8
                     lda #<hint_messages
@@ -336,10 +336,10 @@ display_hint:
 +                   sta SCREENRAM + $21f       
                     lda #$48
                     sta COLRAM + $21f       
--                   lda #$fd
-                    sta KEYBOARD_LATCH
-                    lda KEYBOARD_LATCH
-                    and #$80
+-                   lda $dc00                         ;lda #$fd
+                                                      ;sta KEYBOARD_LATCH
+                                                      ; lda KEYBOARD_LATCH
+                    and #$10                          ; and #$80
                     bne -               
                     jsr set_game_basics
                     jsr m3A2D          
@@ -1938,7 +1938,7 @@ display_intro_text:
 ; ==============================================================================
 
 start_intro:        ;sta KEYBOARD_LATCH
-                    ;jsr PRINT_KERNAL
+                    jsr PRINT_KERNAL
                     jsr display_intro_text
                     jsr check_shift_key
                     
@@ -3166,6 +3166,7 @@ set_charset_and_screen:                               ; set text screen
                     lda FF07
                     lda #$08                                    ; 40 columns and Multicolor OFF
                     sta FF07
+                    
                     rts
 
 test:
@@ -3181,7 +3182,9 @@ code_start:
 init:
                     ;jsr init_music           ; TODO
                     
-
+                    lda #$17                  ; set lower case charset
+                    sta $d018                 ; wasn't on Plus/4 for some reason
+                    
                     lda #$0b
                     sta BG_COLOR          ; background color
                     sta BORDER_COLOR          ; border color
