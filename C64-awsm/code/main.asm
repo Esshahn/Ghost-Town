@@ -11,7 +11,7 @@
 ;      ░  ░  ░  ░    ░ ░        ░                           ░ ░      ░            ░
 ;
 ;
-; Ghost Town, Commodore 16 Version
+; Ghost Town, Commodore 64 Version
 ; Disassembled by awsm & spider j of Mayday in 2019
 ;
 ; ==============================================================================
@@ -102,9 +102,9 @@ zpA9                = $A9
 
 ; ==============================================================================
 
-TAPE_BUFFER         = $0333
-SCREENRAM           = $0C00             ; PLUS/4 default SCREEN
-COLRAM              = $0800             ; PLUS/4 COLOR RAM
+TAPE_BUFFER         = $033c             ; $0333
+SCREENRAM           = $0400             ; $0C00             ; PLUS/4 default SCREEN
+COLRAM              = $d800             ; $0800             ; PLUS/4 COLOR RAM
 PRINT_KERNAL        = $c56b
 BASIC_DA89          = $da89             ; scroll screen down?
 FF07                = $FF07             ; FF07 scroll & multicolor
@@ -117,12 +117,12 @@ VOICE2              = $FF10
 VOLUME_AND_VOICE_SELECT = $FF11
 VOICE1              = $FF12             ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
 CHAR_BASE_ADDRESS   = $FF13
-BG_COLOR            = $FF15
-COLOR_1             = $FF16
-COLOR_2             = $FF17
-COLOR_3             = $FF18
-BORDER_COLOR        = $FF19
-FF1D                = $FF1D             ; FF1D raster line
+BG_COLOR            = $D021
+COLOR_1             = $d022             ;$FF16
+COLOR_2             = $d023             ; $FF17
+COLOR_3             = $d024             ;$FF18
+BORDER_COLOR        = $D020
+FF1D                = $D012             ; $FF1D             ; FF1D raster line
 
 
 
@@ -1781,7 +1781,7 @@ m1732:              ldx #$05
                     lda m1747,x                             ; lda $1747,x
                     sta m3952 + 1                   ; sta $3953
                     jmp print_title     ; jmp $310d
-
+                    
 ; ==============================================================================
 
 m1747:
@@ -1937,12 +1937,13 @@ display_intro_text:
 ; DECREASES MUSIC VOLUME
 ; ==============================================================================
 
-start_intro:        sta KEYBOARD_LATCH
-                    jsr PRINT_KERNAL
+start_intro:        ;sta KEYBOARD_LATCH
+                    ;jsr PRINT_KERNAL
                     jsr display_intro_text
                     jsr check_shift_key
-                    lda #$ba
-                    sta music_volume+1                          ; sound volume
+                    
+                    ;lda #$ba
+                    ;sta music_volume+1                          ; sound volume
                     rts
 
 
@@ -2157,10 +2158,8 @@ irq_init0:          sei
 
 check_shift_key:
 
--                   lda #$fd
-                    sta KEYBOARD_LATCH
-                    lda KEYBOARD_LATCH
-                    and #$80            ; checks for SHIFT key, same as joy 2 fire?
+-                   lda $cb
+                    cmp #$3c
                     bne -
                     rts
 
@@ -2568,9 +2567,10 @@ m3548:              adc #$16                            ; add $15 (#21) why? -> 
 
 check_joystick:
 
-                    lda #$fd
-                    sta KEYBOARD_LATCH
-                    lda KEYBOARD_LATCH
+                    ;lda #$fd
+                    ;sta KEYBOARD_LATCH
+                    ;lda KEYBOARD_LATCH
+                    lda $dc00
 player_pos_y:       ldy #$09
 player_pos_x:       ldx #$15
                     lsr
@@ -2632,11 +2632,13 @@ poll_raster:
                     sei                     ; disable interrupt
                     lda #$c0                ; A = $c0
 -                   cmp FF1D               ; vertical line bits 0-7
+                    
                     bne -                   ; loop until we hit line c0
                     lda #$00                ; A = 0
                     sta zpA7                ; zpA7 = 0
-
+                    
                     jsr get_player_pos
+                    
                     jsr check_joystick
                     cli
                     rts
@@ -3165,6 +3167,9 @@ set_charset_and_screen:                               ; set text screen
                     sta FF07
                     rts
 
+test:
+                    inc BORDER_COLOR
+                    jmp test
 
 ; ==============================================================================
 ; init
@@ -3173,27 +3178,26 @@ set_charset_and_screen:                               ; set text screen
 
 code_start:
 init:
-                    jsr init_music
+                    ;jsr init_music           ; TODO
+                    
 
-                    lda #$01
+                    lda #$0b
                     sta BG_COLOR          ; background color
                     sta BORDER_COLOR          ; border color
                     jsr reset_items           ; might be a level data reset, and print the title screen
 
                     ldy #$20
                     jsr wait
-
+                    
                     ; waiting for key press on title screen
 
-                    lda #TITLE_KEY_MATRIX    ;#$7f           ; read row 7 of keyboard matrix (http://plus4world.powweb.com/plus4encyclopedia/500012)
--                   sta KEYBOARD_LATCH          ; Latch register for keyboard
-                    lda KEYBOARD_LATCH
-                    and #TITLE_KEY    ;#$10            ; $10 = space
-                    bne -               ; wait for keypress ?
+-                   lda $cb                   ; zp position of currently pressed key
+                    cmp #$38                  ; is it the space key?
+                    bne -
 
-                    lda #$ff
+                                              ;clda #$ff
                     jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
-
+                    
 
                     ; TODO: unclear what the code below does
                     ; i think it fills the level data with "DF", which is a blank character
@@ -3210,7 +3214,7 @@ init:
                     inc zp03
                     dex
                     bne -
-
+                    
                     jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
 
                     ; set background color
@@ -3220,7 +3224,9 @@ init:
                     ; border color. default is a dark red
                     lda #BORDER_COLOR_VALUE
                     sta BORDER_COLOR
+                    
                     jsr draw_border
+                    
                     jmp set_start_screen
 
 ; ==============================================================================
@@ -3273,6 +3279,7 @@ set_start_screen:
                     lda #START_ROOM                         ; room number (start screen) ($3b45)
                     sta current_room + 1
                     jsr m3A2D
+                    
 
 main_loop:
                     jsr rasterpoll_and_other_stuff
