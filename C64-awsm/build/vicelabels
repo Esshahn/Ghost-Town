@@ -1,4 +1,4 @@
-	FF0A	= $ff0a
+	FF0A	= $ff0a	; unused
 	check_item_water	= $134e	; ?
 	room_02_prep	= $389a	; ?
 	check_shift_key	= $1ec9	; ?
@@ -39,8 +39,9 @@
 	room_09	= $1388	; ?
 	animation_entrypoint	= $1475
 	m14CC	= $1510	; ?
+	clear	= $3b3f	; ?
 	m164E	= $1645
-	item_pickup_message_end	= $3ff9	; unused
+	item_pickup_message_end	= $4019	; unused
 	EXTENDED	= $0
 	draw_player	= $34c7	; ?
 	TITLE_KEY_MATRIX	= $fd	; unused
@@ -65,7 +66,7 @@
 	room_15_prep	= $14ce	; ?
 	irq0	= $1ed0	; ?
 	VOICE2_FREQ_LOW	= $ff0f
-	item_pickup_message	= $3f81	; ?
+	item_pickup_message	= $3fa1	; ?
 	room_05_prep	= $388e	; ?
 	room_16_cursor_blinking	= $1044
 	fake	= $3a05	; unused
@@ -131,14 +132,14 @@
 	update_player_pos	= $39ea	; ?
 	MUSIC_DELAY_INITIAL	= $9
 	take_key_out_of_bottle	= $1290	; ?
-	hint_messages	= $3e91	; ?
+	hint_messages	= $3eb1	; ?
 	items	= $3616	; ?
 	room_16_code_delay	= $109a	; ?
 	delete_fence	= $38b4	; ?
 	FF1D	= $d012
 	LANGUAGE	= $0
 	_light	= $368a	; ?	; unused
-	helping_letter	= $3f4f	; ?
+	helping_letter	= $3f6f	; ?
 	room_06_make_deadly_doors	= $38df	; ?
 	music_data_voice1	= $1cf1
 	player_xy_pos_table	= $3945
@@ -159,7 +160,7 @@
 	BORDER_COLOR_VALUE	= $2
 	check_joystick	= $353c
 	object_collision	= $163c
-	PRINT_KERNAL	= $ffd2
+	PRINT_KERNAL	= $ffd2	; unused
 	room_18	= $1460	; ?
 	display_hint_message	= $1003
 	print_title	= $30b0	; ?
@@ -234,7 +235,7 @@
 	check_death	= $11cf
 	room_data_07	= $2ad8	; unused
 	screen_start_src_end	= $34c7	; unused
-	death_messages	= $3b3f	; ?
+	death_messages	= $3b5f	; ?
 	room_data_06	= $2a70	; unused
 	_key	= $3626	; ?	; unused
 	zp11	= $11

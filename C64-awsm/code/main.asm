@@ -159,10 +159,11 @@ FF1D                = $D012             ; $FF1D             ; FF1D raster line
 
 display_hint_message_plus_kernal:
                    
-                    jsr PRINT_KERNAL          
+                    jsr clear               ;     jsr PRINT_KERNAL   
+                         
 
 display_hint_message:
-                   
+                    
                     lda #>hint_messages
                     sta zpA8
                     lda #<hint_messages
@@ -179,7 +180,7 @@ m1009:              cpy #$00
                     ldy #$27
 -                   lda (zpA7),y
                     sta SCREENRAM+$1B8,y 
-                    lda #$07
+                    lda #$05
                     sta COLRAM+$1B8,y 
                     dey
                     bne -               
@@ -321,7 +322,6 @@ display_hint:
 +                   cpx #$0a
                     bne +               
                     lda #$47                   
-
 +                   cpx #$0c
                     bne +
                     lda #$49
@@ -331,6 +331,7 @@ display_hint:
 +                   cpx #$0f
                     bne +               
                     lda #$45
+                   
                     sta COLRAM + $26f       
                     lda #$0f
                     sta SCREENRAM + $26f       
@@ -371,7 +372,7 @@ m11A6:              jsr display_hint_message_plus_kernal
 
 switch_charset:
                     jsr set_charset_and_screen           
-                    jmp PRINT_KERNAL           
+                    jmp clear       ; jmp PRINT_KERNAL           
 
 
 
@@ -1939,7 +1940,7 @@ display_intro_text:
 ; ==============================================================================
 
 start_intro:        ;sta KEYBOARD_LATCH
-                    jsr PRINT_KERNAL
+                    jsr clear                                   ; jsr PRINT_KERNAL
                     jsr display_intro_text
                     jsr check_shift_key
                     
@@ -2143,8 +2144,8 @@ irq_init0:          sei
                     lda #>irq0          ; lda #$1f
                     sta $0315          ; irq hi
                                         ; irq at $1F06
-                    lda #$02
-                    sta FF0A          ; set IRQ source to RASTER
+                    lda #$01            ;lda #$02
+                    sta $d01a           ; sta FF0A          ; set IRQ source to RASTER
 
                     lda #$bf
                     sta music_volume+1         ; sta $1ed9    ; sound volume
@@ -3158,7 +3159,7 @@ set_game_basics:
 ; ==============================================================================
 
 set_charset_and_screen:                               ; set text screen
-
+                   
                     lda VOICE1
                     ora #$04                                    ; set bit 2
                     sta VOICE1                                  ; => get data from ROM
@@ -3302,6 +3303,7 @@ main_loop:
 ; ==============================================================================
 
 death:
+                   
                     lda #>death_messages
                     sta zpA8
                     lda #<death_messages
@@ -3338,9 +3340,10 @@ death:
                     ldx #$50
 +                   cpy #$32
                     bne -
-                    lda #$fd
+                    lda #$03
                     sta BG_COLOR
                     sta BORDER_COLOR
+                   
 m3EF9:
                     lda #$08
 -                   ldy #$ff
@@ -3348,8 +3351,29 @@ m3EF9:
                     sec
                     sbc #$01
                     bne -
+                    
                     jmp init
 
+; ==============================================================================
+;
+; clear the sceen (replacing kernal call on plus/4)
+; 
+; ==============================================================================
+
+clear               lda #$20     ; #$20 is the spacebar Screen Code
+                    sta $0400,x  ; fill four areas with 256 spacebar characters
+                    sta $0500,x 
+                    sta $0600,x 
+                    sta $06e8,x 
+                    lda #$00     ; set foreground to black in Color Ram 
+                    sta $d800,x  
+                    sta $d900,x
+                    sta $da00,x
+                    sta $dae8,x
+                    inx           ; increment X
+                    bne clear     ; did X turn to zero yet?
+                                ; if not, continue with the loop
+                    rts           ; return from this subroutine
 ; ==============================================================================
 ;
 ; DEATH MESSAGES
