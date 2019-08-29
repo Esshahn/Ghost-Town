@@ -61,7 +61,7 @@ EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmeti
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0 
+START_ROOM          = 9             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -1385,12 +1385,12 @@ skipper:            dec m15C1 + 1                       ; dec $15c2
 ; ==============================================================================
 
 laser_beam_animation:
-
+                   
                     ldy #$08                            ; speed of the laser flashing
                     sty speed_byte                      ; store     
-                    lda #$09
+                    lda #$d9
                     sta zp05                            ; affects the colram of the laser
-                    lda #$0d                            ; but not understood yet
+                    lda #$05                            ; but not understood yet
                     sta zp03
                     lda #$7b                            ; position of the laser
                     sta zp02
@@ -1398,7 +1398,7 @@ laser_beam_animation:
                     lda #$df                            ; laser beam off
                     cmp m1506 + 1                       
                     bne +                               
-                    lda #$d8                            ; laser beam
+                    lda #$d8                            ; laser beam character
 +                   sta m1506 + 1                       
                     ldx #$06                            ; 6 laser beam characters
 m1506:              lda #$df
@@ -1459,9 +1459,9 @@ room_04_prep_door:
 boris_the_spider_animation:
 
                     inc room_09_counter + 1                           
-                    lda #$08                                ; affects the color ram position for boris the spider
+                    lda #$d8                                ; affects the color ram position for boris the spider
                     sta zp05
-                    lda #$0c
+                    lda #$04
                     sta zp03
                     lda #$0f
                     sta zp02
@@ -1850,10 +1850,12 @@ print_endscreen:
                     lda #$07                  ; yellow
                     sta BG_COLOR              ; background
                     sta BORDER_COLOR          ; und border
--                   lda #$fd
-                    sta KEYBOARD_LATCH
-                    lda KEYBOARD_LATCH
-                    and #$80           ; WAITKEY?
+-                   lda $cb                   ; lda #$fd
+                                              ; sta KEYBOARD_LATCH
+                                              ; lda KEYBOARD_LATCH
+                                              ; and #$80           ; WAITKEY?
+                    
+                    cmp #$3c                  ; check for space key on C64
                     bne -
                     jsr print_title
                     jsr print_title
@@ -2325,9 +2327,9 @@ tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
 
 !if EXTENDED = 0{
 tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $00, $39, $0a, $0e, $3d, $7f, $2a, $2a
+                    !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
+                    !byte $1e, $1e, $1e, $3d, $3d, $0e, $2f, $2f
                     ;     $10
                     !byte $0a
 }
@@ -3194,7 +3196,7 @@ init:
                     sta $d018                 ; wasn't on Plus/4 for some reason
                     
                     lda #$0b
-                    sta BG_COLOR          ; background color
+                    sta BG_COLOR              ; background color
                     sta BORDER_COLOR          ; border color
                     jsr reset_items           ; might be a level data reset, and print the title screen
 
@@ -3207,7 +3209,7 @@ init:
                     cmp #$38                  ; is it the space key?
                     bne -
 
-                                              ;clda #$ff
+                                              ; lda #$ff
                     jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
                     
 
