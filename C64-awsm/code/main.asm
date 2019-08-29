@@ -163,7 +163,8 @@ display_hint_message_plus_kernal:
                          
 
 display_hint_message:
-                    
+                   
+
                     lda #>hint_messages
                     sta zpA8
                     lda #<hint_messages
@@ -176,14 +177,19 @@ m1009:              cpy #$00
 +                   dey
                     bne -               
 ++                  sta zpA7
-                    jsr set_charset_and_screen          
+                    jsr set_charset_and_screen 
+
+                   ; lda #$15            ; TODO
+                   ; sta $d018
+
                     ldy #$27
 -                   lda (zpA7),y
                     sta SCREENRAM+$1B8,y 
                     lda #$05
                     sta COLRAM+$1B8,y 
                     dey
-                    bne -               
+                    bne -  
+                       
                     rts
 
 
@@ -3163,12 +3169,12 @@ set_charset_and_screen:                               ; set text screen
                     lda VOICE1
                     ora #$04                                    ; set bit 2
                     sta VOICE1                                  ; => get data from ROM
-                    lda #$d5                                    ; ROM FONT
+                    lda #$17                                    ; lda #$d5                                    ; ROM FONT
                     sta CHAR_BASE_ADDRESS                       ; set
                     lda FF07
                     lda #$08                                    ; 40 columns and Multicolor OFF
                     sta FF07
-                    
+                    jsr clear
                     rts
 
 test:
