@@ -204,7 +204,8 @@ prep_and_display_hint:
 
 
 room_16_code_number_prep:
-
+                    
+                    jsr clear
                     jsr display_hint_message                ; yes we are in room 3
                     jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
                     jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
@@ -233,35 +234,43 @@ room_16_cursor_blinking:
 ; ==============================================================================
 
 room_16_enter_code:
-                    
+
                     jsr room_16_cursor_blinking
                     sty zp02
                     stx zp04
                     jsr room_16_code_delay           
                     jsr room_16_cursor_blinking           
                     jsr room_16_code_delay
+
                     lda $dc00
-                    ;lda #$fd                                        ; KEYBOARD stuff
-                    ;sta KEYBOARD_LATCH                              ; .
-                    ;lda KEYBOARD_LATCH                              ; .
-                    lsr                                             ; .
-                    lsr
-                    lsr
-                    bcs +
-                    cpx #$00
-                    beq +
-                    dex
-+                   lsr
-                    bcs +
-                    cpx #$25
-                    beq +
-                    inx
-+                   and #$08
-                    bne room_16_enter_code
-                    lda SCREENRAM+$1B9,x
-                    cmp #$bc
-                    bne ++
-                    cpy #$00
+                                                                ; Bit #0: 0 = Port 2 joystick up pressed.
+                                                                ; Bit #1: 0 = Port 2 joystick down pressed.
+                                                                ; Bit #2: 0 = Port 2 joystick left pressed.
+                                                                ; Bit #3: 0 = Port 2 joystick right pressed.
+                                                                ; Bit #4: 0 = Port 2 joystick fire pressed.
+                    
+                    lsr                                         ; we don't check for up       
+                    lsr                                         ; we don't check for down
+                    
+                    lsr                                         ; now we have carry = 0 if LEFT PRESSED
+                    bcs +                                       ; left not pressed ->
+                    cpx #$00                                    ; x = 0?
+                    beq +                                       ; yes ->
+                    dex                                         ; no, x = x - 1 = move cursor left
+
++                   lsr                                         ; now we have carry = 0 if RIGHT PRESSED
+                    bcs +                                       ; right not pressed ->
+                    cpx #$25                                    ; right was pressed, but are we at the rightmost position already?
+                    beq +                                       ; yes we are ->
+                    inx                                         ; no, we can move one more, so x = x + 1
+
++                   lsr                                         ; now we have carry = 0 if FIRE PRESSED
+                    bcs room_16_enter_code                      ; fire wasn't pressed, so start over
+                    
+                    lda SCREENRAM+$1B9,x                        ; fire WAS pressed, so get the current character
+                    cmp #$bc                                    ; is it the "<" char for back?
+                    bne ++                                      ; no ->
+                    cpy #$00                                    ; yes, code submitted
                     beq +
                     dey
 +                   jmp room_16_enter_code
@@ -270,14 +279,13 @@ room_16_enter_code:
                     cpy #$05
                     bne room_16_enter_code
                     jmp check_code_number
-
 ; ==============================================================================
 ;
 ; DELAYS CURSOR MOVEMENT AND BLINKING
 ; ==============================================================================
 
 room_16_code_delay:
-                    ldy #$35                            ; wait a bit
+                    ldy #$20                            ; wait a bit
                     jsr wait                        
                     ldy zp02                            ; and load x and y 
                     ldx zp04                            ; with shit from zp
