@@ -63,7 +63,7 @@
     61                          ;
     62                          ; ==============================================================================
     63                          
-    64                          START_ROOM          = 16             ; default 0 
+    64                          START_ROOM          = 0             ; default 0 
     65                          PLAYER_START_POS_X  = 3             ; default 3
     66                          PLAYER_START_POS_Y  = 6             ; default 6
     67                          SILENT_MODE         = 0
@@ -159,14 +159,14 @@
    157                          ; display the hint messages
    158                          ; ==============================================================================
    159                          
-   160                          display_hint_message_plus_kernal:
+   160                          display_hint_message_plus_clear:
    161                                             
    162  1000 20423b                                 jsr clear               ;     jsr PRINT_KERNAL   
    163                                                   
    164                          
    165                          display_hint_message:
    166                                             
-   167                          
+   167                                              
    168  1003 a93e                                   lda #>hint_messages
    169  1005 85a8                                   sta zpA8
    170  1007 a9b4                                   lda #<hint_messages
@@ -180,7 +180,7 @@
    178  1015 d0f6                                   bne -               
    179  1017 85a7               ++                  sta zpA7
    180  1019 20263a                                 jsr set_charset_and_screen 
-   181                          
+   181                                              
    182  101c a027                                   ldy #$27
    183  101e b1a7               -                   lda (zpA7),y
    184  1020 99b805                                 sta SCREENRAM+$1B8,y 
@@ -326,7 +326,7 @@
    324                          display_hint:
    325  10d5 c000                                   cpy #$00
    326  10d7 d04a                                   bne m11A2           
-   327  10d9 200010                                 jsr display_hint_message_plus_kernal
+   327  10d9 200010                                 jsr display_hint_message_plus_clear
    328  10dc aef82f                                 ldx current_room + 1
    329  10df e001                                   cpx #$01
    330  10e1 d002                                   bne +               
@@ -363,7 +363,7 @@
    361  1120 4cd53a                                 jmp main_loop         
    362  1123 c002               m11A2:              cpy #$02
    363  1125 d006                                   bne +             
-   364  1127 200010             m11A6:              jsr display_hint_message_plus_kernal
+   364  1127 200010             m11A6:              jsr display_hint_message_plus_clear
    365  112a 4c1311                                 jmp -             
    366  112d c004               +                   cpy #$04
    367  112f d00b                                   bne +              
@@ -3597,7 +3597,7 @@
   3296  3ac5 8d4035                                 sta player_pos_y + 1                    ; Y player start position (0 = top)
   3297  3ac8 a903                                   lda #PLAYER_START_POS_X
   3298  3aca 8d4235                                 sta player_pos_x + 1                    ; X player start position (0 = left)
-  3299  3acd a910                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
+  3299  3acd a900                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
   3300  3acf 8df82f                                 sta current_room + 1
   3301  3ad2 20f639                                 jsr m3A2D
   3302                                              

@@ -61,7 +61,7 @@ EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmeti
 ;
 ; ==============================================================================
 
-START_ROOM          = 16             ; default 0 
+START_ROOM          = 0             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -157,14 +157,14 @@ FF1D                = $D012             ; $FF1D             ; FF1D raster line
 ; display the hint messages
 ; ==============================================================================
 
-display_hint_message_plus_kernal:
+display_hint_message_plus_clear:
                    
                     jsr clear               ;     jsr PRINT_KERNAL   
                          
 
 display_hint_message:
                    
-
+                    
                     lda #>hint_messages
                     sta zpA8
                     lda #<hint_messages
@@ -178,7 +178,7 @@ m1009:              cpy #$00
                     bne -               
 ++                  sta zpA7
                     jsr set_charset_and_screen 
-
+                    
                     ldy #$27
 -                   lda (zpA7),y
                     sta SCREENRAM+$1B8,y 
@@ -324,7 +324,7 @@ code_number:        !scr "06138"                        ; !byte $30, $36, $31, $
 display_hint:
                     cpy #$00
                     bne m11A2           
-                    jsr display_hint_message_plus_kernal
+                    jsr display_hint_message_plus_clear
                     ldx current_room + 1
                     cpx #$01
                     bne +               
@@ -361,7 +361,7 @@ display_hint:
                     jmp main_loop         
 m11A2:              cpy #$02
                     bne +             
-m11A6:              jsr display_hint_message_plus_kernal
+m11A6:              jsr display_hint_message_plus_clear
                     jmp -             
 +                   cpy #$04
                     bne +              
