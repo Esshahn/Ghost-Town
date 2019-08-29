@@ -90,8 +90,8 @@
     88                          ; ZEROPAGE
     89                          
     90                          zp02                = $02
-    91                          zp03                = $03
-    92                          zp04                = $04
+    91                          zp03                = $03               ; high byte of screen ram
+    92                          zp04                = $04               ; low byte of screen ram
     93                          zp05                = $05               ; seems to always store the COLRAM information
     94                          zp08                = $08
     95                          zp09                = $09
@@ -1461,9 +1461,9 @@
   1459                          boris_the_spider_animation:
   1460                          
   1461  159a ee7a15                                 inc room_09_counter + 1                           
-  1462  159d a9d8                                   lda #$d8                                ; affects the color ram position for boris the spider
+  1462  159d a9d8                                   lda #>COLRAM + 1                               ; affects the color ram position for boris the spider
   1463  159f 8505                                   sta zp05
-  1464  15a1 a904                                   lda #$04
+  1464  15a1 a904                                   lda #>SCREENRAM
   1465  15a3 8503                                   sta zp03
   1466  15a5 a90f                                   lda #$0f
   1467  15a7 8502                                   sta zp02

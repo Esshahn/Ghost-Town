@@ -88,8 +88,8 @@ _sword              = items + $1a7
 ; ZEROPAGE
 
 zp02                = $02
-zp03                = $03
-zp04                = $04
+zp03                = $03               ; high byte of screen ram
+zp04                = $04               ; low byte of screen ram
 zp05                = $05               ; seems to always store the COLRAM information
 zp08                = $08
 zp09                = $09
@@ -1459,9 +1459,9 @@ room_04_prep_door:
 boris_the_spider_animation:
 
                     inc room_09_counter + 1                           
-                    lda #$d8                                ; affects the color ram position for boris the spider
+                    lda #>COLRAM + 1                               ; affects the color ram position for boris the spider
                     sta zp05
-                    lda #$04
+                    lda #>SCREENRAM
                     sta zp03
                     lda #$0f
                     sta zp02
