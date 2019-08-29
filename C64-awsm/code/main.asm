@@ -61,7 +61,7 @@ EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmeti
 ;
 ; ==============================================================================
 
-START_ROOM          = 9             ; default 0 
+START_ROOM          = 16             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -106,7 +106,7 @@ TAPE_BUFFER         = $033c             ; $0333
 SCREENRAM           = $0400             ; $0C00             ; PLUS/4 default SCREEN
 COLRAM              = $d800             ; $0800             ; PLUS/4 COLOR RAM
 PRINT_KERNAL        = $ffd2             ; $c56b
-BASIC_DA89          = $da89             ; scroll screen down?
+BASIC_DA89          = $e8ea             ; $da89             ; scroll screen up by 1 line
 FF07                = $d016             ; $FF07             ; FF07 scroll & multicolor
 KEYBOARD_LATCH      = $FF08
 INTERRUPT           = $FF09
@@ -179,9 +179,6 @@ m1009:              cpy #$00
 ++                  sta zpA7
                     jsr set_charset_and_screen 
 
-                   ; lda #$15            ; TODO
-                   ; sta $d018
-
                     ldy #$27
 -                   lda (zpA7),y
                     sta SCREENRAM+$1B8,y 
@@ -209,8 +206,9 @@ prep_and_display_hint:
 room_16_code_number_prep:
 
                     jsr display_hint_message                ; yes we are in room 3
-                    ;jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
-                    ;jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
+                    jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
+                    jsr BASIC_DA89                          ; ?!? scroll screen down ?!?
+                   
                     ldy #$01                                ; y = 1
                     jsr display_hint_message              
                     ldx #$00                                ; x = 0
@@ -235,6 +233,7 @@ room_16_cursor_blinking:
 ; ==============================================================================
 
 room_16_enter_code:
+                    
                     jsr room_16_cursor_blinking
                     sty zp02
                     stx zp04
@@ -3176,7 +3175,6 @@ set_charset_and_screen:                               ; set text screen
                     lda FF07
                     lda #$08                                    ; 40 columns and Multicolor OFF
                     sta FF07
-                    jsr clear
                     rts
 
 test:
@@ -3337,6 +3335,7 @@ death:
                     dex
                     bne -
                     jsr set_charset_and_screen
+                    jsr clear
 -                   lda (zpA7),y
                     sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
                     lda #$00                                    ; color of the death message
