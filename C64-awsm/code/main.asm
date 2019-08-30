@@ -2264,7 +2264,7 @@ init_music:
 charset_start:
                     *= $2000
                     !if EXTENDED {
-                        !bin "includes/charset_tweaked-charset.bin"
+                        !bin "includes/charset-extended.bin"
                     }else{
                         !bin "includes/charset.bin" ; !bin "includes/charset.bin"
                     }

@@ -2288,7 +2288,7 @@
   2264                          charset_start:
   2265                                              *= $2000
   2266                                              !if EXTENDED {
-  2267  2000 000000020a292727...                        !bin "includes/charset_tweaked-charset.bin"
+  2267  2000 000000020a292727...                        !bin "includes/charset-extended.bin"
   2268                                              }else{
   2269                                                  !bin "includes/charset.bin" ; !bin "includes/charset.bin"
   2270                                              }

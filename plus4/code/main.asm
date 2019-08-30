@@ -33,7 +33,7 @@ LANGUAGE = EN
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED                = 1       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
@@ -2239,7 +2239,7 @@ init_music:
 charset_start:
                     *= $2000
                     !if EXTENDED {
-                        !bin "includes/charset-new-charset.bin"
+                        !bin "includes/charset-extended.bin"
                     }else{
                         !bin "includes/charset.bin"
                     }
@@ -2483,9 +2483,9 @@ print_title:        lda #>SCREENRAM
 screen_start_src:
 
                     !if EXTENDED {
-                        !bin "includes/screen-start-extended.scr"
+                        !bin "includes/title-extended.scr"
                     }else{
-                        !bin "includes/screen-start.scr"
+                        !bin "includes/title.scr"
                     }
 
 screen_start_src_end:
