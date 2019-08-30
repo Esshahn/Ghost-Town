@@ -25,7 +25,7 @@
 EN = 0
 DE = 1
 
-LANGUAGE = EN
+LANGUAGE = DE
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
@@ -33,7 +33,7 @@ LANGUAGE = EN
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmetics
+EXTENDED                = 1       ; 0 = original version, 1 = tweaks and cosmetics
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $02 ; red
@@ -46,12 +46,12 @@ EXTENDED                = 0       ; 0 = original version, 1 = tweaks and cosmeti
 }
 
 !if EXTENDED = 1{
-    COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $01 ; grey
-    MULTICOLOR_1        = $52           ; face pink
-    MULTICOLOR_2        = $19           ; brownish
-    BORDER_COLOR_VALUE  = $01
-    TITLE_KEY_MATRIX    = $7f           ; Extended version key to press on title screen: space
-    TITLE_KEY           = $10
+    COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $02 ; red
+    MULTICOLOR_1        = $0a           ; face pink
+    MULTICOLOR_2        = $09
+    BORDER_COLOR_VALUE  = $02
+    TITLE_KEY_MATRIX    = $fd           ; Original key to press on title screen: 1
+    TITLE_KEY           = $01
 }
 
 
@@ -196,7 +196,8 @@ m1009:              cpy #$00
 ; ==============================================================================
 
 prep_and_display_hint:
-
+                    
+                    jsr clear
                     jsr switch_charset           
                     cpy #$03                                ; is the display hint the one for the code number?
                     beq room_16_code_number_prep            ; yes -> +      ;bne m10B1 ; bne $10b1
@@ -1792,10 +1793,10 @@ m1732:              ldx #$05
                     bne +
                     ldx #$ff
 +                   inx
-                    stx m1732 + 1                           ; stx $1733
-                    lda m1747,x                             ; lda $1747,x
+                    stx m1732 + 1                   ; stx $1733
+                    lda m1747,x                     ; lda $1747,x
                     sta m3952 + 1                   ; sta $3953
-                    jmp print_title     ; jmp $310d
+                    jmp print_title                 ; jmp $310d
                     
 ; ==============================================================================
 
@@ -1886,7 +1887,9 @@ intro_text:
 !scr "use all the items you'll find during    "
 !scr "your journey through 19 amazing hires-  "
 !scr "graphics-rooms! Enjoy the quest and play"
-!scr "it again and again and again ...      > "
+!scr "it again and again and again ...        "
+!scr "                                        "
+!scr "         Press fire to start !          "
 }
 
 !if LANGUAGE = DE{
@@ -1896,7 +1899,9 @@ intro_text:
 !scr "Sie vielen anderen Wesen geschickt aus. "
 !scr "Bedienen Sie sich an den vielen Gegen-  "
 !scr "staenden, welche sich in den 19 Bildern "
-!scr "befinden. Viel Spass !                > "
+!scr "befinden. Viel Spass !                  "
+!scr "                                        "
+!scr "    Druecken Sie Feuer zum Starten !    "
 }
 
 ; ==============================================================================
@@ -1919,7 +1924,7 @@ display_intro_text:
                     sta zpA8
                     lda #<intro_text
                     sta zpA7
-                    ldx #$07
+                    ldx #$09
 --                  ldy #$00
 -                   lda (zpA7),y
                     sta (zp02),y
@@ -2175,9 +2180,13 @@ irq_init0:          sei
 
 check_shift_key:
 
--                   lda $cb
-                    cmp #$3c
-                    bne -
+-                   lda $dc00
+                    lsr
+                    lsr
+                    lsr
+                    lsr
+                    lsr
+                    bcs -
                     rts
 
 ; ==============================================================================
@@ -2255,9 +2264,9 @@ init_music:
 charset_start:
                     *= $2000
                     !if EXTENDED {
-                        !bin "includes/charset-new-charset.bin"
+                        !bin "includes/charset_tweaked-charset.bin"
                     }else{
-                        !bin "includes/charset.bin"
+                        !bin "includes/charset.bin" ; !bin "includes/charset.bin"
                     }
 charset_end:    ; $2800
 
@@ -2336,18 +2345,18 @@ tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
 tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
                     !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $1e, $1e, $1e, $3d, $3d, $0e, $2f, $2f
+                    !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
                     ;     $10
                     !byte $0a
 }
 
 !if EXTENDED = 1{
 tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $00, $39, $2a, $0e, $3d, $7f, $2a, $2a
+                    !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
                     ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $1e, $1e, $1e, $3d, $3d, $19, $2f, $2f
+                    !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
                     ;     $10
-                    !byte $29   
+                    !byte $0a  
 }
 
 ; ==============================================================================
@@ -2499,9 +2508,9 @@ print_title:        lda #>SCREENRAM
 screen_start_src:
 
                     !if EXTENDED {
-                        !bin "includes/screen-start-extended.scr"
+                        !bin "includes/title-extended.scr"
                     }else{
-                        !bin "includes/screen-start.scr"
+                        !bin "includes/title.scr"
                     }
 
 screen_start_src_end:
@@ -3212,7 +3221,7 @@ init:
                     ; waiting for key press on title screen
 
 -                   lda $cb                   ; zp position of currently pressed key
-                    cmp #$38                  ; is it the space key?
+                    cmp #$3c                  ; is it the space key?
                     bne -
 
                                               ; lda #$ff
@@ -3375,20 +3384,20 @@ m3EF9:
 ; 
 ; ==============================================================================
 
-clear               lda #$20     ; #$20 is the spacebar Screen Code
-                    sta $0400,x  ; fill four areas with 256 spacebar characters
+clear               lda #$20                    ; #$20 is the spacebar Screen Code
+                    sta $0400,x                 ; fill four areas with 256 spacebar characters
                     sta $0500,x 
                     sta $0600,x 
                     sta $06e8,x 
-                    lda #$00     ; set foreground to black in Color Ram 
+                    lda #$00                    ; set foreground to black in Color Ram 
                     sta $d800,x  
                     sta $d900,x
                     sta $da00,x
                     sta $dae8,x
-                    inx           ; increment X
-                    bne clear     ; did X turn to zero yet?
-                                ; if not, continue with the loop
-                    rts           ; return from this subroutine
+                    inx                         ; increment X
+                    bne clear                   ; did X turn to zero yet?
+                                                ; if not, continue with the loop
+                    rts                         ; return from this subroutine
 ; ==============================================================================
 ;
 ; DEATH MESSAGES
