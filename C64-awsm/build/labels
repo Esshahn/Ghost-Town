@@ -15,7 +15,7 @@
 	room_07	= $1304	; ?
 	m1535	= $15b6
 	tiles_chars	= $2fc2
-	START_ROOM	= $12
+	START_ROOM	= $0
 	room_04	= $12b2	; ?
 	m3626	= $35b9	; ?
 	room_05	= $12d4	; ?

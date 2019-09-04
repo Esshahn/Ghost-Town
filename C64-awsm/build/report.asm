@@ -64,7 +64,7 @@
     62                          ;
     63                          ; ==============================================================================
     64                          
-    65                          START_ROOM          = 18             ; default 0 
+    65                          START_ROOM          = 0             ; default 0 
     66                          PLAYER_START_POS_X  = 3             ; default 3
     67                          PLAYER_START_POS_Y  = 6             ; default 6
     68                          SILENT_MODE         = 0
@@ -1919,7 +1919,7 @@
   1917  1c52 05120e190f0e2001...!scr "ernyon at vezeto kalandod soran talalsz."
   1918  1c7a 4a0f20131a0f1201...!scr "Jo szorakozast!                         "
   1919  1ca2 2020202020202020...!scr "                                        "
-  1920  1cca 2020202044121505...!scr "    Druecken Sie Feuer zum Starten !    "
+  1920  1cca 2020202020202020...!scr "         Kezdes a tuz gombbal !         "
   1921                          }
   1922                          
   1923                          ; ==============================================================================
@@ -3622,7 +3622,7 @@
   3321  3ac5 8d4035                                 sta player_pos_y + 1                    ; Y player start position (0 = top)
   3322  3ac8 a903                                   lda #PLAYER_START_POS_X
   3323  3aca 8d4235                                 sta player_pos_x + 1                    ; X player start position (0 = left)
-  3324  3acd a912                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
+  3324  3acd a900                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
   3325  3acf 8df82f                                 sta current_room + 1
   3326  3ad2 20f639                                 jsr m3A2D
   3327                                              

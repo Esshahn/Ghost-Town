@@ -1917,7 +1917,7 @@ intro_text:
 !scr "ernyon at vezeto kalandod soran talalsz."
 !scr "Jo szorakozast!                         "
 !scr "                                        "
-!scr "    Druecken Sie Feuer zum Starten !    "
+!scr "         Kezdes a tuz gombbal !         "
 }
 
 ; ==============================================================================

@@ -24,8 +24,9 @@
 
 EN = 0
 DE = 1
+HU = 2
 
-LANGUAGE = EN
+LANGUAGE = HU
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
@@ -1806,6 +1807,9 @@ screen_win_src:
                     !if LANGUAGE = DE{
                         !bin "includes/screen-win-de.scr"
                     }
+                    !if LANGUAGE = HU{
+                        !bin "includes/screen-win-hu.scr"
+                    }
 screen_win_src_end:
 
 
@@ -1869,7 +1873,9 @@ intro_text:
 !scr "use all the items you'll find during    "
 !scr "your journey through 19 amazing hires-  "
 !scr "graphics-rooms! Enjoy the quest and play"
-!scr "it again and again and again ...      > "
+!scr "it again and again and again ...        "
+!scr "                                        "
+!scr "         Press fire to start !          "
 }
 
 !if LANGUAGE = DE{
@@ -1879,7 +1885,21 @@ intro_text:
 !scr "Sie vielen anderen Wesen geschickt aus. "
 !scr "Bedienen Sie sich an den vielen Gegen-  "
 !scr "staenden, welche sich in den 19 Bildern "
-!scr "befinden. Viel Spass !                > "
+!scr "befinden. Viel Spass !                  "
+!scr "                                        "
+!scr "    Druecken Sie Feuer zum Starten !    "
+}
+
+!if LANGUAGE = HU{
+!scr "Keresd meg es nyisd fel a Szellemvaros  "
+!scr "kincses ladikajat ! Old meg Bellegrot, a"
+!scr "varazslot, miutan elkerulted a kulonfele"
+!scr "veszelyes lenyeket. Hasznald az osszes  "
+!scr "targyat, amelyeket a 19 valtozatos kep- "
+!scr "ernyon at vezeto kalandod soran talalsz."
+!scr "Jo szorakozast!                         "
+!scr "                                        "
+!scr "         Kezdes a tuz gombbal !         "
 }
 
 ; ==============================================================================
@@ -1902,7 +1922,7 @@ display_intro_text:
                     sta zpA8
                     lda #<intro_text
                     sta zpA7
-                    ldx #$07
+                    ldx #$09
 --                  ldy #$00
 -                   lda (zpA7),y
                     sta (zp02),y
@@ -3371,7 +3391,7 @@ death_messages:
 !scr "You fell into a          snake pit !              "
 !scr "You'd better watched out for the sacred column!   "
 !scr "You drowned in the deep  river !                  "
-!scr "You drank from the       poisened bottle ........ "
+!scr "You drank from the       poisoned bottle ........ "
 !scr "Boris, the spider, got   you and killed you !     "
 !scr "Didn't you see the       laser beam ?!?           "
 !scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
@@ -3382,7 +3402,7 @@ death_messages:
 !scr "You were hit by a big    rock and died !          "
 !scr "Belegro killed           you !                    "
 !scr "You found a thirsty      zombie .......           "
-!scr "The monster grapped       you. You are dead !     "
+!scr "The monster grabbed       you. You are dead !     "
 !scr "You were wounded by      the bush !               "
 !scr "You are trapped in       wire-nettings !          "
 }
@@ -3408,13 +3428,33 @@ death_messages:
 !scr "Sie haben sich im        Stacheldraht verfangen !!"
 }
 
+
+!if LANGUAGE = HU{
+!scr "Egy kigyoverembe estel !                          "
+!scr "Az istenkaromlas         buntetese halal !        "
+!scr "Belefulladtal a mely     folyoba !                "
+!scr "A mergezett flaskabol    ittal...                 "
+!scr "Boris, a pok elkapott    es vegzett veled !       "
+!scr "Hat nem lattad a         lezersugarat ?!?         "
+!scr "240 Volt ! Megrazott az  aram !                   "
+!scr "Beleleptel egy szogbe !                           "
+!scr "A csapda, amibe bele-    leptel megallitott !     "
+!scr "Ezen a szoban Manilo, a  varazslo atka ul !       "
+!scr "A szoba rad zarult es    ehen haltal !            "
+!scr "Eltalalt egy hatalmas ko es szornyet haltal !     "
+!scr "Belegro elpusztitott     teged!                   "
+!scr "Egy igazan szomjas zombitsikerult talalnod ...    "
+!scr "A szornyeteg elkapott !  Meghaltal.               "
+!scr "A tuskes bokrok          megsebeztek !            "
+!scr "A szogesdrot fogja       lettel !                 "
+}
+
 ; ==============================================================================
 ; screen messages
 ; and the code entry text
 ; ==============================================================================
 
 !if LANGUAGE = EN{
-
 hint_messages:
 !scr " A part of the code number is :         "
 !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
@@ -3423,11 +3463,9 @@ hint_messages:
 !scr " *****   A helping letter :   "
 helping_letter: !scr "C   ***** "
 !scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
-
 }
 
 !if LANGUAGE = DE{
-
 hint_messages:
 !scr " Ein Teil des Loesungscodes lautet:     "
 !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
@@ -3436,7 +3474,17 @@ hint_messages:
 !scr " *****   Ein Hilfsbuchstabe:  "
 helping_letter: !scr "C   ***** "
 !scr " Falscher Loesungscode ! TODESSTRAFE !! "
+}
 
+!if LANGUAGE = HU{
+hint_messages:
+!scr " A jelszo egy resze a kovetkezo:        "
+!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+!scr " Ezek kellenek: tarto, korte, foglalat !"
+!scr " Mi a jelszo ?                 ",$22,"     ",$22,"  "
+!scr " *****   Egy betunyi sugo :   "
+helping_letter: !scr "C   ***** "
+!scr " A jelszo hibas ! BUNTETESED HALAL !    "
 }
 
 
@@ -3459,4 +3507,11 @@ item_pickup_message:              ; item pickup messages
 !scr "    In dem Sarg lag ein Schluessel !    "
 !scr " Unter dem Stein lag ein Taucheranzug ! "
 }
+
+!if LANGUAGE = HU{
+!scr " A palackban egy kulcs van !            "
+!scr "   Egy kulcs van a koporsoban !         "
+!scr " A ko alatt egy buvarfelszereles hever !"
+}
+
 item_pickup_message_end:
