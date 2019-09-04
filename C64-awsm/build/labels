@@ -15,7 +15,7 @@
 	room_07	= $1304	; ?
 	m1535	= $15b6
 	tiles_chars	= $2fc2
-	START_ROOM	= $0
+	START_ROOM	= $12
 	room_04	= $12b2	; ?
 	m3626	= $35b9	; ?
 	room_05	= $12d4	; ?
@@ -107,6 +107,7 @@
 	code_number	= $10c7	; ?
 	update_items_display	= $37d2	; ?
 	skip	= $383e	; ?
+	HU	= $2
 	check_item_shovel	= $136e	; ?
 	zp09	= $9
 	zp08	= $8	; unused
@@ -137,7 +138,7 @@
 	room_16_code_delay	= $10a5	; ?
 	delete_fence	= $38b4	; ?
 	FF1D	= $d012
-	LANGUAGE	= $1
+	LANGUAGE	= $2
 	_light	= $368a	; ?	; unused
 	helping_letter	= $3f72	; ?
 	room_06_make_deadly_doors	= $38df	; ?
