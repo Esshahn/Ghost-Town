@@ -17,9 +17,9 @@
 ; ==============================================================================
 
 ; ==============================================================================
-; language
-; ENGLISH and GERMAN are available
-; OPTIONS: EN / DE
+; languages
+; ENGLISH, GERMAN and HUNGARIAN are available
+; OPTIONS: EN / DE / HU
 ; ==============================================================================
 
 EN = 0
@@ -3196,20 +3196,21 @@ init:
                     jsr init_music
 
                     lda #$01
-                    sta BG_COLOR          ; background color
+                    sta BG_COLOR              ; background color
                     sta BORDER_COLOR          ; border color
                     jsr reset_items           ; might be a level data reset, and print the title screen
 
-                    ldy #$20
-                    jsr wait
+                    ;ldy #$20                 ; had to uncomment this part - running out of memory at the end ;)
+                    ;jsr wait                 ;
+                    
 
                     ; waiting for key press on title screen
 
-                    lda #TITLE_KEY_MATRIX    ;#$7f           ; read row 7 of keyboard matrix (http://plus4world.powweb.com/plus4encyclopedia/500012)
--                   sta KEYBOARD_LATCH          ; Latch register for keyboard
+                    lda #TITLE_KEY_MATRIX      ;#$7f           ; read row 7 of keyboard matrix (http://plus4world.powweb.com/plus4encyclopedia/500012)
+-                   sta KEYBOARD_LATCH         ; Latch register for keyboard
                     lda KEYBOARD_LATCH
-                    and #TITLE_KEY    ;#$10            ; $10 = space
-                    bne -               ; wait for keypress ?
+                    and #TITLE_KEY              ;#$10            ; $10 = space
+                    bne -                     ; wait for keypress ?
 
                     lda #$ff
                     jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume

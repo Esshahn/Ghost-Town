@@ -28,7 +28,7 @@
     26                          DE = 1
     27                          HU = 2
     28                          
-    29                          LANGUAGE = HU
+    29                          LANGUAGE = EN
     30                          
     31                          ; ==============================================================================
     32                          ; thse settings change the appearance of the game
@@ -1820,13 +1820,13 @@
   1818                          
   1819                          screen_win_src:
   1820                                              !if LANGUAGE = EN{
-  1821                                                  !bin "includes/screen-win-en.scr"
+  1821  175d 7040404040404040...                        !bin "includes/screen-win-en.scr"
   1822                                              }
   1823                                              !if LANGUAGE = DE{
   1824                                                  !bin "includes/screen-win-de.scr"
   1825                                              }
   1826                                              !if LANGUAGE = HU{
-  1827  175d 7040404040404040...                        !bin "includes/screen-win-hu.scr"
+  1827                                                  !bin "includes/screen-win-hu.scr"
   1828                                              }
   1829                          screen_win_src_end:
   1830                          
@@ -1887,15 +1887,15 @@
   1885                          ; "Search the treasure..."
   1886                          
   1887                          !if LANGUAGE = EN{
-  1888                          !scr "Search the treasure of Ghost Town and   "
-  1889                          !scr "open it ! Kill Belegro, the wizard, and "
-  1890                          !scr "dodge all other dangers. Don't forget to"
-  1891                          !scr "use all the items you'll find during    "
-  1892                          !scr "your journey through 19 amazing hires-  "
-  1893                          !scr "graphics-rooms! Enjoy the quest and play"
-  1894                          !scr "it again and again and again ...        "
-  1895                          !scr "                                        "
-  1896                          !scr "         Press fire to start !          "
+  1888  1b8a 5305011203082014...!scr "Search the treasure of Ghost Town and   "
+  1889  1bb2 0f10050e20091420...!scr "open it ! Kill Belegro, the wizard, and "
+  1890  1bda 040f04070520010c...!scr "dodge all other dangers. Don't forget to"
+  1891  1c02 15130520010c0c20...!scr "use all the items you'll find during    "
+  1892  1c2a 190f1512200a0f15...!scr "your journey through 19 amazing hires-  "
+  1893  1c52 0712011008090313...!scr "graphics-rooms! Enjoy the quest and play"
+  1894  1c7a 091420010701090e...!scr "it again and again and again ...        "
+  1895  1ca2 2020202020202020...!scr "                                        "
+  1896  1cca 2020202020202020...!scr "         Press fire to start !          "
   1897                          }
   1898                          
   1899                          !if LANGUAGE = DE{
@@ -1911,15 +1911,15 @@
   1909                          }
   1910                          
   1911                          !if LANGUAGE = HU{
-  1912  1b8a 4b0512051304200d...!scr "Keresd meg es nyisd fel a Szellemvaros  "
-  1913  1bb2 0b090e0313051320...!scr "kincses ladikajat ! Old meg Bellegrot, a"
-  1914  1bda 160112011a130c0f...!scr "varazslot, miutan elkerulted a kulonfele"
-  1915  1c02 1605131a050c1905...!scr "veszelyes lenyeket. Hasznald az osszes  "
-  1916  1c2a 140112071901142c...!scr "targyat, amelyeket a 19 valtozatos kep- "
-  1917  1c52 05120e190f0e2001...!scr "ernyon at vezeto kalandod soran talalsz."
-  1918  1c7a 4a0f20131a0f1201...!scr "Jo szorakozast!                         "
-  1919  1ca2 2020202020202020...!scr "                                        "
-  1920  1cca 2020202020202020...!scr "         Kezdes a tuz gombbal !         "
+  1912                          !scr "Keresd meg es nyisd fel a Szellemvaros  "
+  1913                          !scr "kincses ladikajat ! Old meg Bellegrot, a"
+  1914                          !scr "varazslot, miutan elkerulted a kulonfele"
+  1915                          !scr "veszelyes lenyeket. Hasznald az osszes  "
+  1916                          !scr "targyat, amelyeket a 19 valtozatos kep- "
+  1917                          !scr "ernyon at vezeto kalandod soran talalsz."
+  1918                          !scr "Jo szorakozast!                         "
+  1919                          !scr "                                        "
+  1920                          !scr "         Kezdes a tuz gombbal !         "
   1921                          }
   1922                          
   1923                          ; ==============================================================================
@@ -3746,23 +3746,23 @@
   3445                          ; 10 You are trapped in wire-nettings!
   3446                          
   3447                          !if LANGUAGE = EN{
-  3448                          !scr "You fell into a          snake pit !              "
-  3449                          !scr "You'd better watched out for the sacred column!   "
-  3450                          !scr "You drowned in the deep  river !                  "
-  3451                          !scr "You drank from the       poisoned bottle ........ "
-  3452                          !scr "Boris, the spider, got   you and killed you !     "
-  3453                          !scr "Didn't you see the       laser beam ?!?           "
-  3454                          !scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
-  3455                          !scr "You stepped on a nail !                           "
-  3456                          !scr "A foot trap stopped you !                         "
-  3457                          !scr "This room is doomed      by the wizard Manilo !   "
-  3458                          !scr "You were locked in and   starved !                " ; original: !scr "You were locked in and starved !                  "
-  3459                          !scr "You were hit by a big    rock and died !          "
-  3460                          !scr "Belegro killed           you !                    "
-  3461                          !scr "You found a thirsty      zombie .......           "
-  3462                          !scr "The monster grabbed       you. You are dead !     "
-  3463                          !scr "You were wounded by      the bush !               "
-  3464                          !scr "You are trapped in       wire-nettings !          "
+  3448  3b62 590f152006050c0c...!scr "You fell into a          snake pit !              "
+  3449  3b94 590f152704200205...!scr "You'd better watched out for the sacred column!   "
+  3450  3bc6 590f152004120f17...!scr "You drowned in the deep  river !                  "
+  3451  3bf8 590f15200412010e...!scr "You drank from the       poisoned bottle ........ "
+  3452  3c2a 420f1209132c2014...!scr "Boris, the spider, got   you and killed you !     "
+  3453  3c5c 4409040e27142019...!scr "Didn't you see the       laser beam ?!?           "
+  3454  3c8e 32343020560f0c14...!scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
+  3455  3cc0 590f152013140510...!scr "You stepped on a nail !                           "
+  3456  3cf2 4120060f0f142014...!scr "A foot trap stopped you !                         "
+  3457  3d24 5408091320120f0f...!scr "This room is doomed      by the wizard Manilo !   "
+  3458  3d56 590f152017051205...!scr "You were locked in and   starved !                " ; original: !scr "You were locked in and starved !                  "
+  3459  3d88 590f152017051205...!scr "You were hit by a big    rock and died !          "
+  3460  3dba 42050c0507120f20...!scr "Belegro killed           you !                    "
+  3461  3dec 590f1520060f150e...!scr "You found a thirsty      zombie .......           "
+  3462  3e1e 540805200d0f0e13...!scr "The monster grabbed       you. You are dead !     "
+  3463  3e50 590f152017051205...!scr "You were wounded by      the bush !               "
+  3464  3e82 590f152001120520...!scr "You are trapped in       wire-nettings !          "
   3465                          }
   3466                          
   3467                          
@@ -3788,23 +3788,23 @@
   3487                          
   3488                          
   3489                          !if LANGUAGE = HU{
-  3490  3b62 450719200b090719...!scr "Egy kigyoverembe estel !                          "
-  3491  3b94 411a20091314050e...!scr "Az istenkaromlas         buntetese halal !        "
-  3492  3bc6 42050c0506150c0c...!scr "Belefulladtal a mely     folyoba !                "
-  3493  3bf8 41200d051207051a...!scr "A mergezett flaskabol    ittal...                 "
-  3494  3c2a 420f1209132c2001...!scr "Boris, a pok elkapott    es vegzett veled !       "
-  3495  3c5c 480114200e050d20...!scr "Hat nem lattad a         lezersugarat ?!?         "
-  3496  3c8e 32343020560f0c14...!scr "240 Volt ! Megrazott az  aram !                   "
-  3497  3cc0 42050c050c051014...!scr "Beleleptel egy szogbe !                           "
-  3498  3cf2 4120031301100401...!scr "A csapda, amibe bele-    leptel megallitott !     "
-  3499  3d24 451a050e20012013...!scr "Ezen a szoban Manilo, a  varazslo atka ul !       "
-  3500  3d56 4120131a0f020120...!scr "A szoba rad zarult es    ehen haltal !            "
-  3501  3d88 450c14010c010c14...!scr "Eltalalt egy hatalmas ko es szornyet haltal !     "
-  3502  3dba 42050c0507120f20...!scr "Belegro elpusztitott     teged!                   "
-  3503  3dec 450719200907011a...!scr "Egy igazan szomjas zombitsikerult talalnod ...    "
-  3504  3e1e 4120131a0f120e19...!scr "A szornyeteg elkapott !  Meghaltal.               "
-  3505  3e50 41201415130b0513...!scr "A tuskes bokrok          megsebeztek !            "
-  3506  3e82 4120131a0f070513...!scr "A szogesdrot fogja       lettel !                 "
+  3490                          !scr "Egy kigyoverembe estel !                          "
+  3491                          !scr "Az istenkaromlas         buntetese halal !        "
+  3492                          !scr "Belefulladtal a mely     folyoba !                "
+  3493                          !scr "A mergezett flaskabol    ittal...                 "
+  3494                          !scr "Boris, a pok elkapott    es vegzett veled !       "
+  3495                          !scr "Hat nem lattad a         lezersugarat ?!?         "
+  3496                          !scr "240 Volt ! Megrazott az  aram !                   "
+  3497                          !scr "Beleleptel egy szogbe !                           "
+  3498                          !scr "A csapda, amibe bele-    leptel megallitott !     "
+  3499                          !scr "Ezen a szoban Manilo, a  varazslo atka ul !       "
+  3500                          !scr "A szoba rad zarult es    ehen haltal !            "
+  3501                          !scr "Eltalalt egy hatalmas ko es szornyet haltal !     "
+  3502                          !scr "Belegro elpusztitott     teged!                   "
+  3503                          !scr "Egy igazan szomjas zombitsikerult talalnod ...    "
+  3504                          !scr "A szornyeteg elkapott !  Meghaltal.               "
+  3505                          !scr "A tuskes bokrok          megsebeztek !            "
+  3506                          !scr "A szogesdrot fogja       lettel !                 "
   3507                          }
   3508                          
   3509                          ; ==============================================================================
@@ -3814,13 +3814,13 @@
   3513                          
   3514                          !if LANGUAGE = EN{
   3515                          hint_messages:
-  3516                          !scr " A part of the code number is :         "
-  3517                          !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-  3518                          !scr " You need: bulb, bulb holder, socket !  "
-  3519                          !scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
-  3520                          !scr " *****   A helping letter :   "
-  3521                          helping_letter: !scr "C   ***** "
-  3522                          !scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
+  3516  3eb4 2041201001121420...!scr " A part of the code number is :         "
+  3517  3edc 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+  3518  3f04 20590f15200e0505...!scr " You need: bulb, bulb holder, socket !  "
+  3519  3f2c 2054050c0c200d05...!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
+  3520  3f54 202a2a2a2a2a2020...!scr " *****   A helping letter :   "
+  3521  3f72 432020202a2a2a2a...helping_letter: !scr "C   ***** "
+  3522  3f7c 2057120f0e072003...!scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
   3523                          }
   3524                          
   3525                          !if LANGUAGE = DE{
@@ -3836,13 +3836,13 @@
   3535                          
   3536                          !if LANGUAGE = HU{
   3537                          hint_messages:
-  3538  3eb4 2041200a050c131a...!scr " A jelszo egy resze a kovetkezo:        "
-  3539  3edc 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-  3540  3f04 20451a050b200b05...!scr " Ezek kellenek: tarto, korte, foglalat !"
-  3541  3f2c 204d092001200a05...!scr " Mi a jelszo ?                 ",$22,"     ",$22,"  "
-  3542  3f54 202a2a2a2a2a2020...!scr " *****   Egy betunyi sugo :   "
-  3543  3f72 432020202a2a2a2a...helping_letter: !scr "C   ***** "
-  3544  3f7c 2041200a050c131a...!scr " A jelszo hibas ! BUNTETESED HALAL !    "
+  3538                          !scr " A jelszo egy resze a kovetkezo:        "
+  3539                          !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+  3540                          !scr " Ezek kellenek: tarto, korte, foglalat !"
+  3541                          !scr " Mi a jelszo ?                 ",$22,"     ",$22,"  "
+  3542                          !scr " *****   Egy betunyi sugo :   "
+  3543                          helping_letter: !scr "C   ***** "
+  3544                          !scr " A jelszo hibas ! BUNTETESED HALAL !    "
   3545                          }
   3546                          
   3547                          
@@ -3855,9 +3855,9 @@
   3554                          item_pickup_message:              ; item pickup messages
   3555                          
   3556                          !if LANGUAGE = EN{
-  3557                          !scr " There is a key in the bottle !         "
-  3558                          !scr "   There is a key in the coffin !       "
-  3559                          !scr " There is a breathing tube !            "
+  3557  3fa4 2054080512052009...!scr " There is a key in the bottle !         "
+  3558  3fcc 2020205408051205...!scr "   There is a key in the coffin !       "
+  3559  3ff4 2054080512052009...!scr " There is a breathing tube !            "
   3560                          }
   3561                          
   3562                          !if LANGUAGE = DE{
@@ -3867,9 +3867,9 @@
   3566                          }
   3567                          
   3568                          !if LANGUAGE = HU{
-  3569  3fa4 20412010010c0103...!scr " A palackban egy kulcs van !            "
-  3570  3fcc 202020450719200b...!scr "   Egy kulcs van a koporsoban !         "
-  3571  3ff4 2041200b0f20010c...!scr " A ko alatt egy buvarfelszereles hever !"
+  3569                          !scr " A palackban egy kulcs van !            "
+  3570                          !scr "   Egy kulcs van a koporsoban !         "
+  3571                          !scr " A ko alatt egy buvarfelszereles hever !"
   3572                          }
   3573                          
   3574                          item_pickup_message_end:

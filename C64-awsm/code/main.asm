@@ -17,16 +17,16 @@
 ; ==============================================================================
 
 ; ==============================================================================
-; language
-; ENGLISH and GERMAN are available
-; OPTIONS: EN / DE
+; languages
+; ENGLISH, GERMAN and HUNGARIAN are available
+; OPTIONS: EN / DE / HU
 ; ==============================================================================
 
 EN = 0
 DE = 1
 HU = 2
 
-LANGUAGE = HU
+LANGUAGE = EN
 
 ; ==============================================================================
 ; thse settings change the appearance of the game

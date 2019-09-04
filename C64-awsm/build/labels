@@ -138,7 +138,7 @@
 	room_16_code_delay	= $10a5	; ?
 	delete_fence	= $38b4	; ?
 	FF1D	= $d012
-	LANGUAGE	= $2
+	LANGUAGE	= $0
 	_light	= $368a	; ?	; unused
 	helping_letter	= $3f72	; ?
 	room_06_make_deadly_doors	= $38df	; ?
