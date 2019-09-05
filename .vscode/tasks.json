@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build -> C64 -> VICE",
+            "label": "C64",
             "type": "shell",
             "osx": {
                 "command": "acme -v4 -f cbm -r ../build/report.asm -l ../build/labels -o ../build/main.prg main.asm && STARTADDR=$(grep 'code_start' ../build/labels | cut -d$ -f2 | cut -f1) && exomizer sfx 0x$STARTADDR -n -t 64 -o ../build/main.prg ../build/main.prg && cat ../build/labels ../build/monitor_commands > ../build/vicelabels && /Applications/Vice/x64.app/Contents/MacOS/x64 -moncommands ../build/vicelabels ../build/main.prg 2> /dev/null",
@@ -35,7 +35,7 @@
             }
         },
         {
-            "label": "build -> C16 -> VICE",
+            "label": "C16 Plus/4",
             "type": "shell",
             "osx": {
                 "command": "acme -v4 -f cbm -r ../build/report.asm -l ../build/labels -o ../build/main.prg main.asm && STARTADDR=$(grep 'code_start' ../build/labels | cut -d$ -f2 | cut -f1) && exomizer sfx 0x$STARTADDR -n -t 4 -o ../build/main.prg ../build/main.prg && cat ../build/labels ../build/monitor_commands > ../build/vicelabels && /Applications/Vice/xplus4.app/Contents/MacOS/xplus4 -moncommands ../build/vicelabels ../build/main.prg 2> /dev/null",
@@ -50,30 +50,6 @@
             },
             "options": {
                 "cwd": "${workspaceFolder}/plus4/code"
-            },
-            "problemMatcher": {
-                "owner": "acme",
-                "fileLocation": [
-                    "relative",
-                    "${workspaceFolder}"
-                ],
-                "pattern": {
-                    "regexp": "^(Error - File\\s+(.*), line (\\d+) (\\(Zone .*\\))?:\\s+(.*))$",
-                    "file": 2,
-                    "location": 3,
-                    "message": 1
-                }
-            }
-        },
-        {
-            "label": "build -> C128 -> VICE",
-            "type": "shell",
-            "osx": {
-                "command": "acme -f cbm -l build/labels -o build/main.prg code/main.asm && exomizer sfx 0x3ab3 -n -t 128 -o build/main.prg build/main.prg && /Applications/Vice/x128.app/Contents/MacOS/x128 -moncommands build/labels build/main.prg 2> /dev/null",
-            },
-            "group": "build",
-            "presentation": {
-                "clear": true
             },
             "problemMatcher": {
                 "owner": "acme",
