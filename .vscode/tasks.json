@@ -18,7 +18,7 @@
                 "clear": true
             },
             "options": {
-                "cwd": "${workspaceFolder}/C64-awsm/code"
+                "cwd": "${workspaceFolder}/C64/code"
             },
             "problemMatcher": {
                 "owner": "acme",
