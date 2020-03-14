@@ -1,17 +1,15 @@
 .DS_Store
 
 plus4/build/main.prg
-
 plus4/build/labels
-
 plus4/build/vicelabels
 plus4/build/gtacme.prg
-plus4/build/music.prg
 plus4/build/report.asm
 plus4/docs/plus4.pdf
-C64/music/exports/ghosttown.prg
 plus4/music/labels.asm
+
+C64/music/exports/ghosttown.prg
 C64/music/exports/industrialtown.prg
 C64/music/exports/meditationtown.prg
-C64/build/ghosttown64.prg
-C64/code/report.txt
+C64/build/
+

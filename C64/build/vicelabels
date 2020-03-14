@@ -1,7 +1,9 @@
 	FF0A	= $ff0a	; unused
 	check_item_water	= $1359	; ?
+	text_intro_hu	= $423c	; ?
 	room_02_prep	= $389a	; ?
 	check_shift_key	= $1f1e	; ?
+	copy_text_items	= $40ba	; ?
 	zp0A	= $a
 	set_game_basics	= $3a06	; ?
 	KEYBOARD_LATCH	= $ff08	; unused
@@ -15,9 +17,10 @@
 	room_07	= $1304	; ?
 	m1535	= $15b6
 	tiles_chars	= $2fc2
-	START_ROOM	= $0
+	START_ROOM	= $10
 	room_04	= $12b2	; ?
 	m3626	= $35b9	; ?
+	text_intro_de	= $40d4	; ?
 	room_05	= $12d4	; ?
 	m1537	= $15b8
 	room_02	= $1250	; ?
@@ -25,6 +28,7 @@
 	room_00	= $11f8	; ?
 	belegro_animation	= $35b3	; ?
 	prepare_rooms	= $3876	; ?
+	intro_start	= $4000	; unused
 	room_01	= $1213	; ?
 	PLAYER_START_POS_X	= $3
 	PLAYER_START_POS_Y	= $6
@@ -44,10 +48,12 @@
 	item_pickup_message_end	= $401c	; unused
 	EXTENDED	= $1
 	draw_player	= $34c7	; ?
+	lang_hu	= $4041	; ?
 	TITLE_KEY_MATRIX	= $fd	; unused
 	room_17_prep	= $1517	; ?
 	freq_tab_hi	= $1ed2	; ?
 	charset_end	= $2800	; unused
+	text_hints_hu	= $4c28	; ?
 	m11A6	= $112a
 	VOICE1	= $ff12
 	m15C1	= $151f
@@ -55,6 +61,7 @@
 	m11A2	= $1126	; ?
 	m11E0	= $11e0
 	VOICE2	= $ff10
+	lang_de	= $4012	; unused
 	_gloves	= $361e	; ?	; unused
 	room_14_prep	= $14cd	; ?
 	writeFF11	= $1e8e	; ?
@@ -68,6 +75,7 @@
 	VOICE2_FREQ_LOW	= $ff0f
 	item_pickup_message	= $3fa4	; ?
 	room_05_prep	= $388e	; ?
+	text_hints_de	= $4b38	; ?
 	room_16_cursor_blinking	= $1050
 	fake	= $3a05	; unused
 	set_player_xy	= $39e0	; ?
@@ -80,6 +88,7 @@
 	COLOR_3	= $d024	; unused
 	COLOR_2	= $d023
 	m1264	= $1265
+	end_copy	= $406d	; ?
 	poll_raster	= $359f	; ?
 	room_07_make_sacred_column	= $38cd	; ?
 	m1494	= $14e3
@@ -96,11 +105,13 @@
 	charset_start	= $1f56	; unused
 	VOLUME_AND_VOICE_SELECT	= $ff11
 	laser_beam_animation	= $1541	; ?
+	copy_text_messages	= $4089	; ?
 	DE	= $1
 	set_start_screen	= $3ac3	; ?
 	display_hint	= $10d8	; ?
 	breathing_tube_mod	= $3890	; ?
 	m35E7	= $3580	; ?
+	text_messages_de	= $43a4	; ?
 	m14A4	= $14f3
 	_wirecutter	= $362f	; ?	; unused
 	jmp_death	= $1652
@@ -127,11 +138,13 @@
 	room_data_12	= $2ce0	; unused
 	zp05	= $5
 	room_data_11	= $2c78	; unused
+	text_messages_hu	= $46f6	; ?
 	zp04	= $4
 	check_room	= $1156
 	room_data_10	= $2c10	; unused
 	update_player_pos	= $39ea	; ?
 	MUSIC_DELAY_INITIAL	= $9
+	text_items_de	= $4a48	; ?
 	take_key_out_of_bottle	= $129b	; ?
 	hint_messages	= $3eb4	; ?
 	items	= $3616	; ?
@@ -158,11 +171,13 @@
 	room_13	= $13fa	; ?
 	room_10	= $139f	; ?
 	m1732	= $1733
+	text_items_hu	= $4ac0	; ?
 	room_11	= $13cf	; ?
 	BORDER_COLOR_VALUE	= $2
 	check_joystick	= $353c
 	object_collision	= $1647
 	PRINT_KERNAL	= $ffd2	; unused
+	copy_text_intro	= $4070	; ?
 	room_18	= $146b	; ?
 	display_hint_message	= $1003
 	print_title	= $30b0	; ?
@@ -206,7 +221,7 @@
 	skipper	= $1529	; ?
 	level_data_end	= $2fb8	; unused
 	boris_the_spider_animation	= $15a5	; ?
-	code_start	= $3a42	; unused
+	code_start	= $3a42
 	room_16_code_number_prep	= $1039	; ?
 	m1009	= $1009
 	m15FC	= $149f	; ?
@@ -230,6 +245,7 @@
 	check_death_bush	= $1238	; ?
 	COLOR_FOR_INVISIBLE_ROW_AND_COLUMN	= $2
 	BORDER_COLOR	= $d020
+	copy_text_hints	= $40c7	; ?
 	print_endscreen	= $1b45	; ?
 	room_data_09	= $2ba8	; unused
 	room_data_08	= $2b40	; unused

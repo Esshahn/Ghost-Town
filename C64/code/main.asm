@@ -1882,9 +1882,9 @@ print_endscreen:
 intro_text:
 
 ; instructions screen
+; languages data is copied from the intro
 ; "Search the treasure..."
 
-!if LANGUAGE = EN{
 !scr "Search the treasure of Ghost Town and   "
 !scr "open it ! Kill Belegro, the wizard, and "
 !scr "dodge all other dangers. Don't forget to"
@@ -1894,31 +1894,7 @@ intro_text:
 !scr "it again and again and again ...        "
 !scr "                                        "
 !scr "         Press fire to start !          "
-}
 
-!if LANGUAGE = DE{
-!scr "Suchen Sie die Schatztruhe der Geister- "
-!scr "stadt und oeffnen Sie diese ! Toeten    "
-!scr "Sie Belegro, den Zauberer und weichen   "
-!scr "Sie vielen anderen Wesen geschickt aus. "
-!scr "Bedienen Sie sich an den vielen Gegen-  "
-!scr "staenden, welche sich in den 19 Bildern "
-!scr "befinden. Viel Spass !                  "
-!scr "                                        "
-!scr "    Druecken Sie Feuer zum Starten !    "
-}
-
-!if LANGUAGE = HU{
-!scr "Keresd meg es nyisd fel a Szellemvaros  "
-!scr "kincses ladikajat ! Old meg Bellegrot, a"
-!scr "varazslot, miutan elkerulted a kulonfele"
-!scr "veszelyes lenyeket. Hasznald az osszes  "
-!scr "targyat, amelyeket a 19 valtozatos kep- "
-!scr "ernyon at vezeto kalandod soran talalsz."
-!scr "Jo szorakozast!                         "
-!scr "                                        "
-!scr "         Kezdes a tuz gombbal !         "
-}
 
 ; ==============================================================================
 ;
@@ -3423,6 +3399,7 @@ death_messages:
 
 ; death messages
 ; like "You fell into a snake pit"
+; other languages are copied over from the intro.asm
 
 ; scr conversion
 
@@ -3444,7 +3421,7 @@ death_messages:
 ; 0f You were wounded by the bush!
 ; 10 You are trapped in wire-nettings!
 
-!if LANGUAGE = EN{
+
 !scr "You fell into a          snake pit !              "
 !scr "You'd better watched out for the sacred column!   "
 !scr "You drowned in the deep  river !                  "
@@ -3462,56 +3439,19 @@ death_messages:
 !scr "The monster grabbed       you. You are dead !     "
 !scr "You were wounded by      the bush !               "
 !scr "You are trapped in       wire-nettings !          "
-}
 
 
-!if LANGUAGE = DE{
-!scr "Sie sind in eine         Schlangengrube gefallen !"
-!scr "Gotteslaesterung wird    mit dem Tod bestraft !   "
-!scr "Sie sind in dem tiefen   Fluss ertrunken !        "
-!scr "Sie haben aus der Gift-  flasche getrunken....... "
-!scr "Boris, die Spinne, hat   Sie verschlungen !!      "
-!scr "Den Laserstrahl muessen  Sie uebersehen haben ?!  "
-!scr "220 Volt !! Sie erlitten einen Elektroschock !    "
-!scr "Sie sind in einen Nagel  getreten !               "
-!scr "Eine Fussangel verhindertIhr Weiterkommen !       "
-!scr "Auf diesem Raum liegt einFluch des Magiers Manilo!"
-!scr "Sie wurden eingeschlossenund verhungern !         "
-!scr "Sie wurden von einem     Stein ueberollt !!       "
-!scr "Belegro hat Sie          vernichtet !             "
-!scr "Im Sarg lag ein durstigerZombie........           "
-!scr "Das Monster hat Sie      erwischt !!!!!           "
-!scr "Sie haben sich an dem    Dornenbusch verletzt !   "
-!scr "Sie haben sich im        Stacheldraht verfangen !!"
-}
 
 
-!if LANGUAGE = HU{
-!scr "Egy kigyoverembe estel !                          "
-!scr "Az istenkaromlas         buntetese halal !        "
-!scr "Belefulladtal a mely     folyoba !                "
-!scr "A mergezett flaskabol    ittal...                 "
-!scr "Boris, a pok elkapott    es vegzett veled !       "
-!scr "Hat nem lattad a         lezersugarat ?!?         "
-!scr "240 Volt ! Megrazott az  aram !                   "
-!scr "Beleleptel egy szogbe !                           "
-!scr "A csapda, amibe bele-    leptel megallitott !     "
-!scr "Ezen a szoban Manilo, a  varazslo atka ul !       "
-!scr "A szoba rad zarult es    ehen haltal !            "
-!scr "Eltalalt egy hatalmas ko es szornyet haltal !     "
-!scr "Belegro elpusztitott     teged!                   "
-!scr "Egy igazan szomjas zombitsikerult talalnod ...    "
-!scr "A szornyeteg elkapott !  Meghaltal.               "
-!scr "A tuskes bokrok          megsebeztek !            "
-!scr "A szogesdrot fogja       lettel !                 "
-}
+
+
+
 
 ; ==============================================================================
 ; screen messages
 ; and the code entry text
 ; ==============================================================================
 
-!if LANGUAGE = EN{
 hint_messages:
 !scr " A part of the code number is :         "
 !scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
@@ -3520,29 +3460,7 @@ hint_messages:
 !scr " *****   A helping letter :   "
 helping_letter: !scr "C   ***** "
 !scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
-}
 
-!if LANGUAGE = DE{
-hint_messages:
-!scr " Ein Teil des Loesungscodes lautet:     "
-!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-!scr " Du brauchst:Fassung,Gluehbirne,Strom ! "
-!scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
-!scr " *****   Ein Hilfsbuchstabe:  "
-helping_letter: !scr "C   ***** "
-!scr " Falscher Loesungscode ! TODESSTRAFE !! "
-}
-
-!if LANGUAGE = HU{
-hint_messages:
-!scr " A jelszo egy resze a kovetkezo:        "
-!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-!scr " Ezek kellenek: tarto, korte, foglalat !"
-!scr " Mi a jelszo ?                 ",$22,"     ",$22,"  "
-!scr " *****   Egy betunyi sugo :   "
-helping_letter: !scr "C   ***** "
-!scr " A jelszo hibas ! BUNTETESED HALAL !    "
-}
 
 
 ; ==============================================================================
@@ -3553,22 +3471,41 @@ helping_letter: !scr "C   ***** "
 
 item_pickup_message:              ; item pickup messages
 
-!if LANGUAGE = EN{
 !scr " There is a key in the bottle !         "
 !scr "   There is a key in the coffin !       "
 !scr " There is a breathing tube !            "
-}
-
-!if LANGUAGE = DE{
-!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
-!scr "    In dem Sarg lag ein Schluessel !    "
-!scr " Unter dem Stein lag ein Taucheranzug ! "
-}
-
-!if LANGUAGE = HU{
-!scr " A palackban egy kulcs van !            "
-!scr "   Egy kulcs van a koporsoban !         "
-!scr " A ko alatt egy buvarfelszereles hever !"
-}
 
 item_pickup_message_end:
+
+
+
+
+
+                    ;       444444444       000000000          000000000          000000000     
+                    ;      4::::::::4     00:::::::::00      00:::::::::00      00:::::::::00   
+                    ;     4:::::::::4   00:::::::::::::00  00:::::::::::::00  00:::::::::::::00 
+                    ;    4::::44::::4  0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
+                    ;   4::::4 4::::4  0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
+                    ;  4::::4  4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+                    ; 4::::4   4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+                    ;4::::444444::::4440:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
+                    ;4::::::::::::::::40:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
+                    ;4444444444:::::4440:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+                    ;          4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+                    ;          4::::4  0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
+                    ;          4::::4  0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
+                    ;        44::::::44 00:::::::::::::00  00:::::::::::::00  00:::::::::::::00 
+                    ;        4::::::::4   00:::::::::00      00:::::::::00      00:::::::::00   
+                    ;        4444444444     000000000          000000000          000000000  
+
+
+
+*= $4000
+
+; ==============================================================================
+;
+; CODE ADDITION AREA
+; ==============================================================================
+
+; intro_start
+!source "includes/intro.asm"
