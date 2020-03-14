@@ -62,7 +62,7 @@ EXTENDED                = 1       ; 0 = original version, 1 = tweaks and cosmeti
 ;
 ; ==============================================================================
 
-START_ROOM          = 0             ; default 0 
+START_ROOM          = 18             ; default 0 
 PLAYER_START_POS_X  = 3             ; default 3
 PLAYER_START_POS_Y  = 6             ; default 6
 SILENT_MODE         = 0
@@ -1817,15 +1817,9 @@ m174F:
 
 
 screen_win_src:
-                    !if LANGUAGE = EN{
-                        !bin "includes/screen-win-en.scr"
-                    }
-                    !if LANGUAGE = DE{
-                        !bin "includes/screen-win-de.scr"
-                    }
-                    !if LANGUAGE = HU{
-                        !bin "includes/screen-win-hu.scr"
-                    }
+
+!bin "includes/screen-win-en.scr"
+
 screen_win_src_end:
 
 

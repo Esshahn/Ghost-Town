@@ -64,7 +64,7 @@
     62                          ;
     63                          ; ==============================================================================
     64                          
-    65                          START_ROOM          = 16             ; default 0 
+    65                          START_ROOM          = 18             ; default 0 
     66                          PLAYER_START_POS_X  = 3             ; default 3
     67                          PLAYER_START_POS_Y  = 6             ; default 6
     68                          SILENT_MODE         = 0
@@ -1819,148 +1819,148 @@
   1817                          
   1818                          
   1819                          screen_win_src:
-  1820                                              !if LANGUAGE = EN{
-  1821  175d 7040404040404040...                        !bin "includes/screen-win-en.scr"
-  1822                                              }
-  1823                                              !if LANGUAGE = DE{
-  1824                                                  !bin "includes/screen-win-de.scr"
-  1825                                              }
-  1826                                              !if LANGUAGE = HU{
-  1827                                                  !bin "includes/screen-win-hu.scr"
-  1828                                              }
-  1829                          screen_win_src_end:
+  1820                          
+  1821  175d 7040404040404040...!bin "includes/screen-win-en.scr"
+  1822                          
+  1823                          screen_win_src_end:
+  1824                          
+  1825                          
+  1826                          ; ==============================================================================
+  1827                          ;
+  1828                          ; PRINT WIN SCREEN
+  1829                          ; ==============================================================================
   1830                          
-  1831                          
-  1832                          ; ==============================================================================
-  1833                          ;
-  1834                          ; PRINT WIN SCREEN
-  1835                          ; ==============================================================================
-  1836                          
-  1837                          print_endscreen:
-  1838  1b45 a904                                   lda #>SCREENRAM
-  1839  1b47 8503                                   sta zp03
-  1840  1b49 a9d8                                   lda #>COLRAM
-  1841  1b4b 8505                                   sta zp05
-  1842  1b4d a900                                   lda #<SCREENRAM
-  1843  1b4f 8502                                   sta zp02
-  1844  1b51 8504                                   sta zp04
-  1845  1b53 a204                                   ldx #$04
-  1846  1b55 a917                                   lda #>screen_win_src
-  1847  1b57 85a8                                   sta zpA8
-  1848  1b59 a95d                                   lda #<screen_win_src
-  1849  1b5b 85a7                                   sta zpA7
-  1850  1b5d a000                                   ldy #$00
-  1851  1b5f b1a7               -                   lda (zpA7),y        ; copy from $175c + y
-  1852  1b61 9102                                   sta (zp02),y        ; to SCREEN
-  1853  1b63 a900                                   lda #$00            ; color = BLACK
-  1854  1b65 9104                                   sta (zp04),y        ; to COLRAM
-  1855  1b67 c8                                     iny
-  1856  1b68 d0f5                                   bne -
-  1857  1b6a e603                                   inc zp03
-  1858  1b6c e605                                   inc zp05
-  1859  1b6e e6a8                                   inc zpA8
-  1860  1b70 ca                                     dex
-  1861  1b71 d0ec                                   bne -
-  1862  1b73 a907                                   lda #$07                  ; yellow
-  1863  1b75 8d21d0                                 sta BG_COLOR              ; background
-  1864  1b78 8d20d0                                 sta BORDER_COLOR          ; und border
-  1865  1b7b a5cb               -                   lda $cb                   ; lda #$fd
-  1866                                                                        ; sta KEYBOARD_LATCH
-  1867                                                                        ; lda KEYBOARD_LATCH
-  1868                                                                        ; and #$80           ; WAITKEY?
-  1869                                              
-  1870  1b7d c93c                                   cmp #$3c                  ; check for space key on C64
-  1871  1b7f d0fa                                   bne -
-  1872  1b81 20b030                                 jsr print_title
-  1873  1b84 20b030                                 jsr print_title
-  1874  1b87 4c423a                                 jmp init
+  1831                          print_endscreen:
+  1832  1b45 a904                                   lda #>SCREENRAM
+  1833  1b47 8503                                   sta zp03
+  1834  1b49 a9d8                                   lda #>COLRAM
+  1835  1b4b 8505                                   sta zp05
+  1836  1b4d a900                                   lda #<SCREENRAM
+  1837  1b4f 8502                                   sta zp02
+  1838  1b51 8504                                   sta zp04
+  1839  1b53 a204                                   ldx #$04
+  1840  1b55 a917                                   lda #>screen_win_src
+  1841  1b57 85a8                                   sta zpA8
+  1842  1b59 a95d                                   lda #<screen_win_src
+  1843  1b5b 85a7                                   sta zpA7
+  1844  1b5d a000                                   ldy #$00
+  1845  1b5f b1a7               -                   lda (zpA7),y        ; copy from $175c + y
+  1846  1b61 9102                                   sta (zp02),y        ; to SCREEN
+  1847  1b63 a900                                   lda #$00            ; color = BLACK
+  1848  1b65 9104                                   sta (zp04),y        ; to COLRAM
+  1849  1b67 c8                                     iny
+  1850  1b68 d0f5                                   bne -
+  1851  1b6a e603                                   inc zp03
+  1852  1b6c e605                                   inc zp05
+  1853  1b6e e6a8                                   inc zpA8
+  1854  1b70 ca                                     dex
+  1855  1b71 d0ec                                   bne -
+  1856  1b73 a907                                   lda #$07                  ; yellow
+  1857  1b75 8d21d0                                 sta BG_COLOR              ; background
+  1858  1b78 8d20d0                                 sta BORDER_COLOR          ; und border
+  1859  1b7b a5cb               -                   lda $cb                   ; lda #$fd
+  1860                                                                        ; sta KEYBOARD_LATCH
+  1861                                                                        ; lda KEYBOARD_LATCH
+  1862                                                                        ; and #$80           ; WAITKEY?
+  1863                                              
+  1864  1b7d c93c                                   cmp #$3c                  ; check for space key on C64
+  1865  1b7f d0fa                                   bne -
+  1866  1b81 20b030                                 jsr print_title
+  1867  1b84 20b030                                 jsr print_title
+  1868  1b87 4c423a                                 jmp init
+  1869                          
+  1870                          
+  1871                          ; ==============================================================================
+  1872                          ;
+  1873                          ; INTRO TEXT SCREEN
+  1874                          ; ==============================================================================
   1875                          
-  1876                          
-  1877                          ; ==============================================================================
-  1878                          ;
-  1879                          ; INTRO TEXT SCREEN
-  1880                          ; ==============================================================================
+  1876                          intro_text:
+  1877                          
+  1878                          ; instructions screen
+  1879                          ; languages data is copied from the intro
+  1880                          ; "Search the treasure..."
   1881                          
-  1882                          intro_text:
-  1883                          
-  1884                          ; instructions screen
-  1885                          ; languages data is copied from the intro
-  1886                          ; "Search the treasure..."
-  1887                          
-  1888  1b8a 5305011203082014...!scr "Search the treasure of Ghost Town and   "
-  1889  1bb2 0f10050e20091420...!scr "open it ! Kill Belegro, the wizard, and "
-  1890  1bda 040f04070520010c...!scr "dodge all other dangers. Don't forget to"
-  1891  1c02 15130520010c0c20...!scr "use all the items you'll find during    "
-  1892  1c2a 190f1512200a0f15...!scr "your journey through 19 amazing hires-  "
-  1893  1c52 0712011008090313...!scr "graphics-rooms! Enjoy the quest and play"
-  1894  1c7a 091420010701090e...!scr "it again and again and again ...        "
-  1895  1ca2 2020202020202020...!scr "                                        "
-  1896  1cca 2020202020202020...!scr "         Press fire to start !          "
+  1882  1b8a 5305011203082014...!scr "Search the treasure of Ghost Town and   "
+  1883  1bb2 0f10050e20091420...!scr "open it ! Kill Belegro, the wizard, and "
+  1884  1bda 040f04070520010c...!scr "dodge all other dangers. Don't forget to"
+  1885  1c02 15130520010c0c20...!scr "use all the items you'll find during    "
+  1886  1c2a 190f1512200a0f15...!scr "your journey through 19 amazing hires-  "
+  1887  1c52 0712011008090313...!scr "graphics-rooms! Enjoy the quest and play"
+  1888  1c7a 091420010701090e...!scr "it again and again and again ...        "
+  1889  1ca2 2020202020202020...!scr "                                        "
+  1890  1cca 2020202020202020...!scr "         Press fire to start !          "
+  1891                          
+  1892                          
+  1893                          ; ==============================================================================
+  1894                          ;
+  1895                          ; DISPLAY INTRO TEXT
+  1896                          ; ==============================================================================
   1897                          
-  1898                          
-  1899                          ; ==============================================================================
-  1900                          ;
-  1901                          ; DISPLAY INTRO TEXT
-  1902                          ; ==============================================================================
-  1903                          
-  1904                          display_intro_text:
-  1905                          
-  1906                                              ; i think this part displays the introduction text
-  1907                          
-  1908  1cf2 a904                                   lda #>SCREENRAM       ; lda #$0c
-  1909  1cf4 8503                                   sta zp03
-  1910  1cf6 a9d8                                   lda #>COLRAM        ; lda #$08
-  1911  1cf8 8505                                   sta zp05
-  1912  1cfa a9a0                                   lda #$a0
-  1913  1cfc 8502                                   sta zp02
-  1914  1cfe 8504                                   sta zp04
-  1915  1d00 a91b                                   lda #>intro_text
-  1916  1d02 85a8                                   sta zpA8
-  1917  1d04 a98a                                   lda #<intro_text
-  1918  1d06 85a7                                   sta zpA7
-  1919  1d08 a209                                   ldx #$09
-  1920  1d0a a000               --                  ldy #$00
-  1921  1d0c b1a7               -                   lda (zpA7),y
-  1922  1d0e 9102                                   sta (zp02),y
-  1923  1d10 a968                                   lda #$68
-  1924  1d12 9104                                   sta (zp04),y
-  1925  1d14 c8                                     iny
-  1926  1d15 c028                                   cpy #$28
-  1927  1d17 d0f3                                   bne -
-  1928  1d19 a5a7                                   lda zpA7
-  1929  1d1b 18                                     clc
-  1930  1d1c 6928                                   adc #$28
-  1931  1d1e 85a7                                   sta zpA7
-  1932  1d20 9002                                   bcc +
-  1933  1d22 e6a8                                   inc zpA8
-  1934  1d24 a502               +                   lda zp02
-  1935  1d26 18                                     clc
-  1936  1d27 6950                                   adc #$50
-  1937  1d29 8502                                   sta zp02
-  1938  1d2b 8504                                   sta zp04
-  1939  1d2d 9004                                   bcc +
-  1940  1d2f e603                                   inc zp03
-  1941  1d31 e605                                   inc zp05
-  1942  1d33 ca                 +                   dex
-  1943  1d34 d0d4                                   bne --
-  1944  1d36 a900                                   lda #$00
-  1945  1d38 8d21d0                                 sta BG_COLOR
-  1946  1d3b 60                                     rts
+  1898                          display_intro_text:
+  1899                          
+  1900                                              ; i think this part displays the introduction text
+  1901                          
+  1902  1cf2 a904                                   lda #>SCREENRAM       ; lda #$0c
+  1903  1cf4 8503                                   sta zp03
+  1904  1cf6 a9d8                                   lda #>COLRAM        ; lda #$08
+  1905  1cf8 8505                                   sta zp05
+  1906  1cfa a9a0                                   lda #$a0
+  1907  1cfc 8502                                   sta zp02
+  1908  1cfe 8504                                   sta zp04
+  1909  1d00 a91b                                   lda #>intro_text
+  1910  1d02 85a8                                   sta zpA8
+  1911  1d04 a98a                                   lda #<intro_text
+  1912  1d06 85a7                                   sta zpA7
+  1913  1d08 a209                                   ldx #$09
+  1914  1d0a a000               --                  ldy #$00
+  1915  1d0c b1a7               -                   lda (zpA7),y
+  1916  1d0e 9102                                   sta (zp02),y
+  1917  1d10 a968                                   lda #$68
+  1918  1d12 9104                                   sta (zp04),y
+  1919  1d14 c8                                     iny
+  1920  1d15 c028                                   cpy #$28
+  1921  1d17 d0f3                                   bne -
+  1922  1d19 a5a7                                   lda zpA7
+  1923  1d1b 18                                     clc
+  1924  1d1c 6928                                   adc #$28
+  1925  1d1e 85a7                                   sta zpA7
+  1926  1d20 9002                                   bcc +
+  1927  1d22 e6a8                                   inc zpA8
+  1928  1d24 a502               +                   lda zp02
+  1929  1d26 18                                     clc
+  1930  1d27 6950                                   adc #$50
+  1931  1d29 8502                                   sta zp02
+  1932  1d2b 8504                                   sta zp04
+  1933  1d2d 9004                                   bcc +
+  1934  1d2f e603                                   inc zp03
+  1935  1d31 e605                                   inc zp05
+  1936  1d33 ca                 +                   dex
+  1937  1d34 d0d4                                   bne --
+  1938  1d36 a900                                   lda #$00
+  1939  1d38 8d21d0                                 sta BG_COLOR
+  1940  1d3b 60                                     rts
+  1941                          
+  1942                          ; ==============================================================================
+  1943                          ;
+  1944                          ; DISPLAY INTRO TEXT AND WAIT FOR INPUT (SHIFT & JOY)
+  1945                          ; DECREASES MUSIC VOLUME
+  1946                          ; ==============================================================================
   1947                          
-  1948                          ; ==============================================================================
-  1949                          ;
-  1950                          ; DISPLAY INTRO TEXT AND WAIT FOR INPUT (SHIFT & JOY)
-  1951                          ; DECREASES MUSIC VOLUME
-  1952                          ; ==============================================================================
-  1953                          
-  1954                          start_intro:        ;sta KEYBOARD_LATCH
-  1955  1d3c 20423b                                 jsr clear                                   ; jsr PRINT_KERNAL
-  1956  1d3f 20f21c                                 jsr display_intro_text
-  1957  1d42 201e1f                                 jsr check_shift_key
-  1958                                              
-  1959                                              ;lda #$ba
-  1960                                              ;sta music_volume+1                          ; sound volume
-  1961  1d45 60                                     rts
+  1948                          start_intro:        ;sta KEYBOARD_LATCH
+  1949  1d3c 20423b                                 jsr clear                                   ; jsr PRINT_KERNAL
+  1950  1d3f 20f21c                                 jsr display_intro_text
+  1951  1d42 201e1f                                 jsr check_shift_key
+  1952                                              
+  1953                                              ;lda #$ba
+  1954                                              ;sta music_volume+1                          ; sound volume
+  1955  1d45 60                                     rts
+  1956                          
+  1957                          
+  1958                          
+  1959                          
+  1960                          
+  1961                          
   1962                          
   1963                          
   1964                          
@@ -1989,16 +1989,10 @@
   1987                          
   1988                          
   1989                          
-  1990                          
-  1991                          
-  1992                          
-  1993                          
-  1994                          
-  1995                          
-  1996                          ; ==============================================================================
-  1997                          ; MUSIC
-  1998                          ; ==============================================================================
-  1999                                              !zone MUSIC
+  1990                          ; ==============================================================================
+  1991                          ; MUSIC
+  1992                          ; ==============================================================================
+  1993                                              !zone MUSIC
 
 ; ******** Source: includes/music_data.asm
      1                          ; music! :)
@@ -2022,122 +2016,128 @@
     19  1e03 ea                 !byte $ea
 
 ; ******** Source: main.asm
-  2001                          ; ==============================================================================
-  2002                          music_get_data:
-  2003  1e04 a000               .voice1_dur_pt:     ldy #$00
-  2004  1e06 d01d                                   bne +
-  2005  1e08 a940                                   lda #$40
-  2006  1e0a 8d6b1e                                 sta music_voice1+1
-  2007  1e0d 206a1e                                 jsr music_voice1
-  2008  1e10 a200               .voice1_dat_pt:     ldx #$00
-  2009  1e12 bd461d                                 lda music_data_voice1,x
-  2010  1e15 ee111e                                 inc .voice1_dat_pt+1
-  2011  1e18 a8                                     tay
-  2012  1e19 291f                                   and #$1f
-  2013  1e1b 8d6b1e                                 sta music_voice1+1
-  2014  1e1e 98                                     tya
-  2015  1e1f 4a                                     lsr
-  2016  1e20 4a                                     lsr
-  2017  1e21 4a                                     lsr
-  2018  1e22 4a                                     lsr
-  2019  1e23 4a                                     lsr
-  2020  1e24 a8                                     tay
-  2021  1e25 88                 +                   dey
-  2022  1e26 8c051e                                 sty .voice1_dur_pt + 1
-  2023  1e29 a000               .voice2_dur_pt:     ldy #$00
-  2024  1e2b d022                                   bne +
-  2025  1e2d a940                                   lda #$40
-  2026  1e2f 8d931e                                 sta music_voice2 + 1
-  2027  1e32 20921e                                 jsr music_voice2
-  2028  1e35 a200               .voice2_dat_pt:     ldx #$00
-  2029  1e37 bda01d                                 lda music_data_voice2,x
-  2030  1e3a a8                                     tay
-  2031  1e3b e8                                     inx
-  2032  1e3c e065                                   cpx #$65
-  2033  1e3e f019                                   beq music_reset
-  2034  1e40 8e361e                                 stx .voice2_dat_pt + 1
-  2035  1e43 291f                                   and #$1f
-  2036  1e45 8d931e                                 sta music_voice2 + 1
-  2037  1e48 98                                     tya
-  2038  1e49 4a                                     lsr
-  2039  1e4a 4a                                     lsr
-  2040  1e4b 4a                                     lsr
-  2041  1e4c 4a                                     lsr
-  2042  1e4d 4a                                     lsr
-  2043  1e4e a8                                     tay
-  2044  1e4f 88                 +                   dey
-  2045  1e50 8c2a1e                                 sty .voice2_dur_pt + 1
-  2046  1e53 206a1e                                 jsr music_voice1
-  2047  1e56 4c921e                                 jmp music_voice2
-  2048                          ; ==============================================================================
-  2049  1e59 a900               music_reset:        lda #$00
-  2050  1e5b 8d051e                                 sta .voice1_dur_pt + 1
-  2051  1e5e 8d111e                                 sta .voice1_dat_pt + 1
-  2052  1e61 8d2a1e                                 sta .voice2_dur_pt + 1
-  2053  1e64 8d361e                                 sta .voice2_dat_pt + 1
-  2054  1e67 4c041e                                 jmp music_get_data
-  2055                          ; ==============================================================================
-  2056                          ; write music data for voice1 / voice2 into TED registers
-  2057                          ; ==============================================================================
-  2058  1e6a a204               music_voice1:       ldx #$04
-  2059  1e6c e01c                                   cpx #$1c
-  2060  1e6e 9008                                   bcc +
-  2061  1e70 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
-  2062  1e73 29ef                                   and #$ef
-  2063  1e75 4c8e1e                                 jmp writeFF11
-  2064  1e78 bdba1e             +                   lda freq_tab_lo,x
-  2065  1e7b 8d0eff                                 sta VOICE1_FREQ_LOW
-  2066  1e7e ad12ff                                 lda VOICE1
-  2067  1e81 29fc                                   and #$fc
-  2068  1e83 1dd21e                                 ora freq_tab_hi, x
-  2069  1e86 8d12ff                                 sta VOICE1
-  2070  1e89 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
-  2071  1e8c 0910                                   ora #$10
-  2072  1e8e 8d11ff             writeFF11           sta VOLUME_AND_VOICE_SELECT
-  2073  1e91 60                                     rts
-  2074                          ; ==============================================================================
-  2075  1e92 a20d               music_voice2:       ldx #$0d
-  2076  1e94 e01c                                   cpx #$1c
-  2077  1e96 9008                                   bcc +
-  2078  1e98 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
-  2079  1e9b 29df                                   and #$df
-  2080  1e9d 4c8e1e                                 jmp writeFF11
-  2081  1ea0 bdba1e             +                   lda freq_tab_lo,x
-  2082  1ea3 8d0fff                                 sta VOICE2_FREQ_LOW
-  2083  1ea6 ad10ff                                 lda VOICE2
-  2084  1ea9 29fc                                   and #$fc
-  2085  1eab 1dd21e                                 ora freq_tab_hi,x
-  2086  1eae 8d10ff                                 sta VOICE2
-  2087  1eb1 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
-  2088  1eb4 0920                                   ora #$20
-  2089  1eb6 8d11ff                                 sta VOLUME_AND_VOICE_SELECT
-  2090  1eb9 60                                     rts
-  2091                          ; ==============================================================================
-  2092                          ; TED frequency tables
-  2093                          ; ==============================================================================
-  2094  1eba 0776a906597fc5     freq_tab_lo:        !byte $07, $76, $a9, $06, $59, $7f, $c5
-  2095  1ec1 043b5483adc0e3                         !byte $04, $3b, $54, $83, $ad, $c0, $e3
-  2096  1ec8 021e2a42566071                         !byte $02, $1e, $2a, $42, $56, $60, $71
-  2097  1ecf 818f95                                 !byte $81, $8f, $95
-  2098  1ed2 00000001010101     freq_tab_hi:        !byte $00, $00, $00, $01, $01, $01, $01
-  2099  1ed9 02020202020202                         !byte $02, $02, $02, $02, $02, $02, $02
-  2100  1ee0 03030303030303                         !byte $03, $03, $03, $03, $03, $03, $03
-  2101  1ee7 030303                                 !byte $03, $03, $03
-  2102                          ; ==============================================================================
-  2103                                              MUSIC_DELAY_INITIAL   = $09
-  2104                                              MUSIC_DELAY           = $0B
-  2105  1eea a209               music_play:         ldx #MUSIC_DELAY_INITIAL
-  2106  1eec ca                                     dex
-  2107  1eed 8eeb1e                                 stx music_play+1
-  2108  1ef0 f001                                   beq +
-  2109  1ef2 60                                     rts
-  2110  1ef3 a20b               +                   ldx #MUSIC_DELAY
-  2111  1ef5 8eeb1e                                 stx music_play+1
-  2112  1ef8 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
-  2113  1efb 0937                                   ora #$37
-  2114  1efd 29bf               music_volume:       and #$bf
-  2115  1eff 8d11ff                                 sta VOLUME_AND_VOICE_SELECT
-  2116  1f02 4c041e                                 jmp music_get_data
+  1995                          ; ==============================================================================
+  1996                          music_get_data:
+  1997  1e04 a000               .voice1_dur_pt:     ldy #$00
+  1998  1e06 d01d                                   bne +
+  1999  1e08 a940                                   lda #$40
+  2000  1e0a 8d6b1e                                 sta music_voice1+1
+  2001  1e0d 206a1e                                 jsr music_voice1
+  2002  1e10 a200               .voice1_dat_pt:     ldx #$00
+  2003  1e12 bd461d                                 lda music_data_voice1,x
+  2004  1e15 ee111e                                 inc .voice1_dat_pt+1
+  2005  1e18 a8                                     tay
+  2006  1e19 291f                                   and #$1f
+  2007  1e1b 8d6b1e                                 sta music_voice1+1
+  2008  1e1e 98                                     tya
+  2009  1e1f 4a                                     lsr
+  2010  1e20 4a                                     lsr
+  2011  1e21 4a                                     lsr
+  2012  1e22 4a                                     lsr
+  2013  1e23 4a                                     lsr
+  2014  1e24 a8                                     tay
+  2015  1e25 88                 +                   dey
+  2016  1e26 8c051e                                 sty .voice1_dur_pt + 1
+  2017  1e29 a000               .voice2_dur_pt:     ldy #$00
+  2018  1e2b d022                                   bne +
+  2019  1e2d a940                                   lda #$40
+  2020  1e2f 8d931e                                 sta music_voice2 + 1
+  2021  1e32 20921e                                 jsr music_voice2
+  2022  1e35 a200               .voice2_dat_pt:     ldx #$00
+  2023  1e37 bda01d                                 lda music_data_voice2,x
+  2024  1e3a a8                                     tay
+  2025  1e3b e8                                     inx
+  2026  1e3c e065                                   cpx #$65
+  2027  1e3e f019                                   beq music_reset
+  2028  1e40 8e361e                                 stx .voice2_dat_pt + 1
+  2029  1e43 291f                                   and #$1f
+  2030  1e45 8d931e                                 sta music_voice2 + 1
+  2031  1e48 98                                     tya
+  2032  1e49 4a                                     lsr
+  2033  1e4a 4a                                     lsr
+  2034  1e4b 4a                                     lsr
+  2035  1e4c 4a                                     lsr
+  2036  1e4d 4a                                     lsr
+  2037  1e4e a8                                     tay
+  2038  1e4f 88                 +                   dey
+  2039  1e50 8c2a1e                                 sty .voice2_dur_pt + 1
+  2040  1e53 206a1e                                 jsr music_voice1
+  2041  1e56 4c921e                                 jmp music_voice2
+  2042                          ; ==============================================================================
+  2043  1e59 a900               music_reset:        lda #$00
+  2044  1e5b 8d051e                                 sta .voice1_dur_pt + 1
+  2045  1e5e 8d111e                                 sta .voice1_dat_pt + 1
+  2046  1e61 8d2a1e                                 sta .voice2_dur_pt + 1
+  2047  1e64 8d361e                                 sta .voice2_dat_pt + 1
+  2048  1e67 4c041e                                 jmp music_get_data
+  2049                          ; ==============================================================================
+  2050                          ; write music data for voice1 / voice2 into TED registers
+  2051                          ; ==============================================================================
+  2052  1e6a a204               music_voice1:       ldx #$04
+  2053  1e6c e01c                                   cpx #$1c
+  2054  1e6e 9008                                   bcc +
+  2055  1e70 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
+  2056  1e73 29ef                                   and #$ef
+  2057  1e75 4c8e1e                                 jmp writeFF11
+  2058  1e78 bdba1e             +                   lda freq_tab_lo,x
+  2059  1e7b 8d0eff                                 sta VOICE1_FREQ_LOW
+  2060  1e7e ad12ff                                 lda VOICE1
+  2061  1e81 29fc                                   and #$fc
+  2062  1e83 1dd21e                                 ora freq_tab_hi, x
+  2063  1e86 8d12ff                                 sta VOICE1
+  2064  1e89 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
+  2065  1e8c 0910                                   ora #$10
+  2066  1e8e 8d11ff             writeFF11           sta VOLUME_AND_VOICE_SELECT
+  2067  1e91 60                                     rts
+  2068                          ; ==============================================================================
+  2069  1e92 a20d               music_voice2:       ldx #$0d
+  2070  1e94 e01c                                   cpx #$1c
+  2071  1e96 9008                                   bcc +
+  2072  1e98 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
+  2073  1e9b 29df                                   and #$df
+  2074  1e9d 4c8e1e                                 jmp writeFF11
+  2075  1ea0 bdba1e             +                   lda freq_tab_lo,x
+  2076  1ea3 8d0fff                                 sta VOICE2_FREQ_LOW
+  2077  1ea6 ad10ff                                 lda VOICE2
+  2078  1ea9 29fc                                   and #$fc
+  2079  1eab 1dd21e                                 ora freq_tab_hi,x
+  2080  1eae 8d10ff                                 sta VOICE2
+  2081  1eb1 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
+  2082  1eb4 0920                                   ora #$20
+  2083  1eb6 8d11ff                                 sta VOLUME_AND_VOICE_SELECT
+  2084  1eb9 60                                     rts
+  2085                          ; ==============================================================================
+  2086                          ; TED frequency tables
+  2087                          ; ==============================================================================
+  2088  1eba 0776a906597fc5     freq_tab_lo:        !byte $07, $76, $a9, $06, $59, $7f, $c5
+  2089  1ec1 043b5483adc0e3                         !byte $04, $3b, $54, $83, $ad, $c0, $e3
+  2090  1ec8 021e2a42566071                         !byte $02, $1e, $2a, $42, $56, $60, $71
+  2091  1ecf 818f95                                 !byte $81, $8f, $95
+  2092  1ed2 00000001010101     freq_tab_hi:        !byte $00, $00, $00, $01, $01, $01, $01
+  2093  1ed9 02020202020202                         !byte $02, $02, $02, $02, $02, $02, $02
+  2094  1ee0 03030303030303                         !byte $03, $03, $03, $03, $03, $03, $03
+  2095  1ee7 030303                                 !byte $03, $03, $03
+  2096                          ; ==============================================================================
+  2097                                              MUSIC_DELAY_INITIAL   = $09
+  2098                                              MUSIC_DELAY           = $0B
+  2099  1eea a209               music_play:         ldx #MUSIC_DELAY_INITIAL
+  2100  1eec ca                                     dex
+  2101  1eed 8eeb1e                                 stx music_play+1
+  2102  1ef0 f001                                   beq +
+  2103  1ef2 60                                     rts
+  2104  1ef3 a20b               +                   ldx #MUSIC_DELAY
+  2105  1ef5 8eeb1e                                 stx music_play+1
+  2106  1ef8 ad11ff                                 lda VOLUME_AND_VOICE_SELECT
+  2107  1efb 0937                                   ora #$37
+  2108  1efd 29bf               music_volume:       and #$bf
+  2109  1eff 8d11ff                                 sta VOLUME_AND_VOICE_SELECT
+  2110  1f02 4c041e                                 jmp music_get_data
+  2111                          
+  2112                          
+  2113                          
+  2114                          
+  2115                          
+  2116                          
   2117                          
   2118                          
   2119                          
@@ -2164,158 +2164,152 @@
   2140                          
   2141                          
   2142                          
-  2143                          
-  2144                          
-  2145                          
-  2146                          
-  2147                          
-  2148                          
-  2149                          ; ==============================================================================
-  2150                          ; irq init
-  2151                          ; ==============================================================================
-  2152                                              !zone IRQ
-  2153  1f05 78                 irq_init0:          sei
-  2154  1f06 a929                                   lda #<irq0          ; lda #$06
-  2155  1f08 8d1403                                 sta $0314          ; irq lo
-  2156  1f0b a91f                                   lda #>irq0          ; lda #$1f
-  2157  1f0d 8d1503                                 sta $0315          ; irq hi
-  2158                                                                  ; irq at $1F06
-  2159  1f10 a901                                   lda #$01            ;lda #$02
-  2160  1f12 8d1ad0                                 sta $d01a           ; sta FF0A          ; set IRQ source to RASTER
+  2143                          ; ==============================================================================
+  2144                          ; irq init
+  2145                          ; ==============================================================================
+  2146                                              !zone IRQ
+  2147  1f05 78                 irq_init0:          sei
+  2148  1f06 a929                                   lda #<irq0          ; lda #$06
+  2149  1f08 8d1403                                 sta $0314          ; irq lo
+  2150  1f0b a91f                                   lda #>irq0          ; lda #$1f
+  2151  1f0d 8d1503                                 sta $0315          ; irq hi
+  2152                                                                  ; irq at $1F06
+  2153  1f10 a901                                   lda #$01            ;lda #$02
+  2154  1f12 8d1ad0                                 sta $d01a           ; sta FF0A          ; set IRQ source to RASTER
+  2155                          
+  2156  1f15 a9bf                                   lda #$bf
+  2157  1f17 8dfe1e                                 sta music_volume+1         ; sta $1ed9    ; sound volume
+  2158  1f1a 58                                     cli
+  2159                          
+  2160  1f1b 4c263a                                 jmp set_charset_and_screen
   2161                          
-  2162  1f15 a9bf                                   lda #$bf
-  2163  1f17 8dfe1e                                 sta music_volume+1         ; sta $1ed9    ; sound volume
-  2164  1f1a 58                                     cli
-  2165                          
-  2166  1f1b 4c263a                                 jmp set_charset_and_screen
-  2167                          
-  2168                          ; ==============================================================================
-  2169                          ; intro text
-  2170                          ; wait for shift or joy2 fire press
-  2171                          ; ==============================================================================
-  2172                          
-  2173                          check_shift_key:
-  2174                          
-  2175  1f1e ad00dc             -                   lda $dc00
-  2176  1f21 4a                                     lsr
-  2177  1f22 4a                                     lsr
-  2178  1f23 4a                                     lsr
-  2179  1f24 4a                                     lsr
-  2180  1f25 4a                                     lsr
-  2181  1f26 b0f6                                   bcs -
-  2182  1f28 60                                     rts
-  2183                          
-  2184                          ; ==============================================================================
-  2185                          ;
-  2186                          ; INTERRUPT routine for music
-  2187                          ; ==============================================================================
-  2188                          
-  2189                                              ; *= $1F06
-  2190                          irq0:
-  2191  1f29 ce09ff                                 DEC INTERRUPT
-  2192                          
-  2193                                                                  ; this IRQ seems to handle music only!
-  2194                                              !if SILENT_MODE = 1 {
-  2195                                                  jsr fake
-  2196                                              } else {
-  2197  1f2c 20ea1e                                     jsr music_play
-  2198                                              }
-  2199  1f2f 68                                     pla
-  2200  1f30 a8                                     tay
-  2201  1f31 68                                     pla
-  2202  1f32 aa                                     tax
-  2203  1f33 68                                     pla
-  2204  1f34 40                                     rti
-  2205                          
+  2162                          ; ==============================================================================
+  2163                          ; intro text
+  2164                          ; wait for shift or joy2 fire press
+  2165                          ; ==============================================================================
+  2166                          
+  2167                          check_shift_key:
+  2168                          
+  2169  1f1e ad00dc             -                   lda $dc00
+  2170  1f21 4a                                     lsr
+  2171  1f22 4a                                     lsr
+  2172  1f23 4a                                     lsr
+  2173  1f24 4a                                     lsr
+  2174  1f25 4a                                     lsr
+  2175  1f26 b0f6                                   bcs -
+  2176  1f28 60                                     rts
+  2177                          
+  2178                          ; ==============================================================================
+  2179                          ;
+  2180                          ; INTERRUPT routine for music
+  2181                          ; ==============================================================================
+  2182                          
+  2183                                              ; *= $1F06
+  2184                          irq0:
+  2185  1f29 ce09ff                                 DEC INTERRUPT
+  2186                          
+  2187                                                                  ; this IRQ seems to handle music only!
+  2188                                              !if SILENT_MODE = 1 {
+  2189                                                  jsr fake
+  2190                                              } else {
+  2191  1f2c 20ea1e                                     jsr music_play
+  2192                                              }
+  2193  1f2f 68                                     pla
+  2194  1f30 a8                                     tay
+  2195  1f31 68                                     pla
+  2196  1f32 aa                                     tax
+  2197  1f33 68                                     pla
+  2198  1f34 40                                     rti
+  2199                          
+  2200                          ; ==============================================================================
+  2201                          ; checks if the music volume is at the desired level
+  2202                          ; and increases it if not
+  2203                          ; if volume is high enough, it initializes the music irq routine
+  2204                          ; is called right at the start of the game, but also when a game ended
+  2205                          ; and is about to show the title screen again (increasing the volume)
   2206                          ; ==============================================================================
-  2207                          ; checks if the music volume is at the desired level
-  2208                          ; and increases it if not
-  2209                          ; if volume is high enough, it initializes the music irq routine
-  2210                          ; is called right at the start of the game, but also when a game ended
-  2211                          ; and is about to show the title screen again (increasing the volume)
-  2212                          ; ==============================================================================
-  2213                          
-  2214                          init_music:                                  
-  2215  1f35 adfe1e                                 lda music_volume+1                              ; sound volume
-  2216  1f38 c9bf               --                  cmp #$bf                                        ; is true on init
-  2217  1f3a d003                                   bne +
-  2218  1f3c 4c051f                                 jmp irq_init0
-  2219  1f3f a204               +                   ldx #$04
-  2220  1f41 86a8               -                   stx zpA8                                        ; buffer serial input byte ?
-  2221  1f43 a0ff                                   ldy #$ff
-  2222  1f45 20ff39                                 jsr wait
-  2223  1f48 a6a8                                   ldx zpA8
-  2224  1f4a ca                                     dex
-  2225  1f4b d0f4                                   bne -                                               
-  2226  1f4d 18                                     clc
-  2227  1f4e 6901                                   adc #$01                                        ; increases volume again before returning to title screen
-  2228  1f50 8dfe1e                                 sta music_volume+1                              ; sound volume
-  2229  1f53 4c381f                                 jmp --
-  2230                          
-  2231                          
-  2232                          
-  2233                                              ; 222222222222222         000000000          000000000          000000000
-  2234                                              ;2:::::::::::::::22     00:::::::::00      00:::::::::00      00:::::::::00
-  2235                                              ;2::::::222222:::::2  00:::::::::::::00  00:::::::::::::00  00:::::::::::::00
-  2236                                              ;2222222     2:::::2 0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
-  2237                                              ;            2:::::2 0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
-  2238                                              ;            2:::::2 0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  2239                                              ;         2222::::2  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  2240                                              ;    22222::::::22   0:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
-  2241                                              ;  22::::::::222     0:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
-  2242                                              ; 2:::::22222        0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  2243                                              ;2:::::2             0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  2244                                              ;2:::::2             0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
-  2245                                              ;2:::::2       2222220:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
-  2246                                              ;2::::::2222222:::::2 00:::::::::::::00  00:::::::::::::00  00:::::::::::::00
-  2247                                              ;2::::::::::::::::::2   00:::::::::00      00:::::::::00      00:::::::::00
-  2248                                              ;22222222222222222222     000000000          000000000          000000000
+  2207                          
+  2208                          init_music:                                  
+  2209  1f35 adfe1e                                 lda music_volume+1                              ; sound volume
+  2210  1f38 c9bf               --                  cmp #$bf                                        ; is true on init
+  2211  1f3a d003                                   bne +
+  2212  1f3c 4c051f                                 jmp irq_init0
+  2213  1f3f a204               +                   ldx #$04
+  2214  1f41 86a8               -                   stx zpA8                                        ; buffer serial input byte ?
+  2215  1f43 a0ff                                   ldy #$ff
+  2216  1f45 20ff39                                 jsr wait
+  2217  1f48 a6a8                                   ldx zpA8
+  2218  1f4a ca                                     dex
+  2219  1f4b d0f4                                   bne -                                               
+  2220  1f4d 18                                     clc
+  2221  1f4e 6901                                   adc #$01                                        ; increases volume again before returning to title screen
+  2222  1f50 8dfe1e                                 sta music_volume+1                              ; sound volume
+  2223  1f53 4c381f                                 jmp --
+  2224                          
+  2225                          
+  2226                          
+  2227                                              ; 222222222222222         000000000          000000000          000000000
+  2228                                              ;2:::::::::::::::22     00:::::::::00      00:::::::::00      00:::::::::00
+  2229                                              ;2::::::222222:::::2  00:::::::::::::00  00:::::::::::::00  00:::::::::::::00
+  2230                                              ;2222222     2:::::2 0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
+  2231                                              ;            2:::::2 0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
+  2232                                              ;            2:::::2 0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  2233                                              ;         2222::::2  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  2234                                              ;    22222::::::22   0:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
+  2235                                              ;  22::::::::222     0:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
+  2236                                              ; 2:::::22222        0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  2237                                              ;2:::::2             0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  2238                                              ;2:::::2             0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
+  2239                                              ;2:::::2       2222220:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
+  2240                                              ;2::::::2222222:::::2 00:::::::::::::00  00:::::::::::::00  00:::::::::::::00
+  2241                                              ;2::::::::::::::::::2   00:::::::::00      00:::::::::00      00:::::::::00
+  2242                                              ;22222222222222222222     000000000          000000000          000000000
+  2243                          
+  2244                          ; ==============================================================================
+  2245                          ; CHARSET
+  2246                          ; $2000 - $2800
+  2247                          ; ==============================================================================
+  2248                          
   2249                          
-  2250                          ; ==============================================================================
-  2251                          ; CHARSET
-  2252                          ; $2000 - $2800
-  2253                          ; ==============================================================================
-  2254                          
-  2255                          
-  2256                          charset_start:
-  2257                                              *= $2000
-  2258                                              !if EXTENDED {
-  2259  2000 000000020a292727...                        !bin "includes/charset-extended.bin"
-  2260                                              }else{
-  2261                                                  !bin "includes/charset.bin" ; !bin "includes/charset.bin"
-  2262                                              }
-  2263                          charset_end:    ; $2800
-  2264                          
-  2265                          
-  2266                                              ; 222222222222222         888888888          000000000           000000000
-  2267                                              ;2:::::::::::::::22     88:::::::::88      00:::::::::00       00:::::::::00
-  2268                                              ;2::::::222222:::::2  88:::::::::::::88  00:::::::::::::00   00:::::::::::::00
-  2269                                              ;2222222     2:::::2 8::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
-  2270                                              ;            2:::::2 8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
-  2271                                              ;            2:::::2 8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
-  2272                                              ;         2222::::2   8:::::88888:::::8  0:::::0     0:::::0 0:::::0     0:::::0
-  2273                                              ;    22222::::::22     8:::::::::::::8   0:::::0 000 0:::::0 0:::::0 000 0:::::0
-  2274                                              ;  22::::::::222      8:::::88888:::::8  0:::::0 000 0:::::0 0:::::0 000 0:::::0
-  2275                                              ; 2:::::22222        8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
-  2276                                              ;2:::::2             8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
-  2277                                              ;2:::::2             8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
-  2278                                              ;2:::::2       2222228::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
-  2279                                              ;2::::::2222222:::::2 88:::::::::::::88   00:::::::::::::00   00:::::::::::::00
-  2280                                              ;2::::::::::::::::::2   88:::::::::88       00:::::::::00       00:::::::::00
-  2281                                              ;22222222222222222222     888888888           000000000           000000000
-  2282                          
-  2283                          
-  2284                          
+  2250                          charset_start:
+  2251                                              *= $2000
+  2252                                              !if EXTENDED {
+  2253  2000 000000020a292727...                        !bin "includes/charset-extended.bin"
+  2254                                              }else{
+  2255                                                  !bin "includes/charset.bin" ; !bin "includes/charset.bin"
+  2256                                              }
+  2257                          charset_end:    ; $2800
+  2258                          
+  2259                          
+  2260                                              ; 222222222222222         888888888          000000000           000000000
+  2261                                              ;2:::::::::::::::22     88:::::::::88      00:::::::::00       00:::::::::00
+  2262                                              ;2::::::222222:::::2  88:::::::::::::88  00:::::::::::::00   00:::::::::::::00
+  2263                                              ;2222222     2:::::2 8::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
+  2264                                              ;            2:::::2 8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
+  2265                                              ;            2:::::2 8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
+  2266                                              ;         2222::::2   8:::::88888:::::8  0:::::0     0:::::0 0:::::0     0:::::0
+  2267                                              ;    22222::::::22     8:::::::::::::8   0:::::0 000 0:::::0 0:::::0 000 0:::::0
+  2268                                              ;  22::::::::222      8:::::88888:::::8  0:::::0 000 0:::::0 0:::::0 000 0:::::0
+  2269                                              ; 2:::::22222        8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
+  2270                                              ;2:::::2             8:::::8     8:::::8 0:::::0     0:::::0 0:::::0     0:::::0
+  2271                                              ;2:::::2             8:::::8     8:::::8 0::::::0   0::::::0 0::::::0   0::::::0
+  2272                                              ;2:::::2       2222228::::::88888::::::8 0:::::::000:::::::0 0:::::::000:::::::0
+  2273                                              ;2::::::2222222:::::2 88:::::::::::::88   00:::::::::::::00   00:::::::::::::00
+  2274                                              ;2::::::::::::::::::2   88:::::::::88       00:::::::::00       00:::::::::00
+  2275                                              ;22222222222222222222     888888888           000000000           000000000
+  2276                          
+  2277                          
+  2278                          
+  2279                          ; ==============================================================================
+  2280                          ; LEVEL DATA
+  2281                          ; Based on tiles
+  2282                          ;                     !IMPORTANT!
+  2283                          ;                     has to be page aligned or
+  2284                          ;                     display_room routine will fail
   2285                          ; ==============================================================================
-  2286                          ; LEVEL DATA
-  2287                          ; Based on tiles
-  2288                          ;                     !IMPORTANT!
-  2289                          ;                     has to be page aligned or
-  2290                          ;                     display_room routine will fail
-  2291                          ; ==============================================================================
-  2292                          
-  2293                                              *= $2800
-  2294                          level_data:
+  2286                          
+  2287                                              *= $2800
+  2288                          level_data:
 
 ; ******** Source: includes/levels.asm
      1                          ; all levels/rooms
@@ -2552,436 +2546,436 @@
    232                          
 
 ; ******** Source: main.asm
-  2296                          level_data_end:
+  2290                          level_data_end:
+  2291                          
+  2292                          
+  2293                          ;$2fbf
+  2294                          speed_byte:
+  2295  2fb8 01                 !byte $01
+  2296                          
   2297                          
   2298                          
-  2299                          ;$2fbf
-  2300                          speed_byte:
-  2301  2fb8 01                 !byte $01
-  2302                          
-  2303                          
-  2304                          
-  2305                          
+  2299                          
+  2300                          
+  2301                          ; ==============================================================================
+  2302                          ;
+  2303                          ;
+  2304                          ; ==============================================================================
+  2305                                  
   2306                          
-  2307                          ; ==============================================================================
-  2308                          ;
-  2309                          ;
-  2310                          ; ==============================================================================
-  2311                                  
+  2307                          rasterpoll_and_other_stuff:
+  2308                          
+  2309  2fb9 209f35                                 jsr poll_raster
+  2310  2fbc 20c039                                 jsr check_door 
+  2311  2fbf 4c8014                                 jmp animation_entrypoint          
   2312                          
-  2313                          rasterpoll_and_other_stuff:
+  2313                          
   2314                          
-  2315  2fb9 209f35                                 jsr poll_raster
-  2316  2fbc 20c039                                 jsr check_door 
-  2317  2fbf 4c8014                                 jmp animation_entrypoint          
-  2318                          
-  2319                          
-  2320                          
-  2321                          ; ==============================================================================
-  2322                          ;
-  2323                          ; tileset definition
-  2324                          ; these are the first characters in the charset of each tile.
-  2325                          ; example: rocks start at $0c and span 9 characters in total
-  2326                          ; ==============================================================================
-  2327                          
-  2328                          tileset_definition:
-  2329                          tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
-  2330  2fc2 df0c151e27303942                       !byte $df, $0c, $15, $1e, $27, $30, $39, $42        ; empty, rock, brick, ?mark, bush, grave, coffin, coffin
-  2331                                              ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-  2332  2fca 4b545d666f78818a                       !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a        ; water, water, water, tree, tree, boulder, treasure, treasure
-  2333                                              ;     $10
-  2334  2fd2 03                                     !byte $03                                           ; door
-  2335                          
-  2336                          !if EXTENDED = 0{
-  2337                          tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
-  2338                                              !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
-  2339                                              ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-  2340                                              !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
-  2341                                              ;     $10
-  2342                                              !byte $0a
-  2343                          }
-  2344                          
-  2345                          !if EXTENDED = 1{
-  2346                          tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
-  2347  2fd3 000a0a0e3d7f2a2a                       !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
-  2348                                              ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-  2349  2fdb 1e1e1e3d3d0d2f2f                       !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
-  2350                                              ;     $10
-  2351  2fe3 0a                                     !byte $0a  
-  2352                          }
-  2353                          
-  2354                          ; ==============================================================================
-  2355                          ;
-  2356                          ; displays a room based on tiles
-  2357                          ; ==============================================================================
-  2358                          
-  2359                          display_room:       
-  2360  2fe4 208b3a                                 jsr draw_border
-  2361  2fe7 a900                                   lda #$00
-  2362  2fe9 8502                                   sta zp02
-  2363  2feb a2d8                                   ldx #>COLRAM        ; HiByte of COLRAM
-  2364  2fed 8605                                   stx zp05
-  2365  2fef a204                                   ldx #>SCREENRAM     ; HiByte of SCREENRAM
-  2366  2ff1 8603                                   stx zp03
-  2367  2ff3 a228                                   ldx #>level_data    ; HiByte of level_data
-  2368  2ff5 860a                                   stx zp0A            ; in zp0A
-  2369  2ff7 a201               current_room:       ldx #$01            ; current_room in X
-  2370  2ff9 f00a                                   beq ++              ; if 0 -> skip
-  2371  2ffb 18                 -                   clc                 ; else
-  2372  2ffc 6968                                   adc #$68            ; add $68 [= 104 = 13*8 (size of a room]
-  2373  2ffe 9002                                   bcc +               ; to zp09/zp0A
-  2374  3000 e60a                                   inc zp0A            ;
-  2375  3002 ca                 +                   dex                 ; X times
-  2376  3003 d0f6                                   bne -               ; => current_room_data = ( level_data + ( $68 * current_room ) )
-  2377  3005 8509               ++                  sta zp09            ; LoByte from above
-  2378  3007 a000                                   ldy #$00
-  2379  3009 84a8                                   sty zpA8
-  2380  300b 84a7                                   sty zpA7
-  2381  300d b109               m3066:              lda (zp09),y        ; get Tilenumber
-  2382  300f aa                                     tax                 ; in X
-  2383  3010 bdd32f                                 lda tiles_colors,x  ; get Tilecolor
-  2384  3013 8510                                   sta zp10            ; => zp10
-  2385  3015 bdc22f                                 lda tiles_chars,x   ; get Tilechar
-  2386  3018 8511                                   sta zp11            ; => zp11
-  2387  301a a203                                   ldx #$03            ; (3 rows)
-  2388  301c a000               --                  ldy #$00
-  2389  301e a502               -                   lda zp02            ; LoByte of SCREENRAM pointer
-  2390  3020 8504                                   sta zp04            ; LoByte of COLRAM pointer
-  2391  3022 a511                                   lda zp11            ; Load Tilechar
-  2392  3024 9102                                   sta (zp02),y        ; to SCREENRAM + Y
-  2393  3026 a510                                   lda zp10            ; Load Tilecolor
-  2394  3028 9104                                   sta (zp04),y        ; to COLRAM + Y
-  2395  302a a511                                   lda zp11            ; Load Tilechar again
-  2396  302c c9df                                   cmp #$df            ; if empty tile
-  2397  302e f002                                   beq +               ; -> skip
-  2398  3030 e611                                   inc zp11            ; else: Tilechar + 1
-  2399  3032 c8                 +                   iny                 ; Y = Y + 1
-  2400  3033 c003                                   cpy #$03            ; Y = 3 ? (Tilecolumns)
-  2401  3035 d0e7                                   bne -               ; no -> next Char
-  2402  3037 a502                                   lda zp02            ; yes:
-  2403  3039 18                                     clc
-  2404  303a 6928                                   adc #$28            ; next SCREEN row
-  2405  303c 8502                                   sta zp02
-  2406  303e 9004                                   bcc +
-  2407  3040 e603                                   inc zp03
-  2408  3042 e605                                   inc zp05            ; and COLRAM row
-  2409  3044 ca                 +                   dex                 ; X = X - 1
-  2410  3045 d0d5                                   bne --              ; X != 0 -> next Char
-  2411  3047 e6a8                                   inc zpA8            ; else: zpA8 = zpA8 + 1
-  2412  3049 e6a7                                   inc zpA7            ; zpA7 = zpA7 + 1
-  2413  304b a975                                   lda #$75            ; for m30B8 + 1
-  2414  304d a6a8                                   ldx zpA8
-  2415  304f e00d                                   cpx #$0d            ; zpA8 < $0d ? (same Tilerow)
-  2416  3051 900c                                   bcc +               ; yes: -> skip (-$75 for next Tile)
-  2417  3053 a6a7                                   ldx zpA7            ; else:
-  2418  3055 e066                                   cpx #$66            ; zpA7 >= $66
-  2419  3057 b01c                                   bcs display_door    ; yes: display_door
-  2420  3059 a900                                   lda #$00            ; else:
-  2421  305b 85a8                                   sta zpA8            ; clear zpA8
-  2422  305d a924                                   lda #$24            ; for m30B8 + 1
-  2423  305f 8d6630             +                   sta m30B8 + 1       ;
-  2424  3062 a502                                   lda zp02
-  2425  3064 38                                     sec
-  2426  3065 e975               m30B8:              sbc #$75            ; -$75 (next Tile in row) or -$24 (next row )
-  2427  3067 8502                                   sta zp02
-  2428  3069 b004                                   bcs +
-  2429  306b c603                                   dec zp03
-  2430  306d c605                                   dec zp05
-  2431  306f a4a7               +                   ldy zpA7
-  2432  3071 4c0d30                                 jmp m3066
-  2433  3074 60                                     rts                 ; will this ever be used?
-  2434                          
-  2435  3075 a904               display_door:       lda #>SCREENRAM
-  2436  3077 8503                                   sta zp03
-  2437  3079 a9d8                                   lda #>COLRAM
-  2438  307b 8505                                   sta zp05
-  2439  307d a900                                   lda #$00
-  2440  307f 8502                                   sta zp02
-  2441  3081 8504                                   sta zp04
-  2442  3083 a028               -                   ldy #$28
-  2443  3085 b102                                   lda (zp02),y        ; read from SCREENRAM
-  2444  3087 c906                                   cmp #$06            ; $06 (part from Door?)
-  2445  3089 b00b                                   bcs +               ; >= $06 -> skip
-  2446  308b 38                                     sec                 ; else:
-  2447  308c e903                                   sbc #$03            ; subtract $03
-  2448  308e a000                                   ldy #$00            ; set Y = $00
-  2449  3090 9102                                   sta (zp02),y        ; and copy to one row above
-  2450  3092 a90a                                   lda #$0a            ; lda #$39 ; color brown - luminance $3  -> color of the top of a door
-  2451  3094 9104                                   sta (zp04),y
-  2452  3096 a502               +                   lda zp02
-  2453  3098 18                                     clc
-  2454  3099 6901                                   adc #$01            ; add 1 to SCREENRAM pointer low
-  2455  309b 9004                                   bcc +
-  2456  309d e603                                   inc zp03            ; inc pointer HiBytes if necessary
-  2457  309f e605                                   inc zp05
-  2458  30a1 8502               +                   sta zp02
-  2459  30a3 8504                                   sta zp04
-  2460  30a5 c998                                   cmp #$98            ; SCREENRAM pointer low = $98
-  2461  30a7 d0da                                   bne -               ; no -> loop
-  2462  30a9 a503                                   lda zp03            ; else:
-  2463  30ab c907                                   cmp #>(SCREENRAM+$300)
-  2464  30ad d0d4                                   bne -               ; no -> loop
-  2465  30af 60                                     rts                 ; else: finally ready with room display
-  2466                          
-  2467                          ; ==============================================================================
-  2468                          
-  2469  30b0 a904               print_title:        lda #>SCREENRAM
-  2470  30b2 8503                                   sta zp03
-  2471  30b4 a9d8                                   lda #>COLRAM
-  2472  30b6 8505                                   sta zp05
-  2473  30b8 a900                                   lda #<SCREENRAM
-  2474  30ba 8502                                   sta zp02
-  2475  30bc 8504                                   sta zp04
-  2476  30be a930                                   lda #>screen_start_src
-  2477  30c0 85a8                                   sta zpA8
-  2478  30c2 a9df                                   lda #<screen_start_src
-  2479  30c4 85a7                                   sta zpA7
-  2480  30c6 a204                                   ldx #$04
-  2481  30c8 a000               --                  ldy #$00
-  2482  30ca b1a7               -                   lda (zpA7),y        ; $313C + Y ( Titelbild )
-  2483  30cc 9102                                   sta (zp02),y        ; nach SCREEN
-  2484  30ce a900                                   lda #$00           ; BLACK
-  2485  30d0 9104                                   sta (zp04),y        ; nach COLRAM
-  2486  30d2 c8                                     iny
-  2487  30d3 d0f5                                   bne -
-  2488  30d5 e603                                   inc zp03
-  2489  30d7 e605                                   inc zp05
-  2490  30d9 e6a8                                   inc zpA8
-  2491  30db ca                                     dex
-  2492  30dc d0ea                                   bne --
-  2493  30de 60                                     rts
-  2494                          
-  2495                          ; ==============================================================================
-  2496                          ; TITLE SCREEN DATA
-  2497                          ;
-  2498                          ; ==============================================================================
-  2499                          
-  2500                          screen_start_src:
+  2315                          ; ==============================================================================
+  2316                          ;
+  2317                          ; tileset definition
+  2318                          ; these are the first characters in the charset of each tile.
+  2319                          ; example: rocks start at $0c and span 9 characters in total
+  2320                          ; ==============================================================================
+  2321                          
+  2322                          tileset_definition:
+  2323                          tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
+  2324  2fc2 df0c151e27303942                       !byte $df, $0c, $15, $1e, $27, $30, $39, $42        ; empty, rock, brick, ?mark, bush, grave, coffin, coffin
+  2325                                              ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+  2326  2fca 4b545d666f78818a                       !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a        ; water, water, water, tree, tree, boulder, treasure, treasure
+  2327                                              ;     $10
+  2328  2fd2 03                                     !byte $03                                           ; door
+  2329                          
+  2330                          !if EXTENDED = 0{
+  2331                          tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+  2332                                              !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
+  2333                                              ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+  2334                                              !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
+  2335                                              ;     $10
+  2336                                              !byte $0a
+  2337                          }
+  2338                          
+  2339                          !if EXTENDED = 1{
+  2340                          tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+  2341  2fd3 000a0a0e3d7f2a2a                       !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
+  2342                                              ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+  2343  2fdb 1e1e1e3d3d0d2f2f                       !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
+  2344                                              ;     $10
+  2345  2fe3 0a                                     !byte $0a  
+  2346                          }
+  2347                          
+  2348                          ; ==============================================================================
+  2349                          ;
+  2350                          ; displays a room based on tiles
+  2351                          ; ==============================================================================
+  2352                          
+  2353                          display_room:       
+  2354  2fe4 208b3a                                 jsr draw_border
+  2355  2fe7 a900                                   lda #$00
+  2356  2fe9 8502                                   sta zp02
+  2357  2feb a2d8                                   ldx #>COLRAM        ; HiByte of COLRAM
+  2358  2fed 8605                                   stx zp05
+  2359  2fef a204                                   ldx #>SCREENRAM     ; HiByte of SCREENRAM
+  2360  2ff1 8603                                   stx zp03
+  2361  2ff3 a228                                   ldx #>level_data    ; HiByte of level_data
+  2362  2ff5 860a                                   stx zp0A            ; in zp0A
+  2363  2ff7 a201               current_room:       ldx #$01            ; current_room in X
+  2364  2ff9 f00a                                   beq ++              ; if 0 -> skip
+  2365  2ffb 18                 -                   clc                 ; else
+  2366  2ffc 6968                                   adc #$68            ; add $68 [= 104 = 13*8 (size of a room]
+  2367  2ffe 9002                                   bcc +               ; to zp09/zp0A
+  2368  3000 e60a                                   inc zp0A            ;
+  2369  3002 ca                 +                   dex                 ; X times
+  2370  3003 d0f6                                   bne -               ; => current_room_data = ( level_data + ( $68 * current_room ) )
+  2371  3005 8509               ++                  sta zp09            ; LoByte from above
+  2372  3007 a000                                   ldy #$00
+  2373  3009 84a8                                   sty zpA8
+  2374  300b 84a7                                   sty zpA7
+  2375  300d b109               m3066:              lda (zp09),y        ; get Tilenumber
+  2376  300f aa                                     tax                 ; in X
+  2377  3010 bdd32f                                 lda tiles_colors,x  ; get Tilecolor
+  2378  3013 8510                                   sta zp10            ; => zp10
+  2379  3015 bdc22f                                 lda tiles_chars,x   ; get Tilechar
+  2380  3018 8511                                   sta zp11            ; => zp11
+  2381  301a a203                                   ldx #$03            ; (3 rows)
+  2382  301c a000               --                  ldy #$00
+  2383  301e a502               -                   lda zp02            ; LoByte of SCREENRAM pointer
+  2384  3020 8504                                   sta zp04            ; LoByte of COLRAM pointer
+  2385  3022 a511                                   lda zp11            ; Load Tilechar
+  2386  3024 9102                                   sta (zp02),y        ; to SCREENRAM + Y
+  2387  3026 a510                                   lda zp10            ; Load Tilecolor
+  2388  3028 9104                                   sta (zp04),y        ; to COLRAM + Y
+  2389  302a a511                                   lda zp11            ; Load Tilechar again
+  2390  302c c9df                                   cmp #$df            ; if empty tile
+  2391  302e f002                                   beq +               ; -> skip
+  2392  3030 e611                                   inc zp11            ; else: Tilechar + 1
+  2393  3032 c8                 +                   iny                 ; Y = Y + 1
+  2394  3033 c003                                   cpy #$03            ; Y = 3 ? (Tilecolumns)
+  2395  3035 d0e7                                   bne -               ; no -> next Char
+  2396  3037 a502                                   lda zp02            ; yes:
+  2397  3039 18                                     clc
+  2398  303a 6928                                   adc #$28            ; next SCREEN row
+  2399  303c 8502                                   sta zp02
+  2400  303e 9004                                   bcc +
+  2401  3040 e603                                   inc zp03
+  2402  3042 e605                                   inc zp05            ; and COLRAM row
+  2403  3044 ca                 +                   dex                 ; X = X - 1
+  2404  3045 d0d5                                   bne --              ; X != 0 -> next Char
+  2405  3047 e6a8                                   inc zpA8            ; else: zpA8 = zpA8 + 1
+  2406  3049 e6a7                                   inc zpA7            ; zpA7 = zpA7 + 1
+  2407  304b a975                                   lda #$75            ; for m30B8 + 1
+  2408  304d a6a8                                   ldx zpA8
+  2409  304f e00d                                   cpx #$0d            ; zpA8 < $0d ? (same Tilerow)
+  2410  3051 900c                                   bcc +               ; yes: -> skip (-$75 for next Tile)
+  2411  3053 a6a7                                   ldx zpA7            ; else:
+  2412  3055 e066                                   cpx #$66            ; zpA7 >= $66
+  2413  3057 b01c                                   bcs display_door    ; yes: display_door
+  2414  3059 a900                                   lda #$00            ; else:
+  2415  305b 85a8                                   sta zpA8            ; clear zpA8
+  2416  305d a924                                   lda #$24            ; for m30B8 + 1
+  2417  305f 8d6630             +                   sta m30B8 + 1       ;
+  2418  3062 a502                                   lda zp02
+  2419  3064 38                                     sec
+  2420  3065 e975               m30B8:              sbc #$75            ; -$75 (next Tile in row) or -$24 (next row )
+  2421  3067 8502                                   sta zp02
+  2422  3069 b004                                   bcs +
+  2423  306b c603                                   dec zp03
+  2424  306d c605                                   dec zp05
+  2425  306f a4a7               +                   ldy zpA7
+  2426  3071 4c0d30                                 jmp m3066
+  2427  3074 60                                     rts                 ; will this ever be used?
+  2428                          
+  2429  3075 a904               display_door:       lda #>SCREENRAM
+  2430  3077 8503                                   sta zp03
+  2431  3079 a9d8                                   lda #>COLRAM
+  2432  307b 8505                                   sta zp05
+  2433  307d a900                                   lda #$00
+  2434  307f 8502                                   sta zp02
+  2435  3081 8504                                   sta zp04
+  2436  3083 a028               -                   ldy #$28
+  2437  3085 b102                                   lda (zp02),y        ; read from SCREENRAM
+  2438  3087 c906                                   cmp #$06            ; $06 (part from Door?)
+  2439  3089 b00b                                   bcs +               ; >= $06 -> skip
+  2440  308b 38                                     sec                 ; else:
+  2441  308c e903                                   sbc #$03            ; subtract $03
+  2442  308e a000                                   ldy #$00            ; set Y = $00
+  2443  3090 9102                                   sta (zp02),y        ; and copy to one row above
+  2444  3092 a90a                                   lda #$0a            ; lda #$39 ; color brown - luminance $3  -> color of the top of a door
+  2445  3094 9104                                   sta (zp04),y
+  2446  3096 a502               +                   lda zp02
+  2447  3098 18                                     clc
+  2448  3099 6901                                   adc #$01            ; add 1 to SCREENRAM pointer low
+  2449  309b 9004                                   bcc +
+  2450  309d e603                                   inc zp03            ; inc pointer HiBytes if necessary
+  2451  309f e605                                   inc zp05
+  2452  30a1 8502               +                   sta zp02
+  2453  30a3 8504                                   sta zp04
+  2454  30a5 c998                                   cmp #$98            ; SCREENRAM pointer low = $98
+  2455  30a7 d0da                                   bne -               ; no -> loop
+  2456  30a9 a503                                   lda zp03            ; else:
+  2457  30ab c907                                   cmp #>(SCREENRAM+$300)
+  2458  30ad d0d4                                   bne -               ; no -> loop
+  2459  30af 60                                     rts                 ; else: finally ready with room display
+  2460                          
+  2461                          ; ==============================================================================
+  2462                          
+  2463  30b0 a904               print_title:        lda #>SCREENRAM
+  2464  30b2 8503                                   sta zp03
+  2465  30b4 a9d8                                   lda #>COLRAM
+  2466  30b6 8505                                   sta zp05
+  2467  30b8 a900                                   lda #<SCREENRAM
+  2468  30ba 8502                                   sta zp02
+  2469  30bc 8504                                   sta zp04
+  2470  30be a930                                   lda #>screen_start_src
+  2471  30c0 85a8                                   sta zpA8
+  2472  30c2 a9df                                   lda #<screen_start_src
+  2473  30c4 85a7                                   sta zpA7
+  2474  30c6 a204                                   ldx #$04
+  2475  30c8 a000               --                  ldy #$00
+  2476  30ca b1a7               -                   lda (zpA7),y        ; $313C + Y ( Titelbild )
+  2477  30cc 9102                                   sta (zp02),y        ; nach SCREEN
+  2478  30ce a900                                   lda #$00           ; BLACK
+  2479  30d0 9104                                   sta (zp04),y        ; nach COLRAM
+  2480  30d2 c8                                     iny
+  2481  30d3 d0f5                                   bne -
+  2482  30d5 e603                                   inc zp03
+  2483  30d7 e605                                   inc zp05
+  2484  30d9 e6a8                                   inc zpA8
+  2485  30db ca                                     dex
+  2486  30dc d0ea                                   bne --
+  2487  30de 60                                     rts
+  2488                          
+  2489                          ; ==============================================================================
+  2490                          ; TITLE SCREEN DATA
+  2491                          ;
+  2492                          ; ==============================================================================
+  2493                          
+  2494                          screen_start_src:
+  2495                          
+  2496                                              !if EXTENDED {
+  2497  30df 20202020202020a0...                        !bin "includes/title-extended.scr"
+  2498                                              }else{
+  2499                                                  !bin "includes/title.scr"
+  2500                                              }
   2501                          
-  2502                                              !if EXTENDED {
-  2503  30df 20202020202020a0...                        !bin "includes/title-extended.scr"
-  2504                                              }else{
-  2505                                                  !bin "includes/title.scr"
-  2506                                              }
-  2507                          
-  2508                          screen_start_src_end:
+  2502                          screen_start_src_end:
+  2503                          
+  2504                          
+  2505                          ; ==============================================================================
+  2506                          ; i think this might be the draw routine for the player sprite
+  2507                          ;
+  2508                          ; ==============================================================================
   2509                          
   2510                          
-  2511                          ; ==============================================================================
-  2512                          ; i think this might be the draw routine for the player sprite
-  2513                          ;
-  2514                          ; ==============================================================================
-  2515                          
-  2516                          
-  2517                          draw_player:
-  2518  34c7 8eea34                                 stx m3548 + 1                       ; store x pos of player
-  2519  34ca a9d8                                   lda #>COLRAM                        ; store colram high in zp05
-  2520  34cc 8505                                   sta zp05
-  2521  34ce a904                                   lda #>SCREENRAM                     ; store screenram high in zp03
-  2522  34d0 8503                                   sta zp03
-  2523  34d2 a900                                   lda #$00
-  2524  34d4 8502                                   sta zp02
-  2525  34d6 8504                                   sta zp04                            ; 00 for zp02 and zp04 (colram low and screenram low)
-  2526  34d8 c000                                   cpy #$00                            ; Y is probably the player Y position
-  2527  34da f00c                                   beq +                               ; Y is 0 -> +
-  2528  34dc 18                 -                   clc                                 ; Y not 0
-  2529  34dd 6928                                   adc #$28                            ; add $28 (=#40 = one line) to A (which is now $28)
-  2530  34df 9004                                   bcc ++                              ; <256? -> ++
-  2531  34e1 e603                                   inc zp03
-  2532  34e3 e605                                   inc zp05
-  2533  34e5 88                 ++                  dey                                 ; Y = Y - 1
-  2534  34e6 d0f4                                   bne -                               ; Y = 0 ? -> -
-  2535  34e8 18                 +                   clc                                 ;
-  2536  34e9 6916               m3548:              adc #$16                            ; add $15 (#21) why? -> selfmod address
-  2537  34eb 8502                                   sta zp02
-  2538  34ed 8504                                   sta zp04
-  2539  34ef 9004                                   bcc +
-  2540  34f1 e603                                   inc zp03
-  2541  34f3 e605                                   inc zp05
-  2542  34f5 a203               +                   ldx #$03                            ; draw 3 rows for the player "sprite"
-  2543  34f7 a900                                   lda #$00
-  2544  34f9 8509                                   sta zp09
-  2545  34fb a000               --                  ldy #$00
-  2546  34fd a5a7               -                   lda zpA7
-  2547  34ff d006                                   bne +
-  2548  3501 a9df                                   lda #$df                            ; empty char, but not sure why
-  2549  3503 9102                                   sta (zp02),y
-  2550  3505 d01b                                   bne ++
-  2551  3507 c901               +                   cmp #$01
-  2552  3509 d00a                                   bne +
-  2553  350b a5a8                                   lda zpA8
-  2554  350d 9102                                   sta (zp02),y
-  2555  350f a50a                                   lda zp0A
-  2556  3511 9104                                   sta (zp04),y
-  2557  3513 d00d                                   bne ++
-  2558  3515 b102               +                   lda (zp02),y
-  2559  3517 8610                                   stx zp10
-  2560  3519 a609                                   ldx zp09
-  2561  351b 9d4503                                 sta TAPE_BUFFER + $9,x              ; the tape buffer stores the chars UNDER the player (9 in total)
-  2562  351e e609                                   inc zp09
-  2563  3520 a610                                   ldx zp10
-  2564  3522 e6a8               ++                  inc zpA8
-  2565  3524 c8                                     iny
-  2566  3525 c003                                   cpy #$03                            ; width of the player sprite in characters (3)
-  2567  3527 d0d4                                   bne -
-  2568  3529 a502                                   lda zp02
-  2569  352b 18                                     clc
-  2570  352c 6928                                   adc #$28                            ; $28 = #40, draws one row of the player under each other
-  2571  352e 8502                                   sta zp02
-  2572  3530 8504                                   sta zp04
-  2573  3532 9004                                   bcc +
-  2574  3534 e603                                   inc zp03
-  2575  3536 e605                                   inc zp05
-  2576  3538 ca                 +                   dex
-  2577  3539 d0c0                                   bne --
-  2578  353b 60                                     rts
+  2511                          draw_player:
+  2512  34c7 8eea34                                 stx m3548 + 1                       ; store x pos of player
+  2513  34ca a9d8                                   lda #>COLRAM                        ; store colram high in zp05
+  2514  34cc 8505                                   sta zp05
+  2515  34ce a904                                   lda #>SCREENRAM                     ; store screenram high in zp03
+  2516  34d0 8503                                   sta zp03
+  2517  34d2 a900                                   lda #$00
+  2518  34d4 8502                                   sta zp02
+  2519  34d6 8504                                   sta zp04                            ; 00 for zp02 and zp04 (colram low and screenram low)
+  2520  34d8 c000                                   cpy #$00                            ; Y is probably the player Y position
+  2521  34da f00c                                   beq +                               ; Y is 0 -> +
+  2522  34dc 18                 -                   clc                                 ; Y not 0
+  2523  34dd 6928                                   adc #$28                            ; add $28 (=#40 = one line) to A (which is now $28)
+  2524  34df 9004                                   bcc ++                              ; <256? -> ++
+  2525  34e1 e603                                   inc zp03
+  2526  34e3 e605                                   inc zp05
+  2527  34e5 88                 ++                  dey                                 ; Y = Y - 1
+  2528  34e6 d0f4                                   bne -                               ; Y = 0 ? -> -
+  2529  34e8 18                 +                   clc                                 ;
+  2530  34e9 6916               m3548:              adc #$16                            ; add $15 (#21) why? -> selfmod address
+  2531  34eb 8502                                   sta zp02
+  2532  34ed 8504                                   sta zp04
+  2533  34ef 9004                                   bcc +
+  2534  34f1 e603                                   inc zp03
+  2535  34f3 e605                                   inc zp05
+  2536  34f5 a203               +                   ldx #$03                            ; draw 3 rows for the player "sprite"
+  2537  34f7 a900                                   lda #$00
+  2538  34f9 8509                                   sta zp09
+  2539  34fb a000               --                  ldy #$00
+  2540  34fd a5a7               -                   lda zpA7
+  2541  34ff d006                                   bne +
+  2542  3501 a9df                                   lda #$df                            ; empty char, but not sure why
+  2543  3503 9102                                   sta (zp02),y
+  2544  3505 d01b                                   bne ++
+  2545  3507 c901               +                   cmp #$01
+  2546  3509 d00a                                   bne +
+  2547  350b a5a8                                   lda zpA8
+  2548  350d 9102                                   sta (zp02),y
+  2549  350f a50a                                   lda zp0A
+  2550  3511 9104                                   sta (zp04),y
+  2551  3513 d00d                                   bne ++
+  2552  3515 b102               +                   lda (zp02),y
+  2553  3517 8610                                   stx zp10
+  2554  3519 a609                                   ldx zp09
+  2555  351b 9d4503                                 sta TAPE_BUFFER + $9,x              ; the tape buffer stores the chars UNDER the player (9 in total)
+  2556  351e e609                                   inc zp09
+  2557  3520 a610                                   ldx zp10
+  2558  3522 e6a8               ++                  inc zpA8
+  2559  3524 c8                                     iny
+  2560  3525 c003                                   cpy #$03                            ; width of the player sprite in characters (3)
+  2561  3527 d0d4                                   bne -
+  2562  3529 a502                                   lda zp02
+  2563  352b 18                                     clc
+  2564  352c 6928                                   adc #$28                            ; $28 = #40, draws one row of the player under each other
+  2565  352e 8502                                   sta zp02
+  2566  3530 8504                                   sta zp04
+  2567  3532 9004                                   bcc +
+  2568  3534 e603                                   inc zp03
+  2569  3536 e605                                   inc zp05
+  2570  3538 ca                 +                   dex
+  2571  3539 d0c0                                   bne --
+  2572  353b 60                                     rts
+  2573                          
+  2574                          
+  2575                          ; ==============================================================================
+  2576                          ; $359b
+  2577                          ; JOYSTICK CONTROLS
+  2578                          ; ==============================================================================
   2579                          
-  2580                          
-  2581                          ; ==============================================================================
-  2582                          ; $359b
-  2583                          ; JOYSTICK CONTROLS
-  2584                          ; ==============================================================================
-  2585                          
-  2586                          check_joystick:
-  2587                          
-  2588                                              ;lda #$fd
-  2589                                              ;sta KEYBOARD_LATCH
-  2590                                              ;lda KEYBOARD_LATCH
-  2591  353c ad00dc                                 lda $dc00
-  2592  353f a009               player_pos_y:       ldy #$09
-  2593  3541 a215               player_pos_x:       ldx #$15
-  2594  3543 4a                                     lsr
-  2595  3544 b005                                   bcs +
-  2596  3546 c000                                   cpy #$00
-  2597  3548 f001                                   beq +
-  2598  354a 88                                     dey                                           ; JOYSTICK UP
-  2599  354b 4a                 +                   lsr
-  2600  354c b005                                   bcs +
-  2601  354e c015                                   cpy #$15
-  2602  3550 b001                                   bcs +
-  2603  3552 c8                                     iny                                           ; JOYSTICK DOWN
-  2604  3553 4a                 +                   lsr
-  2605  3554 b005                                   bcs +
-  2606  3556 e000                                   cpx #$00
-  2607  3558 f001                                   beq +
-  2608  355a ca                                     dex                                           ; JOYSTICK LEFT
-  2609  355b 4a                 +                   lsr
-  2610  355c b005                                   bcs +
-  2611  355e e024                                   cpx #$24
-  2612  3560 b001                                   bcs +
-  2613  3562 e8                                     inx                                           ; JOYSTICK RIGHT
-  2614  3563 8c8135             +                   sty m35E7 + 1
-  2615  3566 8e8635                                 stx m35EC + 1
-  2616  3569 a902                                   lda #$02
-  2617  356b 85a7                                   sta zpA7
-  2618  356d 20c734                                 jsr draw_player
-  2619  3570 a209                                   ldx #$09
-  2620  3572 bd4403             -                   lda TAPE_BUFFER + $8,x
-  2621  3575 c9df                                   cmp #$df
-  2622  3577 f004                                   beq +
-  2623  3579 c9e2                                   cmp #$e2
-  2624  357b d00d                                   bne ++
-  2625  357d ca                 +                   dex
-  2626  357e d0f2                                   bne -
-  2627  3580 a90a               m35E7:              lda #$0a
-  2628  3582 8d4035                                 sta player_pos_y + 1
-  2629  3585 a915               m35EC:              lda #$15
-  2630  3587 8d4235                                 sta player_pos_x + 1
-  2631                          ++                  ;lda #$ff
-  2632                                              ;sta KEYBOARD_LATCH
-  2633  358a a901                                   lda #$01
-  2634  358c 85a7                                   sta zpA7
-  2635  358e a993                                   lda #$93                ; first character of the player graphic
-  2636  3590 85a8                                   sta zpA8
-  2637  3592 a93d                                   lda #$3d
-  2638  3594 850a                                   sta zp0A
-  2639  3596 ac4035             get_player_pos:     ldy player_pos_y + 1
-  2640  3599 ae4235                                 ldx player_pos_x + 1
-  2641                                        
-  2642  359c 4cc734                                 jmp draw_player
-  2643                          
-  2644                          ; ==============================================================================
-  2645                          ;
-  2646                          ; POLL RASTER
-  2647                          ; ==============================================================================
-  2648                          
-  2649                          poll_raster:
-  2650  359f 78                                     sei                     ; disable interrupt
-  2651  35a0 a9f0                                   lda #$f0                ; lda #$c0  ;A = $c0
-  2652  35a2 cd12d0             -                   cmp FF1D                ; vertical line bits 0-7
+  2580                          check_joystick:
+  2581                          
+  2582                                              ;lda #$fd
+  2583                                              ;sta KEYBOARD_LATCH
+  2584                                              ;lda KEYBOARD_LATCH
+  2585  353c ad00dc                                 lda $dc00
+  2586  353f a009               player_pos_y:       ldy #$09
+  2587  3541 a215               player_pos_x:       ldx #$15
+  2588  3543 4a                                     lsr
+  2589  3544 b005                                   bcs +
+  2590  3546 c000                                   cpy #$00
+  2591  3548 f001                                   beq +
+  2592  354a 88                                     dey                                           ; JOYSTICK UP
+  2593  354b 4a                 +                   lsr
+  2594  354c b005                                   bcs +
+  2595  354e c015                                   cpy #$15
+  2596  3550 b001                                   bcs +
+  2597  3552 c8                                     iny                                           ; JOYSTICK DOWN
+  2598  3553 4a                 +                   lsr
+  2599  3554 b005                                   bcs +
+  2600  3556 e000                                   cpx #$00
+  2601  3558 f001                                   beq +
+  2602  355a ca                                     dex                                           ; JOYSTICK LEFT
+  2603  355b 4a                 +                   lsr
+  2604  355c b005                                   bcs +
+  2605  355e e024                                   cpx #$24
+  2606  3560 b001                                   bcs +
+  2607  3562 e8                                     inx                                           ; JOYSTICK RIGHT
+  2608  3563 8c8135             +                   sty m35E7 + 1
+  2609  3566 8e8635                                 stx m35EC + 1
+  2610  3569 a902                                   lda #$02
+  2611  356b 85a7                                   sta zpA7
+  2612  356d 20c734                                 jsr draw_player
+  2613  3570 a209                                   ldx #$09
+  2614  3572 bd4403             -                   lda TAPE_BUFFER + $8,x
+  2615  3575 c9df                                   cmp #$df
+  2616  3577 f004                                   beq +
+  2617  3579 c9e2                                   cmp #$e2
+  2618  357b d00d                                   bne ++
+  2619  357d ca                 +                   dex
+  2620  357e d0f2                                   bne -
+  2621  3580 a90a               m35E7:              lda #$0a
+  2622  3582 8d4035                                 sta player_pos_y + 1
+  2623  3585 a915               m35EC:              lda #$15
+  2624  3587 8d4235                                 sta player_pos_x + 1
+  2625                          ++                  ;lda #$ff
+  2626                                              ;sta KEYBOARD_LATCH
+  2627  358a a901                                   lda #$01
+  2628  358c 85a7                                   sta zpA7
+  2629  358e a993                                   lda #$93                ; first character of the player graphic
+  2630  3590 85a8                                   sta zpA8
+  2631  3592 a93d                                   lda #$3d
+  2632  3594 850a                                   sta zp0A
+  2633  3596 ac4035             get_player_pos:     ldy player_pos_y + 1
+  2634  3599 ae4235                                 ldx player_pos_x + 1
+  2635                                        
+  2636  359c 4cc734                                 jmp draw_player
+  2637                          
+  2638                          ; ==============================================================================
+  2639                          ;
+  2640                          ; POLL RASTER
+  2641                          ; ==============================================================================
+  2642                          
+  2643                          poll_raster:
+  2644  359f 78                                     sei                     ; disable interrupt
+  2645  35a0 a9f0                                   lda #$f0                ; lda #$c0  ;A = $c0
+  2646  35a2 cd12d0             -                   cmp FF1D                ; vertical line bits 0-7
+  2647                                              
+  2648  35a5 d0fb                                   bne -                   ; loop until we hit line c0
+  2649  35a7 a900                                   lda #$00                ; A = 0
+  2650  35a9 85a7                                   sta zpA7                ; zpA7 = 0
+  2651                                              
+  2652  35ab 209635                                 jsr get_player_pos
   2653                                              
-  2654  35a5 d0fb                                   bne -                   ; loop until we hit line c0
-  2655  35a7 a900                                   lda #$00                ; A = 0
-  2656  35a9 85a7                                   sta zpA7                ; zpA7 = 0
-  2657                                              
-  2658  35ab 209635                                 jsr get_player_pos
-  2659                                              
-  2660  35ae 203c35                                 jsr check_joystick
-  2661  35b1 58                                     cli
-  2662  35b2 60                                     rts
+  2654  35ae 203c35                                 jsr check_joystick
+  2655  35b1 58                                     cli
+  2656  35b2 60                                     rts
+  2657                          
+  2658                          
+  2659                          ; ==============================================================================
+  2660                          ; ROOM 16
+  2661                          ; BELEGRO ANIMATION
+  2662                          ; ==============================================================================
   2663                          
-  2664                          
-  2665                          ; ==============================================================================
-  2666                          ; ROOM 16
-  2667                          ; BELEGRO ANIMATION
-  2668                          ; ==============================================================================
-  2669                          
-  2670                          belegro_animation:
-  2671                          
-  2672  35b3 a900                                   lda #$00
-  2673  35b5 85a7                                   sta zpA7
-  2674  35b7 a20f               m3624:              ldx #$0f
-  2675  35b9 a00f               m3626:              ldy #$0f
-  2676  35bb 20c734                                 jsr draw_player
-  2677  35be aeb835                                 ldx m3624 + 1
-  2678  35c1 acba35                                 ldy m3626 + 1
-  2679  35c4 ec4235                                 cpx player_pos_x + 1
-  2680  35c7 b002                                   bcs +
-  2681  35c9 e8                                     inx
-  2682  35ca e8                                     inx
-  2683  35cb ec4235             +                   cpx player_pos_x + 1
-  2684  35ce f001                                   beq +
-  2685  35d0 ca                                     dex
-  2686  35d1 cc4035             +                   cpy player_pos_y + 1
-  2687  35d4 b002                                   bcs +
-  2688  35d6 c8                                     iny
-  2689  35d7 c8                                     iny
-  2690  35d8 cc4035             +                   cpy player_pos_y + 1
-  2691  35db f001                                   beq +
-  2692  35dd 88                                     dey
-  2693  35de 8ef835             +                   stx m3668 + 1
-  2694  35e1 8cfd35                                 sty m366D + 1
-  2695  35e4 a902                                   lda #$02
-  2696  35e6 85a7                                   sta zpA7
-  2697  35e8 20c734                                 jsr draw_player
-  2698  35eb a209                                   ldx #$09
-  2699  35ed bd4403             -                   lda TAPE_BUFFER + $8,x
-  2700  35f0 c992                                   cmp #$92
-  2701  35f2 900d                                   bcc +
-  2702  35f4 ca                                     dex
-  2703  35f5 d0f6                                   bne -
-  2704  35f7 a210               m3668:              ldx #$10
-  2705  35f9 8eb835                                 stx m3624 + 1
-  2706  35fc a00e               m366D:              ldy #$0e
-  2707  35fe 8cba35                                 sty m3626 + 1
-  2708  3601 a99c               +                   lda #$9c                                ; belegro chars
-  2709  3603 85a8                                   sta zpA8
-  2710  3605 a93e                                   lda #$3e
-  2711  3607 850a                                   sta zp0A
-  2712  3609 acba35                                 ldy m3626 + 1
-  2713  360c aeb835                                 ldx m3624 + 1                    
-  2714  360f a901                                   lda #$01
-  2715  3611 85a7                                   sta zpA7
-  2716  3613 4cc734                                 jmp draw_player
-  2717                          
+  2664                          belegro_animation:
+  2665                          
+  2666  35b3 a900                                   lda #$00
+  2667  35b5 85a7                                   sta zpA7
+  2668  35b7 a20f               m3624:              ldx #$0f
+  2669  35b9 a00f               m3626:              ldy #$0f
+  2670  35bb 20c734                                 jsr draw_player
+  2671  35be aeb835                                 ldx m3624 + 1
+  2672  35c1 acba35                                 ldy m3626 + 1
+  2673  35c4 ec4235                                 cpx player_pos_x + 1
+  2674  35c7 b002                                   bcs +
+  2675  35c9 e8                                     inx
+  2676  35ca e8                                     inx
+  2677  35cb ec4235             +                   cpx player_pos_x + 1
+  2678  35ce f001                                   beq +
+  2679  35d0 ca                                     dex
+  2680  35d1 cc4035             +                   cpy player_pos_y + 1
+  2681  35d4 b002                                   bcs +
+  2682  35d6 c8                                     iny
+  2683  35d7 c8                                     iny
+  2684  35d8 cc4035             +                   cpy player_pos_y + 1
+  2685  35db f001                                   beq +
+  2686  35dd 88                                     dey
+  2687  35de 8ef835             +                   stx m3668 + 1
+  2688  35e1 8cfd35                                 sty m366D + 1
+  2689  35e4 a902                                   lda #$02
+  2690  35e6 85a7                                   sta zpA7
+  2691  35e8 20c734                                 jsr draw_player
+  2692  35eb a209                                   ldx #$09
+  2693  35ed bd4403             -                   lda TAPE_BUFFER + $8,x
+  2694  35f0 c992                                   cmp #$92
+  2695  35f2 900d                                   bcc +
+  2696  35f4 ca                                     dex
+  2697  35f5 d0f6                                   bne -
+  2698  35f7 a210               m3668:              ldx #$10
+  2699  35f9 8eb835                                 stx m3624 + 1
+  2700  35fc a00e               m366D:              ldy #$0e
+  2701  35fe 8cba35                                 sty m3626 + 1
+  2702  3601 a99c               +                   lda #$9c                                ; belegro chars
+  2703  3603 85a8                                   sta zpA8
+  2704  3605 a93e                                   lda #$3e
+  2705  3607 850a                                   sta zp0A
+  2706  3609 acba35                                 ldy m3626 + 1
+  2707  360c aeb835                                 ldx m3624 + 1                    
+  2708  360f a901                                   lda #$01
+  2709  3611 85a7                                   sta zpA7
+  2710  3613 4cc734                                 jmp draw_player
+  2711                          
+  2712                          
+  2713                          ; ==============================================================================
+  2714                          ; items
+  2715                          ; This area seems to be responsible for items placement
+  2716                          ;
+  2717                          ; ==============================================================================
   2718                          
-  2719                          ; ==============================================================================
-  2720                          ; items
-  2721                          ; This area seems to be responsible for items placement
-  2722                          ;
-  2723                          ; ==============================================================================
-  2724                          
-  2725                          items:
+  2719                          items:
 
 ; ******** Source: includes/items.asm
      1                          
@@ -3025,105 +3019,111 @@
     39                                          
 
 ; ******** Source: main.asm
-  2727                          items_end:
-  2728                          
-  2729                          next_item:
-  2730  37c6 a5a7                                   lda zpA7
-  2731  37c8 18                                     clc
-  2732  37c9 6901                                   adc #$01
-  2733  37cb 85a7                                   sta zpA7
-  2734  37cd 9002                                   bcc +                       ; bcc $3845
-  2735  37cf e6a8                                   inc zpA8
-  2736  37d1 60                 +                   rts
+  2721                          items_end:
+  2722                          
+  2723                          next_item:
+  2724  37c6 a5a7                                   lda zpA7
+  2725  37c8 18                                     clc
+  2726  37c9 6901                                   adc #$01
+  2727  37cb 85a7                                   sta zpA7
+  2728  37cd 9002                                   bcc +                       ; bcc $3845
+  2729  37cf e6a8                                   inc zpA8
+  2730  37d1 60                 +                   rts
+  2731                          
+  2732                          ; ==============================================================================
+  2733                          ; TODO
+  2734                          ; no clue yet. level data has already been drawn when this is called
+  2735                          ; probably placing the items on the screen
+  2736                          ; ==============================================================================
   2737                          
-  2738                          ; ==============================================================================
-  2739                          ; TODO
-  2740                          ; no clue yet. level data has already been drawn when this is called
-  2741                          ; probably placing the items on the screen
-  2742                          ; ==============================================================================
-  2743                          
-  2744                          update_items_display:
-  2745  37d2 a936                                   lda #>items                 ; load address for items into zeropage
-  2746  37d4 85a8                                   sta zpA8
-  2747  37d6 a916                                   lda #<items
-  2748  37d8 85a7                                   sta zpA7
-  2749  37da a000                                   ldy #$00                    ; y = 0
-  2750  37dc b1a7               --                  lda (zpA7),y                ; load first value
-  2751  37de c9ff                                   cmp #$ff                    ; is it $ff?
-  2752  37e0 f006                                   beq +                       ; yes -> +
-  2753  37e2 20c637             -                   jsr next_item               ; no -> set zero page to next value
-  2754  37e5 4cdc37                                 jmp --                      ; and loop
-  2755  37e8 20c637             +                   jsr next_item               ; value was $ff, now get the next value in the list
-  2756  37eb b1a7                                   lda (zpA7),y
-  2757  37ed c9ff                                   cmp #$ff                    ; is the next value $ff again?
-  2758  37ef d003                                   bne +
-  2759  37f1 4c7638                                 jmp prepare_rooms           ; yes -> m38DF
-  2760  37f4 cdf82f             +                   cmp current_room + 1        ; is the number the current room number?
-  2761  37f7 d0e9                                   bne -                       ; no -> loop
-  2762  37f9 a9d8                                   lda #>COLRAM                ; yes the number is the current room number
-  2763  37fb 8505                                   sta zp05                    ; store COLRAM and SCREENRAM in zeropage
-  2764  37fd a904                                   lda #>SCREENRAM
-  2765  37ff 8503                                   sta zp03
-  2766  3801 a900                                   lda #$00                    ; A = 0
-  2767  3803 8502                                   sta zp02                    ; zp02 = 0, zp04 = 0
-  2768  3805 8504                                   sta zp04
-  2769  3807 20c637                                 jsr next_item               ; move to next value
-  2770  380a b1a7                                   lda (zpA7),y                ; get next value in the list
-  2771  380c c9fe               -                   cmp #$fe                    ; is it $FE?
-  2772  380e f00b                                   beq +                       ; yes -> +
-  2773  3810 c9f9                                   cmp #$f9                    ; no, is it $f9?
-  2774  3812 d00d                                   bne +++                     ; no -> +++
-  2775  3814 a502                                   lda zp02                    ; value is $f9
-  2776  3816 206e38                                 jsr m38D7                   ; add 1 to zp02 and zp04
-  2777  3819 9004                                   bcc ++                      ; if neither zp02 nor zp04 have become 0 -> ++
-  2778  381b e603               +                   inc zp03                    ; value is $fe
-  2779  381d e605                                   inc zp05                    ; increase zp03 and zp05
-  2780  381f b1a7               ++                  lda (zpA7),y                ; get value from list
-  2781  3821 c9fb               +++                 cmp #$fb                    ; it wasn't $f9, so is it $fb?
-  2782  3823 d009                                   bne +                       ; no -> +
-  2783  3825 20c637                                 jsr next_item               ; yes it's $fb, get the next value
-  2784  3828 b1a7                                   lda (zpA7),y                ; get value from list
-  2785  382a 8509                                   sta zp09                    ; store value in zp09
-  2786  382c d028                                   bne ++                      ; if value was 0 -> ++
-  2787  382e c9f8               +                   cmp #$f8
-  2788  3830 f01c                                   beq +
-  2789  3832 c9fc                                   cmp #$fc
-  2790  3834 d00d                                   bne +++
-  2791  3836 a50a                                   lda zp0A
-  2792                                                                          ; jmp m399F
+  2738                          update_items_display:
+  2739  37d2 a936                                   lda #>items                 ; load address for items into zeropage
+  2740  37d4 85a8                                   sta zpA8
+  2741  37d6 a916                                   lda #<items
+  2742  37d8 85a7                                   sta zpA7
+  2743  37da a000                                   ldy #$00                    ; y = 0
+  2744  37dc b1a7               --                  lda (zpA7),y                ; load first value
+  2745  37de c9ff                                   cmp #$ff                    ; is it $ff?
+  2746  37e0 f006                                   beq +                       ; yes -> +
+  2747  37e2 20c637             -                   jsr next_item               ; no -> set zero page to next value
+  2748  37e5 4cdc37                                 jmp --                      ; and loop
+  2749  37e8 20c637             +                   jsr next_item               ; value was $ff, now get the next value in the list
+  2750  37eb b1a7                                   lda (zpA7),y
+  2751  37ed c9ff                                   cmp #$ff                    ; is the next value $ff again?
+  2752  37ef d003                                   bne +
+  2753  37f1 4c7638                                 jmp prepare_rooms           ; yes -> m38DF
+  2754  37f4 cdf82f             +                   cmp current_room + 1        ; is the number the current room number?
+  2755  37f7 d0e9                                   bne -                       ; no -> loop
+  2756  37f9 a9d8                                   lda #>COLRAM                ; yes the number is the current room number
+  2757  37fb 8505                                   sta zp05                    ; store COLRAM and SCREENRAM in zeropage
+  2758  37fd a904                                   lda #>SCREENRAM
+  2759  37ff 8503                                   sta zp03
+  2760  3801 a900                                   lda #$00                    ; A = 0
+  2761  3803 8502                                   sta zp02                    ; zp02 = 0, zp04 = 0
+  2762  3805 8504                                   sta zp04
+  2763  3807 20c637                                 jsr next_item               ; move to next value
+  2764  380a b1a7                                   lda (zpA7),y                ; get next value in the list
+  2765  380c c9fe               -                   cmp #$fe                    ; is it $FE?
+  2766  380e f00b                                   beq +                       ; yes -> +
+  2767  3810 c9f9                                   cmp #$f9                    ; no, is it $f9?
+  2768  3812 d00d                                   bne +++                     ; no -> +++
+  2769  3814 a502                                   lda zp02                    ; value is $f9
+  2770  3816 206e38                                 jsr m38D7                   ; add 1 to zp02 and zp04
+  2771  3819 9004                                   bcc ++                      ; if neither zp02 nor zp04 have become 0 -> ++
+  2772  381b e603               +                   inc zp03                    ; value is $fe
+  2773  381d e605                                   inc zp05                    ; increase zp03 and zp05
+  2774  381f b1a7               ++                  lda (zpA7),y                ; get value from list
+  2775  3821 c9fb               +++                 cmp #$fb                    ; it wasn't $f9, so is it $fb?
+  2776  3823 d009                                   bne +                       ; no -> +
+  2777  3825 20c637                                 jsr next_item               ; yes it's $fb, get the next value
+  2778  3828 b1a7                                   lda (zpA7),y                ; get value from list
+  2779  382a 8509                                   sta zp09                    ; store value in zp09
+  2780  382c d028                                   bne ++                      ; if value was 0 -> ++
+  2781  382e c9f8               +                   cmp #$f8
+  2782  3830 f01c                                   beq +
+  2783  3832 c9fc                                   cmp #$fc
+  2784  3834 d00d                                   bne +++
+  2785  3836 a50a                                   lda zp0A
+  2786                                                                          ; jmp m399F
+  2787                          
+  2788  3838 c9df                                   cmp #$df                    ; this part was moved here as it wasn't called anywhere else
+  2789  383a f002                                   beq skip                    ; and I think it was just outsourced for branching length issues
+  2790  383c e60a                                   inc zp0A           
+  2791  383e b1a7               skip:               lda (zpA7),y        
+  2792  3840 4c4e38                                 jmp m38B7
   2793                          
-  2794  3838 c9df                                   cmp #$df                    ; this part was moved here as it wasn't called anywhere else
-  2795  383a f002                                   beq skip                    ; and I think it was just outsourced for branching length issues
-  2796  383c e60a                                   inc zp0A           
-  2797  383e b1a7               skip:               lda (zpA7),y        
-  2798  3840 4c4e38                                 jmp m38B7
-  2799                          
-  2800  3843 c9fa               +++                 cmp #$fa
-  2801  3845 d00f                                   bne ++
-  2802  3847 20c637                                 jsr next_item
-  2803  384a b1a7                                   lda (zpA7),y
-  2804  384c 850a                                   sta zp0A
-  2805                          m38B7:
-  2806  384e a509               +                   lda zp09
-  2807  3850 9104                                   sta (zp04),y
-  2808  3852 a50a                                   lda zp0A
-  2809  3854 9102                                   sta (zp02),y
-  2810  3856 c9fd               ++                  cmp #$fd
-  2811  3858 d009                                   bne +
-  2812  385a 20c637                                 jsr next_item
-  2813  385d b1a7                                   lda (zpA7),y
-  2814  385f 8502                                   sta zp02
-  2815  3861 8504                                   sta zp04
-  2816  3863 20c637             +                   jsr next_item
-  2817  3866 b1a7                                   lda (zpA7),y
-  2818  3868 c9ff                                   cmp #$ff
-  2819  386a d0a0                                   bne -
-  2820  386c f008                                   beq prepare_rooms
-  2821  386e 18                 m38D7:              clc
-  2822  386f 6901                                   adc #$01
-  2823  3871 8502                                   sta zp02
-  2824  3873 8504                                   sta zp04
-  2825  3875 60                                     rts
+  2794  3843 c9fa               +++                 cmp #$fa
+  2795  3845 d00f                                   bne ++
+  2796  3847 20c637                                 jsr next_item
+  2797  384a b1a7                                   lda (zpA7),y
+  2798  384c 850a                                   sta zp0A
+  2799                          m38B7:
+  2800  384e a509               +                   lda zp09
+  2801  3850 9104                                   sta (zp04),y
+  2802  3852 a50a                                   lda zp0A
+  2803  3854 9102                                   sta (zp02),y
+  2804  3856 c9fd               ++                  cmp #$fd
+  2805  3858 d009                                   bne +
+  2806  385a 20c637                                 jsr next_item
+  2807  385d b1a7                                   lda (zpA7),y
+  2808  385f 8502                                   sta zp02
+  2809  3861 8504                                   sta zp04
+  2810  3863 20c637             +                   jsr next_item
+  2811  3866 b1a7                                   lda (zpA7),y
+  2812  3868 c9ff                                   cmp #$ff
+  2813  386a d0a0                                   bne -
+  2814  386c f008                                   beq prepare_rooms
+  2815  386e 18                 m38D7:              clc
+  2816  386f 6901                                   adc #$01
+  2817  3871 8502                                   sta zp02
+  2818  3873 8504                                   sta zp04
+  2819  3875 60                                     rts
+  2820                          
+  2821                          
+  2822                          
+  2823                          
+  2824                          
+  2825                          
   2826                          
   2827                          
   2828                          
@@ -3146,175 +3146,175 @@
   2845                          
   2846                          
   2847                          
-  2848                          
-  2849                          
-  2850                          
-  2851                          
+  2848                          ; ==============================================================================
+  2849                          ; ROOM PREPARATION CHECK
+  2850                          ; WAS INITIALLY SCATTERED THROUGH THE LEVEL COMPARISONS
+  2851                          ; ==============================================================================
   2852                          
-  2853                          
-  2854                          ; ==============================================================================
-  2855                          ; ROOM PREPARATION CHECK
-  2856                          ; WAS INITIALLY SCATTERED THROUGH THE LEVEL COMPARISONS
-  2857                          ; ==============================================================================
-  2858                          
-  2859                          prepare_rooms:
-  2860                                      
-  2861  3876 adf82f                                 lda current_room + 1
+  2853                          prepare_rooms:
+  2854                                      
+  2855  3876 adf82f                                 lda current_room + 1
+  2856                                              
+  2857  3879 c902                                   cmp #$02                                ; is the current room 02?
+  2858  387b f01d                                   beq room_02_prep
+  2859                          
+  2860  387d c907                                   cmp #$07
+  2861  387f f04c                                   beq room_07_make_sacred_column
   2862                                              
-  2863  3879 c902                                   cmp #$02                                ; is the current room 02?
-  2864  387b f01d                                   beq room_02_prep
+  2863  3881 c906                                   cmp #$06          
+  2864  3883 f05a                                   beq room_06_make_deadly_doors
   2865                          
-  2866  387d c907                                   cmp #$07
-  2867  387f f04c                                   beq room_07_make_sacred_column
-  2868                                              
-  2869  3881 c906                                   cmp #$06          
-  2870  3883 f05a                                   beq room_06_make_deadly_doors
+  2866  3885 c904                                   cmp #$04
+  2867  3887 f062                                   beq room_04_prep
+  2868                          
+  2869  3889 c905                                   cmp #$05
+  2870  388b f001                                   beq room_05_prep
   2871                          
-  2872  3885 c904                                   cmp #$04
-  2873  3887 f062                                   beq room_04_prep
+  2872  388d 60                                     rts
+  2873                          
   2874                          
-  2875  3889 c905                                   cmp #$05
-  2876  388b f001                                   beq room_05_prep
-  2877                          
-  2878  388d 60                                     rts
-  2879                          
+  2875                          
+  2876                          ; ==============================================================================
+  2877                          ; ROOM 05
+  2878                          ; HIDE THE BREATHING TUBE UNDER THE STONE
+  2879                          ; ==============================================================================
   2880                          
-  2881                          
-  2882                          ; ==============================================================================
-  2883                          ; ROOM 05
-  2884                          ; HIDE THE BREATHING TUBE UNDER THE STONE
-  2885                          ; ==============================================================================
-  2886                          
-  2887                          room_05_prep:                  
-  2888                                                         
-  2889  388e a9fd                                   lda #$fd                                    ; yes
-  2890  3890 a201               breathing_tube_mod: ldx #$01
-  2891  3892 d002                                   bne +                                       ; based on self mod, put the normal
-  2892  3894 a97a                                   lda #$7a                                    ; stone char back again
-  2893  3896 8dd206             +                   sta SCREENRAM + $2d2   
-  2894  3899 60                                     rts
-  2895                          
+  2881                          room_05_prep:                  
+  2882                                                         
+  2883  388e a9fd                                   lda #$fd                                    ; yes
+  2884  3890 a201               breathing_tube_mod: ldx #$01
+  2885  3892 d002                                   bne +                                       ; based on self mod, put the normal
+  2886  3894 a97a                                   lda #$7a                                    ; stone char back again
+  2887  3896 8dd206             +                   sta SCREENRAM + $2d2   
+  2888  3899 60                                     rts
+  2889                          
+  2890                          
+  2891                          
+  2892                          ; ==============================================================================
+  2893                          ; ROOM 02 PREP
+  2894                          ; 
+  2895                          ; ==============================================================================
   2896                          
-  2897                          
-  2898                          ; ==============================================================================
-  2899                          ; ROOM 02 PREP
-  2900                          ; 
-  2901                          ; ==============================================================================
-  2902                          
-  2903                          room_02_prep:
-  2904  389a a90d                                   lda #$0d                                ; yes room is 02, a = $0d #13
-  2905  389c 8502                                   sta zp02                                ; zp02 = $0d
-  2906  389e 8504                                   sta zp04                                ; zp04 = $0d
-  2907  38a0 a9d8                                   lda #>COLRAM                            ; set colram zp
-  2908  38a2 8505                                   sta zp05
-  2909  38a4 a904                                   lda #>SCREENRAM                         ; set screenram zp      
-  2910  38a6 8503                                   sta zp03
-  2911  38a8 a218                                   ldx #$18                                ; x = $18 #24
-  2912  38aa b102               -                   lda (zp02),y                            ; y must have been set earlier
-  2913  38ac c9df                                   cmp #$df                                ; $df = empty space likely
-  2914  38ae f004                                   beq delete_fence                        ; yes, empty -> m3900
-  2915  38b0 c9f5                                   cmp #$f5                                ; no, but maybe a $f5? (fence!)
-  2916  38b2 d006                                   bne +                                   ; nope -> ++
-  2917                          
-  2918                          delete_fence:
-  2919  38b4 a9f5                                   lda #$f5                                ; A is either $df or $f5 -> selfmod here
-  2920  38b6 9102                                   sta (zp02),y                            ; store that value
-  2921  38b8 9104                                   sta (zp04),y                            ; in zp02 and zo04
-  2922  38ba a502               +                   lda zp02                                ; and load it in again, jeez
-  2923  38bc 18                                     clc
-  2924  38bd 6928                                   adc #$28                                ; smells like we're going to draw a fence
-  2925  38bf 8502                                   sta zp02
-  2926  38c1 8504                                   sta zp04
-  2927  38c3 9004                                   bcc +             
-  2928  38c5 e603                                   inc zp03
-  2929  38c7 e605                                   inc zp05
-  2930  38c9 ca                 +                   dex
-  2931  38ca d0de                                   bne -              
-  2932  38cc 60                                     rts
-  2933                          
-  2934                          ; ==============================================================================
-  2935                          ; ROOM 07 PREP
-  2936                          ;
-  2937                          ; ==============================================================================
-  2938                          
-  2939                          room_07_make_sacred_column:
-  2940                          
-  2941                                              
-  2942  38cd a217                                   ldx #$17                                    ; yes
-  2943  38cf bd6805             -                   lda SCREENRAM + $168,x     
-  2944  38d2 c9df                                   cmp #$df
-  2945  38d4 d005                                   bne +                       
-  2946  38d6 a9e3                                   lda #$e3
-  2947  38d8 9d6805                                 sta SCREENRAM + $168,x    
-  2948  38db ca                 +                   dex
-  2949  38dc d0f1                                   bne -                      
-  2950  38de 60                                     rts
+  2897                          room_02_prep:
+  2898  389a a90d                                   lda #$0d                                ; yes room is 02, a = $0d #13
+  2899  389c 8502                                   sta zp02                                ; zp02 = $0d
+  2900  389e 8504                                   sta zp04                                ; zp04 = $0d
+  2901  38a0 a9d8                                   lda #>COLRAM                            ; set colram zp
+  2902  38a2 8505                                   sta zp05
+  2903  38a4 a904                                   lda #>SCREENRAM                         ; set screenram zp      
+  2904  38a6 8503                                   sta zp03
+  2905  38a8 a218                                   ldx #$18                                ; x = $18 #24
+  2906  38aa b102               -                   lda (zp02),y                            ; y must have been set earlier
+  2907  38ac c9df                                   cmp #$df                                ; $df = empty space likely
+  2908  38ae f004                                   beq delete_fence                        ; yes, empty -> m3900
+  2909  38b0 c9f5                                   cmp #$f5                                ; no, but maybe a $f5? (fence!)
+  2910  38b2 d006                                   bne +                                   ; nope -> ++
+  2911                          
+  2912                          delete_fence:
+  2913  38b4 a9f5                                   lda #$f5                                ; A is either $df or $f5 -> selfmod here
+  2914  38b6 9102                                   sta (zp02),y                            ; store that value
+  2915  38b8 9104                                   sta (zp04),y                            ; in zp02 and zo04
+  2916  38ba a502               +                   lda zp02                                ; and load it in again, jeez
+  2917  38bc 18                                     clc
+  2918  38bd 6928                                   adc #$28                                ; smells like we're going to draw a fence
+  2919  38bf 8502                                   sta zp02
+  2920  38c1 8504                                   sta zp04
+  2921  38c3 9004                                   bcc +             
+  2922  38c5 e603                                   inc zp03
+  2923  38c7 e605                                   inc zp05
+  2924  38c9 ca                 +                   dex
+  2925  38ca d0de                                   bne -              
+  2926  38cc 60                                     rts
+  2927                          
+  2928                          ; ==============================================================================
+  2929                          ; ROOM 07 PREP
+  2930                          ;
+  2931                          ; ==============================================================================
+  2932                          
+  2933                          room_07_make_sacred_column:
+  2934                          
+  2935                                              
+  2936  38cd a217                                   ldx #$17                                    ; yes
+  2937  38cf bd6805             -                   lda SCREENRAM + $168,x     
+  2938  38d2 c9df                                   cmp #$df
+  2939  38d4 d005                                   bne +                       
+  2940  38d6 a9e3                                   lda #$e3
+  2941  38d8 9d6805                                 sta SCREENRAM + $168,x    
+  2942  38db ca                 +                   dex
+  2943  38dc d0f1                                   bne -                      
+  2944  38de 60                                     rts
+  2945                          
+  2946                          
+  2947                          ; ==============================================================================
+  2948                          ; ROOM 06
+  2949                          ; PREPARE THE DEADLY DOORS
+  2950                          ; ==============================================================================
   2951                          
-  2952                          
-  2953                          ; ==============================================================================
-  2954                          ; ROOM 06
-  2955                          ; PREPARE THE DEADLY DOORS
-  2956                          ; ==============================================================================
-  2957                          
-  2958                          room_06_make_deadly_doors:
-  2959                          
-  2960                                              
-  2961  38df a9f6                                   lda #$f6                                    ; char for wrong door
-  2962  38e1 8d9c04                                 sta SCREENRAM + $9c                         ; make three doors DEADLY!!!11
-  2963  38e4 8d7c06                                 sta SCREENRAM + $27c
-  2964  38e7 8d6c07                                 sta SCREENRAM + $36c       
-  2965  38ea 60                                     rts
-  2966                          
-  2967                          ; ==============================================================================
-  2968                          ; ROOM 04
-  2969                          ; PUT SOME REALLY DEADLY ZOMBIES INSIDE THE COFFINS
-  2970                          ; ==============================================================================
-  2971                          
-  2972                          room_04_prep: 
-  2973                          
-  2974                          
-  2975                                              
-  2976  38eb adf82f                                 lda current_room + 1                            ; get current room
-  2977  38ee c904                                   cmp #04                                         ; is it 4? (coffins)
-  2978  38f0 d00c                                   bne ++                                          ; nope
-  2979  38f2 a903                                   lda #$03                                        ; OMG YES! How did you know?? (and get door char)
-  2980  38f4 ac0339                                 ldy m394A + 1                                   ; 
-  2981  38f7 f002                                   beq +
-  2982  38f9 a9f6                                   lda #$f6                                        ; put fake door char in place (making it closed)
-  2983  38fb 8df904             +                   sta SCREENRAM + $f9 
-  2984                                          
-  2985  38fe a2f7               ++                  ldx #$f7                                    ; yes room 04
-  2986  3900 a0f8                                   ldy #$f8
-  2987  3902 a901               m394A:              lda #$01
-  2988  3904 d004                                   bne m3952           
-  2989  3906 a23b                                   ldx #$3b
-  2990  3908 a042                                   ldy #$42
-  2991  390a a901               m3952:              lda #$01                                    ; some self mod here
-  2992  390c c901                                   cmp #$01
-  2993  390e d003                                   bne +           
-  2994  3910 8e7a04                                 stx SCREENRAM+ $7a 
-  2995  3913 c902               +                   cmp #$02
-  2996  3915 d003                                   bne +           
-  2997  3917 8e6a05                                 stx SCREENRAM + $16a   
-  2998  391a c903               +                   cmp #$03
-  2999  391c d003                                   bne +           
-  3000  391e 8e5a06                                 stx SCREENRAM + $25a       
-  3001  3921 c904               +                   cmp #$04
-  3002  3923 d003                                   bne +           
-  3003  3925 8e4a07                                 stx SCREENRAM + $34a   
-  3004  3928 c905               +                   cmp #$05
-  3005  392a d003                                   bne +           
-  3006  392c 8c9c04                                 sty SCREENRAM + $9c    
-  3007  392f c906               +                   cmp #$06
-  3008  3931 d003                                   bne +           
-  3009  3933 8c8c05                                 sty SCREENRAM + $18c   
-  3010  3936 c907               +                   cmp #$07
-  3011  3938 d003                                   bne +           
-  3012  393a 8c7c06                                 sty SCREENRAM + $27c 
-  3013  393d c908               +                   cmp #$08
-  3014  393f d003                                   bne +           
-  3015  3941 8c6c07                                 sty SCREENRAM + $36c   
-  3016  3944 60                 +                   rts
+  2952                          room_06_make_deadly_doors:
+  2953                          
+  2954                                              
+  2955  38df a9f6                                   lda #$f6                                    ; char for wrong door
+  2956  38e1 8d9c04                                 sta SCREENRAM + $9c                         ; make three doors DEADLY!!!11
+  2957  38e4 8d7c06                                 sta SCREENRAM + $27c
+  2958  38e7 8d6c07                                 sta SCREENRAM + $36c       
+  2959  38ea 60                                     rts
+  2960                          
+  2961                          ; ==============================================================================
+  2962                          ; ROOM 04
+  2963                          ; PUT SOME REALLY DEADLY ZOMBIES INSIDE THE COFFINS
+  2964                          ; ==============================================================================
+  2965                          
+  2966                          room_04_prep: 
+  2967                          
+  2968                          
+  2969                                              
+  2970  38eb adf82f                                 lda current_room + 1                            ; get current room
+  2971  38ee c904                                   cmp #04                                         ; is it 4? (coffins)
+  2972  38f0 d00c                                   bne ++                                          ; nope
+  2973  38f2 a903                                   lda #$03                                        ; OMG YES! How did you know?? (and get door char)
+  2974  38f4 ac0339                                 ldy m394A + 1                                   ; 
+  2975  38f7 f002                                   beq +
+  2976  38f9 a9f6                                   lda #$f6                                        ; put fake door char in place (making it closed)
+  2977  38fb 8df904             +                   sta SCREENRAM + $f9 
+  2978                                          
+  2979  38fe a2f7               ++                  ldx #$f7                                    ; yes room 04
+  2980  3900 a0f8                                   ldy #$f8
+  2981  3902 a901               m394A:              lda #$01
+  2982  3904 d004                                   bne m3952           
+  2983  3906 a23b                                   ldx #$3b
+  2984  3908 a042                                   ldy #$42
+  2985  390a a901               m3952:              lda #$01                                    ; some self mod here
+  2986  390c c901                                   cmp #$01
+  2987  390e d003                                   bne +           
+  2988  3910 8e7a04                                 stx SCREENRAM+ $7a 
+  2989  3913 c902               +                   cmp #$02
+  2990  3915 d003                                   bne +           
+  2991  3917 8e6a05                                 stx SCREENRAM + $16a   
+  2992  391a c903               +                   cmp #$03
+  2993  391c d003                                   bne +           
+  2994  391e 8e5a06                                 stx SCREENRAM + $25a       
+  2995  3921 c904               +                   cmp #$04
+  2996  3923 d003                                   bne +           
+  2997  3925 8e4a07                                 stx SCREENRAM + $34a   
+  2998  3928 c905               +                   cmp #$05
+  2999  392a d003                                   bne +           
+  3000  392c 8c9c04                                 sty SCREENRAM + $9c    
+  3001  392f c906               +                   cmp #$06
+  3002  3931 d003                                   bne +           
+  3003  3933 8c8c05                                 sty SCREENRAM + $18c   
+  3004  3936 c907               +                   cmp #$07
+  3005  3938 d003                                   bne +           
+  3006  393a 8c7c06                                 sty SCREENRAM + $27c 
+  3007  393d c908               +                   cmp #$08
+  3008  393f d003                                   bne +           
+  3009  3941 8c6c07                                 sty SCREENRAM + $36c   
+  3010  3944 60                 +                   rts
+  3011                          
+  3012                          
+  3013                          
+  3014                          
+  3015                          
+  3016                          
   3017                          
   3018                          
   3019                          
@@ -3329,486 +3329,480 @@
   3028                          
   3029                          
   3030                          
-  3031                          
-  3032                          
-  3033                          
-  3034                          
+  3031                          ; ==============================================================================
+  3032                          ; PLAYER POSITION TABLE FOR EACH ROOM
+  3033                          ; FORMAT: Y left door, X left door, Y right door, X right door
+  3034                          ; ==============================================================================
   3035                          
-  3036                          
-  3037                          ; ==============================================================================
-  3038                          ; PLAYER POSITION TABLE FOR EACH ROOM
-  3039                          ; FORMAT: Y left door, X left door, Y right door, X right door
-  3040                          ; ==============================================================================
-  3041                          
-  3042                          player_xy_pos_table:
-  3043                          
-  3044  3945 06031221           !byte $06, $03, $12, $21                                        ; room 00
-  3045  3949 03031221           !byte $03, $03, $12, $21                                        ; room 01
-  3046  394d 03031521           !byte $03, $03, $15, $21                                        ; room 02
-  3047  3951 03030f21           !byte $03, $03, $0f, $21                                        ; room 03
-  3048  3955 151e0606           !byte $15, $1e, $06, $06                                        ; room 04
-  3049  3959 06031221           !byte $06, $03, $12, $21                                        ; room 05
-  3050  395d 03030921           !byte $03, $03, $09, $21                                        ; room 06
-  3051  3961 03031221           !byte $03, $03, $12, $21                                        ; room 07
-  3052  3965 03030c21           !byte $03, $03, $0c, $21                                        ; room 08
-  3053  3969 03031221           !byte $03, $03, $12, $21                                        ; room 09
-  3054  396d 0c030c20           !byte $0c, $03, $0c, $20                                        ; room 10
-  3055  3971 0c030c21           !byte $0c, $03, $0c, $21                                        ; room 11
-  3056  3975 0c030915           !byte $0c, $03, $09, $15                                        ; room 12
-  3057  3979 03030621           !byte $03, $03, $06, $21                                        ; room 13
-  3058  397d 03030321           !byte $03, $03, $03, $21                                        ; room 14
-  3059  3981 06031221           !byte $06, $03, $12, $21                                        ; room 15
-  3060  3985 0303031d           !byte $03, $03, $03, $1d                                        ; room 16
-  3061  3989 03030621           !byte $03, $03, $06, $21                                        ; room 17
-  3062  398d 0303               !byte $03, $03                                                  ; room 18 (only one door)
-  3063                          
+  3036                          player_xy_pos_table:
+  3037                          
+  3038  3945 06031221           !byte $06, $03, $12, $21                                        ; room 00
+  3039  3949 03031221           !byte $03, $03, $12, $21                                        ; room 01
+  3040  394d 03031521           !byte $03, $03, $15, $21                                        ; room 02
+  3041  3951 03030f21           !byte $03, $03, $0f, $21                                        ; room 03
+  3042  3955 151e0606           !byte $15, $1e, $06, $06                                        ; room 04
+  3043  3959 06031221           !byte $06, $03, $12, $21                                        ; room 05
+  3044  395d 03030921           !byte $03, $03, $09, $21                                        ; room 06
+  3045  3961 03031221           !byte $03, $03, $12, $21                                        ; room 07
+  3046  3965 03030c21           !byte $03, $03, $0c, $21                                        ; room 08
+  3047  3969 03031221           !byte $03, $03, $12, $21                                        ; room 09
+  3048  396d 0c030c20           !byte $0c, $03, $0c, $20                                        ; room 10
+  3049  3971 0c030c21           !byte $0c, $03, $0c, $21                                        ; room 11
+  3050  3975 0c030915           !byte $0c, $03, $09, $15                                        ; room 12
+  3051  3979 03030621           !byte $03, $03, $06, $21                                        ; room 13
+  3052  397d 03030321           !byte $03, $03, $03, $21                                        ; room 14
+  3053  3981 06031221           !byte $06, $03, $12, $21                                        ; room 15
+  3054  3985 0303031d           !byte $03, $03, $03, $1d                                        ; room 16
+  3055  3989 03030621           !byte $03, $03, $06, $21                                        ; room 17
+  3056  398d 0303               !byte $03, $03                                                  ; room 18 (only one door)
+  3057                          
+  3058                          
+  3059                          
+  3060                          ; ==============================================================================
+  3061                          ; $3a33
+  3062                          ; Apparently some lookup table, e.g. to get the 
+  3063                          ; ==============================================================================
   3064                          
-  3065                          
-  3066                          ; ==============================================================================
-  3067                          ; $3a33
-  3068                          ; Apparently some lookup table, e.g. to get the 
-  3069                          ; ==============================================================================
-  3070                          
-  3071                          room_player_pos_lookup:
+  3065                          room_player_pos_lookup:
+  3066                          
+  3067  398f 02060a0e12161a1e...!byte $02 ,$06 ,$0a ,$0e ,$12 ,$16 ,$1a ,$1e ,$22 ,$26 ,$2a ,$2e ,$32 ,$36 ,$3a ,$3e
+  3068  399f 42464a4e52565a5e...!byte $42 ,$46 ,$4a ,$4e ,$52 ,$56 ,$5a ,$5e ,$04 ,$08 ,$0c ,$10 ,$14 ,$18 ,$1c ,$20
+  3069  39af 24282c3034383c40...!byte $24 ,$28 ,$2c ,$30 ,$34 ,$38 ,$3c ,$40 ,$44 ,$48 ,$4c ,$50 ,$54 ,$58 ,$5c ,$60
+  3070  39bf 00                 !byte $00
+  3071                          
   3072                          
-  3073  398f 02060a0e12161a1e...!byte $02 ,$06 ,$0a ,$0e ,$12 ,$16 ,$1a ,$1e ,$22 ,$26 ,$2a ,$2e ,$32 ,$36 ,$3a ,$3e
-  3074  399f 42464a4e52565a5e...!byte $42 ,$46 ,$4a ,$4e ,$52 ,$56 ,$5a ,$5e ,$04 ,$08 ,$0c ,$10 ,$14 ,$18 ,$1c ,$20
-  3075  39af 24282c3034383c40...!byte $24 ,$28 ,$2c ,$30 ,$34 ,$38 ,$3c ,$40 ,$44 ,$48 ,$4c ,$50 ,$54 ,$58 ,$5c ,$60
-  3076  39bf 00                 !byte $00
+  3073                          
+  3074                          
+  3075                          
+  3076                          
   3077                          
   3078                          
   3079                          
   3080                          
   3081                          
-  3082                          
-  3083                          
-  3084                          
-  3085                          
+  3082                          ; ==============================================================================
+  3083                          ;
+  3084                          ;
+  3085                          ; ==============================================================================
   3086                          
-  3087                          
-  3088                          ; ==============================================================================
-  3089                          ;
-  3090                          ;
-  3091                          ; ==============================================================================
-  3092                          
-  3093                          check_door:
-  3094                          
-  3095  39c0 a209                                   ldx #$09                                    ; set loop to 9
-  3096  39c2 bd4403             -                   lda TAPE_BUFFER + $8,x                      ; get value from tape buffer
-  3097  39c5 c905                                   cmp #$05                                    ; is it a 05? -> right side of the door, meaning LEFT DOOR
-  3098  39c7 f008                                   beq +                                       ; yes -> +
-  3099  39c9 c903                                   cmp #$03                                    ; is it a 03? -> left side of the door, meaning RIGHT DOOR
-  3100  39cb f013                                   beq set_player_xy                           ; yes -> m3A17
-  3101  39cd ca                                     dex                                         ; decrease loop
-  3102  39ce d0f2                                   bne -                                       ; loop
-  3103  39d0 60                 -                   rts
-  3104                          
-  3105  39d1 aef82f             +                   ldx current_room + 1
-  3106  39d4 f0fa                                   beq -               
-  3107  39d6 ca                                     dex
-  3108  39d7 8ef82f                                 stx current_room + 1                        ; update room number                         
-  3109  39da bc8f39                                 ldy room_player_pos_lookup,x                ; load        
-  3110  39dd 4cea39                                 jmp update_player_pos           
+  3087                          check_door:
+  3088                          
+  3089  39c0 a209                                   ldx #$09                                    ; set loop to 9
+  3090  39c2 bd4403             -                   lda TAPE_BUFFER + $8,x                      ; get value from tape buffer
+  3091  39c5 c905                                   cmp #$05                                    ; is it a 05? -> right side of the door, meaning LEFT DOOR
+  3092  39c7 f008                                   beq +                                       ; yes -> +
+  3093  39c9 c903                                   cmp #$03                                    ; is it a 03? -> left side of the door, meaning RIGHT DOOR
+  3094  39cb f013                                   beq set_player_xy                           ; yes -> m3A17
+  3095  39cd ca                                     dex                                         ; decrease loop
+  3096  39ce d0f2                                   bne -                                       ; loop
+  3097  39d0 60                 -                   rts
+  3098                          
+  3099  39d1 aef82f             +                   ldx current_room + 1
+  3100  39d4 f0fa                                   beq -               
+  3101  39d6 ca                                     dex
+  3102  39d7 8ef82f                                 stx current_room + 1                        ; update room number                         
+  3103  39da bc8f39                                 ldy room_player_pos_lookup,x                ; load        
+  3104  39dd 4cea39                                 jmp update_player_pos           
+  3105                          
+  3106                          set_player_xy:
+  3107  39e0 aef82f                                 ldx current_room + 1                            ; x = room number
+  3108  39e3 e8                                     inx                                             ; room number ++
+  3109  39e4 8ef82f                                 stx current_room + 1                            ; update room number
+  3110  39e7 bca639                                 ldy room_player_pos_lookup + $17, x             ; y = ( $08 for room 2 ) -> get table pos for room
   3111                          
-  3112                          set_player_xy:
-  3113  39e0 aef82f                                 ldx current_room + 1                            ; x = room number
-  3114  39e3 e8                                     inx                                             ; room number ++
-  3115  39e4 8ef82f                                 stx current_room + 1                            ; update room number
-  3116  39e7 bca639                                 ldy room_player_pos_lookup + $17, x             ; y = ( $08 for room 2 ) -> get table pos for room
+  3112                          update_player_pos:              
+  3113  39ea b94539                                 lda player_xy_pos_table,y                       ; a = pos y ( $03 for room 2 )
+  3114  39ed 8d4035                                 sta player_pos_y + 1                            ; player y pos = a
+  3115  39f0 b94639                                 lda player_xy_pos_table + 1,y                   ; y +1 = player x pos
+  3116  39f3 8d4235                                 sta player_pos_x + 1
   3117                          
-  3118                          update_player_pos:              
-  3119  39ea b94539                                 lda player_xy_pos_table,y                       ; a = pos y ( $03 for room 2 )
-  3120  39ed 8d4035                                 sta player_pos_y + 1                            ; player y pos = a
-  3121  39f0 b94639                                 lda player_xy_pos_table + 1,y                   ; y +1 = player x pos
-  3122  39f3 8d4235                                 sta player_pos_x + 1
+  3118  39f6 20e42f             m3A2D:              jsr display_room                                ; done  
+  3119  39f9 209115                                 jsr room_04_prep_door                           ; was in main loop before, might find a better place
+  3120  39fc 4cd237                                 jmp update_items_display
+  3121                          
+  3122                          
   3123                          
-  3124  39f6 20e42f             m3A2D:              jsr display_room                                ; done  
-  3125  39f9 209115                                 jsr room_04_prep_door                           ; was in main loop before, might find a better place
-  3126  39fc 4cd237                                 jmp update_items_display
-  3127                          
-  3128                          
+  3124                          ; ==============================================================================
+  3125                          ;
+  3126                          ; wait routine
+  3127                          ; usually called with Y set before
+  3128                          ; ==============================================================================
   3129                          
-  3130                          ; ==============================================================================
-  3131                          ;
-  3132                          ; wait routine
-  3133                          ; usually called with Y set before
-  3134                          ; ==============================================================================
-  3135                          
-  3136                          wait:
-  3137  39ff ca                                     dex
-  3138  3a00 d0fd                                   bne wait
-  3139  3a02 88                                     dey
-  3140  3a03 d0fa                                   bne wait
-  3141  3a05 60                 fake:               rts
+  3130                          wait:
+  3131  39ff ca                                     dex
+  3132  3a00 d0fd                                   bne wait
+  3133  3a02 88                                     dey
+  3134  3a03 d0fa                                   bne wait
+  3135  3a05 60                 fake:               rts
+  3136                          
+  3137                          
+  3138                          ; ==============================================================================
+  3139                          ; sets the game screen
+  3140                          ; multicolor, charset, main colors
+  3141                          ; ==============================================================================
   3142                          
-  3143                          
-  3144                          ; ==============================================================================
-  3145                          ; sets the game screen
-  3146                          ; multicolor, charset, main colors
-  3147                          ; ==============================================================================
-  3148                          
-  3149                          set_game_basics:
-  3150  3a06 ad12ff                                 lda VOICE1                                  ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
-  3151  3a09 29fb                                   and #$fb                                    ; clear bit 2
-  3152  3a0b 8d12ff                                 sta VOICE1                                  ; => get data from RAM
-  3153  3a0e a918                                   lda #$18            ;lda #$21
-  3154  3a10 8d18d0                                 sta CHAR_BASE_ADDRESS                       ; bit 0 : Status of Clock   ( 1 )
-  3155                                              
-  3156                                                                                          ; bit 1 : Single clock set  ( 0 )
-  3157                                                                                          ; b.2-7 : character data base address
-  3158                                                                                          ; %00100$x ($2000)
-  3159  3a13 ad16d0                                 lda FF07
-  3160  3a16 0990                                   ora #$90                                    ; multicolor ON - reverse OFF
-  3161  3a18 8d16d0                                 sta FF07
-  3162                          
-  3163                                                                                          ; set the main colors for the game
-  3164                          
-  3165  3a1b a90a                                   lda #MULTICOLOR_1                           ; original: #$db
-  3166  3a1d 8d22d0                                 sta COLOR_1                                 ; char color 1
-  3167  3a20 a909                                   lda #MULTICOLOR_2                           ; original: #$29
-  3168  3a22 8d23d0                                 sta COLOR_2                                 ; char color 2
-  3169                                              
-  3170  3a25 60                                     rts
-  3171                          
-  3172                          ; ==============================================================================
-  3173                          ; set font and screen setup (40 columns and hires)
-  3174                          ; $3a9d
-  3175                          ; ==============================================================================
-  3176                          
-  3177                          set_charset_and_screen:                               ; set text screen
-  3178                                             
-  3179  3a26 ad12ff                                 lda VOICE1
-  3180  3a29 0904                                   ora #$04                                    ; set bit 2
-  3181  3a2b 8d12ff                                 sta VOICE1                                  ; => get data from ROM
-  3182  3a2e a917                                   lda #$17                                    ; lda #$d5                                    ; ROM FONT
-  3183  3a30 8d18d0                                 sta CHAR_BASE_ADDRESS                       ; set
-  3184  3a33 ad16d0                                 lda FF07
-  3185  3a36 a908                                   lda #$08                                    ; 40 columns and Multicolor OFF
-  3186  3a38 8d16d0                                 sta FF07
-  3187  3a3b 60                                     rts
-  3188                          
-  3189                          test:
-  3190  3a3c ee20d0                                 inc BORDER_COLOR
-  3191  3a3f 4c3c3a                                 jmp test
-  3192                          
-  3193                          ; ==============================================================================
-  3194                          ; init
-  3195                          ; start of game (original $3ab3)
-  3196                          ; ==============================================================================
-  3197                          
-  3198                          code_start:
-  3199                          init:
-  3200                                              ;jsr init_music           ; TODO
-  3201                                              
-  3202  3a42 a917                                   lda #$17                  ; set lower case charset
-  3203  3a44 8d18d0                                 sta $d018                 ; wasn't on Plus/4 for some reason
-  3204                                              
-  3205  3a47 a90b                                   lda #$0b
-  3206  3a49 8d21d0                                 sta BG_COLOR              ; background color
-  3207  3a4c 8d20d0                                 sta BORDER_COLOR          ; border color
-  3208  3a4f 20bb16                                 jsr reset_items           ; might be a level data reset, and print the title screen
-  3209                          
-  3210  3a52 a020                                   ldy #$20
-  3211  3a54 20ff39                                 jsr wait
-  3212                                              
-  3213                                              ; waiting for key press on title screen
-  3214                          
-  3215  3a57 a5cb               -                   lda $cb                   ; zp position of currently pressed key
-  3216  3a59 c93c                                   cmp #$3c                  ; is it the space key?
-  3217  3a5b d0fa                                   bne -
-  3218                          
-  3219                                                                        ; lda #$ff
-  3220  3a5d 203c1d                                 jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
-  3221                                              
-  3222                          
-  3223                                              ; TODO: unclear what the code below does
-  3224                                              ; i think it fills the level data with "DF", which is a blank character
-  3225  3a60 a904                                   lda #>SCREENRAM
-  3226  3a62 8503                                   sta zp03
-  3227  3a64 a900                                   lda #$00
-  3228  3a66 8502                                   sta zp02
-  3229  3a68 a204                                   ldx #$04
-  3230  3a6a a000                                   ldy #$00
-  3231  3a6c a9df                                   lda #$df
-  3232  3a6e 9102               -                   sta (zp02),y
-  3233  3a70 c8                                     iny
-  3234  3a71 d0fb                                   bne -
-  3235  3a73 e603                                   inc zp03
-  3236  3a75 ca                                     dex
-  3237  3a76 d0f6                                   bne -
-  3238                                              
-  3239  3a78 20063a                                 jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
-  3240                          
-  3241                                              ; set background color
-  3242  3a7b a900                                   lda #$00
-  3243  3a7d 8d21d0                                 sta BG_COLOR
-  3244                          
-  3245                                              ; border color. default is a dark red
-  3246  3a80 a902                                   lda #BORDER_COLOR_VALUE
-  3247  3a82 8d20d0                                 sta BORDER_COLOR
-  3248                                              
-  3249  3a85 208b3a                                 jsr draw_border
-  3250                                              
-  3251  3a88 4cc33a                                 jmp set_start_screen
-  3252                          
-  3253                          ; ==============================================================================
-  3254                          ;
-  3255                          ; draws the extended "border"
-  3256                          ; ==============================================================================
-  3257                          
-  3258                          draw_border:        
-  3259  3a8b a927                                   lda #$27
-  3260  3a8d 8502                                   sta zp02
-  3261  3a8f 8504                                   sta zp04
-  3262  3a91 a9d8                                   lda #>COLRAM
-  3263  3a93 8505                                   sta zp05
-  3264  3a95 a904                                   lda #>SCREENRAM
-  3265  3a97 8503                                   sta zp03
-  3266  3a99 a218                                   ldx #$18
-  3267  3a9b a000                                   ldy #$00
-  3268  3a9d a95d               -                   lda #$5d
-  3269  3a9f 9102                                   sta (zp02),y
-  3270  3aa1 a902                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
-  3271  3aa3 9104                                   sta (zp04),y
-  3272  3aa5 98                                     tya
-  3273  3aa6 18                                     clc
-  3274  3aa7 6928                                   adc #$28
-  3275  3aa9 a8                                     tay
-  3276  3aaa 9004                                   bcc +
-  3277  3aac e603                                   inc zp03
-  3278  3aae e605                                   inc zp05
-  3279  3ab0 ca                 +                   dex
-  3280  3ab1 d0ea                                   bne -
-  3281  3ab3 a95d               -                   lda #$5d
-  3282  3ab5 9dc007                                 sta SCREENRAM + $3c0,x
-  3283  3ab8 a902                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
-  3284  3aba 9dc0db                                 sta COLRAM + $3c0,x
-  3285  3abd e8                                     inx
-  3286  3abe e028                                   cpx #$28
-  3287  3ac0 d0f1                                   bne -
-  3288  3ac2 60                                     rts
-  3289                          
-  3290                          ; ==============================================================================
-  3291                          ; SETUP FIRST ROOM
-  3292                          ; player xy position and room number
-  3293                          ; ==============================================================================
-  3294                          
-  3295                          set_start_screen:
-  3296  3ac3 a906                                   lda #PLAYER_START_POS_Y
-  3297  3ac5 8d4035                                 sta player_pos_y + 1                    ; Y player start position (0 = top)
-  3298  3ac8 a903                                   lda #PLAYER_START_POS_X
-  3299  3aca 8d4235                                 sta player_pos_x + 1                    ; X player start position (0 = left)
-  3300  3acd a910                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
-  3301  3acf 8df82f                                 sta current_room + 1
-  3302  3ad2 20f639                                 jsr m3A2D
-  3303                                              
-  3304                          
-  3305                          main_loop:
-  3306                                              
-  3307  3ad5 20b92f                                 jsr rasterpoll_and_other_stuff
-  3308  3ad8 a01b                                   ldy #$1b                                ; ldy #$30    ; wait a bit -> in each frame! slows down movement
-  3309  3ada 20ff39                                 jsr wait
-  3310                                                                                      ;jsr room_04_prep_door
-  3311  3add 202e16                                 jsr prep_player_pos
-  3312  3ae0 4c4716                                 jmp object_collision
+  3143                          set_game_basics:
+  3144  3a06 ad12ff                                 lda VOICE1                                  ; 0-1 TED Voice, 2 TED data fetch rom/ram select, Bits 0-5 : Bit map base address
+  3145  3a09 29fb                                   and #$fb                                    ; clear bit 2
+  3146  3a0b 8d12ff                                 sta VOICE1                                  ; => get data from RAM
+  3147  3a0e a918                                   lda #$18            ;lda #$21
+  3148  3a10 8d18d0                                 sta CHAR_BASE_ADDRESS                       ; bit 0 : Status of Clock   ( 1 )
+  3149                                              
+  3150                                                                                          ; bit 1 : Single clock set  ( 0 )
+  3151                                                                                          ; b.2-7 : character data base address
+  3152                                                                                          ; %00100$x ($2000)
+  3153  3a13 ad16d0                                 lda FF07
+  3154  3a16 0990                                   ora #$90                                    ; multicolor ON - reverse OFF
+  3155  3a18 8d16d0                                 sta FF07
+  3156                          
+  3157                                                                                          ; set the main colors for the game
+  3158                          
+  3159  3a1b a90a                                   lda #MULTICOLOR_1                           ; original: #$db
+  3160  3a1d 8d22d0                                 sta COLOR_1                                 ; char color 1
+  3161  3a20 a909                                   lda #MULTICOLOR_2                           ; original: #$29
+  3162  3a22 8d23d0                                 sta COLOR_2                                 ; char color 2
+  3163                                              
+  3164  3a25 60                                     rts
+  3165                          
+  3166                          ; ==============================================================================
+  3167                          ; set font and screen setup (40 columns and hires)
+  3168                          ; $3a9d
+  3169                          ; ==============================================================================
+  3170                          
+  3171                          set_charset_and_screen:                               ; set text screen
+  3172                                             
+  3173  3a26 ad12ff                                 lda VOICE1
+  3174  3a29 0904                                   ora #$04                                    ; set bit 2
+  3175  3a2b 8d12ff                                 sta VOICE1                                  ; => get data from ROM
+  3176  3a2e a917                                   lda #$17                                    ; lda #$d5                                    ; ROM FONT
+  3177  3a30 8d18d0                                 sta CHAR_BASE_ADDRESS                       ; set
+  3178  3a33 ad16d0                                 lda FF07
+  3179  3a36 a908                                   lda #$08                                    ; 40 columns and Multicolor OFF
+  3180  3a38 8d16d0                                 sta FF07
+  3181  3a3b 60                                     rts
+  3182                          
+  3183                          test:
+  3184  3a3c ee20d0                                 inc BORDER_COLOR
+  3185  3a3f 4c3c3a                                 jmp test
+  3186                          
+  3187                          ; ==============================================================================
+  3188                          ; init
+  3189                          ; start of game (original $3ab3)
+  3190                          ; ==============================================================================
+  3191                          
+  3192                          code_start:
+  3193                          init:
+  3194                                              ;jsr init_music           ; TODO
+  3195                                              
+  3196  3a42 a917                                   lda #$17                  ; set lower case charset
+  3197  3a44 8d18d0                                 sta $d018                 ; wasn't on Plus/4 for some reason
+  3198                                              
+  3199  3a47 a90b                                   lda #$0b
+  3200  3a49 8d21d0                                 sta BG_COLOR              ; background color
+  3201  3a4c 8d20d0                                 sta BORDER_COLOR          ; border color
+  3202  3a4f 20bb16                                 jsr reset_items           ; might be a level data reset, and print the title screen
+  3203                          
+  3204  3a52 a020                                   ldy #$20
+  3205  3a54 20ff39                                 jsr wait
+  3206                                              
+  3207                                              ; waiting for key press on title screen
+  3208                          
+  3209  3a57 a5cb               -                   lda $cb                   ; zp position of currently pressed key
+  3210  3a59 c93c                                   cmp #$3c                  ; is it the space key?
+  3211  3a5b d0fa                                   bne -
+  3212                          
+  3213                                                                        ; lda #$ff
+  3214  3a5d 203c1d                                 jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
+  3215                                              
+  3216                          
+  3217                                              ; TODO: unclear what the code below does
+  3218                                              ; i think it fills the level data with "DF", which is a blank character
+  3219  3a60 a904                                   lda #>SCREENRAM
+  3220  3a62 8503                                   sta zp03
+  3221  3a64 a900                                   lda #$00
+  3222  3a66 8502                                   sta zp02
+  3223  3a68 a204                                   ldx #$04
+  3224  3a6a a000                                   ldy #$00
+  3225  3a6c a9df                                   lda #$df
+  3226  3a6e 9102               -                   sta (zp02),y
+  3227  3a70 c8                                     iny
+  3228  3a71 d0fb                                   bne -
+  3229  3a73 e603                                   inc zp03
+  3230  3a75 ca                                     dex
+  3231  3a76 d0f6                                   bne -
+  3232                                              
+  3233  3a78 20063a                                 jsr set_game_basics           ; jsr $3a7d -> multicolor, charset and main char colors
+  3234                          
+  3235                                              ; set background color
+  3236  3a7b a900                                   lda #$00
+  3237  3a7d 8d21d0                                 sta BG_COLOR
+  3238                          
+  3239                                              ; border color. default is a dark red
+  3240  3a80 a902                                   lda #BORDER_COLOR_VALUE
+  3241  3a82 8d20d0                                 sta BORDER_COLOR
+  3242                                              
+  3243  3a85 208b3a                                 jsr draw_border
+  3244                                              
+  3245  3a88 4cc33a                                 jmp set_start_screen
+  3246                          
+  3247                          ; ==============================================================================
+  3248                          ;
+  3249                          ; draws the extended "border"
+  3250                          ; ==============================================================================
+  3251                          
+  3252                          draw_border:        
+  3253  3a8b a927                                   lda #$27
+  3254  3a8d 8502                                   sta zp02
+  3255  3a8f 8504                                   sta zp04
+  3256  3a91 a9d8                                   lda #>COLRAM
+  3257  3a93 8505                                   sta zp05
+  3258  3a95 a904                                   lda #>SCREENRAM
+  3259  3a97 8503                                   sta zp03
+  3260  3a99 a218                                   ldx #$18
+  3261  3a9b a000                                   ldy #$00
+  3262  3a9d a95d               -                   lda #$5d
+  3263  3a9f 9102                                   sta (zp02),y
+  3264  3aa1 a902                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
+  3265  3aa3 9104                                   sta (zp04),y
+  3266  3aa5 98                                     tya
+  3267  3aa6 18                                     clc
+  3268  3aa7 6928                                   adc #$28
+  3269  3aa9 a8                                     tay
+  3270  3aaa 9004                                   bcc +
+  3271  3aac e603                                   inc zp03
+  3272  3aae e605                                   inc zp05
+  3273  3ab0 ca                 +                   dex
+  3274  3ab1 d0ea                                   bne -
+  3275  3ab3 a95d               -                   lda #$5d
+  3276  3ab5 9dc007                                 sta SCREENRAM + $3c0,x
+  3277  3ab8 a902                                   lda #COLOR_FOR_INVISIBLE_ROW_AND_COLUMN
+  3278  3aba 9dc0db                                 sta COLRAM + $3c0,x
+  3279  3abd e8                                     inx
+  3280  3abe e028                                   cpx #$28
+  3281  3ac0 d0f1                                   bne -
+  3282  3ac2 60                                     rts
+  3283                          
+  3284                          ; ==============================================================================
+  3285                          ; SETUP FIRST ROOM
+  3286                          ; player xy position and room number
+  3287                          ; ==============================================================================
+  3288                          
+  3289                          set_start_screen:
+  3290  3ac3 a906                                   lda #PLAYER_START_POS_Y
+  3291  3ac5 8d4035                                 sta player_pos_y + 1                    ; Y player start position (0 = top)
+  3292  3ac8 a903                                   lda #PLAYER_START_POS_X
+  3293  3aca 8d4235                                 sta player_pos_x + 1                    ; X player start position (0 = left)
+  3294  3acd a912                                   lda #START_ROOM                         ; room number (start screen) ($3b45)
+  3295  3acf 8df82f                                 sta current_room + 1
+  3296  3ad2 20f639                                 jsr m3A2D
+  3297                                              
+  3298                          
+  3299                          main_loop:
+  3300                                              
+  3301  3ad5 20b92f                                 jsr rasterpoll_and_other_stuff
+  3302  3ad8 a01b                                   ldy #$1b                                ; ldy #$30    ; wait a bit -> in each frame! slows down movement
+  3303  3ada 20ff39                                 jsr wait
+  3304                                                                                      ;jsr room_04_prep_door
+  3305  3add 202e16                                 jsr prep_player_pos
+  3306  3ae0 4c4716                                 jmp object_collision
+  3307                          
+  3308                          ; ==============================================================================
+  3309                          ;
+  3310                          ; Display the death message
+  3311                          ; End of game and return to start screen
+  3312                          ; ==============================================================================
   3313                          
-  3314                          ; ==============================================================================
-  3315                          ;
-  3316                          ; Display the death message
-  3317                          ; End of game and return to start screen
-  3318                          ; ==============================================================================
-  3319                          
-  3320                          death:
-  3321                                             
-  3322  3ae3 a93b                                   lda #>death_messages
-  3323  3ae5 85a8                                   sta zpA8
-  3324  3ae7 a962                                   lda #<death_messages
-  3325  3ae9 85a7                                   sta zpA7
-  3326  3aeb c000                                   cpy #$00
-  3327  3aed f00c                                   beq ++
-  3328  3aef 18                 -                   clc
-  3329  3af0 6932                                   adc #$32
-  3330  3af2 85a7                                   sta zpA7
-  3331  3af4 9002                                   bcc +
-  3332  3af6 e6a8                                   inc zpA8
-  3333  3af8 88                 +                   dey
-  3334  3af9 d0f4                                   bne -
-  3335  3afb a90c               ++                  lda #$0c
-  3336  3afd 8503                                   sta zp03
-  3337  3aff 8402                                   sty zp02
-  3338  3b01 a204                                   ldx #$04
-  3339  3b03 a920                                   lda #$20
-  3340  3b05 9102               -                   sta (zp02),y
-  3341  3b07 c8                                     iny
-  3342  3b08 d0fb                                   bne -
-  3343  3b0a e603                                   inc zp03
-  3344  3b0c ca                                     dex
-  3345  3b0d d0f6                                   bne -
-  3346  3b0f 20263a                                 jsr set_charset_and_screen
-  3347  3b12 20423b                                 jsr clear
-  3348  3b15 b1a7               -                   lda (zpA7),y
-  3349  3b17 9dc005                                 sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
-  3350  3b1a a900                                   lda #$00                                    ; color of the death message
-  3351  3b1c 9dc0d9                                 sta COLRAM + $1c0,x     ; sta $09c0,x
-  3352  3b1f e8                                     inx
-  3353  3b20 c8                                     iny
-  3354  3b21 e019                                   cpx #$19
-  3355  3b23 d002                                   bne +
-  3356  3b25 a250                                   ldx #$50
-  3357  3b27 c032               +                   cpy #$32
-  3358  3b29 d0ea                                   bne -
-  3359  3b2b a903                                   lda #$03
-  3360  3b2d 8d21d0                                 sta BG_COLOR
-  3361  3b30 8d20d0                                 sta BORDER_COLOR
-  3362                                             
-  3363                          m3EF9:
-  3364  3b33 a908                                   lda #$08
-  3365  3b35 a0ff               -                   ldy #$ff
-  3366  3b37 20ff39                                 jsr wait
-  3367  3b3a 38                                     sec
-  3368  3b3b e901                                   sbc #$01
-  3369  3b3d d0f6                                   bne -
-  3370                                              
-  3371  3b3f 4c423a                                 jmp init
+  3314                          death:
+  3315                                             
+  3316  3ae3 a93b                                   lda #>death_messages
+  3317  3ae5 85a8                                   sta zpA8
+  3318  3ae7 a962                                   lda #<death_messages
+  3319  3ae9 85a7                                   sta zpA7
+  3320  3aeb c000                                   cpy #$00
+  3321  3aed f00c                                   beq ++
+  3322  3aef 18                 -                   clc
+  3323  3af0 6932                                   adc #$32
+  3324  3af2 85a7                                   sta zpA7
+  3325  3af4 9002                                   bcc +
+  3326  3af6 e6a8                                   inc zpA8
+  3327  3af8 88                 +                   dey
+  3328  3af9 d0f4                                   bne -
+  3329  3afb a90c               ++                  lda #$0c
+  3330  3afd 8503                                   sta zp03
+  3331  3aff 8402                                   sty zp02
+  3332  3b01 a204                                   ldx #$04
+  3333  3b03 a920                                   lda #$20
+  3334  3b05 9102               -                   sta (zp02),y
+  3335  3b07 c8                                     iny
+  3336  3b08 d0fb                                   bne -
+  3337  3b0a e603                                   inc zp03
+  3338  3b0c ca                                     dex
+  3339  3b0d d0f6                                   bne -
+  3340  3b0f 20263a                                 jsr set_charset_and_screen
+  3341  3b12 20423b                                 jsr clear
+  3342  3b15 b1a7               -                   lda (zpA7),y
+  3343  3b17 9dc005                                 sta SCREENRAM + $1c0,x   ; sta $0dc0,x         ; position of the death message
+  3344  3b1a a900                                   lda #$00                                    ; color of the death message
+  3345  3b1c 9dc0d9                                 sta COLRAM + $1c0,x     ; sta $09c0,x
+  3346  3b1f e8                                     inx
+  3347  3b20 c8                                     iny
+  3348  3b21 e019                                   cpx #$19
+  3349  3b23 d002                                   bne +
+  3350  3b25 a250                                   ldx #$50
+  3351  3b27 c032               +                   cpy #$32
+  3352  3b29 d0ea                                   bne -
+  3353  3b2b a903                                   lda #$03
+  3354  3b2d 8d21d0                                 sta BG_COLOR
+  3355  3b30 8d20d0                                 sta BORDER_COLOR
+  3356                                             
+  3357                          m3EF9:
+  3358  3b33 a908                                   lda #$08
+  3359  3b35 a0ff               -                   ldy #$ff
+  3360  3b37 20ff39                                 jsr wait
+  3361  3b3a 38                                     sec
+  3362  3b3b e901                                   sbc #$01
+  3363  3b3d d0f6                                   bne -
+  3364                                              
+  3365  3b3f 4c423a                                 jmp init
+  3366                          
+  3367                          ; ==============================================================================
+  3368                          ;
+  3369                          ; clear the sceen (replacing kernal call on plus/4)
+  3370                          ; 
+  3371                          ; ==============================================================================
   3372                          
-  3373                          ; ==============================================================================
-  3374                          ;
-  3375                          ; clear the sceen (replacing kernal call on plus/4)
-  3376                          ; 
-  3377                          ; ==============================================================================
-  3378                          
-  3379  3b42 a920               clear               lda #$20                    ; #$20 is the spacebar Screen Code
-  3380  3b44 9d0004                                 sta $0400,x                 ; fill four areas with 256 spacebar characters
-  3381  3b47 9d0005                                 sta $0500,x 
-  3382  3b4a 9d0006                                 sta $0600,x 
-  3383  3b4d 9de806                                 sta $06e8,x 
-  3384  3b50 a900                                   lda #$00                    ; set foreground to black in Color Ram 
-  3385  3b52 9d00d8                                 sta $d800,x  
-  3386  3b55 9d00d9                                 sta $d900,x
-  3387  3b58 9d00da                                 sta $da00,x
-  3388  3b5b 9de8da                                 sta $dae8,x
-  3389  3b5e e8                                     inx                         ; increment X
-  3390  3b5f d0e1                                   bne clear                   ; did X turn to zero yet?
-  3391                                                                          ; if not, continue with the loop
-  3392  3b61 60                                     rts                         ; return from this subroutine
-  3393                          ; ==============================================================================
-  3394                          ;
-  3395                          ; DEATH MESSAGES
-  3396                          ; ==============================================================================
+  3373  3b42 a920               clear               lda #$20                    ; #$20 is the spacebar Screen Code
+  3374  3b44 9d0004                                 sta $0400,x                 ; fill four areas with 256 spacebar characters
+  3375  3b47 9d0005                                 sta $0500,x 
+  3376  3b4a 9d0006                                 sta $0600,x 
+  3377  3b4d 9de806                                 sta $06e8,x 
+  3378  3b50 a900                                   lda #$00                    ; set foreground to black in Color Ram 
+  3379  3b52 9d00d8                                 sta $d800,x  
+  3380  3b55 9d00d9                                 sta $d900,x
+  3381  3b58 9d00da                                 sta $da00,x
+  3382  3b5b 9de8da                                 sta $dae8,x
+  3383  3b5e e8                                     inx                         ; increment X
+  3384  3b5f d0e1                                   bne clear                   ; did X turn to zero yet?
+  3385                                                                          ; if not, continue with the loop
+  3386  3b61 60                                     rts                         ; return from this subroutine
+  3387                          ; ==============================================================================
+  3388                          ;
+  3389                          ; DEATH MESSAGES
+  3390                          ; ==============================================================================
+  3391                          
+  3392                          death_messages:
+  3393                          
+  3394                          ; death messages
+  3395                          ; like "You fell into a snake pit"
+  3396                          ; other languages are copied over from the intro.asm
   3397                          
-  3398                          death_messages:
+  3398                          ; scr conversion
   3399                          
-  3400                          ; death messages
-  3401                          ; like "You fell into a snake pit"
-  3402                          ; other languages are copied over from the intro.asm
-  3403                          
-  3404                          ; scr conversion
-  3405                          
-  3406                          ; 00 You fell into a snake pit
-  3407                          ; 01 You'd better watched out for the sacred column
-  3408                          ; 02 You drowned in the deep river
-  3409                          ; 03 You drank from the poisend bottle
-  3410                          ; 04 Boris the spider got you and killed you
-  3411                          ; 05 Didn't you see the laser beam?
-  3412                          ; 06 240 Volts! You got an electrical shock!
-  3413                          ; 07 You stepped on a nail!
-  3414                          ; 08 A foot trap stopped you!
-  3415                          ; 09 This room is doomed by the wizard Manilo!
-  3416                          ; 0a You were locked in and starved!
-  3417                          ; 0b You were hit by a big rock and died!
-  3418                          ; 0c Belegro killed you!
-  3419                          ; 0d You found a thirsty zombie....
-  3420                          ; 0e The monster grabbed you you. You are dead!
-  3421                          ; 0f You were wounded by the bush!
-  3422                          ; 10 You are trapped in wire-nettings!
-  3423                          
-  3424                          
-  3425  3b62 590f152006050c0c...!scr "You fell into a          snake pit !              "
-  3426  3b94 590f152704200205...!scr "You'd better watched out for the sacred column!   "
-  3427  3bc6 590f152004120f17...!scr "You drowned in the deep  river !                  "
-  3428  3bf8 590f15200412010e...!scr "You drank from the       poisoned bottle ........ "
-  3429  3c2a 420f1209132c2014...!scr "Boris, the spider, got   you and killed you !     "
-  3430  3c5c 4409040e27142019...!scr "Didn't you see the       laser beam ?!?           "
-  3431  3c8e 32343020560f0c14...!scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
-  3432  3cc0 590f152013140510...!scr "You stepped on a nail !                           "
-  3433  3cf2 4120060f0f142014...!scr "A foot trap stopped you !                         "
-  3434  3d24 5408091320120f0f...!scr "This room is doomed      by the wizard Manilo !   "
-  3435  3d56 590f152017051205...!scr "You were locked in and   starved !                " ; original: !scr "You were locked in and starved !                  "
-  3436  3d88 590f152017051205...!scr "You were hit by a big    rock and died !          "
-  3437  3dba 42050c0507120f20...!scr "Belegro killed           you !                    "
-  3438  3dec 590f1520060f150e...!scr "You found a thirsty      zombie .......           "
-  3439  3e1e 540805200d0f0e13...!scr "The monster grabbed       you. You are dead !     "
-  3440  3e50 590f152017051205...!scr "You were wounded by      the bush !               "
-  3441  3e82 590f152001120520...!scr "You are trapped in       wire-nettings !          "
+  3400                          ; 00 You fell into a snake pit
+  3401                          ; 01 You'd better watched out for the sacred column
+  3402                          ; 02 You drowned in the deep river
+  3403                          ; 03 You drank from the poisend bottle
+  3404                          ; 04 Boris the spider got you and killed you
+  3405                          ; 05 Didn't you see the laser beam?
+  3406                          ; 06 240 Volts! You got an electrical shock!
+  3407                          ; 07 You stepped on a nail!
+  3408                          ; 08 A foot trap stopped you!
+  3409                          ; 09 This room is doomed by the wizard Manilo!
+  3410                          ; 0a You were locked in and starved!
+  3411                          ; 0b You were hit by a big rock and died!
+  3412                          ; 0c Belegro killed you!
+  3413                          ; 0d You found a thirsty zombie....
+  3414                          ; 0e The monster grabbed you you. You are dead!
+  3415                          ; 0f You were wounded by the bush!
+  3416                          ; 10 You are trapped in wire-nettings!
+  3417                          
+  3418                          
+  3419  3b62 590f152006050c0c...!scr "You fell into a          snake pit !              "
+  3420  3b94 590f152704200205...!scr "You'd better watched out for the sacred column!   "
+  3421  3bc6 590f152004120f17...!scr "You drowned in the deep  river !                  "
+  3422  3bf8 590f15200412010e...!scr "You drank from the       poisoned bottle ........ "
+  3423  3c2a 420f1209132c2014...!scr "Boris, the spider, got   you and killed you !     "
+  3424  3c5c 4409040e27142019...!scr "Didn't you see the       laser beam ?!?           "
+  3425  3c8e 32343020560f0c14...!scr "240 Volts ! You got an   electrical shock !       " ; original: !scr "240 Volts ! You got an electrical shock !         "
+  3426  3cc0 590f152013140510...!scr "You stepped on a nail !                           "
+  3427  3cf2 4120060f0f142014...!scr "A foot trap stopped you !                         "
+  3428  3d24 5408091320120f0f...!scr "This room is doomed      by the wizard Manilo !   "
+  3429  3d56 590f152017051205...!scr "You were locked in and   starved !                " ; original: !scr "You were locked in and starved !                  "
+  3430  3d88 590f152017051205...!scr "You were hit by a big    rock and died !          "
+  3431  3dba 42050c0507120f20...!scr "Belegro killed           you !                    "
+  3432  3dec 590f1520060f150e...!scr "You found a thirsty      zombie .......           "
+  3433  3e1e 540805200d0f0e13...!scr "The monster grabbed       you. You are dead !     "
+  3434  3e50 590f152017051205...!scr "You were wounded by      the bush !               "
+  3435  3e82 590f152001120520...!scr "You are trapped in       wire-nettings !          "
+  3436                          
+  3437                          
+  3438                          
+  3439                          
+  3440                          
+  3441                          
   3442                          
   3443                          
-  3444                          
-  3445                          
-  3446                          
-  3447                          
+  3444                          ; ==============================================================================
+  3445                          ; screen messages
+  3446                          ; and the code entry text
+  3447                          ; ==============================================================================
   3448                          
-  3449                          
-  3450                          ; ==============================================================================
-  3451                          ; screen messages
-  3452                          ; and the code entry text
-  3453                          ; ==============================================================================
-  3454                          
-  3455                          hint_messages:
-  3456  3eb4 2041201001121420...!scr " A part of the code number is :         "
-  3457  3edc 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-  3458  3f04 20590f15200e0505...!scr " You need: bulb, bulb holder, socket !  "
-  3459  3f2c 2054050c0c200d05...!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
-  3460  3f54 202a2a2a2a2a2020...!scr " *****   A helping letter :   "
-  3461  3f72 432020202a2a2a2a...helping_letter: !scr "C   ***** "
-  3462  3f7c 2057120f0e072003...!scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
-  3463                          
+  3449                          hint_messages:
+  3450  3eb4 2041201001121420...!scr " A part of the code number is :         "
+  3451  3edc 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+  3452  3f04 20590f15200e0505...!scr " You need: bulb, bulb holder, socket !  "
+  3453  3f2c 2054050c0c200d05...!scr " Tell me the Code number ?     ",$22,"     ",$22,"  "
+  3454  3f54 202a2a2a2a2a2020...!scr " *****   A helping letter :   "
+  3455  3f72 432020202a2a2a2a...helping_letter: !scr "C   ***** "
+  3456  3f7c 2057120f0e072003...!scr " Wrong code number ! DEATH PENALTY !!!  " ; original: !scr " Sorry, bad code number! Better luck next time! "
+  3457                          
+  3458                          
+  3459                          
+  3460                          ; ==============================================================================
+  3461                          ;
+  3462                          ; ITEM PICKUP MESSAGES
+  3463                          ; ==============================================================================
   3464                          
   3465                          
-  3466                          ; ==============================================================================
-  3467                          ;
-  3468                          ; ITEM PICKUP MESSAGES
-  3469                          ; ==============================================================================
-  3470                          
+  3466                          item_pickup_message:              ; item pickup messages
+  3467                          
+  3468  3fa4 2054080512052009...!scr " There is a key in the bottle !         "
+  3469  3fcc 2020205408051205...!scr "   There is a key in the coffin !       "
+  3470  3ff4 2054080512052009...!scr " There is a breathing tube !            "
   3471                          
-  3472                          item_pickup_message:              ; item pickup messages
+  3472                          item_pickup_message_end:
   3473                          
-  3474  3fa4 2054080512052009...!scr " There is a key in the bottle !         "
-  3475  3fcc 2020205408051205...!scr "   There is a key in the coffin !       "
-  3476  3ff4 2054080512052009...!scr " There is a breathing tube !            "
+  3474                          
+  3475                          
+  3476                          
   3477                          
-  3478                          item_pickup_message_end:
-  3479                          
-  3480                          
-  3481                          
-  3482                          
-  3483                          
-  3484                                              ;       444444444       000000000          000000000          000000000     
-  3485                                              ;      4::::::::4     00:::::::::00      00:::::::::00      00:::::::::00   
-  3486                                              ;     4:::::::::4   00:::::::::::::00  00:::::::::::::00  00:::::::::::::00 
-  3487                                              ;    4::::44::::4  0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
-  3488                                              ;   4::::4 4::::4  0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
-  3489                                              ;  4::::4  4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  3490                                              ; 4::::4   4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  3491                                              ;4::::444444::::4440:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
-  3492                                              ;4::::::::::::::::40:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
-  3493                                              ;4444444444:::::4440:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  3494                                              ;          4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
-  3495                                              ;          4::::4  0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
-  3496                                              ;          4::::4  0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
-  3497                                              ;        44::::::44 00:::::::::::::00  00:::::::::::::00  00:::::::::::::00 
-  3498                                              ;        4::::::::4   00:::::::::00      00:::::::::00      00:::::::::00   
-  3499                                              ;        4444444444     000000000          000000000          000000000  
-  3500                          
-  3501                          
-  3502                          
-  3503                          *= $4000
-  3504                          
-  3505                          ; ==============================================================================
-  3506                          ;
-  3507                          ; CODE ADDITION AREA
-  3508                          ; ==============================================================================
-  3509                          
-  3510                          ; intro_start
+  3478                                              ;       444444444       000000000          000000000          000000000     
+  3479                                              ;      4::::::::4     00:::::::::00      00:::::::::00      00:::::::::00   
+  3480                                              ;     4:::::::::4   00:::::::::::::00  00:::::::::::::00  00:::::::::::::00 
+  3481                                              ;    4::::44::::4  0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
+  3482                                              ;   4::::4 4::::4  0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
+  3483                                              ;  4::::4  4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  3484                                              ; 4::::4   4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  3485                                              ;4::::444444::::4440:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
+  3486                                              ;4::::::::::::::::40:::::0 000 0:::::00:::::0 000 0:::::00:::::0 000 0:::::0
+  3487                                              ;4444444444:::::4440:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  3488                                              ;          4::::4  0:::::0     0:::::00:::::0     0:::::00:::::0     0:::::0
+  3489                                              ;          4::::4  0::::::0   0::::::00::::::0   0::::::00::::::0   0::::::0
+  3490                                              ;          4::::4  0:::::::000:::::::00:::::::000:::::::00:::::::000:::::::0
+  3491                                              ;        44::::::44 00:::::::::::::00  00:::::::::::::00  00:::::::::::::00 
+  3492                                              ;        4::::::::4   00:::::::::00      00:::::::::00      00:::::::::00   
+  3493                                              ;        4444444444     000000000          000000000          000000000  
+  3494                          
+  3495                          
+  3496                          
+  3497                          *= $4000
+  3498                          
+  3499                          ; ==============================================================================
+  3500                          ;
+  3501                          ; CODE ADDITION AREA
+  3502                          ; ==============================================================================
+  3503                          
+  3504                          ; intro_start
 
 ; ******** Source: includes/intro.asm
      1                          
@@ -3828,307 +3822,401 @@
     15  4002 8d20d0                                 sta $d020
     16  4005 8d21d0                                 sta $d021
     17                          
-    18  4008 a901                                   lda #01                 ; todo -> this should be 0,1,2 depending on language choice
+    18  4008 a900                                   lda #00                 ; todo -> this should be 0,1,2 depending on language choice
     19                                                                      ; 0 = english (do nothing)
     20                                                                      ; 1 = german (copy stuff)
     21                                                                      ; 2 = hungarian (copy stuff)
     22                          
     23  400a c900                                   cmp #0                  ; is it 0 = english?
-    24  400c f05f                                   beq end_copy            ; we're done here
-    25                          
-    26  400e c901                                   cmp #1                  ; is it 1 = german?
-    27  4010 d02f                                   bne lang_hu             ; no -> must be hungarian
-    28                          
-    29                                                                      ; yes
-    30                          
-    31                          lang_de:                    
-    32                                              ; copy the introduction text
-    33  4012 a9d4                                   lda #<text_intro_de
-    34  4014 8502                                   sta $02
-    35  4016 a940                                   lda #>text_intro_de
-    36  4018 8503                                   sta $03
-    37  401a 207040                                 jsr copy_text_intro
-    38                          
-    39                                              ; copy the messages 
-    40  401d a9a4                                   lda #<text_messages_de
-    41  401f 8502                                   sta $02
-    42  4021 a943                                   lda #>text_messages_de
-    43  4023 8503                                   sta $03
-    44  4025 208940                                 jsr copy_text_messages
-    45                          
-    46                                              ; copy the items text 
-    47  4028 a948                                   lda #<text_items_de
-    48  402a 8502                                   sta $02
-    49  402c a94a                                   lda #>text_items_de
-    50  402e 8503                                   sta $03
-    51  4030 20ba40                                 jsr copy_text_items
-    52                          
-    53                                              ; copy the hints text 
-    54  4033 a938                                   lda #<text_hints_de
-    55  4035 8502                                   sta $02
-    56  4037 a94b                                   lda #>text_hints_de
-    57  4039 8503                                   sta $03
-    58  403b 20c740                                 jsr copy_text_hints
-    59                          
-    60  403e 4c6d40                                 jmp end_copy
-    61                                              
-    62                          
-    63                          lang_hu:
-    64                          
-    65                                              ; copy the introduction text
-    66  4041 a93c                                   lda #<text_intro_hu
-    67  4043 8502                                   sta $02
-    68  4045 a942                                   lda #>text_intro_hu
-    69  4047 8503                                   sta $03
-    70  4049 207040                                 jsr copy_text_intro
-    71                          
-    72                                              ; copy the messages 
-    73  404c a9f6                                   lda #<text_messages_hu
-    74  404e 8502                                   sta $02
-    75  4050 a946                                   lda #>text_messages_hu
-    76  4052 8503                                   sta $03
-    77  4054 208940                                 jsr copy_text_messages
-    78                          
-    79                                              ; copy the items text 
-    80  4057 a9c0                                   lda #<text_items_hu
-    81  4059 8502                                   sta $02
-    82  405b a94a                                   lda #>text_items_hu
-    83  405d 8503                                   sta $03
-    84  405f 20ba40                                 jsr copy_text_items
-    85                          
-    86                                              ; copy the hints text 
-    87  4062 a928                                   lda #<text_hints_hu
-    88  4064 8502                                   sta $02
-    89  4066 a94c                                   lda #>text_hints_hu
-    90  4068 8503                                   sta $03
-    91  406a 20c740                                 jsr copy_text_hints
+    24  400c d003                                   bne +
+    25  400e 4ccd40                                 jmp end_copy            ; we're done here
+    26                          +
+    27  4011 c901                                   cmp #1                  ; is it 1 = german?
+    28  4013 d06b                                   bne lang_hu             ; no -> must be hungarian
+    29                          
+    30                                                                      ; yes
+    31                          
+    32                          lang_de:                    
+    33                                              ; copy the introduction text
+    34  4015 a95f                                   lda #<text_intro_de
+    35  4017 8502                                   sta $02
+    36  4019 a941                                   lda #>text_intro_de
+    37  401b 8503                                   sta $03
+    38  401d 20d040                                 jsr copy_text_intro
+    39                          
+    40                                              ; copy the messages 
+    41  4020 a92f                                   lda #<text_messages_de
+    42  4022 8502                                   sta $02
+    43  4024 a944                                   lda #>text_messages_de
+    44  4026 8503                                   sta $03
+    45  4028 20e940                                 jsr copy_text_messages
+    46                          
+    47                                              ; copy the items text 
+    48  402b a9d3                                   lda #<text_items_de
+    49  402d 8502                                   sta $02
+    50  402f a94a                                   lda #>text_items_de
+    51  4031 8503                                   sta $03
+    52  4033 201a41                                 jsr copy_text_items
+    53                          
+    54                                              ; copy the hints text 
+    55  4036 a9c3                                   lda #<text_hints_de
+    56  4038 8502                                   sta $02
+    57  403a a94b                                   lda #>text_hints_de
+    58  403c 8503                                   sta $03
+    59  403e 202741                                 jsr copy_text_hints
+    60                          
+    61                                              ; copy the win text 
+    62  4041 a9a3                                   lda #<text_win_de
+    63  4043 8502                                   sta $02
+    64  4045 a94d                                   lda #>text_win_de
+    65  4047 8503                                   sta $03
+    66  4049 203441                                 jsr copy_text_win
+    67                          
+    68                                              ; repair some underline characters
+    69  404c a963                                   lda #$63
+    70  404e 8d011a                                 sta $175d + 16*40 + 36
+    71  4051 8d021a                                 sta $175d + 16*40 + 37
+    72  4054 8d031a                                 sta $175d + 16*40 + 38
+    73                          
+    74  4057 a920                                   lda #$20
+    75  4059 8d521a                                 sta $175d + 18*40 + 37
+    76  405c 8d8f1a                                 sta $175d + 20*40 + 18
+    77  405f 8d901a                                 sta $175d + 20*40 + 19
+    78  4062 8d911a                                 sta $175d + 20*40 + 20
+    79  4065 8d921a                                 sta $175d + 20*40 + 21
+    80  4068 8d931a                                 sta $175d + 20*40 + 22
+    81  406b 8d941a                                 sta $175d + 20*40 + 23
+    82  406e 8d951a                                 sta $175d + 20*40 + 24
+    83  4071 8d961a                                 sta $175d + 20*40 + 25
+    84  4074 8d971a                                 sta $175d + 20*40 + 26
+    85  4077 8d981a                                 sta $175d + 20*40 + 27
+    86  407a 8d991a                                 sta $175d + 20*40 + 28
+    87                          
+    88                          
+    89                          
+    90  407d 4ccd40                                 jmp end_copy
+    91                                              
     92                          
-    93                          
+    93                          lang_hu:
     94                          
-    95                          
-    96                          end_copy:
-    97  406d 4c423a                                 jmp code_start
-    98                          
-    99                          
-   100                          
+    95                                              ; copy the introduction text
+    96  4080 a9c7                                   lda #<text_intro_hu
+    97  4082 8502                                   sta $02
+    98  4084 a942                                   lda #>text_intro_hu
+    99  4086 8503                                   sta $03
+   100  4088 20d040                                 jsr copy_text_intro
    101                          
-   102                          
-   103                          
-   104                          
-   105                          ; ==============================================================================
-   106                          ; copy the localized intro
-   107                          ; ==============================================================================
+   102                                              ; copy the messages 
+   103  408b a981                                   lda #<text_messages_hu
+   104  408d 8502                                   sta $02
+   105  408f a947                                   lda #>text_messages_hu
+   106  4091 8503                                   sta $03
+   107  4093 20e940                                 jsr copy_text_messages
    108                          
-   109                          
-   110                          copy_text_intro:
-   111                          
-   112  4070 a000                                   ldy #$0
-   113                          
-   114  4072 b102               -                   lda ($02) ,y
-   115  4074 998a1b                                 sta $1b8a ,y
-   116  4077 c8                                     iny
-   117  4078 d0f8                                   bne -
-   118                          
-   119  407a e603                                   inc $03                 ; we copied 255 chars, so we need to increment the high byte of the copy address
-   120  407c a000                                   ldy #$0
-   121                          
-   122  407e b102               -                   lda ($02) ,y
-   123  4080 998a1c                                 sta $1c8a ,y
-   124  4083 c8                                     iny
-   125  4084 c068                                   cpy #104
-   126  4086 d0f6                                   bne -
-   127                          
-   128  4088 60                                     rts
+   109                                              ; copy the items text 
+   110  4096 a94b                                   lda #<text_items_hu
+   111  4098 8502                                   sta $02
+   112  409a a94b                                   lda #>text_items_hu
+   113  409c 8503                                   sta $03
+   114  409e 201a41                                 jsr copy_text_items
+   115                          
+   116                                              ; copy the hints text 
+   117  40a1 a9b3                                   lda #<text_hints_hu
+   118  40a3 8502                                   sta $02
+   119  40a5 a94c                                   lda #>text_hints_hu
+   120  40a7 8503                                   sta $03
+   121  40a9 202741                                 jsr copy_text_hints
+   122                          
+   123                                              ; copy the win text 
+   124  40ac a943                                   lda #<text_win_hu
+   125  40ae 8502                                   sta $02
+   126  40b0 a94e                                   lda #>text_win_hu
+   127  40b2 8503                                   sta $03
+   128  40b4 203441                                 jsr copy_text_win
    129                          
-   130                          
-   131                          ; ==============================================================================
-   132                          ; copy the localized messages ( 17 lines with 50 characters = 850 chars)
-   133                          ; ==============================================================================
-   134                          
-   135                          
-   136                          copy_text_messages:
-   137                          
-   138  4089 a000                                   ldy #$0
+   130                                              ; repair some underline characters
+   131  40b7 a920                                   lda #$20
+   132  40b9 8d951a                                 sta $175d + 20*40 + 24
+   133  40bc 8d961a                                 sta $175d + 20*40 + 25
+   134  40bf 8d971a                                 sta $175d + 20*40 + 26
+   135  40c2 8d981a                                 sta $175d + 20*40 + 27
+   136  40c5 a963                                   lda #$63
+   137  40c7 8d011a                                 sta $175d + 16*40 + 36
+   138  40ca 8d021a                                 sta $175d + 16*40 + 37
    139                          
-   140  408b b102               -                   lda ($02) ,y
-   141  408d 99623b                                 sta $3b62 ,y
-   142  4090 c8                                     iny
-   143  4091 d0f8                                   bne -
-   144                          
-   145  4093 e603                                   inc $03                 ; we copied 255 chars, so we need to increment the high byte of the copy address
-   146  4095 a000                                   ldy #$0
+   140                          
+   141                          
+   142                          
+   143                          end_copy:
+   144  40cd 4c423a                                 jmp code_start
+   145                          
+   146                          
    147                          
-   148  4097 b102               -                   lda ($02) ,y
-   149  4099 99623c                                 sta $3c62 ,y
-   150  409c c8                                     iny
-   151  409d d0f8                                   bne -
-   152                          
-   153  409f e603                                   inc $03
-   154  40a1 a000                                   ldy #$0
+   148                          
+   149                          
+   150                          
+   151                          
+   152                          ; ==============================================================================
+   153                          ; copy the localized intro
+   154                          ; ==============================================================================
    155                          
-   156  40a3 b102               -                   lda ($02) ,y
-   157  40a5 99623d                                 sta $3d62 ,y
-   158  40a8 c8                                     iny
-   159  40a9 d0f8                                   bne -
+   156                          
+   157                          copy_text_intro:
+   158                          
+   159  40d0 a000                                   ldy #$0
    160                          
-   161  40ab e603                                   inc $03
-   162  40ad a000                                   ldy #$0
-   163                          
-   164  40af b102               -                   lda ($02) ,y
-   165  40b1 99623e                                 sta $3e62 ,y
-   166  40b4 c8                                     iny
-   167                          
-   168  40b5 c052                                   cpy #82
-   169  40b7 d0f6                                   bne -
-   170                          
-   171  40b9 60                                     rts
-   172                          
-   173                          
-   174                          ; ==============================================================================
-   175                          ; copy the localized items text
-   176                          ; ==============================================================================
+   161  40d2 b102               -                   lda ($02) ,y
+   162  40d4 998a1b                                 sta $1b8a ,y
+   163  40d7 c8                                     iny
+   164  40d8 d0f8                                   bne -
+   165                          
+   166  40da e603                                   inc $03                 ; we copied 255 chars, so we need to increment the high byte of the copy address
+   167  40dc a000                                   ldy #$0
+   168                          
+   169  40de b102               -                   lda ($02) ,y
+   170  40e0 998a1c                                 sta $1c8a ,y
+   171  40e3 c8                                     iny
+   172  40e4 c068                                   cpy #104
+   173  40e6 d0f6                                   bne -
+   174                          
+   175  40e8 60                                     rts
+   176                          
    177                          
-   178                          
-   179                          copy_text_items:
-   180                          
-   181  40ba a000                                   ldy #$0
+   178                          ; ==============================================================================
+   179                          ; copy the localized messages ( 17 lines with 50 characters = 850 chars)
+   180                          ; ==============================================================================
+   181                          
    182                          
-   183  40bc b102               -                   lda ($02) ,y
-   184  40be 99a43f                                 sta $3fa4 ,y
-   185  40c1 c8                                     iny
-   186  40c2 c078                                   cpy #120
-   187  40c4 d0f6                                   bne -
-   188                          
-   189  40c6 60                                     rts
-   190                          
+   183                          copy_text_messages:
+   184                          
+   185  40e9 a000                                   ldy #$0
+   186                          
+   187  40eb b102               -                   lda ($02) ,y
+   188  40ed 99623b                                 sta $3b62 ,y
+   189  40f0 c8                                     iny
+   190  40f1 d0f8                                   bne -
    191                          
-   192                          ; ==============================================================================
-   193                          ; copy the localized hints text
-   194                          ; ==============================================================================
-   195                          
-   196                          
-   197                          copy_text_hints:
-   198                          
-   199  40c7 a000                                   ldy #$0
-   200                          
-   201  40c9 b102               -                   lda ($02) ,y
-   202  40cb 99b43e                                 sta $3eb4 ,y
-   203  40ce c8                                     iny
-   204  40cf c0ef                                   cpy #239
-   205  40d1 d0f6                                   bne -
-   206                          
-   207  40d3 60                                     rts
-   208                          
-   209                          
+   192  40f3 e603                                   inc $03                 ; we copied 255 chars, so we need to increment the high byte of the copy address
+   193  40f5 a000                                   ldy #$0
+   194                          
+   195  40f7 b102               -                   lda ($02) ,y
+   196  40f9 99623c                                 sta $3c62 ,y
+   197  40fc c8                                     iny
+   198  40fd d0f8                                   bne -
+   199                          
+   200  40ff e603                                   inc $03
+   201  4101 a000                                   ldy #$0
+   202                          
+   203  4103 b102               -                   lda ($02) ,y
+   204  4105 99623d                                 sta $3d62 ,y
+   205  4108 c8                                     iny
+   206  4109 d0f8                                   bne -
+   207                          
+   208  410b e603                                   inc $03
+   209  410d a000                                   ldy #$0
    210                          
-   211                          
-   212                          
-   213                          
+   211  410f b102               -                   lda ($02) ,y
+   212  4111 99623e                                 sta $3e62 ,y
+   213  4114 c8                                     iny
    214                          
-   215                          
-   216                          
+   215  4115 c052                                   cpy #82
+   216  4117 d0f6                                   bne -
    217                          
-   218                          
+   218  4119 60                                     rts
    219                          
    220                          
-   221                          
-   222                          
-   223                          
-   224                          text_intro_de:
-   225  40d4 53150308050e2053...!scr "Suchen Sie die Schatztruhe der Geister- "
-   226  40fc 131401041420150e...!scr "stadt und oeffnen Sie diese ! Toeten    "
-   227  4124 5309052042050c05...!scr "Sie Belegro, den Zauberer und weichen   "
-   228  414c 530905201609050c...!scr "Sie vielen anderen Wesen geschickt aus. "
-   229  4174 42050409050e050e...!scr "Bedienen Sie sich an den vielen Gegen-  "
-   230  419c 131401050e04050e...!scr "staenden, welche sich in den 19 Bildern "
-   231  41c4 020506090e04050e...!scr "befinden. Viel Spass !                  "
-   232  41ec 2020202020202020...!scr "                                        "
-   233  4214 2020202044121505...!scr "    Druecken Sie Feuer zum Starten !    "
-   234                          
+   221                          ; ==============================================================================
+   222                          ; copy the localized items text
+   223                          ; ==============================================================================
+   224                          
+   225                          
+   226                          copy_text_items:
+   227                          
+   228  411a a000                                   ldy #$0
+   229                          
+   230  411c b102               -                   lda ($02) ,y
+   231  411e 99a43f                                 sta $3fa4 ,y
+   232  4121 c8                                     iny
+   233  4122 c078                                   cpy #120
+   234  4124 d0f6                                   bne -
    235                          
-   236                          text_intro_hu:
-   237  423c 4b0512051304200d...!scr "Keresd meg es nyisd fel a Szellemvaros  "
-   238  4264 0b090e0313051320...!scr "kincses ladikajat ! Old meg Bellegrot, a"
-   239  428c 160112011a130c0f...!scr "varazslot, miutan elkerulted a kulonfele"
-   240  42b4 1605131a050c1905...!scr "veszelyes lenyeket. Hasznald az osszes  "
-   241  42dc 140112071901142c...!scr "targyat, amelyeket a 19 valtozatos kep- "
-   242  4304 05120e190f0e2001...!scr "ernyon at vezeto kalandod soran talalsz."
-   243  432c 4a0f20131a0f1201...!scr "Jo szorakozast!                         "
-   244  4354 2020202020202020...!scr "                                        "
-   245  437c 2020202020202020...!scr "         Kezdes a tuz gombbal !         "
-   246                          
+   236  4126 60                                     rts
+   237                          
+   238                          
+   239                          ; ==============================================================================
+   240                          ; copy the localized hints text
+   241                          ; ==============================================================================
+   242                          
+   243                          
+   244                          copy_text_hints:
+   245                          
+   246  4127 a000                                   ldy #$0
    247                          
-   248                          text_messages_de:
-   249  43a4 5309052013090e04...!scr "Sie sind in eine         Schlangengrube gefallen !"
-   250  43d6 470f141405130c01...!scr "Gotteslaesterung wird    mit dem Tod bestraft !   "
-   251  4408 5309052013090e04...!scr "Sie sind in dem tiefen   Fluss ertrunken !        "
-   252  443a 5309052008010205...!scr "Sie haben aus der Gift-  flasche getrunken....... "
-   253  446c 420f1209132c2004...!scr "Boris, die Spinne, hat   Sie verschlungen !!      "
-   254  449e 44050e204c011305...!scr "Den Laserstrahl muessen  Sie uebersehen haben ?!  "
-   255  44d0 32323020560f0c14...!scr "220 Volt !! Sie erlitten einen Elektroschock !    "
-   256  4502 5309052013090e04...!scr "Sie sind in einen Nagel  getreten !               "
-   257  4534 45090e0520461513...!scr "Eine Fussangel verhindertIhr Weiterkommen !       "
-   258  4566 4115062004090513...!scr "Auf diesem Raum liegt einFluch des Magiers Manilo!"
-   259  4598 5309052017151204...!scr "Sie wurden eingeschlossenund verhungern !         "
-   260  45ca 5309052017151204...!scr "Sie wurden von einem     Stein ueberollt !!       "
-   261  45fc 42050c0507120f20...!scr "Belegro hat Sie          vernichtet !             "
-   262  462e 490d205301120720...!scr "Im Sarg lag ein durstigerZombie........           "
-   263  4660 440113204d0f0e13...!scr "Das Monster hat Sie      erwischt !!!!!           "
-   264  4692 5309052008010205...!scr "Sie haben sich an dem    Dornenbusch verletzt !   "
-   265  46c4 5309052008010205...!scr "Sie haben sich im        Stacheldraht verfangen !!"
-   266                          
-   267                          
-   268                          text_messages_hu:
-   269  46f6 450719200b090719...!scr "Egy kigyoverembe estel !                          "
-   270  4728 411a20091314050e...!scr "Az istenkaromlas         buntetese halal !        "
-   271  475a 42050c0506150c0c...!scr "Belefulladtal a mely     folyoba !                "
-   272  478c 41200d051207051a...!scr "A mergezett flaskabol    ittal...                 "
-   273  47be 420f1209132c2001...!scr "Boris, a pok elkapott    es vegzett veled !       "
-   274  47f0 480114200e050d20...!scr "Hat nem lattad a         lezersugarat ?!?         "
-   275  4822 32343020560f0c14...!scr "240 Volt ! Megrazott az  aram !                   "
-   276  4854 42050c050c051014...!scr "Beleleptel egy szogbe !                           "
-   277  4886 4120031301100401...!scr "A csapda, amibe bele-    leptel megallitott !     "
-   278  48b8 451a050e20012013...!scr "Ezen a szoban Manilo, a  varazslo atka ul !       "
-   279  48ea 4120131a0f020120...!scr "A szoba rad zarult es    ehen haltal !            "
-   280  491c 450c14010c010c14...!scr "Eltalalt egy hatalmas ko es szornyet haltal !     "
-   281  494e 42050c0507120f20...!scr "Belegro elpusztitott     teged!                   "
-   282  4980 450719200907011a...!scr "Egy igazan szomjas zombitsikerult talalnod ...    "
-   283  49b2 4120131a0f120e19...!scr "A szornyeteg elkapott !  Meghaltal.               "
-   284  49e4 41201415130b0513...!scr "A tuskes bokrok          megsebeztek !            "
-   285  4a16 4120131a0f070513...!scr "A szogesdrot fogja       lettel !                 "
-   286                          
-   287                          
-   288                          
-   289                          
-   290                          text_items_de
-   291  4a48 20490e2004051220...!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
-   292  4a70 20202020490e2004...!scr "    In dem Sarg lag ein Schluessel !    "
-   293  4a98 20550e1405122004...!scr " Unter dem Stein lag ein Taucheranzug ! "
+   248  4129 b102               -                   lda ($02) ,y
+   249  412b 99b43e                                 sta $3eb4 ,y
+   250  412e c8                                     iny
+   251  412f c0f0                                   cpy #240
+   252  4131 d0f6                                   bne -
+   253                          
+   254  4133 60                                     rts
+   255                          
+   256                          
+   257                          ; ==============================================================================
+   258                          ; copy the localized win text
+   259                          ; ==============================================================================
+   260                          
+   261                          
+   262                          copy_text_win:
+   263                          
+   264  4134 a000                                   ldy #$0
+   265                          
+   266  4136 b102               -                   lda ($02) ,y
+   267  4138 99b519                                 sta $175d + 15*40 ,y
+   268  413b c8                                     iny
+   269  413c c028                                   cpy #40
+   270  413e d0f6                                   bne -
+   271                          
+   272                          
+   273  4140 b102               -                   lda ($02) ,y
+   274  4142 99dd19                                 sta $175d + 16*40 ,y
+   275  4145 c8                                     iny
+   276  4146 c050                                   cpy #80
+   277  4148 d0f6                                   bne -
+   278                          
+   279  414a b102               -                   lda ($02) ,y
+   280  414c 99051a                                 sta $175d + 17*40 ,y
+   281  414f c8                                     iny
+   282  4150 c078                                   cpy #120
+   283  4152 d0f6                                   bne -
+   284                          
+   285  4154 b102               -                   lda ($02) ,y
+   286  4156 99551a                                 sta $175d + 19*40 ,y
+   287  4159 c8                                     iny
+   288  415a c0a0                                   cpy #160
+   289  415c d0f6                                   bne -
+   290                          
+   291  415e 60                                     rts
+   292                          
+   293                          
    294                          
    295                          
-   296                          text_items_hu
-   297  4ac0 20412010010c0103...!scr " A palackban egy kulcs van !            "
-   298  4ae8 202020450719200b...!scr "   Egy kulcs van a koporsoban !         "
-   299  4b10 2041200b0f20010c...!scr " A ko alatt egy buvarfelszereles hever !"
+   296                          
+   297                          
+   298                          
+   299                          
    300                          
    301                          
    302                          
    303                          
-   304                          text_hints_de
-   305  4b38 2045090e20540509...!scr " Ein Teil des Loesungscodes lautet:     "
-   306  4b60 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-   307  4b88 2044152002120115...!scr " Du brauchst:Fassung,Gluehbirne,Strom ! "
-   308  4bb0 20570905200c0115...!scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
-   309  4bd8 202a2a2a2a2a2020...!scr " *****   Ein Hilfsbuchstabe:  "
-   310  4bf6 432020202a2a2a2a...!scr "C   ***** "
-   311  4c00 2046010c13030805...!scr " Falscher Loesungscode ! TODESSTRAFE !!1"
-   312                          
-   313                          
-   314                          text_hints_hu
-   315  4c28 2041200a050c131a...!scr " A jelszo egy resze a kovetkezo:        "
-   316  4c50 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
-   317  4c78 20451a050b200b05...!scr " Ezek kellenek: tarto, korte, foglalat !"
-   318  4ca0 204d092001200a05...!scr " Mi a jelszo ?                 ",$22,"     ",$22,"  "
-   319  4cc8 202a2a2a2a2a2020...!scr " *****   Egy betunyi sugo :   "
-   320  4ce6 432020202a2a2a2a...!scr "C   ***** "
-   321  4cf0 2041200a050c131a...!scr " A jelszo hibas ! BUNTETESED HALAL !    "
+   304                          
+   305                          text_intro_de:
+   306  415f 53150308050e2053...!scr "Suchen Sie die Schatztruhe der Geister- "
+   307  4187 131401041420150e...!scr "stadt und oeffnen Sie diese ! Toeten    "
+   308  41af 5309052042050c05...!scr "Sie Belegro, den Zauberer und weichen   "
+   309  41d7 530905201609050c...!scr "Sie vielen anderen Wesen geschickt aus. "
+   310  41ff 42050409050e050e...!scr "Bedienen Sie sich an den vielen Gegen-  "
+   311  4227 131401050e04050e...!scr "staenden, welche sich in den 19 Bildern "
+   312  424f 020506090e04050e...!scr "befinden. Viel Spass !                  "
+   313  4277 2020202020202020...!scr "                                        "
+   314  429f 2020202044121505...!scr "    Druecken Sie Feuer zum Starten !    "
+   315                          
+   316                          
+   317                          text_intro_hu:
+   318  42c7 4b0512051304200d...!scr "Keresd meg es nyisd fel a Szellemvaros  "
+   319  42ef 0b090e0313051320...!scr "kincses ladikajat ! Old meg Bellegrot, a"
+   320  4317 160112011a130c0f...!scr "varazslot, miutan elkerulted a kulonfele"
+   321  433f 1605131a050c1905...!scr "veszelyes lenyeket. Hasznald az osszes  "
+   322  4367 140112071901142c...!scr "targyat, amelyeket a 19 valtozatos kep- "
+   323  438f 05120e190f0e2001...!scr "ernyon at vezeto kalandod soran talalsz."
+   324  43b7 4a0f20131a0f1201...!scr "Jo szorakozast!                         "
+   325  43df 2020202020202020...!scr "                                        "
+   326  4407 2020202020202020...!scr "         Kezdes a tuz gombbal !         "
+   327                          
+   328                          
+   329                          text_messages_de:
+   330  442f 5309052013090e04...!scr "Sie sind in eine         Schlangengrube gefallen !"
+   331  4461 470f141405130c01...!scr "Gotteslaesterung wird    mit dem Tod bestraft !   "
+   332  4493 5309052013090e04...!scr "Sie sind in dem tiefen   Fluss ertrunken !        "
+   333  44c5 5309052008010205...!scr "Sie haben aus der Gift-  flasche getrunken....... "
+   334  44f7 420f1209132c2004...!scr "Boris, die Spinne, hat   Sie verschlungen !!      "
+   335  4529 44050e204c011305...!scr "Den Laserstrahl muessen  Sie uebersehen haben ?!  "
+   336  455b 32323020560f0c14...!scr "220 Volt !! Sie erlitten einen Elektroschock !    "
+   337  458d 5309052013090e04...!scr "Sie sind in einen Nagel  getreten !               "
+   338  45bf 45090e0520461513...!scr "Eine Fussangel verhindertIhr Weiterkommen !       "
+   339  45f1 4115062004090513...!scr "Auf diesem Raum liegt einFluch des Magiers Manilo!"
+   340  4623 5309052017151204...!scr "Sie wurden eingeschlossenund verhungern !         "
+   341  4655 5309052017151204...!scr "Sie wurden von einem     Stein ueberollt !!       "
+   342  4687 42050c0507120f20...!scr "Belegro hat Sie          vernichtet !             "
+   343  46b9 490d205301120720...!scr "Im Sarg lag ein durstigerZombie........           "
+   344  46eb 440113204d0f0e13...!scr "Das Monster hat Sie      erwischt !!!!!           "
+   345  471d 5309052008010205...!scr "Sie haben sich an dem    Dornenbusch verletzt !   "
+   346  474f 5309052008010205...!scr "Sie haben sich im        Stacheldraht verfangen !!"
+   347                          
+   348                          
+   349                          text_messages_hu:
+   350  4781 450719200b090719...!scr "Egy kigyoverembe estel !                          "
+   351  47b3 411a20091314050e...!scr "Az istenkaromlas         buntetese halal !        "
+   352  47e5 42050c0506150c0c...!scr "Belefulladtal a mely     folyoba !                "
+   353  4817 41200d051207051a...!scr "A mergezett flaskabol    ittal...                 "
+   354  4849 420f1209132c2001...!scr "Boris, a pok elkapott    es vegzett veled !       "
+   355  487b 480114200e050d20...!scr "Hat nem lattad a         lezersugarat ?!?         "
+   356  48ad 32343020560f0c14...!scr "240 Volt ! Megrazott az  aram !                   "
+   357  48df 42050c050c051014...!scr "Beleleptel egy szogbe !                           "
+   358  4911 4120031301100401...!scr "A csapda, amibe bele-    leptel megallitott !     "
+   359  4943 451a050e20012013...!scr "Ezen a szoban Manilo, a  varazslo atka ul !       "
+   360  4975 4120131a0f020120...!scr "A szoba rad zarult es    ehen haltal !            "
+   361  49a7 450c14010c010c14...!scr "Eltalalt egy hatalmas ko es szornyet haltal !     "
+   362  49d9 42050c0507120f20...!scr "Belegro elpusztitott     teged!                   "
+   363  4a0b 450719200907011a...!scr "Egy igazan szomjas zombitsikerult talalnod ...    "
+   364  4a3d 4120131a0f120e19...!scr "A szornyeteg elkapott !  Meghaltal.               "
+   365  4a6f 41201415130b0513...!scr "A tuskes bokrok          megsebeztek !            "
+   366  4aa1 4120131a0f070513...!scr "A szogesdrot fogja       lettel !                 "
+   367                          
+   368                          
+   369                          
+   370                          
+   371                          text_items_de
+   372  4ad3 20490e2004051220...!scr " In der Flasche liegt ein Schluessel !  " ; Original: !scr " In der Flasche war sich ein Schluessel "
+   373  4afb 20202020490e2004...!scr "    In dem Sarg lag ein Schluessel !    "
+   374  4b23 20550e1405122004...!scr " Unter dem Stein lag ein Taucheranzug ! "
+   375                          
+   376                          
+   377                          text_items_hu
+   378  4b4b 20412010010c0103...!scr " A palackban egy kulcs van !            "
+   379  4b73 202020450719200b...!scr "   Egy kulcs van a koporsoban !         "
+   380  4b9b 2041200b0f20010c...!scr " A ko alatt egy buvarfelszereles hever !"
+   381                          
+   382                          
+   383                          
+   384                          
+   385                          text_hints_de
+   386  4bc3 2045090e20540509...!scr " Ein Teil des Loesungscodes lautet:     "
+   387  4beb 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+   388  4c13 2044152002120115...!scr " Du brauchst:Fassung,Gluehbirne,Strom ! "
+   389  4c3b 20570905200c0115...!scr " Wie lautet der Loesungscode ? ",$22,"     ",$22,"  "
+   390  4c63 202a2a2a2a2a2020...!scr " *****   Ein Hilfsbuchstabe:  "
+   391  4c81 432020202a2a2a2a...!scr "C   ***** "
+   392  4c8b 2046010c13030805...!scr " Falscher Loesungscode ! TODESSTRAFE !! "
+   393                          
+   394                          
+   395                          text_hints_hu
+   396  4cb3 2041200a050c131a...!scr " A jelszo egy resze a kovetkezo:        "
+   397  4cdb 2041424344454647...!scr " ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789",$bc," "
+   398  4d03 20451a050b200b05...!scr " Ezek kellenek: tarto, korte, foglalat !"
+   399  4d2b 204d092001200a05...!scr " Mi a jelszo ?                 ",$22,"     ",$22,"  "
+   400  4d53 202a2a2a2a2a2020...!scr " *****   Egy betunyi sugo :   "
+   401  4d71 432020202a2a2a2a...!scr "C   ***** "
+   402  4d7b 2041200a050c131a...!scr " A jelszo hibas ! BUNTETESED HALAL !    "
+   403                          
+   404                          
+   405                          text_win_de
+   406  4da3 5d53090520080102...!scr $5d,"Sie haben das Raetsel der Geisterstadt",$5d
+   407  4dcb 5d07050c0f051314...!scr $5d,"geloest, Belegro vernichtet, und den  ",$5d
+   408  4df3 5d53030801141a20...!scr $5d,"Schatz gefunden !                     ",$5d
+   409  4e1b 5d4b494e47534f46...!scr $5d,"KINGSOFT GRATULIERT ! >Play it again>>",$5d
+   410                          
+   411                          
+   412                          text_win_hu
+   413  4e43 5d4d05070f0c040f...!scr $5d,"Megoldottad a Szellemvaros rejtelyet, ",$5d
+   414  4e6b 5d050c1015131a14...!scr $5d,"elpusztitottad Belegrot, es tied lett ",$5d
+   415  4e93 5d012003130f0401...!scr $5d,"a csodalatos kincs is !               ",$5d

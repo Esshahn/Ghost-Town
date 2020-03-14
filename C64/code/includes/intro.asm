@@ -15,14 +15,15 @@ intro_start:
                     sta $d020
                     sta $d021
 
-                    lda #01                 ; todo -> this should be 0,1,2 depending on language choice
+                    lda #00                 ; todo -> this should be 0,1,2 depending on language choice
                                             ; 0 = english (do nothing)
                                             ; 1 = german (copy stuff)
                                             ; 2 = hungarian (copy stuff)
 
                     cmp #0                  ; is it 0 = english?
-                    beq end_copy            ; we're done here
-
+                    bne +
+                    jmp end_copy            ; we're done here
++
                     cmp #1                  ; is it 1 = german?
                     bne lang_hu             ; no -> must be hungarian
 
@@ -57,6 +58,35 @@ lang_de:
                     sta $03
                     jsr copy_text_hints
 
+                    ; copy the win text 
+                    lda #<text_win_de
+                    sta $02
+                    lda #>text_win_de
+                    sta $03
+                    jsr copy_text_win
+
+                    ; repair some underline characters
+                    lda #$63
+                    sta $175d + 16*40 + 36
+                    sta $175d + 16*40 + 37
+                    sta $175d + 16*40 + 38
+
+                    lda #$20
+                    sta $175d + 18*40 + 37
+                    sta $175d + 20*40 + 18
+                    sta $175d + 20*40 + 19
+                    sta $175d + 20*40 + 20
+                    sta $175d + 20*40 + 21
+                    sta $175d + 20*40 + 22
+                    sta $175d + 20*40 + 23
+                    sta $175d + 20*40 + 24
+                    sta $175d + 20*40 + 25
+                    sta $175d + 20*40 + 26
+                    sta $175d + 20*40 + 27
+                    sta $175d + 20*40 + 28
+
+
+
                     jmp end_copy
                     
 
@@ -89,6 +119,23 @@ lang_hu:
                     lda #>text_hints_hu
                     sta $03
                     jsr copy_text_hints
+
+                    ; copy the win text 
+                    lda #<text_win_hu
+                    sta $02
+                    lda #>text_win_hu
+                    sta $03
+                    jsr copy_text_win
+
+                    ; repair some underline characters
+                    lda #$20
+                    sta $175d + 20*40 + 24
+                    sta $175d + 20*40 + 25
+                    sta $175d + 20*40 + 26
+                    sta $175d + 20*40 + 27
+                    lda #$63
+                    sta $175d + 16*40 + 36
+                    sta $175d + 16*40 + 37
 
 
 
@@ -207,7 +254,41 @@ copy_text_hints:
                     rts
 
 
+; ==============================================================================
+; copy the localized win text
+; ==============================================================================
 
+
+copy_text_win:
+
+                    ldy #$0
+
+-                   lda ($02) ,y
+                    sta $175d + 15*40 ,y
+                    iny
+                    cpy #40
+                    bne -
+
+
+-                   lda ($02) ,y
+                    sta $175d + 16*40 ,y
+                    iny
+                    cpy #80
+                    bne -
+
+-                   lda ($02) ,y
+                    sta $175d + 17*40 ,y
+                    iny
+                    cpy #120
+                    bne -
+
+-                   lda ($02) ,y
+                    sta $175d + 19*40 ,y
+                    iny
+                    cpy #160
+                    bne -
+
+                    rts
 
 
 
@@ -319,3 +400,17 @@ text_hints_hu
 !scr " *****   Egy betunyi sugo :   "
 !scr "C   ***** "
 !scr " A jelszo hibas ! BUNTETESED HALAL !    "
+
+
+text_win_de
+!scr $5d,"Sie haben das Raetsel der Geisterstadt",$5d
+!scr $5d,"geloest, Belegro vernichtet, und den  ",$5d
+!scr $5d,"Schatz gefunden !                     ",$5d
+!scr $5d,"KINGSOFT GRATULIERT ! >Play it again>>",$5d
+
+
+text_win_hu
+!scr $5d,"Megoldottad a Szellemvaros rejtelyet, ",$5d
+!scr $5d,"elpusztitottad Belegrot, es tied lett ",$5d
+!scr $5d,"a csodalatos kincs is !               ",$5d
+!scr $5d,"A KINGSOFT GRATULAL ! > Ujrajatszas  >",$5d
