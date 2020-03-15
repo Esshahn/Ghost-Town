@@ -2055,7 +2055,38 @@ check_shift_key:
                     bcs -
                     rts
 
+; ==============================================================================
+;
+; tileset definition
+; these are the first characters in the charset of each tile.
+; example: rocks start at $0c and span 9 characters in total
+; ==============================================================================
 
+tileset_definition:
+tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42        ; empty, rock, brick, ?mark, bush, grave, coffin, coffin
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a        ; water, water, water, tree, tree, boulder, treasure, treasure
+                    ;     $10
+                    !byte $03                                           ; door
+
+!if EXTENDED = 0{
+tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
+                    ;     $10
+                    !byte $0a
+}
+
+!if EXTENDED = 1{
+tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
+                    !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
+                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
+                    !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
+                    ;     $10
+                    !byte $0a  
+}
 
 
 
@@ -2149,38 +2180,7 @@ rasterpoll_and_other_stuff:
 
 
 
-; ==============================================================================
-;
-; tileset definition
-; these are the first characters in the charset of each tile.
-; example: rocks start at $0c and span 9 characters in total
-; ==============================================================================
 
-tileset_definition:
-tiles_chars:        ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $df, $0c, $15, $1e, $27, $30, $39, $42        ; empty, rock, brick, ?mark, bush, grave, coffin, coffin
-                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $4b, $54, $5d, $66, $6f, $78, $81, $8a        ; water, water, water, tree, tree, boulder, treasure, treasure
-                    ;     $10
-                    !byte $03                                           ; door
-
-!if EXTENDED = 0{
-tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
-                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
-                    ;     $10
-                    !byte $0a
-}
-
-!if EXTENDED = 1{
-tiles_colors:       ;     $00, $01, $02, $03, $04, $05, $06, $07
-                    !byte $00, $0a, $0a, $0e, $3d, $7f, $2a, $2a
-                    ;     $08, $09, $0A, $0B, $0C, $0D, $0E, $0F
-                    !byte $1e, $1e, $1e, $3d, $3d, $0d, $2f, $2f
-                    ;     $10
-                    !byte $0a  
-}
 
 ; ==============================================================================
 ;
@@ -3017,9 +3017,6 @@ set_charset_and_screen:                               ; set text screen
                     sta FF07
                     rts
 
-test:
-                    inc BORDER_COLOR
-                    jmp test
 
 ; ==============================================================================
 ; init
