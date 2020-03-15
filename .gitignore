@@ -1,11 +1,7 @@
 .DS_Store
 
 
-plus4/build/main.prg
-plus4/build/labels
-plus4/build/vicelabels
-plus4/build/gtacme.prg
-plus4/build/report.asm
+build/
 plus4/docs/plus4.pdf
 plus4/music/labels.asm
 

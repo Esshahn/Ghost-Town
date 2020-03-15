@@ -1983,179 +1983,61 @@ start_intro:        ;sta KEYBOARD_LATCH
 
 
 
-
-
-; ==============================================================================
-; MUSIC
-; ==============================================================================
-                    !zone MUSIC
-music_data:         !source "includes/music_data.asm"
-; ==============================================================================
-music_get_data:
-.voice1_dur_pt:     ldy #$00
-                    bne +
-                    lda #$40
-                    sta music_voice1+1
-                    jsr music_voice1
-.voice1_dat_pt:     ldx #$00
-                    lda music_data_voice1,x
-                    inc .voice1_dat_pt+1
-                    tay
-                    and #$1f
-                    sta music_voice1+1
-                    tya
-                    lsr
-                    lsr
-                    lsr
-                    lsr
-                    lsr
-                    tay
-+                   dey
-                    sty .voice1_dur_pt + 1
-.voice2_dur_pt:     ldy #$00
-                    bne +
-                    lda #$40
-                    sta music_voice2 + 1
-                    jsr music_voice2
-.voice2_dat_pt:     ldx #$00
-                    lda music_data_voice2,x
-                    tay
-                    inx
-                    cpx #$65
-                    beq music_reset
-                    stx .voice2_dat_pt + 1
-                    and #$1f
-                    sta music_voice2 + 1
-                    tya
-                    lsr
-                    lsr
-                    lsr
-                    lsr
-                    lsr
-                    tay
-+                   dey
-                    sty .voice2_dur_pt + 1
-                    jsr music_voice1
-                    jmp music_voice2
-; ==============================================================================
-music_reset:        lda #$00
-                    sta .voice1_dur_pt + 1
-                    sta .voice1_dat_pt + 1
-                    sta .voice2_dur_pt + 1
-                    sta .voice2_dat_pt + 1
-                    jmp music_get_data
-; ==============================================================================
-; write music data for voice1 / voice2 into TED registers
-; ==============================================================================
-music_voice1:       ldx #$04
-                    cpx #$1c
-                    bcc +
-                    lda VOLUME_AND_VOICE_SELECT
-                    and #$ef
-                    jmp writeFF11
-+                   lda freq_tab_lo,x
-                    sta VOICE1_FREQ_LOW
-                    lda VOICE1
-                    and #$fc
-                    ora freq_tab_hi, x
-                    sta VOICE1
-                    lda VOLUME_AND_VOICE_SELECT
-                    ora #$10
-writeFF11           sta VOLUME_AND_VOICE_SELECT
-                    rts
-; ==============================================================================
-music_voice2:       ldx #$0d
-                    cpx #$1c
-                    bcc +
-                    lda VOLUME_AND_VOICE_SELECT
-                    and #$df
-                    jmp writeFF11
-+                   lda freq_tab_lo,x
-                    sta VOICE2_FREQ_LOW
-                    lda VOICE2
-                    and #$fc
-                    ora freq_tab_hi,x
-                    sta VOICE2
-                    lda VOLUME_AND_VOICE_SELECT
-                    ora #$20
-                    sta VOLUME_AND_VOICE_SELECT
-                    rts
-; ==============================================================================
-; TED frequency tables
-; ==============================================================================
-freq_tab_lo:        !byte $07, $76, $a9, $06, $59, $7f, $c5
-                    !byte $04, $3b, $54, $83, $ad, $c0, $e3
-                    !byte $02, $1e, $2a, $42, $56, $60, $71
-                    !byte $81, $8f, $95
-freq_tab_hi:        !byte $00, $00, $00, $01, $01, $01, $01
-                    !byte $02, $02, $02, $02, $02, $02, $02
-                    !byte $03, $03, $03, $03, $03, $03, $03
-                    !byte $03, $03, $03
-; ==============================================================================
-                    MUSIC_DELAY_INITIAL   = $09
-                    MUSIC_DELAY           = $0B
-music_play:         ldx #MUSIC_DELAY_INITIAL
-                    dex
-                    stx music_play+1
-                    beq +
-                    rts
-+                   ldx #MUSIC_DELAY
-                    stx music_play+1
-                    lda VOLUME_AND_VOICE_SELECT
-                    ora #$37
-music_volume:       and #$bf
-                    sta VOLUME_AND_VOICE_SELECT
-                    jmp music_get_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ; ==============================================================================
 ; irq init
 ; ==============================================================================
-                    !zone IRQ
-irq_init0:          sei
-                    lda #<irq0          ; lda #$06
-                    sta $0314          ; irq lo
-                    lda #>irq0          ; lda #$1f
-                    sta $0315          ; irq hi
-                                        ; irq at $1F06
-                    lda #$01            ;lda #$02
-                    sta $d01a           ; sta FF0A          ; set IRQ source to RASTER
+                   
+irq_init0:          
+                    
+                    sei               ; set interrupt disable flag
 
-                    lda #$bf
-                    sta music_volume+1         ; sta $1ed9    ; sound volume
+                    ldy #$7f    ; $7f = %01111111
+			        sty $dc0d   ; Turn off CIAs Timer interrupts ($7f = %01111111)
+			        sty $dd0d   ; Turn off CIAs Timer interrupts ($7f = %01111111)
+			        lda $dc0d   ; by reading $dc0d and $dd0d we cancel all CIA-IRQs in queue/unprocessed
+			        lda $dd0d   ; by reading $dc0d and $dd0d we cancel all CIA-IRQs in queue/unprocessed
+
+                    lda #$01    ; Set Interrupt Request Mask...
+                    sta $d01a   ; ...we want IRQ by Rasterbeam (%00000001)
+
+                    lda #<irq0 
+                    ldx #>irq0        
+                    sta $0314                            
+                    stx $0315  
+
+                    lda #$0    ; trigger interrupt at row zero
+                    sta $d012
+
+                    ;lda #$bf
+                    ;sta music_volume+1         ; sta $1ed9    ; sound volume
                     cli
+                    rts
 
-                    jmp set_charset_and_screen
+
+; ==============================================================================
+;
+; INTERRUPT routine for music
+; ==============================================================================
+
+    
+irq0:
+                    
+                    pha
+                    txa
+                    pha
+                    tya
+                    pha
+
+                    lsr $d019         ; acknowledge IRQ / clear register for next interrupt
+                    dec $d020
+                    
+                    pla
+                    tay 
+                    pla
+                    tax 
+                    pla
+
+                    jmp $ea31      ; return to Kernel routine
 
 ; ==============================================================================
 ; intro text
@@ -2173,52 +2055,9 @@ check_shift_key:
                     bcs -
                     rts
 
-; ==============================================================================
-;
-; INTERRUPT routine for music
-; ==============================================================================
 
-                    ; *= $1F06
-irq0:
-                    DEC INTERRUPT
 
-                                        ; this IRQ seems to handle music only!
-                    !if SILENT_MODE = 1 {
-                        jsr fake
-                    } else {
-                        jsr music_play
-                    }
-                    pla
-                    tay
-                    pla
-                    tax
-                    pla
-                    rti
 
-; ==============================================================================
-; checks if the music volume is at the desired level
-; and increases it if not
-; if volume is high enough, it initializes the music irq routine
-; is called right at the start of the game, but also when a game ended
-; and is about to show the title screen again (increasing the volume)
-; ==============================================================================
-
-init_music:                                  
-                    lda music_volume+1                              ; sound volume
---                  cmp #$bf                                        ; is true on init
-                    bne +
-                    jmp irq_init0
-+                   ldx #$04
--                   stx zpA8                                        ; buffer serial input byte ?
-                    ldy #$ff
-                    jsr wait
-                    ldx zpA8
-                    dex
-                    bne -                                               
-                    clc
-                    adc #$01                                        ; increases volume again before returning to title screen
-                    sta music_volume+1                              ; sound volume
-                    jmp --
 
 
 
@@ -3189,7 +3028,9 @@ test:
 
 code_start:
 init:
-                    ;jsr init_music           ; TODO
+                    
+                    jsr irq_init0
+                    
                     
                     lda #$17                  ; set lower case charset
                     sta $d018                 ; wasn't on Plus/4 for some reason
