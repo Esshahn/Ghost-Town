@@ -15,7 +15,7 @@ intro_start:
                     sta $d020
                     sta $d021
 
-                    lda #00                 ; todo -> this should be 0,1,2 depending on language choice
+                    lda #01                 ; todo -> this should be 0,1,2 depending on language choice
                                             ; 0 = english (do nothing)
                                             ; 1 = german (copy stuff)
                                             ; 2 = hungarian (copy stuff)
@@ -67,23 +67,23 @@ lang_de:
 
                     ; repair some underline characters
                     lda #$63
-                    sta $175d + 16*40 + 36
-                    sta $175d + 16*40 + 37
-                    sta $175d + 16*40 + 38
+                    sta screen_win_src + 16*40 + 36
+                    sta screen_win_src + 16*40 + 37
+                    sta screen_win_src + 16*40 + 38
 
                     lda #$20
-                    sta $175d + 18*40 + 37
-                    sta $175d + 20*40 + 18
-                    sta $175d + 20*40 + 19
-                    sta $175d + 20*40 + 20
-                    sta $175d + 20*40 + 21
-                    sta $175d + 20*40 + 22
-                    sta $175d + 20*40 + 23
-                    sta $175d + 20*40 + 24
-                    sta $175d + 20*40 + 25
-                    sta $175d + 20*40 + 26
-                    sta $175d + 20*40 + 27
-                    sta $175d + 20*40 + 28
+                    sta screen_win_src + 18*40 + 37
+                    sta screen_win_src + 20*40 + 18
+                    sta screen_win_src + 20*40 + 19
+                    sta screen_win_src + 20*40 + 20
+                    sta screen_win_src + 20*40 + 21
+                    sta screen_win_src + 20*40 + 22
+                    sta screen_win_src + 20*40 + 23
+                    sta screen_win_src + 20*40 + 24
+                    sta screen_win_src + 20*40 + 25
+                    sta screen_win_src + 20*40 + 26
+                    sta screen_win_src + 20*40 + 27
+                    sta screen_win_src + 20*40 + 28
 
 
 
@@ -129,13 +129,13 @@ lang_hu:
 
                     ; repair some underline characters
                     lda #$20
-                    sta $175d + 20*40 + 24
-                    sta $175d + 20*40 + 25
-                    sta $175d + 20*40 + 26
-                    sta $175d + 20*40 + 27
+                    sta screen_win_src + 20*40 + 24
+                    sta screen_win_src + 20*40 + 25
+                    sta screen_win_src + 20*40 + 26
+                    sta screen_win_src + 20*40 + 27
                     lda #$63
-                    sta $175d + 16*40 + 36
-                    sta $175d + 16*40 + 37
+                    sta screen_win_src + 16*40 + 36
+                    sta screen_win_src + 16*40 + 37
 
 
 
@@ -159,7 +159,7 @@ copy_text_intro:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $1b8a ,y
+                    sta intro_text ,y
                     iny
                     bne -
 
@@ -167,7 +167,7 @@ copy_text_intro:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $1c8a ,y
+                    sta intro_text + $100 ,y
                     iny
                     cpy #104
                     bne -
@@ -185,7 +185,7 @@ copy_text_messages:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $3b62 ,y
+                    sta death_messages ,y
                     iny
                     bne -
 
@@ -193,7 +193,7 @@ copy_text_messages:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $3c62 ,y
+                    sta death_messages + $100 ,y
                     iny
                     bne -
 
@@ -201,7 +201,7 @@ copy_text_messages:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $3d62 ,y
+                    sta death_messages + $200 ,y
                     iny
                     bne -
 
@@ -209,7 +209,7 @@ copy_text_messages:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $3e62 ,y
+                    sta death_messages + $300 ,y
                     iny
 
                     cpy #82
@@ -228,7 +228,7 @@ copy_text_items:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $3fa4 ,y
+                    sta item_pickup_message ,y
                     iny
                     cpy #120
                     bne -
@@ -246,7 +246,7 @@ copy_text_hints:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $3eb4 ,y
+                    sta hint_messages ,y
                     iny
                     cpy #240
                     bne -
@@ -264,26 +264,26 @@ copy_text_win:
                     ldy #$0
 
 -                   lda ($02) ,y
-                    sta $175d + 15*40 ,y
+                    sta screen_win_src + 15*40 ,y
                     iny
                     cpy #40
                     bne -
 
 
 -                   lda ($02) ,y
-                    sta $175d + 16*40 ,y
+                    sta screen_win_src + 16*40 ,y
                     iny
                     cpy #80
                     bne -
 
 -                   lda ($02) ,y
-                    sta $175d + 17*40 ,y
+                    sta screen_win_src + 17*40 ,y
                     iny
                     cpy #120
                     bne -
 
 -                   lda ($02) ,y
-                    sta $175d + 19*40 ,y
+                    sta screen_win_src + 19*40 ,y
                     iny
                     cpy #160
                     bne -
