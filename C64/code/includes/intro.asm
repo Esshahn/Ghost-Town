@@ -9,6 +9,28 @@
 ; display the title screen bitmap
 ; ==============================================================================
 
+
+SCREEN = $e000
+COLORS = $6000
+BITMAP = $c000
+
+
+
+* = BITMAP
+!bin "../gfx/gt-bitmap.bin"
+; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 2000 3f3f
+
+* = SCREEN
+!bin "../gfx/gt-screen.bin"
+; save "/Users/ingohinterding/Desktop/gt-screen.bin" 0 0400 07e7
+
+* = COLORS
+!bin "../gfx/gt-colors.bin"
+; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 d800 dbe7
+
+
+
+
 intro_start:
 
                     lda #$0
@@ -85,8 +107,6 @@ lang_de:
                     sta screen_win_src + 20*40 + 27
                     sta screen_win_src + 20*40 + 28
 
-
-
                     jmp end_copy
                     
 
@@ -139,8 +159,9 @@ lang_hu:
 
 
 
-
 end_copy:
+                    
+                    jsr display_title
                     jmp code_start
 
 
@@ -293,10 +314,46 @@ copy_text_win:
 
 
 
+display_title:
+   
+                    lda #$00 
+                    sta $d020
+                    sta $d021
 
 
 
+                    lda #0				;vic bank $4000-$7fff
+                    sta $dd00 
+                    
+                    ldx #$00 
 
+-
+
+                    lda COLORS,x
+                    sta $d800,x
+                    lda COLORS+$100,x
+                    sta $d900,x
+                    lda COLORS+$200,x
+                    sta $da00,x
+                    lda COLORS+$300,x
+                    sta $db00,x
+                    dex
+                    bne -
+                    
+                    ; Bitmap Mode On 
+
+                    lda #$3b 
+                    sta $d011 
+
+                    ; MultiColor On 
+
+                    lda #$d8 
+                    sta $d016 
+
+                    lda #$80			;//bitmap = $4000, screen = $6000
+                    sta $d018
+
+                    jmp *      
 
 
 
