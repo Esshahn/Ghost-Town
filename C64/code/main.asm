@@ -3030,27 +3030,27 @@ code_start:
                     
 init:
                     lda #$d
-                    jsr SID_ADDRESS + 6                      ; sound volume
+                    jsr SID_ADDRESS + 6                         ; sound volume
 
-                    lda #$17                  ; set lower case charset
-                    sta $d018                 ; wasn't on Plus/4 for some reason
+                    lda #$17                                    ; set lower case charset
+                    sta $d018                                   ; wasn't on Plus/4 for some reason
                     
                     lda #$0b
-                    sta BG_COLOR              ; background color
-                    sta BORDER_COLOR          ; border color
-                    jsr reset_items           ; might be a level data reset, and print the title screen
+                    sta BG_COLOR                                ; background color
+                    sta BORDER_COLOR                            ; border color
+                    jsr reset_items                             ; might be a level data reset, and print the title screen
 
                     ldy #$20
                     jsr wait
                     
                     ; waiting for key press on title screen
 
--                   lda $cb                   ; zp position of currently pressed key
-                    cmp #$3c                  ; is it the space key?
+-                   lda $cb                                     ; zp position of currently pressed key
+                    cmp #$3c                                    ; is it the space key?
                     bne -
 
-                                              ; lda #$ff
-                    jsr start_intro           ; displays intro text, waits for shift/fire and decreases the volume
+                                                                ; lda #$ff
+                    jsr start_intro                             ; displays intro text, waits for shift/fire and decreases the volume
                     
 
                     ; TODO: unclear what the code below does
