@@ -122,7 +122,7 @@ COLOR_2             = $d023             ; $FF17
 COLOR_3             = $d024             ;$FF18
 BORDER_COLOR        = $D020
 FF1D                = $D012             ; $FF1D             ; FF1D raster line
-
+SID_ADDRESS         = $5000
 
 
 
@@ -1948,8 +1948,8 @@ start_intro:        ;sta KEYBOARD_LATCH
                     jsr display_intro_text
                     jsr check_shift_key
                     
-                    ;lda #$ba
-                    ;sta music_volume+1                          ; sound volume
+                    lda #$6
+                    jsr SID_ADDRESS + 6                      ; sound volume
                     rts
 
 
@@ -1989,6 +1989,9 @@ start_intro:        ;sta KEYBOARD_LATCH
                    
 irq_init0:          
                     
+                    lda #$0
+                    jsr SID_ADDRESS
+
                     sei               ; set interrupt disable flag
 
                     ldy #$7f    ; $7f = %01111111
@@ -2008,8 +2011,6 @@ irq_init0:
                     lda #$0    ; trigger interrupt at row zero
                     sta $d012
 
-                    ;lda #$bf
-                    ;sta music_volume+1         ; sta $1ed9    ; sound volume
                     cli
                     rts
 
@@ -2029,7 +2030,7 @@ irq0:
                     pha
 
                     lsr $d019         ; acknowledge IRQ / clear register for next interrupt
-                    dec $d020
+                    jsr SID_ADDRESS + 3
                     
                     pla
                     tay 
@@ -3024,11 +3025,13 @@ set_charset_and_screen:                               ; set text screen
 ; ==============================================================================
 
 code_start:
-init:
-                    
+                
                     jsr irq_init0
                     
-                    
+init:
+                    lda #$d
+                    jsr SID_ADDRESS + 6                      ; sound volume
+
                     lda #$17                  ; set lower case charset
                     sta $d018                 ; wasn't on Plus/4 for some reason
                     
@@ -3317,3 +3320,8 @@ item_pickup_message_end:
 
 ; intro_start
 !source "includes/intro.asm"
+
+
+*= SID_ADDRESS
+!bin "../music/industrialtown.sid",, $7c+2  ; remove header from sid and cut off original loading address 
+
