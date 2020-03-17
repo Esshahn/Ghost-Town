@@ -10,25 +10,6 @@
 ; ==============================================================================
 
 
-SCREEN = $e000
-COLORS = $6000
-BITMAP = $c000
-
-
-
-* = BITMAP
-!bin "../gfx/gt-bitmap.bin"
-; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 2000 3f3f
-
-* = SCREEN
-!bin "../gfx/gt-screen.bin"
-; save "/Users/ingohinterding/Desktop/gt-screen.bin" 0 0400 07e7
-
-* = COLORS
-!bin "../gfx/gt-colors.bin"
-; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 d800 dbe7
-
-
 
 
 intro_start:
@@ -353,7 +334,17 @@ display_title:
                     lda #$80			;//bitmap = $4000, screen = $6000
                     sta $d018
 
-                    jmp *      
+                    ; add wait for keypress here
+                    ;jmp *
+
+                    ; restore text mode
+                    lda #$1b
+                    sta $d011
+                    lda #$c8
+                    sta $d016
+                    lda #$3
+                    sta $dd00
+                    rts      
 
 
 

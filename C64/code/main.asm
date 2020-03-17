@@ -113,7 +113,7 @@ FF0A                = $FF0A
 VOICE1_FREQ_LOW     = $FF0E             ; Low byte of frequency for voice 1
 VOICE2_FREQ_LOW     = $FF0F
 VOICE2              = $FF10
-VOLUME_AND_VOICE_SELECT = $FF11
+
 VOICE1              = $FF12             ; Bit 0-1 : Voice #1 frequency, bits 8 & 9;  Bit 2    : TED data fetch ROM/RAM select; Bits 0-5 : Bit map base address
 CHAR_BASE_ADDRESS   = $d018             ; $FF13
 BG_COLOR            = $D021
@@ -123,7 +123,11 @@ COLOR_3             = $d024             ;$FF18
 BORDER_COLOR        = $D020
 FF1D                = $D012             ; $FF1D             ; FF1D raster line
 SID_ADDRESS         = $5000
-
+COLORS              = $6000
+PETSCII_CHARS       = $8000
+PETSCII_COLOR       = $9000
+BITMAP              = $c000
+SCREEN              = $e000
 
 
 
@@ -3322,6 +3326,21 @@ item_pickup_message_end:
 !source "includes/intro.asm"
 
 
-*= SID_ADDRESS
+*= SID_ADDRESS ; $5000
 !bin "../music/industrialtown.sid",, $7c+2  ; remove header from sid and cut off original loading address 
+
+*= COLORS ; $6000
+!bin "../gfx/gt-colors.bin"
+; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 d800 dbe7
+
+*= PETSCII_CHARS ; $8000
+!source "includes/petscii-intro.asm"
+
+*= BITMAP ; $c000
+!bin "../gfx/gt-bitmap.bin"
+; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 2000 3f3f
+
+*= SCREEN ; $e000
+!bin "../gfx/gt-screen.bin"
+; save "/Users/ingohinterding/Desktop/gt-screen.bin" 0 0400 07e7
 
