@@ -1,13 +1,8 @@
 
 
-; PETSCII memory layout (example for a 40x25 screen)'
-; byte  0         = border color'
-; byte  1         = background color'
-; bytes 2-1001    = screencodes'
-; bytes 1002-2001 = color
-
-screen_011 
-!byte 0,0
+; petscii intro
+; 0-0fff characters
+; 1000-1fff colors
 !byte $A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$2E,$A0,$A0,$0B,$09,$0E,$07,$13,$2E,$06,$14,$20,$10,$12,$05,$13,$05,$0E,$14,$13,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$2E,$A0
 !byte $A0,$A0,$2E,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$2E,$A0,$A0,$A0,$A0,$A0
 !byte $A0,$A0,$A0,$2E,$A0,$2E,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$0F,$A0,$A0,$A0,$A0,$A0,$FE,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$A0,$2E,$A0,$A0,$A0,$A0,$2E,$A0,$A0

@@ -11,12 +11,16 @@
 
 
 
-
 intro_start:
 
                     lda #$0
                     sta $d020
                     sta $d021
+
+                    jsr intro_menu
+                    jmp *
+                    jsr display_title
+
 
                     lda #01                 ; todo -> this should be 0,1,2 depending on language choice
                                             ; 0 = english (do nothing)
@@ -142,7 +146,7 @@ lang_hu:
 
 end_copy:
                     
-                    jsr display_title
+                    
                     jmp code_start
 
 
@@ -297,11 +301,6 @@ copy_text_win:
 
 display_title:
    
-                    lda #$00 
-                    sta $d020
-                    sta $d021
-
-
 
                     lda #0				;vic bank $4000-$7fff
                     sta $dd00 
@@ -335,7 +334,7 @@ display_title:
                     sta $d018
 
                     ; add wait for keypress here
-                    ;jmp *
+                    jmp *
 
                     ; restore text mode
                     lda #$1b
@@ -346,6 +345,43 @@ display_title:
                     sta $dd00
                     rts      
 
+
+;
+; draw the chars into screenram
+; and initialize all colors to black
+;
+
+intro_menu:
+
+                    ldx	#0
+                    ldy	#250
+
+-
+
+                    ; screen data
+                    lda	PETSCII_CHARS,x
+                    sta	SCREENRAM,x
+                    lda	PETSCII_CHARS+250,x
+                    sta	SCREENRAM+250,x
+                    lda	PETSCII_CHARS+500,x
+                    sta	SCREENRAM+500,x
+                    lda	PETSCII_CHARS+750,x
+                    sta	SCREENRAM+750,x
+
+                    ; color data
+                    lda	PETSCII_COLORS,x
+                    sta	COLRAM,x
+                    lda	PETSCII_COLORS+250,x
+                    sta	COLRAM+250,x
+                    lda	PETSCII_COLORS+500,x	
+                    sta	COLRAM+500,x
+                    lda	PETSCII_COLORS+750,x
+                    sta	COLRAM+750,x
+                    inx
+                    dey
+                    bne	-
+
+                    rts
 
 
 

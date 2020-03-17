@@ -99,6 +99,7 @@ zpA7                = $A7
 zpA8                = $A8
 zpA9                = $A9
 
+
 ; ==============================================================================
 
 TAPE_BUFFER         = $033c             ; $0333
@@ -125,7 +126,7 @@ FF1D                = $D012             ; $FF1D             ; FF1D raster line
 SID_ADDRESS         = $5000
 COLORS              = $6000
 PETSCII_CHARS       = $8000
-PETSCII_COLOR       = $9000
+PETSCII_COLORS      = $8000 + 1000
 BITMAP              = $c000
 SCREEN              = $e000
 
