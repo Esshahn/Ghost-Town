@@ -7,6 +7,7 @@
 ; maybe set the style
 ; copy the music (?)
 ; display the title screen bitmap
+;
 ; ==============================================================================
 
 
@@ -18,23 +19,22 @@ intro_start:
                     sta $d021
 
                     jsr intro_menu
-                    jmp *
                     jsr display_title
 
 
-                    lda #01                 ; todo -> this should be 0,1,2 depending on language choice
-                                            ; 0 = english (do nothing)
-                                            ; 1 = german (copy stuff)
-                                            ; 2 = hungarian (copy stuff)
+                    lda language_active                             ; todo -> this should be 0,1,2 depending on language choice
+                                                                    ; 0 = english (do nothing)
+                                                                    ; 1 = german (copy stuff)
+                                                                    ; 2 = hungarian (copy stuff)
 
-                    cmp #0                  ; is it 0 = english?
+                    cmp #0                                          ; is it 0 = english?
                     bne +
-                    jmp end_copy            ; we're done here
+                    jmp end_copy                                    ; we're done here
 +
-                    cmp #1                  ; is it 1 = german?
-                    bne lang_hu             ; no -> must be hungarian
+                    cmp #1                                          ; is it 1 = german?
+                    bne lang_hu                                     ; no -> must be hungarian
 
-                                            ; yes
+                                                                    ; yes
 
 lang_de:                    
                     ; copy the introduction text
@@ -156,7 +156,9 @@ end_copy:
 
 
 ; ==============================================================================
+;
 ; copy the localized intro
+;
 ; ==============================================================================
 
 
@@ -182,7 +184,9 @@ copy_text_intro:
 
 
 ; ==============================================================================
+;
 ; copy the localized messages ( 17 lines with 50 characters = 850 chars)
+;
 ; ==============================================================================
 
 
@@ -225,7 +229,9 @@ copy_text_messages:
 
 
 ; ==============================================================================
+;
 ; copy the localized items text
+;
 ; ==============================================================================
 
 
@@ -243,7 +249,9 @@ copy_text_items:
 
 
 ; ==============================================================================
+;
 ; copy the localized hints text
+;
 ; ==============================================================================
 
 
@@ -261,7 +269,9 @@ copy_text_hints:
 
 
 ; ==============================================================================
+;
 ; copy the localized win text
+;
 ; ==============================================================================
 
 
@@ -297,7 +307,11 @@ copy_text_win:
                     rts
 
 
-
+; ==============================================================================
+;
+; show the bitmap title screen
+;
+; ==============================================================================
 
 display_title:
    
@@ -334,7 +348,11 @@ display_title:
                     sta $d018
 
                     ; add wait for keypress here
-                    jmp *
+-
+                    lda $dc00                                       ; get joy 1 
+                    and #%00011111                                  ; use only bits 0-4
+                    cmp #$f                                         ; fire
+                    bne -
 
                     ; restore text mode
                     lda #$1b
@@ -346,10 +364,11 @@ display_title:
                     rts      
 
 
+; ==============================================================================
 ;
-; draw the chars into screenram
-; and initialize all colors to black
+; show the PETSCII language select screen
 ;
+; ==============================================================================
 
 intro_menu:
 
@@ -381,10 +400,116 @@ intro_menu:
                     dey
                     bne	-
 
+
+check_joy:
+                    
+
+                    lda $dc00                                       ; get joy 1 
+                    and #%00011111                                  ; use only bits 0-4
+                    
+                    cmp #$1d                                        ; is joy 1 down?
+                    bne +                                           ; no, next check
+                    
+                    lda language_active                             ; yes, joy down pressed
+                    cmp #2                                          ; is the language position (0,1,2) already at 2?
+                    beq +                                           ; yes, next check
+                    inc language_active                             ; no, increase language position
+                    jsr languages_deselect
+                    jsr language_select
+                    jsr joy_wait                                    ; slow down joystick input by waiting
+                    
++
+
+                    lda $dc00                                       ; get joy 1 
+                    and #%00011111                                  ; use only bits 0-4
+                    cmp #$1e                                        ; is joy 1 up?
+                    bne +                                           ; no, next check
+                    
+                    lda language_active                             ; yes, joy up pressed
+                    cmp #0                                          ; is the language position (0,1,2) already at 0?
+                    beq +                                           ; yes, next check
+                    dec language_active                             ; no, decrease language position
+                    jsr languages_deselect
+                    jsr language_select
+                    jsr joy_wait                                    ; slow down joystick input by waiting
+                    
++
+
+                    
+                    lda $dc00                                       ; get joy 1 
+                    and #%00011111                                  ; use only bits 0-4
+                    cmp #$f                                         ; fire
+                    bne check_joy
+                    jsr wait
+                    jsr wait
+                    jsr wait
+                    jsr wait
+                    rts
+
+languages_deselect:
+
+                    lda #$09                                        ; $09 = dark brown
+                    ldx #8                                          ; we want to change the color of 8 chars
+
+-
+
+                    sta COLRAM + 13*40 + 15,x                       ; change first language color
+                    sta COLRAM + 15*40 + 15,x                       ; change second language color
+                    sta COLRAM + 17*40 + 15,x                       ; change third language color
+                    dex
+                    bne -
                     rts
 
 
+language_select:
 
+                    lda language_active                             ; which language is currently active (0,1,2)
+                    
+                    cmp #0                                          ; is it language 0?
+                    bne +
+                    ldy #$17                                        ; yes, self modify code to the position in colram (low byte only)
+
++
+                    cmp #1                                          ; is it language 1?
+                    bne +  
+                    ldy #$67                                        ; yes, self modify code to the position in colram (low byte only) 
+
++
+                    cmp #2                                          ; is it language 2?
+                    bne +
+                    ldy #$b7                                        ; yes, self modify code to the position in colram (low byte only)     
+
++
+
+                    sty COLRAMPOS+1                                 ; selfmod low byte of colram position
+                    lda #$07                                        ; $07 = yellow
+                    ldx #8                                          ; we want to change the color of 8 chars
+
+-
+
+COLRAMPOS           sta $da17,x                                     ; loop through the chars and make them yellow
+
+                    dex
+                    bne -
+                    rts
+
+
+joy_wait:
+
+                    ldx #$80
+
+-
+
+                    lda $d012
+                    cmp #$0
+                    bne -
+                    dex
+                    bne -
+                    rts
+
+
+language_active:
+!byte $0
 
 text_intro_de:
 !scr "Suchen Sie die Schatztruhe der Geister- "
