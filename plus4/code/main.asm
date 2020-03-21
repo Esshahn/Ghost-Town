@@ -26,7 +26,9 @@ EN = 0
 DE = 1
 HU = 2
 
-LANGUAGE = HU
+LANGUAGE                = HU            ; this setting is only relevant for a dedicated 16k version with one language
+EXTENDED                = 1             ; 0 = original version, 1 = tweaks and cosmetics
+MACHINE_TYPE            = 16            ; should be either 16 or 64 for 16k or 64k memory
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
@@ -34,7 +36,7 @@ LANGUAGE = HU
 ; EXTENDED = 1 -> altered version
 ; ==============================================================================
 
-EXTENDED                = 1       ; 0 = original version, 1 = tweaks and cosmetics
+
 
 !if EXTENDED = 0{
     COLOR_FOR_INVISIBLE_ROW_AND_COLUMN = $12 ; red
@@ -3516,3 +3518,31 @@ item_pickup_message:              ; item pickup messages
 }
 
 item_pickup_message_end:
+
+
+
+; ==============================================================================
+;
+; CODE ADDITION AREA
+; ==============================================================================
+
+
+!if MACHINE_TYPE = 64{
+    ; intro_start
+    !source "includes/intro.asm"
+
+    *= COLORS ; $6000
+    !bin "../gfx/gt-colors.bin"
+    ; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 d800 dbe7
+
+    *= PETSCII_CHARS ; $8000
+    !source "includes/petscii-intro.asm"
+
+    *= BITMAP ; $c000
+    !bin "../gfx/gt-bitmap.bin"
+    ; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 2000 3f3f
+
+    *= SCREEN ; $e000
+    !bin "../gfx/gt-screen.bin"
+    ; save "/Users/ingohinterding/Desktop/gt-screen.bin" 0 0400 07e7
+}
