@@ -19,7 +19,7 @@ intro_start:
                     sta	$ff15
 
                     jsr intro_menu
-                    jsr display_title
+                    ;jsr display_title
 
 
                     lda language_active                             ; todo -> this should be 0,1,2 depending on language choice

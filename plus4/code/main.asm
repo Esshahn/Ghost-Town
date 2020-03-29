@@ -26,9 +26,18 @@ EN = 0
 DE = 1
 HU = 2
 
-LANGUAGE                = HU            ; this setting is only relevant for a dedicated 16k version with one language
+
 EXTENDED                = 1             ; 0 = original version, 1 = tweaks and cosmetics
 MACHINE_TYPE            = 64            ; should be either 16 or 64 for 16k or 64k memory
+
+!if MACHINE_TYPE = 16 {
+    LANGUAGE            = HU            ; this setting is only relevant for a dedicated 16k version with one language
+}
+
+!if MACHINE_TYPE = 64 {
+    LANGUAGE            = EN            ; if we have the full 64k version, than english must be default and should not be changed
+                                        ; as the language can be switched from within the intro of the game
+}
 
 ; ==============================================================================
 ; thse settings change the appearance of the game
