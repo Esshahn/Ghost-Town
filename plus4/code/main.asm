@@ -3559,3 +3559,17 @@ item_pickup_message_end:
     ;!bin "../gfx/gt-screen.bin"
     ; save "/Users/ingohinterding/Desktop/gt-screen.bin" 0 0400 07e7
 }
+
+
+; notes
+; luminance
+; 1c00 - 1fe7
+; save "/Users/ingohinterding/Desktop/gt-luminance.bin" 0 1c00 1fe7
+
+; color
+; 1800 - 1be7
+; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 1800 1be7
+
+; bitmap
+; 4000 - 5f3f
+; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 4000 5f3f

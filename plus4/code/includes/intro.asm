@@ -15,7 +15,7 @@
 intro_start:
 
                     lda	#$0
-                    sta	$ff19
+                    sta	$ff19                                       ; border color
                     sta	$ff15
 
                     jsr intro_menu
