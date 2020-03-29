@@ -14,9 +14,9 @@
 
 intro_start:
 
-                    lda #$0
-                    sta $d020
-                    sta $d021
+                    lda	#$0
+                    sta	$ff19
+                    sta	$ff15
 
                     jsr intro_menu
                     jsr display_title
@@ -375,39 +375,41 @@ intro_menu:
                     ldx	#0
                     ldy	#250
 
+
 -
-
-                    ; screen data
                     lda	PETSCII_CHARS,x
-                    sta	SCREENRAM,x
+                    sta	$c00,x
                     lda	PETSCII_CHARS+250,x
-                    sta	SCREENRAM+250,x
+                    sta	$c00+250,x
                     lda	PETSCII_CHARS+500,x
-                    sta	SCREENRAM+500,x
+                    sta	$c00+500,x
                     lda	PETSCII_CHARS+750,x
-                    sta	SCREENRAM+750,x
+                    sta	$c00+750,x
 
-                    ; color data
-                    lda	PETSCII_COLORS,x
-                    sta	COLRAM,x
-                    lda	PETSCII_COLORS+250,x
-                    sta	COLRAM+250,x
-                    lda	PETSCII_COLORS+500,x	
-                    sta	COLRAM+500,x
-                    lda	PETSCII_COLORS+750,x
-                    sta	COLRAM+750,x
+                    lda	PETSCII_CHARS+1000,x
+                    sta	$800,x
+                    lda	PETSCII_CHARS+1250,x
+                    sta	$800+250,x
+                    lda	PETSCII_CHARS+1500,x
+                    sta	$800+500,x
+                    lda	PETSCII_CHARS+1750,x
+                    sta	$800+750,x
+
                     inx
                     dey
                     bne	-
 
 
+
+
 check_joy:
                     
-
-                    lda $dc00                                       ; get joy 1 
-                    and #%00011111                                  ; use only bits 0-4
+                    lda #$fd
+                    sta KEYBOARD_LATCH
+                    lda KEYBOARD_LATCH
                     
-                    cmp #$1d                                        ; is joy 1 down?
+                    
+                    cmp #$fd                                        ; is joy 1 down?
                     bne +                                           ; no, next check
                     
                     lda language_active                             ; yes, joy down pressed
@@ -420,9 +422,11 @@ check_joy:
                     
 +
 
-                    lda $dc00                                       ; get joy 1 
-                    and #%00011111                                  ; use only bits 0-4
-                    cmp #$1e                                        ; is joy 1 up?
+                    lda #$fd
+                    sta KEYBOARD_LATCH
+                    lda KEYBOARD_LATCH
+
+                    cmp #$fe                                        ; is joy 1 up?
                     bne +                                           ; no, next check
                     
                     lda language_active                             ; yes, joy up pressed
@@ -436,9 +440,11 @@ check_joy:
 +
 
                     
-                    lda $dc00                                       ; get joy 1 
-                    and #%00011111                                  ; use only bits 0-4
-                    cmp #$f                                         ; fire
+                    lda #$fd
+                    sta KEYBOARD_LATCH
+                    lda KEYBOARD_LATCH 
+
+                    cmp #$7f                                         ; fire
                     bne check_joy
                     jsr wait
                     jsr wait
@@ -482,12 +488,12 @@ language_select:
 +
 
                     sty COLRAMPOS+1                                 ; selfmod low byte of colram position
-                    lda #$07                                        ; $07 = yellow
+                    lda #$67                                        ; $67 = yellow
                     ldx #8                                          ; we want to change the color of 8 chars
 
 -
 
-COLRAMPOS           sta $da17,x                                     ; loop through the chars and make them yellow
+COLRAMPOS           sta $a17,x                                     ; loop through the chars and make them yellow
 
                     dex
                     bne -
@@ -500,7 +506,7 @@ joy_wait:
 
 -
 
-                    lda $d012
+                    lda $FF1D                                       ; $FF1D = Raster Line
                     cmp #$0
                     bne -
                     dex
