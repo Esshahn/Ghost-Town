@@ -19,7 +19,7 @@ intro_start:
                     sta	$ff15
 
                     jsr intro_menu
-                    ;jsr display_title
+                    jsr display_title
 
 
                     lda language_active                             ; todo -> this should be 0,1,2 depending on language choice
@@ -315,52 +315,40 @@ copy_text_win:
 
 display_title:
    
+                    lda #$3b                                        ; bitmap mode and multicolor
+                    sta $ff06
+                    lda #$18 
+                    sta $ff07 
 
-                    lda #0				;vic bank $4000-$7fff
-                    sta $dd00 
-                    
-                    ldx #$00 
+                    lda #%00010000                                  ; set bitmap address
+                    sta $ff12
 
--
+                    lda #%01100000                                  ; set color and luminance address
+                    sta $ff14
 
-                    lda COLORS,x
-                    sta $d800,x
-                    lda COLORS+$100,x
-                    sta $d900,x
-                    lda COLORS+$200,x
-                    sta $da00,x
-                    lda COLORS+$300,x
-                    sta $db00,x
-                    dex
-                    bne -
-                    
-                    ; Bitmap Mode On 
+                    lda #65                                         ; set extra color to gray
+                    sta $ff16
 
-                    lda #$3b 
-                    sta $d011 
-
-                    ; MultiColor On 
-
-                    lda #$d8 
-                    sta $d016 
-
-                    lda #$80			;//bitmap = $4000, screen = $6000
-                    sta $d018
+                   
 
                     ; add wait for keypress here
 -
-                    lda $dc00                                       ; get joy 1 
-                    and #%00011111                                  ; use only bits 0-4
-                    cmp #$f                                         ; fire
+                    lda #$fd
+                    sta KEYBOARD_LATCH
+                    lda KEYBOARD_LATCH 
+                    cmp #$7f                                        ; fire
                     bne -
+
 
                     ; restore text mode
                     lda #$1b
-                    sta $d011
-                    lda #$c8
-                    sta $d016
-                    lda #$3
-                    sta $dd00
+                    sta $ff06
+                    lda #$08
+                    sta $ff07
+                    sta $ff14
+                    lda #$c4
+                    sta $ff12
+
                     rts      
 
 

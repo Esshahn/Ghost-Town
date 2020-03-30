@@ -136,8 +136,8 @@ COLOR_3             = $FF18
 BORDER_COLOR        = $FF19
 FF1D                = $FF1D             ; FF1D raster line
 COLORS              = $6000
-PETSCII_CHARS       = $5000
-BITMAP              = $c000
+PETSCII_CHARS       = $7000
+BITMAP              = $6000
 SCREEN              = $e000
 
 
@@ -3542,34 +3542,40 @@ item_pickup_message_end:
 
 !if MACHINE_TYPE = 64{
     ; intro_start
-    !source "includes/intro.asm"
+    
 
-   ; *= COLORS ; $6000
-   ; !bin "../gfx/gt-colors.bin"
-    ; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 d800 dbe7
 
-    *= PETSCII_CHARS ; $8000
+    ; ----------------------------------------
+
+    ; bitmap
+    ; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 4000 5f3f
+
+    *= $4000 
+    !bin "../gfx/gt-bitmap.bin",,2
+
+    ; ----------------------------------------
+
+    ; color
+    ; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 1800 1be7
+
+    *= $6000
+    !bin "../gfx/gt-colors.bin",,2
+
+    ; ----------------------------------------
+
+    ; luminance
+    ; save "/Users/ingohinterding/Desktop/gt-luminance.bin" 0 1c00 1fe7
+
+    *= $6400
+    !bin "../gfx/gt-luminance.bin",,2
+
+    ; ----------------------------------------
+
+
+    *= PETSCII_CHARS 
     !source "includes/petscii-intro.asm"
 
-   ; *= BITMAP ; $c000
-   ; !bin "../gfx/gt-bitmap.bin"
-    ; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 2000 3f3f
+    !source "includes/intro.asm"
 
-    ;*= SCREEN ; $e000
-    ;!bin "../gfx/gt-screen.bin"
-    ; save "/Users/ingohinterding/Desktop/gt-screen.bin" 0 0400 07e7
+   
 }
-
-
-; notes
-; luminance
-; 1c00 - 1fe7
-; save "/Users/ingohinterding/Desktop/gt-luminance.bin" 0 1c00 1fe7
-
-; color
-; 1800 - 1be7
-; save "/Users/ingohinterding/Desktop/gt-colors.bin" 0 1800 1be7
-
-; bitmap
-; 4000 - 5f3f
-; save "/Users/ingohinterding/Desktop/gt-bitmap.bin" 0 4000 5f3f
