@@ -328,7 +328,7 @@ display_title:
 
                     lda #65                                         ; set extra color to gray
                     sta $ff16
-
+                    
                    
 
                     ; add wait for keypress here
@@ -338,8 +338,11 @@ display_title:
                     lda KEYBOARD_LATCH 
                     cmp #$7f                                        ; fire
                     bne -
+                    jsr wait
+                    jsr wait
+                    
 
-
++
                     ; restore text mode
                     lda #$1b
                     sta $ff06
@@ -365,22 +368,22 @@ intro_menu:
 
 
 -
-                    lda	PETSCII_CHARS,x
+                    lda	petscii_chars,x
                     sta	$c00,x
-                    lda	PETSCII_CHARS+250,x
+                    lda	petscii_chars+250,x
                     sta	$c00+250,x
-                    lda	PETSCII_CHARS+500,x
+                    lda	petscii_chars+500,x
                     sta	$c00+500,x
-                    lda	PETSCII_CHARS+750,x
+                    lda	petscii_chars+750,x
                     sta	$c00+750,x
 
-                    lda	PETSCII_CHARS+1000,x
+                    lda	petscii_chars+1000,x
                     sta	$800,x
-                    lda	PETSCII_CHARS+1250,x
+                    lda	petscii_chars+1250,x
                     sta	$800+250,x
-                    lda	PETSCII_CHARS+1500,x
+                    lda	petscii_chars+1500,x
                     sta	$800+500,x
-                    lda	PETSCII_CHARS+1750,x
+                    lda	petscii_chars+1750,x
                     sta	$800+750,x
 
                     inx

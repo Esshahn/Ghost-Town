@@ -32,6 +32,8 @@ MACHINE_TYPE            = 64            ; should be either 16 or 64 for 16k or 6
 
 !if MACHINE_TYPE = 16 {
     LANGUAGE            = HU            ; this setting is only relevant for a dedicated 16k version with one language
+                                        ; to make the 16k version compile, change the code entry in the
+                                        ; tasks.json file from "intro_start" to "code_start"
 }
 
 !if MACHINE_TYPE = 64 {
@@ -136,20 +138,7 @@ COLOR_3             = $FF18
 BORDER_COLOR        = $FF19
 FF1D                = $FF1D             ; FF1D raster line
 COLORS              = $6000
-PETSCII_CHARS       = $7000
-BITMAP              = $6000
-SCREEN              = $e000
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -3572,7 +3561,7 @@ item_pickup_message_end:
     ; ----------------------------------------
 
 
-    *= PETSCII_CHARS 
+    petscii_chars:
     !source "includes/petscii-intro.asm"
 
     !source "includes/intro.asm"
