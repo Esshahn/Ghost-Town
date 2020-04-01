@@ -55,11 +55,13 @@ Please note that the directory structure will likely be different on your machin
 
 # Thanks
 
-This project would not have been possible without the support of many others. My deepest thanks go to:
+This project would not have been possible without the support of many. My deepest thanks go to:
 
 * Spider Jerusalem for helping with the initial disassembly and composing the C64 music
 * Charlie/chainq for providing the hungarian translation
 * Luca/Fire for testing the Plus/4 version, helping with bugfixing and providing great feedback
+* Stefan Vogt for testing the games on real hardware and providing great feedback
 * dalezy for help with the music export
 * MacBacon for code support
-* Stefan Vogt for testing the games on real hardware
+* Udo Gertz for creating this wonderful game
+
