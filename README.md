@@ -6,6 +6,9 @@
 This is the fully disassembled source code of the Commodore 16 game "Ghost Town". It has been commented, restructured, bug fixed and optimized. In addition, new content has been added.
 
 
+You can download the binaries here: http://www.kingsoft.de
+
+
 ## Plus/4 version (64k RAM)
 
 * choose between english, german and hungarian language
