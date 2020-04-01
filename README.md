@@ -65,3 +65,21 @@ This project would not have been possible without the support of many. My deepes
 * MacBacon for code support
 * Udo Gertz for creating this wonderful game
 
+
+# Do you want to contribute?
+
+I would be happy if this little game gets improved further. Feel free deep dive into the mysteries of the Ghost Town and send me PRs. I would be extremely happy about:
+
+* more platforms
+  * How about a C128 version with extended music and graphics? 
+  * How about a Atari 8bit release? This game should be very easy to port (e.g. no sprites)
+* added content
+  * more levels anyone?
+  * even a Ghost Town 2?
+* deluxe version
+  * the game could use more animations and effects to make the world more lively
+* code optimizations & bug fixes
+  * make this version of Ghost Town the absolute best one!
+* and whatever you have in mind
+
+
