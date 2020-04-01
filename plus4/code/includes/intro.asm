@@ -317,7 +317,9 @@ display_title:
    
                     lda #$3b                                        ; bitmap mode and multicolor
                     sta $ff06
-                    lda #$18 
+                    lda $ff07
+                    and #$40
+                    ora #$18 
                     sta $ff07 
 
                     lda #%00010000                                  ; set bitmap address

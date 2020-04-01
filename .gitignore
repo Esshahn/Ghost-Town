@@ -2,11 +2,5 @@
 
 
 build/
-plus4/docs/plus4.pdf
-plus4/music/labels.asm
-
-C64/music/exports/ghosttown.prg
-C64/music/exports/industrialtown.prg
-C64/music/exports/meditationtown.prg
 C64/build
 
