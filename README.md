@@ -68,7 +68,7 @@ This project would not have been possible without the support of many. My deepes
 
 # Do you want to contribute?
 
-I would be happy if this little game gets improved further. Feel free deep dive into the mysteries of the Ghost Town and send me PRs. I would be extremely happy about:
+I would be happy if this little gem gets improved further. Feel free to deep dive into the mysteries of the Ghost Town and send me PRs. I would be extremely happy about:
 
 * more platforms
   * How about a C128 version with extended music and graphics? 
