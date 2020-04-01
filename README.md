@@ -72,7 +72,7 @@ I would be happy if this little gem gets improved further. Feel free to deep div
 
 * more platforms
   * How about a C128 version with extended music and graphics? 
-  * How about a Atari 8bit release? This game should be very easy to port (e.g. no sprites)
+  * How about an Atari 8bit release? This game should be very easy to port (e.g. no sprites)
 * added content
   * more levels anyone?
   * even a Ghost Town 2?
