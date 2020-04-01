@@ -30,6 +30,7 @@ You can download the binaries here: http://www.kingsoft.de
 * Fixed joystick routine to be more reliable
 * lots of bug fixes
 
+
 # How to build
 
 The game can be build with ACME and exomizer. This is my command line for the C64.
@@ -45,3 +46,20 @@ acme -v4 -f cbm -r ../build/report.asm -l ../build/labels -o ../build/main.prg m
 ````
 
 Please note that the directory structure will likely be different on your machine. If you use VSCode as an editor, you'll find a `tasks.json` file inside the `.vscode` folder that compiles, packs and displays the game in the VICE emulator.
+
+
+## Version history
+
+* 1.0 - this is the initial release
+
+
+# Thanks
+
+This project would not have been possible without the support of many others. My deepest thanks go to:
+
+* Spider Jerusalem for helping with the initial disassembly and composing the C64 music
+* Charlie/chainq for providing the hungarian translation
+* Luca/Fire for testing the Plus/4 version, helping with bugfixing and providing great feedback
+* dalezy for help with the music export
+* MacBacon for code support
+* Stefan Vogt for testing the games on real hardware
